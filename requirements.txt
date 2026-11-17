@@ -9,7 +9,10 @@
 #   - Tesseract binary for pytesseract (Lab/L1.ipynb):  brew install tesseract
 #   - LayoutReader helpers (Lab/L3.ipynb) are not on PyPI; clone into Lab/:
 #       git clone https://github.com/ppaanngggg/layoutreader.git Lab/layoutreader
-#   - Lab/L4, L4_II, L5 import a local `helper.py` module that is not in this repo.
+#   - Lab/L4, L4_II, L5 import Lab/helper.py (from the DeepLearning.AI course environment).
+#
+# Lab/requirements.txt is the course's original file (Python 3.10, LangChain 0.1.x pins).
+# This file supersedes it: same packages, versions tested on Python 3.12 / macOS arm64.
 
 # --- Notebook tooling ---
 jupyter
@@ -48,4 +51,5 @@ landingai-ade             # L4, L4_II
 
 # --- Utilities ---
 pydantic>=2
+pydantic-settings
 python-dotenv
