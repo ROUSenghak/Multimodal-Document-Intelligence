@@ -1,0 +1,51 @@
+# Multimodal Document Intelligence — Python dependencies
+# Target: Python 3.12 (macOS arm64)
+# Setup:
+#   python3.12 -m venv .venv
+#   source .venv/bin/activate
+#   pip install -r requirements.txt
+#
+# Non-pip requirements:
+#   - Tesseract binary for pytesseract (Lab/L1.ipynb):  brew install tesseract
+#   - LayoutReader helpers (Lab/L3.ipynb) are not on PyPI; clone into Lab/:
+#       git clone https://github.com/ppaanngggg/layoutreader.git Lab/layoutreader
+#   - Lab/L4, L4_II, L5 import a local `helper.py` module that is not in this repo.
+
+# --- Notebook tooling ---
+jupyter
+ipykernel
+ipython
+
+# --- Core scientific stack ---
+numpy
+pandas
+matplotlib
+pillow
+
+# --- PDF / OCR / vision ---
+pymupdf                   # pdf_extraction, PyMuPDF_experiment, L4, L4_II
+pytesseract               # L1 (needs the tesseract binary)
+opencv-contrib-python     # L2, L3 (cv2) — the variant paddleocr requires; do not also install opencv-python
+paddlepaddle>=3.0         # backend for paddleocr
+paddleocr>=3.0            # L2, L3 (PaddleOCR, LayoutDetection)
+
+# --- Reading-order model (LayoutReader / LayoutLMv3) ---
+torch
+transformers              # L3 (LayoutLMv3ForTokenClassification)
+
+# --- LLM / agents / RAG ---
+# Pinned < 1.0: notebooks use AgentExecutor, langchain.schema, langchain.chains,
+# which were removed in LangChain 1.0.
+langchain>=0.3,<1.0
+langchain-core>=0.3,<1.0
+langchain-openai>=0.3,<1.0
+langchain-community>=0.3,<1.0
+openai
+chromadb                  # L5 vector store
+
+# --- LandingAI Agentic Document Extraction ---
+landingai-ade             # L4, L4_II
+
+# --- Utilities ---
+pydantic>=2
+python-dotenv
