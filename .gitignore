@@ -3,4 +3,43 @@
 __pycache__/
 .ipynb_checkpoints/
 .env
-Lab/layoutreader/
+notebooks/course_labs/layoutreader/
+
+# --- Secrets and credentials -------------------------------------------------
+# Keep real keys in .env (ignored above); commit only .env.example.
+.env.*
+!.env.example
+.streamlit/secrets.toml
+*.pem
+*.key
+credentials*.json
+service-account*.json
+
+# --- Python / tooling caches -------------------------------------------------
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+.jupyter_cache/
+build/
+dist/
+
+# --- Outputs written by the Lab notebooks ------------------------------------
+# (Git has no trailing comments: a '#' after a pattern becomes part of it.)
+# L5: vector store and parsed ADE chunks
+notebooks/course_labs/chroma_db/
+notebooks/course_labs/ade_outputs/
+# L4_II: annotated pages and cropped chunks
+notebooks/course_labs/results/
+notebooks/course_labs/results_extracted/
+notebooks/course_labs/page_*_annotated.png
+notebooks/course_labs/page_annotated.png
+
+# --- Project outputs (regenerable) --------------------------------------------
+experiments/runs/
+data/cache/
+data/processed/
+*.log

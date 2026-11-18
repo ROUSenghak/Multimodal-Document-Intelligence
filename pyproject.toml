@@ -1,0 +1,34 @@
+[build-system]
+requires = ["setuptools>=69"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "visualdoc-ai"
+version = "0.1.0"
+description = "Experiments and reusable components for cited multimodal PDF question answering."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "pymupdf>=1.24,<3",
+]
+
+[project.optional-dependencies]
+notebooks = [
+    "ipykernel",
+    "jupyter",
+    "matplotlib",
+    "numpy",
+    "pandas",
+    "pillow",
+]
+dev = [
+    "pytest>=8,<10",
+]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
