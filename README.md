@@ -161,38 +161,74 @@ selected.
 | Day | Milestone |
 | --- | --- |
 | 1 | ✅ Project foundation: README, structure, annotation schema and guide, environment review |
-| 2 | ✅ Move the parsing prototype into `src/visualdoc/parsing.py` with unit tests; page record still pending |
-| 3 | Parse the selected documents into page records; start writing questions |
-| 4 | Embeddings + vector index; measure page Recall@*k* on `dev` |
-| 5 | Text-only answer generation with page citations |
-| 6 | Page rendering + VLM answer generation (multimodal condition) |
-| 7 | Evaluation harness: run the four conditions, store runs, score |
+| 2 | ✅ Historical baseline: parsing prototype moved into `src/visualdoc/parsing.py` with unit tests; retained but not extended during notebook-first learning |
+| 3 | Build and inspect page records in project notebooks; start writing questions |
+| 4 | Explore embeddings and retrieval in notebooks; measure page Recall@*k* on `dev` when verified questions exist |
+| 5 | Develop text-only answer generation with page citations in a notebook |
+| 6 | Develop page rendering + VLM answering in a notebook (multimodal condition) |
+| 7 | Build the four-condition evaluation interactively, store runs, and score |
 | 8 | Finish and verify annotations; freeze the `test` split |
 | 9 | Improve weak cases (tables, figures) using `dev` only |
-| 10 | Streamlit app: upload, ask, answer with cited page images |
+| 10 | Streamlit app only after the learning phase and explicit approval to productionize |
 | 11 | Final evaluation on `test` |
 | 12 | Error analysis |
-| 13 | Documentation, tests, cleanup |
+| 13 | Notebook documentation, sequential execution checks, cleanup |
 | 14 | Buffer and demo |
 
-## 8. Implemented vs planned
+## 8. Notebook-first development workflow
+
+All new exploratory and experimental implementation lives directly in real
+Jupyter notebooks under `notebooks/project/`. The numbered learning path is:
+
+| Stage | Notebook | Purpose |
+| --- | --- | --- |
+| 00 | `00_environment_and_corpus.ipynb` | Verify the kernel, paths, document manifest, and page counts |
+| 01 | `01_pdf_representation.ipynb` | Compare native PDF objects with rendered page appearance |
+| 02 | `02_page_inspection.ipynb` | Derive and inspect per-page routing features |
+| 03 | `03_extraction_routing.ipynb` | Make routing thresholds and failure cases explicit |
+| 04 | `04_ocr_and_page_records.ipynb` | Compare OCR modes and assemble an inspectable page record |
+| 05 | `05_annotations_and_quality.ipynb` | Validate annotation schemas and evaluation readiness |
+| 06 | `06_embedding_and_retrieval.ipynb` | Learn vectorization, cosine similarity, and ranking transparently |
+| 07 | `07_retrieval_evaluation.ipynb` | Implement Hit@*k* and keep mechanics checks separate from project results |
+| 08 | `08_text_qa_with_citations.ipynb` | Construct text evidence, prompts, and citation validation |
+| 09 | `09_multimodal_qa_with_citations.ipynb` | Render image evidence and construct the matched multimodal input |
+| 10 | `10_controlled_evaluation.ipynb` | Define the four conditions and validate paired scoring |
+| 11 | `11_error_analysis.ipynb` | Separate parsing, retrieval, generation, and citation failures |
+
+Each notebook is independently executable and follows objective → concept →
+implementation → execution → inspection → interpretation → validation. New
+project notebooks do not import `src/visualdoc/` as a hidden implementation
+layer. Repeated operations are intentionally visible when that supports
+learning.
+
+The existing `src/`, `tests/`, `notebooks/prototypes/`, and
+`notebooks/course_labs/` directories remain untouched baselines or reference
+material. Moving notebook code into Python modules or adding an application
+framework is a later production phase, not part of current experimentation.
+The repository-level [`AGENTS.md`](AGENTS.md) records this policy for future
+development sessions.
+
+## 9. Implemented vs planned
 
 | Component | Status | Where |
 | --- | --- | --- |
 | PDF anatomy study (text, spans, images, tables, OCR) | ✅ Experiment | `notebooks/experiments/pdf_anatomy.ipynb` |
 | Per-page routing: native / OCR / hybrid / review | ✅ Implemented; original prototype retained | `src/visualdoc/parsing.py`, `notebooks/prototypes/page_extraction.ipynb` |
+| Notebook-first project learning path | ✅ Structured; locally runnable stages executed where inputs exist | `notebooks/project/` |
 | OCR, layout, ADE, ADE-based RAG course labs | ✅ Learning material | `notebooks/course_labs/` |
 | Annotation schema, guide, schema tests | ✅ Implemented | `data/annotations/`, `tests/` |
 | Verified evaluation questions | ⏳ Not started (needs a human annotator) | `data/annotations/questions.csv` |
-| Reusable parsing module | ✅ Implemented and tested | `src/visualdoc/parsing.py`, `tests/test_parsing.py` |
-| Retrieval, text-only and multimodal QA, citations | ⏳ Planned | — |
-| Evaluation runs | ⏳ Planned | `experiments/` |
-| Streamlit app | ⏳ Planned | — |
+| Reusable parsing module | ✅ Historical tested baseline; frozen during notebook-first learning | `src/visualdoc/parsing.py`, `tests/test_parsing.py` |
+| Retrieval | 🧪 Transparent lexical mechanics implemented; semantic model not selected | `notebooks/project/06_embedding_and_retrieval.ipynb`, `07_retrieval_evaluation.ipynb` |
+| Text-only and multimodal QA, citations | 🧪 Inputs and validation implemented; real model calls intentionally gated | `notebooks/project/08_text_qa_with_citations.ipynb`, `09_multimodal_qa_with_citations.ipynb` |
+| Evaluation runs | 🧪 Design and scoring path implemented; real runs blocked by empty verified set | `notebooks/project/10_controlled_evaluation.ipynb`, `11_error_analysis.ipynb` |
+| Streamlit app | ⏳ Deferred until explicitly requested after learning | — |
 
-## 9. Repository layout
+## 10. Repository layout
 
 ```text
 .
+├── AGENTS.md                       # enforced notebook-first development policy
 ├── README.md                       # project overview and usage
 ├── pyproject.toml                  # package metadata and core/dev dependencies
 ├── requirements.txt               # compatibility installer
@@ -204,6 +240,7 @@ selected.
 ├── src/visualdoc/parsing.py        # reusable inspection, routing, and OCR
 ├── tests/                          # annotation and parsing tests
 ├── notebooks/
+│   ├── project/                    # numbered, executable learning path (00–11)
 │   ├── experiments/                # executed PDF anatomy study
 │   ├── prototypes/                 # original page-routing prototype
 │   └── course_labs/                # external learning/reference material
@@ -211,7 +248,7 @@ selected.
 └── docs/                           # technical map and agent-skill notes
 ```
 
-## 10. Setup
+## 11. Setup
 
 Tested environment: Python 3.12.6 on macOS (Apple Silicon).
 
@@ -248,7 +285,7 @@ API keys (see `.env.example`):
 
 The project notebooks and the tests need no API key.
 
-## 11. Running what exists
+## 12. Running what exists
 
 **Tests** (from the repository root; expected: all pass):
 
@@ -256,15 +293,22 @@ The project notebooks and the tests need no API key.
 pytest tests/ -v
 ```
 
-**Project experiments** — paths are resolved from the repository root, so
-start Jupyter anywhere inside the checkout:
+**Notebook-first project path** — paths are resolved from the repository root,
+so start Jupyter anywhere inside the checkout:
 
 ```bash
 jupyter lab
 ```
 
-Open `notebooks/experiments/pdf_anatomy.ipynb` or `notebooks/prototypes/page_extraction.ipynb` and select the
-`.venv` kernel (the saved notebook metadata names a `conda` kernel).
+Start with `notebooks/project/00_environment_and_corpus.ipynb` and continue in
+numeric order. The project notebooks use the standard `python3` kernelspec and
+contain explicit readiness gates where verified annotations or model choices
+do not yet exist.
+
+The older `notebooks/experiments/pdf_anatomy.ipynb` and
+`notebooks/prototypes/page_extraction.ipynb` remain useful references. Their
+saved metadata names a `conda` kernel, so select the project environment when
+opening them.
 
 **Course notebooks** — start Jupyter from their directory because these
 imported notebooks intentionally use lesson-relative paths:
@@ -277,7 +321,7 @@ jupyter lab
 They call `load_dotenv()`, which searches parent folders, so a `.env` at the
 repository root should be found.
 
-## 12. Data and licensing notes
+## 13. Data and licensing notes
 
 `documents.csv` records the provenance and usage rights of every document.
 Anything committed here is public: check `usage_rights` before adding a
