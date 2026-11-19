@@ -5,10 +5,14 @@ and scanned) with **verifiable citations to the source page**, and to
 measure, through a controlled evaluation, **when looking at the page image
 helps compared with reading only the extracted text**.
 
-> **Project status: foundation, evaluation design, and reusable parsing.**
-> No question-answering pipeline exists yet. The repository currently has a
-> tested native/OCR page parser, PDF experiments, course-reference notebooks,
-> and the evaluation dataset format. The [status table](#implemented-vs-planned)
+> **Project status: learning notebooks plus a first public-benchmark baseline.**
+> The repository has a tested native/OCR page parser, a numbered notebook path,
+> and a reproducible **MMLongBench-Doc** benchmark notebook
+> (`notebooks/project/14_mmlongbench_doc_benchmark.ipynb`) that measures page
+> retrieval for real and scores answers with the benchmark's rules. LLM answer
+> generation is implemented but **gated**: it runs only when a model and API key
+> are configured, so no answer accuracy has been measured yet. The project's own
+> verified question set is still empty. The [status table](#9-implemented-vs-planned)
 > separates what works from what is planned.
 
 ---
@@ -107,9 +111,11 @@ prototyped, in `notebooks/prototypes/page_extraction.ipynb`.
 | Tesseract (via PyMuPDF, `resources/tessdata/eng.traineddata`) | OCR for scanned pages | Prototyped in notebooks |
 | pandas, pytest | Annotation files and their schema checks | Implemented (`tests/`) |
 | PaddleOCR, LayoutReader, LandingAI ADE | Alternative OCR, layout, reading order, agentic extraction | Explored in `notebooks/course_labs/` only; candidates for hard pages |
-| ChromaDB | Vector store for retrieval | Used in `notebooks/course_labs/L5`; planned for the MVP |
+| BM25 (implemented in the notebook, no library) | Lexical page retrieval baseline | Implemented in notebook 14 |
+| Hugging Face `datasets`, `huggingface_hub` | Download public benchmarks at pinned revisions | Used in notebooks 12–14 |
+| ChromaDB | Vector store for retrieval | Used in `notebooks/course_labs/L5`; not needed for the current baseline |
 | Embedding model | Semantic page retrieval | Planned; **not chosen yet** |
-| OpenAI API (`openai`, `langchain-openai`) | LLM / VLM answer generation | Used in `notebooks/course_labs/`; provider for the MVP **not finalized** |
+| OpenAI API (`openai`, `langchain-openai`) | LLM / VLM answer generation | Used in `notebooks/course_labs/`; notebook 14 has a gated OpenAI call; provider and model for the MVP **not finalized** |
 | Streamlit | User interface | Planned; not installed |
 
 ## 6. Research question and evaluation strategy
@@ -156,6 +162,15 @@ for the schema and labelling workflow. `questions.csv` is currently
 **empty**; the three documents in `documents.csv` are **candidates**, not yet
 selected.
 
+**Public benchmark while the project set is empty.** Notebook 14 runs the
+same retrieval → answer → citation → scoring loop on a seeded subset of
+**MMLongBench-Doc** (public questions with reference answers and evidence
+pages). It reports Recall@k and Hit@k against an exact random-ranking
+reference. Answer scores use a local re-implementation of the benchmark's
+rule-based scorer and are labelled as local diagnostics, not leaderboard
+results. See [`experiments/README.md`](experiments/README.md) and
+[`data/external/README.md`](data/external/README.md).
+
 ## 7. Roadmap (tentative)
 
 | Day | Milestone |
@@ -194,6 +209,9 @@ Jupyter notebooks under `notebooks/project/`. The numbered learning path is:
 | 09 | `09_multimodal_qa_with_citations.ipynb` | Render image evidence and construct the matched multimodal input |
 | 10 | `10_controlled_evaluation.ipynb` | Define the four conditions and validate paired scoring |
 | 11 | `11_error_analysis.ipynb` | Separate parsing, retrieval, generation, and citation failures |
+| 12 | `12_external_datasets.ipynb` | Exploratory download log for MMLongBench-Doc, ViDoRe, OmniDocBench (raw, kept as-is) |
+| 13 | `13_understand_the_datasets.ipynb` | Inspect the grain, schema, and quality of the local and external datasets |
+| 14 | `14_mmlongbench_doc_benchmark.ipynb` | Reproducible MMLongBench-Doc subset: OCR fallback, BM25, Recall@k, gated cited answers, official-rule scoring |
 
 Each notebook is independently executable and follows objective → concept →
 implementation → execution → inspection → interpretation → validation. New
@@ -219,9 +237,10 @@ development sessions.
 | Annotation schema, guide, schema tests | ✅ Implemented | `data/annotations/`, `tests/` |
 | Verified evaluation questions | ⏳ Not started (needs a human annotator) | `data/annotations/questions.csv` |
 | Reusable parsing module | ✅ Historical tested baseline; frozen during notebook-first learning | `src/visualdoc/parsing.py`, `tests/test_parsing.py` |
-| Retrieval | 🧪 Transparent lexical mechanics implemented; semantic model not selected | `notebooks/project/06_embedding_and_retrieval.ipynb`, `07_retrieval_evaluation.ipynb` |
-| Text-only and multimodal QA, citations | 🧪 Inputs and validation implemented; real model calls intentionally gated | `notebooks/project/08_text_qa_with_citations.ipynb`, `09_multimodal_qa_with_citations.ipynb` |
-| Evaluation runs | 🧪 Design and scoring path implemented; real runs blocked by empty verified set | `notebooks/project/10_controlled_evaluation.ipynb`, `11_error_analysis.ipynb` |
+| Retrieval | 🧪 Transparent lexical mechanics (06–07); **BM25 baseline measured on MMLongBench-Doc** (14); semantic model not selected | `notebooks/project/06_…`, `07_…`, `14_mmlongbench_doc_benchmark.ipynb` |
+| Public-benchmark evaluation (MMLongBench-Doc) | ✅ Retrieval measured on a seeded 6-document subset; 🧪 answer generation gated (no model/key configured) | `notebooks/project/14_mmlongbench_doc_benchmark.ipynb`, `experiments/README.md` |
+| Text-only and multimodal QA, citations | 🧪 Inputs and validation implemented; real model calls intentionally gated | `notebooks/project/08_text_qa_with_citations.ipynb`, `09_multimodal_qa_with_citations.ipynb`, `14_…` |
+| Controlled evaluation on the project's own set | 🧪 Design and scoring path implemented; real runs blocked by empty verified set | `notebooks/project/10_controlled_evaluation.ipynb`, `11_error_analysis.ipynb` |
 | Streamlit app | ⏳ Deferred until explicitly requested after learning | — |
 
 ## 10. Repository layout
@@ -235,16 +254,17 @@ development sessions.
 ├── requirements/labs.txt          # optional heavy course-lab dependencies
 ├── data/
 │   ├── documents/                  # three evaluation document candidates
-│   └── annotations/                # dataset schema, guide, and CSV files
+│   ├── annotations/                # dataset schema, guide, and CSV files
+│   └── external/                   # public benchmarks (see data/external/README.md)
 ├── resources/tessdata/             # local Tesseract language models
 ├── src/visualdoc/parsing.py        # reusable inspection, routing, and OCR
 ├── tests/                          # annotation and parsing tests
 ├── notebooks/
-│   ├── project/                    # numbered, executable learning path (00–11)
+│   ├── project/                    # numbered, executable learning path (00–14)
 │   ├── experiments/                # executed PDF anatomy study
 │   ├── prototypes/                 # original page-routing prototype
 │   └── course_labs/                # external learning/reference material
-├── experiments/                    # future controlled evaluation runs
+├── experiments/                    # evaluation docs; runs/ holds git-ignored run outputs
 └── docs/                           # technical map and agent-skill notes
 ```
 
@@ -282,8 +302,16 @@ API keys (see `.env.example`):
 | --- | --- |
 | `OPENAI_API_KEY` | `notebooks/course_labs/L1`, `L2`, `L3`, `L5` |
 | `VISION_AGENT_API_KEY` (LandingAI) | `notebooks/course_labs/L4`, `L4_II`, `L5` |
+| `OPENAI_API_KEY` + `VISUALDOC_LLM_MODEL` (+ `VISUALDOC_LLM_PROVIDER=openai`) | answer generation in `notebooks/project/14_…` (optional; install with `pip install -e '.[llm]'`) |
 
-The project notebooks and the tests need no API key.
+The tests and notebooks 00–13 need no API key. Notebook 14 runs fully without
+one and stops answer generation at an explicit readiness gate.
+
+**Troubleshooting `ModuleNotFoundError: No module named 'visualdoc'` on macOS.**
+If `pip show visualdoc-ai` succeeds but the import fails, the editable-install
+`.pth` file may carry the macOS `hidden` flag (`ls -lO .venv/lib/python3.12/site-packages/*.pth`).
+Python 3.12 skips hidden `.pth` files. Clear the flag with
+`chflags nohidden .venv/lib/python3.12/site-packages/*.pth`.
 
 ## 12. Running what exists
 
@@ -325,6 +353,11 @@ repository root should be found.
 
 `documents.csv` records the provenance and usage rights of every document.
 Anything committed here is public: check `usage_rights` before adding a
-document, and do not commit private or confidential PDFs. See
+document, and do not commit private or confidential PDFs.
+
+MMLongBench-Doc data is licensed CC BY-NC 4.0 for research use. Its PDFs are
+downloaded on demand into a git-ignored folder rather than committed. See
+[`data/external/README.md`](data/external/README.md) for every external
+dataset. See
 [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md) for unresolved licensing
 and redistribution notes.

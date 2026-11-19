@@ -15,12 +15,18 @@ dependencies = [
 [project.optional-dependencies]
 notebooks = [
     "datasets",
+    "huggingface_hub",
     "ipykernel",
     "jupyter",
     "matplotlib",
     "numpy",
     "pandas",
     "pillow",
+]
+# Optional: real answer generation in notebooks/project/14_mmlongbench_doc_benchmark.ipynb
+llm = [
+    "openai>=1.0",
+    "python-dotenv",
 ]
 dev = [
     "pytest>=8,<10",
