@@ -119,7 +119,7 @@ Label the content a reader must *look at* to answer:
 | `multiple` | Two or more of the above are required. |
 
 Tip: if you are unsure whether text is native or scanned, open the page in
-`notebooks/experiments/pdf_anatomy.ipynb` style — `page.get_text("words")` returns nothing
+`archive/notebooks/experiments/pdf_anatomy.ipynb` style — `page.get_text("words")` returns nothing
 for text that exists only as pixels.
 
 ---

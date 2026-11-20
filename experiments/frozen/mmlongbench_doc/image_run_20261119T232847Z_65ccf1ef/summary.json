@@ -1,0 +1,158 @@
+{
+  "run_id": "20261119T232847Z_65ccf1ef",
+  "mode": "full",
+  "status": {
+    "smoke": "ok",
+    "B": "complete: 57 replies, 0 skipped by protocol",
+    "D": "complete: 38 replies, 2 skipped by protocol"
+  },
+  "metrics": {
+    "A. text, retrieved": {
+      "questions": 57,
+      "answerable / unanswerable": "40 / 17",
+      "accuracy (all questions)": 0.2631578947368421,
+      "F1 (official definition)": 0.16470588235294117,
+      "accuracy on answerable": 0.175,
+      "correct abstention (unanswerable)": 0.47058823529411764,
+      "false abstention (answerable)": 0.1,
+      "citation validity": 1.0,
+      "cites an evidence page (answerable)": 0.65,
+      "unparseable replies": 0,
+      "prompt tokens": 107988,
+      "completion tokens": 1191,
+      "approx. cost USD (list price)": 0.0169
+    },
+    "B. images, retrieved": {
+      "questions": 57,
+      "answerable / unanswerable": "40 / 17",
+      "accuracy (all questions)": 0.22807017543859648,
+      "F1 (official definition)": 0.15555555555555556,
+      "accuracy on answerable": 0.175,
+      "correct abstention (unanswerable)": 0.35294117647058826,
+      "false abstention (answerable)": 0.025,
+      "citation validity": 0.8947368421052632,
+      "cites an evidence page (answerable)": 0.6,
+      "unparseable replies": 0,
+      "prompt tokens": 4049223,
+      "completion tokens": 1254,
+      "approx. cost USD (list price)": 0.6081
+    },
+    "C. text, oracle": {
+      "questions": 38,
+      "answerable / unanswerable": "38 / 0",
+      "accuracy (all questions)": 0.23684210526315788,
+      "F1 (official definition)": NaN,
+      "accuracy on answerable": 0.23684210526315788,
+      "correct abstention (unanswerable)": NaN,
+      "false abstention (answerable)": 0.07894736842105263,
+      "citation validity": 1.0,
+      "cites an evidence page (answerable)": 0.8947368421052632,
+      "unparseable replies": 0,
+      "prompt tokens": 69979,
+      "completion tokens": 866,
+      "approx. cost USD (list price)": 0.011
+    },
+    "D. images, oracle": {
+      "questions": 38,
+      "answerable / unanswerable": "38 / 0",
+      "accuracy (all questions)": 0.2894736842105263,
+      "F1 (official definition)": NaN,
+      "accuracy on answerable": 0.2894736842105263,
+      "correct abstention (unanswerable)": NaN,
+      "false abstention (answerable)": 0.02631578947368421,
+      "citation validity": 0.9210526315789473,
+      "cites an evidence page (answerable)": 0.7894736842105263,
+      "unparseable replies": 0,
+      "prompt tokens": 2699537,
+      "completion tokens": 846,
+      "approx. cost USD (list price)": 0.4054
+    }
+  },
+  "paired": {
+    "0. reference \u2014 text: retrieved \u2192 oracle": {
+      "questions / documents": "40 / 6",
+      "accuracy A": 0.175,
+      "accuracy B": 0.225,
+      "difference B \u2212 A": 0.05000000000000002,
+      "fixed (A wrong \u2192 B right)": 2,
+      "broken (A right \u2192 B wrong)": 0,
+      "both correct / both wrong": "7 / 31",
+      "exact McNemar p (ignores clustering)": 0.5,
+      "documents better / worse / equal": "2 / 0 / 4"
+    },
+    "1. retrieved pages: text \u2192 images (answerable)": {
+      "questions / documents": "40 / 6",
+      "accuracy A": 0.175,
+      "accuracy B": 0.175,
+      "difference B \u2212 A": 0.0,
+      "fixed (A wrong \u2192 B right)": 3,
+      "broken (A right \u2192 B wrong)": 3,
+      "both correct / both wrong": "4 / 30",
+      "exact McNemar p (ignores clustering)": 1.0,
+      "documents better / worse / equal": "1 / 3 / 2"
+    },
+    "1b. retrieved pages: text \u2192 images (all questions)": {
+      "questions / documents": "57 / 6",
+      "accuracy A": 0.2631578947368421,
+      "accuracy B": 0.22807017543859648,
+      "difference B \u2212 A": -0.03508771929824561,
+      "fixed (A wrong \u2192 B right)": 3,
+      "broken (A right \u2192 B wrong)": 5,
+      "both correct / both wrong": "10 / 39",
+      "exact McNemar p (ignores clustering)": 0.7265625,
+      "documents better / worse / equal": "1 / 4 / 1"
+    },
+    "2. oracle pages: text \u2192 images": {
+      "questions / documents": "38 / 6",
+      "accuracy A": 0.23684210526315788,
+      "accuracy B": 0.2894736842105263,
+      "difference B \u2212 A": 0.052631578947368446,
+      "fixed (A wrong \u2192 B right)": 6,
+      "broken (A right \u2192 B wrong)": 4,
+      "both correct / both wrong": "5 / 23",
+      "exact McNemar p (ignores clustering)": 0.75390625,
+      "documents better / worse / equal": "2 / 3 / 1"
+    },
+    "3. images: retrieved \u2192 oracle": {
+      "questions / documents": "38 / 6",
+      "accuracy A": 0.18421052631578946,
+      "accuracy B": 0.2894736842105263,
+      "difference B \u2212 A": 0.10526315789473686,
+      "fixed (A wrong \u2192 B right)": 4,
+      "broken (A right \u2192 B wrong)": 0,
+      "both correct / both wrong": "7 / 27",
+      "exact McNemar p (ignores clustering)": 0.125,
+      "documents better / worse / equal": "2 / 0 / 4"
+    }
+  },
+  "usage": {
+    "B": {
+      "replies live / cached / skipped": "52 / 5 / 0",
+      "prompt tokens (all replies)": 4049223,
+      "completion tokens (all replies)": 1254,
+      "max |actual \u2212 estimated| prompt tokens": 1,
+      "cost of live calls (USD, list price)": 0.5548
+    },
+    "D": {
+      "replies live / cached / skipped": "13 / 25 / 2",
+      "prompt tokens (all replies)": 2699537,
+      "completion tokens (all replies)": 846,
+      "max |actual \u2212 estimated| prompt tokens": 1,
+      "cost of live calls (USD, list price)": 0.1387
+    }
+  },
+  "manual_review": {
+    "mmlb-0355": [
+      "reasoning or aggregation",
+      "The 'Less' bar for Liberal (56 %) is legible in the 512 x 663 image, but both readers answered with the chart's headline 'Democrats and those with more education\u2026' instead of comparing the bars."
+    ],
+    "mmlb-0731": [
+      "visual reading",
+      "The early Lufthansa logo (p.7) is a ~12-px yellow Twitter avatar in the 911 x 512 image; the model reported only the later black-and-white logo (p.8) and merged the two time periods."
+    ],
+    "mmlb-0736": [
+      "annotation or scoring issue",
+      "The slide says 'Within the first 4 hours: Airbus.com incorporates a pop-up notification'; the reference 3 comes from the small screenshot caption 'Hour 3'. Both readers answered 4, which the slide text supports."
+    ]
+  }
+}

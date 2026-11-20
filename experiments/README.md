@@ -1,75 +1,35 @@
-# `experiments/` — evaluation runs
+# `experiments/` — results and runs
 
-This folder holds the outputs of evaluation runs. The runs themselves are
-executed in notebooks under `notebooks/project/` (notebook-first policy, see
-`AGENTS.md`).
+| Folder | Tracked | Content |
+| --- | --- | --- |
+| `frozen/mmlongbench_doc/` | yes | The canonical text run (conditions A, C) and image run (B, D), copied byte for byte, with `SHA256SUMS` and a provenance [README](frozen/mmlongbench_doc/README.md). Never edited. |
+| `runs/` | no (git-ignored) | Raw outputs of live runs. New runs from `notebooks/02_question_answering.ipynb` go to `runs/qa/<UTC timestamp>_<mode>/`; the historical runs of the archived notebooks 14 and 15 stay in `runs/mmlongbench_doc/` and `runs/mmlongbench_doc_multimodal/` where they exist. |
 
-## Current evaluation: MMLongBench-Doc baseline (notebook 14)
-
-`notebooks/project/14_mmlongbench_doc_benchmark.ipynb` runs a reproducible
-development-subset benchmark:
+## How results are reproduced
 
 ```text
-question → BM25 over the page texts of its PDF (native text + OCR fallback) → top-k pages
-         → LLM (gated) → {answer, cited_pages} → rule-based score
+00 → pages and images ─┐
+01 → rankings ─────────┼─► 02 (replay: rebuild every request, assert it equals the frozen one, reuse the reply)
+frozen predictions ────┘        └─► predictions/{A,B,C,D}.jsonl ─► 03 (score, compare, analyse; asserts the frozen numbers)
 ```
 
-| Measured | Metric | Status in the saved notebook |
-| --- | --- | --- |
-| Page retrieval | Recall@k and Hit@k for k ∈ {1, 3, 5, 10}, with the exact random-ranking expectation as a reference; native-only versus native + OCR | ✅ measured |
-| Answer correctness | local re-implementation of the official rule-based `eval_score` (Int / Float / Str / List / None), accuracy and official F1 | ⏳ gated: needs `VISUALDOC_LLM_MODEL` and `OPENAI_API_KEY` |
-| Citations | validity (cited ⊆ supplied pages); correctness (cites ≥ 1 evidence page) | ⏳ gated |
-| Abstention | correct `"Not answerable"` on unanswerable questions; false-abstention rate | ⏳ gated |
+What is verified on every execution, without API calls:
 
-**Saved retrieval result** (seed 42, 6 documents, 57 questions, 40 in the
-retrieval population, dataset revision `2ff6aa92…`):
+- the document subset, question ids, full BM25 rankings (57/57) and the retrieval table (Recall@5 0.689, Hit@5 0.800) equal the frozen run;
+- the 124 page images sent to the model are reproduced byte for byte;
+- page lists, both system prompts (hashes `f60729bf0b66`, `35ff2e8b91f9`), generation parameters, token estimates and all 95 image-request fingerprints equal what was sent;
+- every per-question score, the four-condition counts (A 7/40, B 7/40, C 9/40, D 11/38) and the five paired summaries equal the frozen files.
 
-| k | BM25 native + OCR Recall@k | BM25 native-only Recall@k | random Recall@k |
-| --- | --- | --- | --- |
-| 1 | 0.346 | 0.200 | 0.035 |
-| 5 | 0.689 | 0.358 | 0.176 |
-| 10 | 0.809 | 0.474 | 0.352 |
+What cannot be verified without paying for new calls: whether the model would
+give the same replies today. At temperature 0, 3–6 of 57 text predictions
+changed between identical runs on 2026-11-19, with no score change; image
+run-to-run variation has not been measured.
 
-These numbers describe a 6-document development subset. They are not an
-estimate for the full benchmark.
+## Settings that define a run
 
-### Local scores versus official scores
-
-The official protocol has three stages: a free-form model response, GPT-4o
-extraction of a short answer, then rule-based scoring. Notebook 14 keeps
-stage 3 and replaces stages 1–2 with a structured JSON answer. Its answer
-scores are therefore **local diagnostics** and must not be compared with the
-MMLongBench-Doc leaderboard. Parity of the scoring rules was checked against
-hand-traced cases from the official source, not by running the official file.
-
-### Reproducing a run
-
-1. `pip install -r requirements.txt` (adds `huggingface_hub`); for answer
-   generation also run `pip install -e '.[llm]'`.
-2. Optional, for answer generation: in `.env`, set `OPENAI_API_KEY` and
-   `VISUALDOC_LLM_MODEL` (and `VISUALDOC_LLM_PROVIDER=openai`).
-3. Run the notebook top to bottom with the project kernel. It downloads the
-   sampled PDFs (about 22 MB) and OCRs about 120 pages (about 40 s).
-
-Every setting that changes a result (dataset revision, seed, subset size, OCR
-threshold, BM25 parameters, k, prompt and its hash, model, temperature) is
-defined in one `SETTINGS` cell and saved with the run.
-
-## Folder conventions
-
-- `experiments/runs/<benchmark>/<UTC timestamp>_<config hash>/` holds the raw
-  per-run outputs. It is **git-ignored**: raw model output can be large and
-  should not be published by accident. Runs with identical configuration share
-  the hash suffix. Each run folder contains:
-  - `settings.json`: the full configuration, subset ids, prompt, generation status and library versions;
-  - `retrieval_per_question.csv` and `retrieval_summary.csv`;
-  - `predictions.jsonl`: raw model responses (empty when generation is gated);
-  - `errors.jsonl`: API and parse errors;
-  - `answer_summary.json`: answer metrics, or `null` with the reason;
-  - `scored_predictions.csv`, written only when generation ran.
-- `experiments/<name>/summary.*` is for small, reviewed result tables that
-  are worth committing. None exist yet.
-
-The controlled text-versus-image comparison on the project's own annotated
-set (README §6) is still planned. It needs verified questions in
-`data/annotations/questions.csv`.
+Defined in one `SETTINGS` cell per notebook and recorded with each live run:
+dataset revision `2ff6aa92…`, seed 42, 6 documents ≤ 15 MB, OCR below 30
+native words at 150 dpi, BM25 k1 = 1.5 and b = 0.75, top-k = 5, 3,500
+characters per text page, render box 512 × 1024 px, `detail: high`, model
+`gpt-4o-mini-2024-07-18`, temperature 0, 400 output tokens, prompt versions
+`mmlb-structured-v1` (text) and `mmlb-image-v1` (images).

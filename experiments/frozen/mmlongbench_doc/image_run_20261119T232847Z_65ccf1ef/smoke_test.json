@@ -1,0 +1,27 @@
+{
+  "requested_model": "gpt-4o-mini-2024-07-18",
+  "image_px": [
+    512,
+    663
+  ],
+  "predicted_prompt_tokens": {
+    "downscale_only": 14337,
+    "upscale_to_768": 25671
+  },
+  "attempts": 1,
+  "latency_s": 2.154,
+  "failed_attempts": [],
+  "raw_response": "{\n  \"answer\": 2019,\n  \"cited_pages\": [1]\n}",
+  "finish_reason": "stop",
+  "served_model": "gpt-4o-mini-2024-07-18",
+  "prompt_tokens": 14338,
+  "completion_tokens": 19,
+  "cached_prompt_tokens": 8704,
+  "pred": 2019,
+  "cited_pages": [
+    1
+  ],
+  "parse_error": null,
+  "status": "ok",
+  "measured_tile_rule": "downscale_only"
+}

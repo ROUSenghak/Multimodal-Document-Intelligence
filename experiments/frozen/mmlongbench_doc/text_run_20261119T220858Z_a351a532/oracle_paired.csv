@@ -1,0 +1,41 @@
+qid,answerable,evidence_pages,evidence_sources,retrieval_group,evidence_group,identical_context,answer,bm25_pred,bm25_score,bm25_cited,oracle_pred,oracle_score,oracle_cited,bm25_correct,oracle_correct
+mmlb-0033,True,[6],"['Chart', 'Table']",all evidence in BM25 top 5,chart or figure,True,63,63,1.0,[6],63,1.0,[6],True,True
+mmlb-0034,True,[11],['Chart'],all evidence in BM25 top 5,chart or figure,True,Europe IPO,Not answerable,0.0,[],Not answerable,0.0,[],False,False
+mmlb-0035,True,"[11, 13, 15, 16, 21, 22, 23, 24, 25, 26, 27, 31, 38]",['Chart'],some evidence in BM25 top 5,chart or figure,False,13,Not answerable,0.0,[],0,0.0,[],False,False
+mmlb-0036,True,"[14, 19, 20, 33, 37]","['Figure', 'Generalized-text (Layout)']",no evidence in BM25 top 5,chart or figure,False,5,0,0.0,[],3,0.0,"[19, 20, 37]",False,False
+mmlb-0037,True,[33],"['Generalized-text (Layout)', 'Figure']",no evidence in BM25 top 5,chart or figure,False,"['The Economist', 'TIME']","['Deutsche Bank Private Equity', 'Earlybird']",0.0,"[19, 30]","['Economist', 'Deutsche Bank Private Equity']",0.0,"[19, 33]",False,False
+mmlb-0039,True,"[6, 7, 8, 11, 18, 23, 24, 25, 28, 30]",['Chart'],no evidence in BM25 top 5,chart or figure,False,10,1,0.0,[17],2,0.0,"[6, 28]",False,False
+mmlb-0041,True,[26],['Chart'],all evidence in BM25 top 5,chart or figure,True,300 million,350,0.0,[26],350,0.0,[26],False,False
+mmlb-0094,True,[15],['Figure'],all evidence in BM25 top 5,chart or figure,True,8,5,0.0,"[15, 13, 14]",5,0.0,"[15, 14, 13]",False,False
+mmlb-0095,True,[6],"['Pure-text (Plain-text)', 'Figure']",all evidence in BM25 top 5,chart or figure,True,2.5-3cm,Not answerable,0.0,[],Not answerable,0.0,[],False,False
+mmlb-0096,True,"[9, 10]",['Pure-text (Plain-text)'],all evidence in BM25 top 5,"text, layout or table only",True,2,2,1.0,"[3, 9]",2,1.0,"[3, 9]",True,True
+mmlb-0097,True,[3],['Table'],all evidence in BM25 top 5,"text, layout or table only",True,Wake up the voice assistant. ,Wake up the voice assistant.,1.0,[3],Wake up the voice assistant.,1.0,[3],True,True
+mmlb-0313,True,[11],"['Figure', 'Pure-text (Plain-text)']",no evidence in BM25 top 5,chart or figure,False,2,2,1.0,[10],2,1.0,"[10, 11]",True,True
+mmlb-0315,True,[14],"['Figure', 'Pure-text (Plain-text)']",all evidence in BM25 top 5,chart or figure,True,2,0.0,0.0,[],Not answerable,0.0,[],False,False
+mmlb-0317,True,"[14, 15]","['Generalized-text (Layout)', 'Pure-text (Plain-text)', 'Figure']",some evidence in BM25 top 5,chart or figure,False,1,Not answerable,0.0,[],0.0,0.0,[],False,False
+mmlb-0318,True,[24],"['Pure-text (Plain-text)', 'Figure']",all evidence in BM25 top 5,chart or figure,True,100,"[600, 450]",0.0,[24],"[600, 450]",0.0,[24],False,False
+mmlb-0319,True,"[30, 31, 32]",['Table'],no evidence in BM25 top 5,"text, layout or table only",False,17,6,0.0,"[29, 51]",12,0.0,"[29, 51, 32, 30, 31]",False,False
+mmlb-0353,True,[19],['Chart'],all evidence in BM25 top 5,chart or figure,True,19%,19,1.0,"[19, 21]",19,1.0,"[19, 21]",True,True
+mmlb-0355,True,[19],['Chart'],all evidence in BM25 top 5,chart or figure,True,Liberal,Democrats,0.0,[19],Democrats,0.0,"[19, 21]",False,False
+mmlb-0357,True,[9],['Chart'],all evidence in BM25 top 5,chart or figure,True,53%,53,1.0,[9],53,1.0,[9],True,True
+mmlb-0359,True,"[11, 12]",['Chart'],some evidence in BM25 top 5,chart or figure,False,13%,25,0.0,"[7, 11]",13,1.0,"[7, 11]",False,True
+mmlb-0360,True,[14],['Chart'],all evidence in BM25 top 5,chart or figure,True,35%,34,0.0,"[5, 14]",34,0.0,"[5, 14]",False,False
+mmlb-0362,True,"[12, 16]",['Chart'],some evidence in BM25 top 5,chart or figure,False,1%,20,0.0,"[5, 16]",24,0.0,"[5, 16]",False,False
+mmlb-0363,True,"[17, 18]",['Chart'],all evidence in BM25 top 5,chart or figure,True,29%,16,0.0,"[18, 16]",15,0.0,"[18, 16]",False,False
+mmlb-0727,True,[16],['Table'],no evidence in BM25 top 5,"text, layout or table only",False,12,500000,0.0,[19],458958,0.0,"[19, 16]",False,False
+mmlb-0729,True,[16],['Table'],all evidence in BM25 top 5,"text, layout or table only",True,41,71,0.0,[16],71,0.0,[16],False,False
+mmlb-0731,True,"[7, 8]",['Figure'],all evidence in BM25 top 5,chart or figure,True,"['yellow', 'black and white']","['black', 'white']",0.0,[8],"['black', 'white']",0.0,[8],False,False
+mmlb-0732,True,"[7, 11, 14]","['Figure', 'Pure-text (Plain-text)']",all evidence in BM25 top 5,chart or figure,True,5,3,0.0,"[7, 11, 14]",3,0.0,"[7, 11, 14]",False,False
+mmlb-0733,True,[19],['Chart'],all evidence in BM25 top 5,chart or figure,True,14:04 CET,17:05 CET,0.0,"[19, 3]",17:05 CET,0.0,"[19, 3]",False,False
+mmlb-0735,True,"[8, 9, 10]",['Figure'],some evidence in BM25 top 5,chart or figure,False,yes,No,0.0,"[8, 6]",No,0.0,"[8, 6, 9, 10]",False,False
+mmlb-0736,True,[14],['Figure'],all evidence in BM25 top 5,chart or figure,True,3,4,0.0,[14],4,0.0,[14],False,False
+mmlb-0737,True,[18],['Figure'],all evidence in BM25 top 5,chart or figure,True,18,61,0.0,[18],61,0.0,[18],False,False
+mmlb-0739,True,"[11, 13]",['Figure'],all evidence in BM25 top 5,chart or figure,True,4,3,0.0,"[13, 11, 4]",3,0.0,"[13, 11, 4]",False,False
+mmlb-0740,True,"[1, 2]",['Pure-text (Plain-text)'],no evidence in BM25 top 5,"text, layout or table only",False,"['2015-03-24', '2015-03-25']","['2015-05-24', '2015-05-25']",0.0,[3],"['2015-03-24', '2015-03-25']",1.0,"[2, 3]",False,True
+mmlb-0741,True,[16],"['Pure-text (Plain-text)', 'Table']",all evidence in BM25 top 5,"text, layout or table only",True,41.67,41.67,1.0,[16],41.67,1.0,[16],True,True
+mmlb-0762,True,"[2, 16, 20]",['Figure'],some evidence in BM25 top 5,chart or figure,False,2,6,0.0,"[2, 4]",3,0.0,"[1, 2, 3]",False,False
+mmlb-0763,True,[7],"['Pure-text (Plain-text)', 'Generalized-text (Layout)', 'Figure']",all evidence in BM25 top 5,chart or figure,True,4,6,0.0,"[3, 7]",6,0.0,"[2, 3, 7]",False,False
+mmlb-0765,True,"[4, 17]",['Chart'],some evidence in BM25 top 5,chart or figure,False,VAAL,Random,0.0,"[2, 16]",Random,0.0,"[2, 4]",False,False
+mmlb-0766,True,"[8, 24]",['Chart'],some evidence in BM25 top 5,chart or figure,False,3,5,0.0,"[2, 8]",5,0.0,"[2, 8, 24]",False,False
+mmlb-0767,True,"[14, 15]",['Table'],no evidence in BM25 top 5,"text, layout or table only",False,SGD,"['Random', 'Consistency', 'VAAL', 'Margin', 'Entropy', 'Coreset', 'BALD']",0.0,[6],['SGD'],0.0,"[14, 15]",False,False
+mmlb-0769,True,[22],['Figure'],all evidence in BM25 top 5,chart or figure,True,ground truth,pseudo-labels,0.0,"[22, 18]",Data Map by pseudo-labels has a larger confidence variance.,0.0,"[22, 18]",False,False

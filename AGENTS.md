@@ -1,33 +1,37 @@
 # Notebook-first development policy
 
-During the learning and experimentation phase, implement project features directly in Jupyter notebooks under `notebooks/project/`.
+During the learning and experimentation phase, project features are implemented directly in the Jupyter notebooks under `notebooks/`.
+
+## Structure
+
+- `notebooks/00_document_processing.ipynb` → `01_retrieval.ipynb` → `02_question_answering.ipynb` → `03_evaluation.ipynb`. Each notebook has one responsibility.
+- Notebooks communicate **only through saved files** (`data/processed/`, `data/cache/`, `experiments/`). Each notebook states its inputs and outputs at the top and fails with a clear message when an input is missing. Never depend on variables created by another notebook.
+- `experiments/frozen/` holds the committed canonical predictions. Never edit those files; new live runs go to the git-ignored `experiments/runs/`.
+- `archive/` is read-only history. Do not import from it or extend it.
 
 ## Required workflow
 
 - Do not create new Python modules or scripts for exploratory or experimental functionality that can reasonably live in a notebook.
 - Do not develop a `.py` implementation and convert or generate a notebook from it.
-- Do not use `src/visualdoc/` as a hidden implementation layer for new learning notebooks. Rebuild important operations visibly in notebook cells.
-- Preserve the existing `src/`, `tests/`, `notebooks/prototypes/`, and `notebooks/course_labs/` content as historical, regression, or reference material unless the user explicitly requests a change.
-- Keep project notebooks independently executable from top to bottom. Do not depend on variables created by another notebook.
-- Use numbered filenames in `notebooks/project/` to preserve the learning sequence.
+- Do not use `src/visualdoc/` as a hidden implementation layer for the notebooks. Rebuild important operations visibly in notebook cells.
+- Preserve `src/`, `tests/` and `archive/` as historical, regression or reference material unless the user explicitly requests a change.
+- Keep each notebook executable from top to bottom on a fresh kernel (`visualdoc-venv`), given the outputs of the notebooks before it.
+- Prefer extending an existing stage over adding a notebook. A new stage gets the next number.
 
-## Notebook teaching structure
+## Notebook structure
 
-Each substantive notebook must include:
+Each notebook follows: Objective (with inputs, outputs, next step) → Method (technique, why it fits, assumptions, essential mathematics) → Implementation in small, sequential cells → Validation checks, including at least one failure case or limitation → Results → Interpretation beside the evidence.
 
-1. Objective
-2. Concept and relevant assumptions or mathematics
-3. Small, focused implementation cells
-4. Executed outputs
-5. Inspection of intermediate values, tables, or figures
-6. Interpretation beside the evidence
-7. Validation checks and at least one relevant failure case or limitation
-8. A clear next step
+Show the underlying operation once before wrapping it in a helper when that improves understanding. Keep outputs bounded. Never present mock, illustrative or synthetic values as project results; mocked API responses are interface tests only.
 
-Show the underlying operation before wrapping it in a helper function when that improves understanding. Keep outputs bounded and never present mock, illustrative, or synthetic values as project results.
+## Experimental integrity
+
+- Do not change the dataset revision, subset, seeds, OCR or BM25 parameters, prompts, model snapshot, page lists or scoring rules without recording it as a new condition.
+- Paid API calls are opt-in (`VISUALDOC_QA_MODE`, default `replay`). Never run `smoke`, `pilot` or `full` without the user's explicit approval. Never print or commit credentials.
+- Regression references (Recall@5 0.689, Hit@5 0.800, A 7/40, B 7/40, C 9/40, D 11/38) are asserted in the notebooks; a change that breaks them must be explained, not silenced.
 
 ## Completion standard
 
-Validate notebook JSON, execute runnable notebooks from a fresh kernel, save their outputs, and inspect their rendered presentation. If credentials, annotations, or an unresolved model choice block execution, retain an explicit readiness gate and state the missing input inside the notebook.
+Validate notebook JSON, execute the notebooks in order from a fresh kernel, save their outputs, and inspect their rendered presentation. If credentials, annotations or an unresolved model choice block execution, keep an explicit readiness gate and state the missing input inside the notebook.
 
 Moving notebook code into production modules, adding an application framework, or deleting the existing Python baseline is a separate phase that requires explicit user approval.

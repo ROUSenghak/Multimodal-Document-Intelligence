@@ -3,7 +3,7 @@
 __pycache__/
 .ipynb_checkpoints/
 .env
-notebooks/course_labs/layoutreader/
+archive/course_labs/layoutreader/
 
 # --- Secrets and credentials -------------------------------------------------
 # Keep real keys in .env (ignored above); commit only .env.example.
@@ -30,13 +30,13 @@ dist/
 # --- Outputs written by the Lab notebooks ------------------------------------
 # (Git has no trailing comments: a '#' after a pattern becomes part of it.)
 # L5: vector store and parsed ADE chunks
-notebooks/course_labs/chroma_db/
-notebooks/course_labs/ade_outputs/
+archive/course_labs/chroma_db/
+archive/course_labs/ade_outputs/
 # L4_II: annotated pages and cropped chunks
-notebooks/course_labs/results/
-notebooks/course_labs/results_extracted/
-notebooks/course_labs/page_*_annotated.png
-notebooks/course_labs/page_annotated.png
+archive/course_labs/results/
+archive/course_labs/results_extracted/
+archive/course_labs/page_*_annotated.png
+archive/course_labs/page_annotated.png
 
 # --- Project outputs (regenerable) --------------------------------------------
 experiments/runs/
@@ -54,7 +54,7 @@ data/external/**/*.lock
 data/external/**/*.incomplete
 data/external/vidore/cache/
 # MMLongBench-Doc PDFs are CC BY-NC 4.0 and downloaded on demand by
-# notebooks/project/14_mmlongbench_doc_benchmark.ipynb.
+# notebooks/00_document_processing.ipynb.
 data/external/mmlongbench_doc/documents/
 # Hugging Face cache redirected into the project by notebooks (if any).
 .hf_cache/

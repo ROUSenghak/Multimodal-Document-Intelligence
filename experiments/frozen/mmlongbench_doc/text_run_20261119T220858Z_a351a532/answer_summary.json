@@ -1,0 +1,28 @@
+{
+  "generation_status": "complete: full population, 57 questions",
+  "generation": {
+    "mode": "full",
+    "answer_population_size": 57,
+    "smoke_test": "ok",
+    "question_status": {
+      "ok": 57
+    },
+    "requested_model": "gpt-4o-mini",
+    "served_models": [
+      "gpt-4o-mini-2024-07-18"
+    ],
+    "prompt_tokens": 107988,
+    "completion_tokens": 1191
+  },
+  "metrics": {
+    "questions": 57,
+    "accuracy (local rules)": 0.2631578947368421,
+    "F1 (official definition)": 0.16470588235294117,
+    "accuracy on answerable": 0.175,
+    "accuracy on unanswerable (correct abstention)": 0.47058823529411764,
+    "false abstention rate on answerable": 0.1,
+    "citation validity": 1.0,
+    "cites an evidence page (answerable)": 0.65,
+    "unparseable replies (scored 0)": 0
+  }
+}

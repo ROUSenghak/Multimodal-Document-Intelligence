@@ -5,11 +5,11 @@ are separate from any future license chosen for the project code.
 
 ## Course labs
 
-`notebooks/course_labs/` contains DeepLearning.AI course notebooks, helper
+`archive/course_labs/` contains DeepLearning.AI course notebooks, helper
 code, and lesson assets. Their inclusion here does not relicense them. Confirm
 the applicable course terms before redistributing the repository.
 
-Parts of `notebooks/course_labs/helper.py` cite LandingAI documentation and
+Parts of `archive/course_labs/helper.py` cite LandingAI documentation and
 the `landing-ai/ade-helper-scripts` repository as their source.
 
 ## Evaluation documents

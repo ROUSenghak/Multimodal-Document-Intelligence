@@ -1,7 +1,7 @@
 """Inspect PDF pages, select an extraction route, and extract their text.
 
 The functions in this module preserve the behavior first prototyped in
-``notebooks/prototypes/page_extraction.ipynb``. The routing thresholds are
+``archive/notebooks/prototypes/page_extraction.ipynb``. The routing thresholds are
 heuristics validated on the repository's sample documents, not universal
 PDF-classification rules.
 """

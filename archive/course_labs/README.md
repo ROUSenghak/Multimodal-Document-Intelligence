@@ -8,7 +8,7 @@ Run them from this directory because the notebooks intentionally use local
 paths for their lesson assets:
 
 ```bash
-cd notebooks/course_labs
+cd archive/course_labs
 jupyter lab
 ```
 

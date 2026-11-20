@@ -1,0 +1,69 @@
+{
+  "oracle_status": "complete: 40 answerable questions",
+  "condition": "annotated evidence pages, padded to generation_top_k with the best-ranked non-evidence BM25 pages, in BM25 rank order",
+  "oracle_qids": [
+    "mmlb-0033",
+    "mmlb-0034",
+    "mmlb-0035",
+    "mmlb-0036",
+    "mmlb-0037",
+    "mmlb-0039",
+    "mmlb-0041",
+    "mmlb-0094",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0097",
+    "mmlb-0313",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0318",
+    "mmlb-0319",
+    "mmlb-0353",
+    "mmlb-0355",
+    "mmlb-0357",
+    "mmlb-0359",
+    "mmlb-0360",
+    "mmlb-0362",
+    "mmlb-0363",
+    "mmlb-0727",
+    "mmlb-0729",
+    "mmlb-0731",
+    "mmlb-0732",
+    "mmlb-0733",
+    "mmlb-0735",
+    "mmlb-0736",
+    "mmlb-0737",
+    "mmlb-0739",
+    "mmlb-0740",
+    "mmlb-0741",
+    "mmlb-0762",
+    "mmlb-0763",
+    "mmlb-0765",
+    "mmlb-0766",
+    "mmlb-0767",
+    "mmlb-0769"
+  ],
+  "question_status": {
+    "ok": 40
+  },
+  "metrics": {
+    "bm25_same_questions": {
+      "questions": 40,
+      "accuracy": 0.175,
+      "false abstention rate": 0.1,
+      "cites an evidence page": 0.65,
+      "citation validity": 1.0,
+      "unparseable replies": 0,
+      "prompt tokens": 74624
+    },
+    "oracle": {
+      "questions": 40,
+      "accuracy": 0.225,
+      "false abstention rate": 0.075,
+      "cites an evidence page": 0.875,
+      "citation validity": 1.0,
+      "unparseable replies": 0,
+      "prompt tokens": 73170
+    }
+  }
+}

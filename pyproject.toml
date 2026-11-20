@@ -13,17 +13,20 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+# Everything the four notebooks need, including offline replay and the mocked API tests in 02.
 notebooks = [
-    "datasets",
     "huggingface_hub",
     "ipykernel",
     "jupyter",
     "matplotlib",
     "numpy",
+    "openai>=1.0",
     "pandas",
-    "pillow",
+    "pyarrow",
+    "python-dotenv",
+    "tiktoken",
 ]
-# Optional: real answer generation in notebooks/project/14_mmlongbench_doc_benchmark.ipynb
+# Kept for compatibility: live API runs need nothing beyond the notebooks extra.
 llm = [
     "openai>=1.0",
     "python-dotenv",

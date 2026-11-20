@@ -1,0 +1,17 @@
+{
+  "requested_model": "gpt-4o-mini",
+  "attempts": 1,
+  "latency_s": 0.704,
+  "failed_attempts": [],
+  "raw_response": "{\n  \"answer\": 2019,\n  \"cited_pages\": [1]\n}",
+  "finish_reason": "stop",
+  "served_model": "gpt-4o-mini-2024-07-18",
+  "prompt_tokens": 181,
+  "completion_tokens": 19,
+  "pred": 2019,
+  "cited_pages": [
+    1
+  ],
+  "parse_error": null,
+  "status": "ok"
+}

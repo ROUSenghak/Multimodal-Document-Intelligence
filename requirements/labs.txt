@@ -1,4 +1,4 @@
-# Optional dependencies for notebooks/course_labs/.
+# Optional dependencies for archive/course_labs/.
 # Install from the repository root:
 #   pip install -r requirements/labs.txt
 
