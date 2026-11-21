@@ -67,6 +67,43 @@ What the evidence supports (all exploratory: 38–57 questions in 6 documents):
   oracle pages (H3) shows a consistent direction but is **not established**
   (6 fixed, 4 broken, McNemar p = 0.75).
 
+## Experiment E1 — image resolution (offline-ready after independent review)
+
+E1 tests the same annotated oracle evidence pages at a 512-px short side and
+a 768-px short side. It needs a new matched 512-px control: the frozen D
+condition pads oracle evidence to five pages, while five high-detail 768-px
+pages plus the unchanged 400-token output allowance exceed GPT-4o-mini's
+128k context. The matched preflight retains 37/40 answerable questions and
+excludes the three questions with 5, 10 and 13 evidence pages.
+
+No E1 API call has been made. The frozen specification is
+[`experiments/specs/e1_image_resolution_v1.json`](experiments/specs/e1_image_resolution_v1.json).
+Offline rendering, request invariants, decoded image dimensions and hashes,
+replicate-isolated cache tests, reproducible randomized ordering, mocked
+responses, context feasibility and cost estimation pass.
+
+The primary outcome is the paired answer-accuracy difference. Mean benchmark
+score is secondary. A full run adds an independent repeated 512-px control to
+estimate run-to-run variability. Requests are adjacent pairs by question with
+seeded within-pair order; the run log records timestamps, model/system
+fingerprints, token usage and cache provenance. The 8-question pilot validates
+technical feasibility only and is not an accuracy estimate.
+
+Upper-bound list cost (including the full 400-token allowance) is about
+**$0.0065** for the two-call technical smoke, **$0.0881** for smoke plus the
+8-question pilot pair, and **$0.5276** for smoke plus the 37-question main pair
+and 37-question repeated control. Actual cost should be lower when replies use
+fewer than 400 output tokens.
+
+The 768-px choice is deliberate: GPT-4o-mini high-detail billing
+preprocessing does not enlarge the 512-px control and reduces a shortest side
+above 768 px to 768. A 1024-px render is therefore not a distinct documented
+input treatment for this model. Observed token counts validate the expected
+billing accounting; they do not prove the model's internal visual resolution. The pinned
+snapshot is deprecated and scheduled for shutdown on 2027-01-14; retain it
+for E1 comparability, then treat a newer-model resolution study as a separate
+experiment.
+
 Answer scores re-implement the benchmark's rule-based scorer with structured
 JSON answers instead of its GPT-4o extraction stage, so they are **local
 diagnostics, not leaderboard numbers**. Details, limitations and the manual
@@ -116,6 +153,29 @@ jupyter lab notebooks/                   # then run 00 → 01 → 02 → 03 with
 For a live run, set `OPENAI_API_KEY` and `VISUALDOC_QA_MODE` in `.env`, and
 always go `smoke` → `pilot` → `full`. A full run costs about $1.10 at list
 prices if no image reply is cached.
+
+E1 is gated separately so the frozen baseline can remain in replay mode:
+
+```bash
+# Offline validation only (default; no API call)
+VISUALDOC_QA_MODE=replay VISUALDOC_E1_MODE=offline jupyter nbconvert \
+  --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+
+# Paid modes: run only after explicit approval, in this order
+VISUALDOC_QA_MODE=replay VISUALDOC_E1_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+VISUALDOC_QA_MODE=replay VISUALDOC_E1_MODE=pilot jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+VISUALDOC_QA_MODE=replay VISUALDOC_E1_MODE=full jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+
+# Evaluate one immutable saved run without calling the API
+VISUALDOC_E1_RUN_DIR=experiments/runs/e1/<run-id> jupyter nbconvert \
+  --execute --to notebook --inplace notebooks/03_evaluation.ipynb
+```
+
+Each paid E1 invocation creates a unique run directory and refuses to
+overwrite an earlier run. `smoke` writes technical verification only;
+`pilot` saves selected responses but 03 suppresses performance claims;
+`full` is the only mode that writes the repeated-control comparison and the
+predefined accuracy–cost decision readout.
 
 **Troubleshooting.** `ModuleNotFoundError: No module named 'visualdoc'` while
 `pip show visualdoc-ai` works: the editable-install `.pth` file has the macOS

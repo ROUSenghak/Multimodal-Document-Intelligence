@@ -5,6 +5,33 @@
 | `frozen/mmlongbench_doc/` | yes | The canonical text run (conditions A, C) and image run (B, D), copied byte for byte, with `SHA256SUMS` and a provenance [README](frozen/mmlongbench_doc/README.md). Never edited. |
 | `runs/` | no (git-ignored) | Raw outputs of live runs. New runs from `notebooks/02_question_answering.ipynb` go to `runs/qa/<UTC timestamp>_<mode>/`; the historical runs of the archived notebooks 14 and 15 stay in `runs/mmlongbench_doc/` and `runs/mmlongbench_doc_multimodal/` where they exist. |
 
+Experiment E1 resolution runs are isolated under
+`runs/e1/<UTC timestamp>_<unique id>_<mode>_<render profile>/`. Creation is
+exclusive: an existing run is never overwritten. The protocol is frozen in
+[`specs/e1_image_resolution_v1.json`](specs/e1_image_resolution_v1.json).
+E1's default `offline` mode creates no run directory and makes no API call; it
+writes only regenerable design, request-estimate and cost-plan files to
+`data/processed/mmlongbench_doc/e1/`.
+
+A paid run directory contains these audit files:
+
+- `settings.json`, `spec_snapshot.json`, `execution_plan.json` and
+  `request_estimates.csv`;
+- `execution_log.jsonl` in actual request order, including timestamps,
+  dimensions, full image hashes, token usage, model/system fingerprints and
+  cache provenance;
+- `response_cache.jsonl`, scoped to that run and replicate only;
+- `smoke_gate.json` and `smoke_records.jsonl`;
+- `completion.json`;
+- for pilot/full, `predictions_main_r1_E1_512.jsonl` and
+  `predictions_main_r1_E1_768.jsonl`;
+- for full only, `predictions_control_r2_E1_512.jsonl`;
+- after evaluation, `evaluation_summary.json` and the full-run summary figure.
+
+Cached-response lookup latency is recorded separately from the originating
+live API latency. A new run or replicate has a new cache namespace and cannot
+reuse a previous replicate's response.
+
 ## How results are reproduced
 
 ```text
