@@ -67,7 +67,7 @@ What the evidence supports (all exploratory: 38–57 questions in 6 documents):
   oracle pages (H3) shows a consistent direction but is **not established**
   (6 fixed, 4 broken, McNemar p = 0.75).
 
-## Experiment E1 — image resolution (offline-ready after independent review)
+## Experiment E1 — image resolution (completed, frozen)
 
 E1 tests the same annotated oracle evidence pages at a 512-px short side and
 a 768-px short side. It needs a new matched 512-px control: the frozen D
@@ -76,7 +76,27 @@ pages plus the unchanged 400-token output allowance exceed GPT-4o-mini's
 128k context. The matched preflight retains 37/40 answerable questions and
 excludes the three questions with 5, 10 and 13 evidence pages.
 
-No E1 API call has been made. The frozen specification is
+**Result** (full run of 2026-11-21, 113 calls, $0.50 at list price; frozen in
+[`experiments/frozen/e1/`](experiments/frozen/e1/README.md)):
+
+| | 512 px | 512 px repeat | 768 px |
+| --- | --- | --- | --- |
+| correct (37 questions, 6 documents) | 10/37 (0.270) | 11/37 (0.297) | 16/37 (0.432) |
+| citation validity, given a citation | 0.944 | 0.944 | 0.892 |
+| mean input tokens | ≈ 21.6k | ≈ 21.6k | ≈ 45.8k |
+
+Paired: 6 fixed, 0 broken. The identical 512-px repeat changed correctness on 1/37
+questions. The pre-registered rule says **adopt 768 px for this model and
+question set**, at $0.022 per additional correct answer. Higher resolution fixes
+small printed digits, counts and labels. It does not fix the counting and
+reasoning failures that make up most remaining errors (21/37 wrong at both
+resolutions). The sample is small and clustered, so intervals are descriptive.
+An independent audit of the saved run passed. Notebook 02 rebuilds its 113
+requests byte for byte, and notebook 03 re-evaluates it with figures; see the
+package README for limitations, including how the executing code revision was
+established.
+
+The frozen specification is
 [`experiments/specs/e1_image_resolution_v1.json`](experiments/specs/e1_image_resolution_v1.json).
 Offline rendering, request invariants, decoded image dimensions and hashes,
 replicate-isolated cache tests, reproducible randomized ordering, mocked
@@ -188,6 +208,7 @@ predefined accuracy–cost decision readout.
 ├── notebooks/                 # the four-stage workflow (00 → 03)
 ├── experiments/
 │   ├── frozen/mmlongbench_doc/  # committed canonical predictions and results, with SHA256SUMS
+│   ├── frozen/e1/             # frozen E1 full run, figures, per-question table, provenance, SHA256SUMS
 │   └── runs/                  # git-ignored outputs of new live runs
 ├── data/
 │   ├── external/              # MMLongBench-Doc question table (tracked) and PDFs (git-ignored); other benchmarks

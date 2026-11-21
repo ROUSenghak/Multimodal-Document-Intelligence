@@ -1,0 +1,231 @@
+{
+  "run_dir": "experiments/runs/e1/20261121T131525011829Z_29c92c8a_full_short768-long1536",
+  "mode": "full",
+  "performance_reported": true,
+  "execution": {
+    "planned_calls": 113,
+    "successful_calls": 113,
+    "prompt_tokens": 3336385,
+    "completion_tokens": 2355,
+    "cached_prompt_tokens": 364800,
+    "observed_token_list_cost_usd": 0.50187075,
+    "mean_live_api_latency_s": 1.6055663716814157,
+    "served_models": [
+      "gpt-4o-mini-2024-07-18"
+    ],
+    "system_fingerprints": [
+      "fp_9483e83037"
+    ],
+    "truncated_responses": 0,
+    "unparseable_responses": 0
+  },
+  "primary": {
+    "questions": 37,
+    "documents": 6,
+    "paired_answer_accuracy_difference": 0.16216216216216217,
+    "paired_net_additional_correct_answers": 6,
+    "paired_correctness_changed_questions": 6,
+    "paired_correctness_changed_percentage": 16.216216216216218,
+    "document_cluster_bootstrap_95_interval": [
+      0.08108108108108109,
+      0.2962962962962963
+    ],
+    "leave_one_document_out": {
+      "2210.02442v1.pdf": 0.1935483870967742,
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf": 0.16666666666666666,
+      "bdf54dxa.pdf": 0.15625,
+      "earlybird-110722143746-phpapp02_95.pdf": 0.15151515151515152,
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf": 0.19230769230769232,
+      "watch_d.pdf": 0.12121212121212122
+    },
+    "fixed": 6,
+    "broken": 0,
+    "exact_mcnemar_p_ignores_clustering": 0.03125
+  },
+  "secondary": {
+    "paired_mean_benchmark_score_difference": 0.15444015444015444,
+    "document_cluster_bootstrap_95_interval": [
+      0.08108108108108109,
+      0.26857142857142857
+    ]
+  },
+  "repeated_control": {
+    "questions": 37,
+    "correctness_changed_questions": 1,
+    "correctness_changed_percentage": 2.7027027027027026,
+    "correctness_change_rate_for_decision": 0.02702702702702703,
+    "fixed_main_r1_wrong_control_r2_correct": 1,
+    "broken_main_r1_correct_control_r2_wrong": 0,
+    "net_additional_correct_r2_minus_r1": 1,
+    "net_accuracy_difference_r2_minus_r1": 0.02702702702702703,
+    "interpretation": "Observed sensitivity margin from two replicates; not a precise stochastic-uncertainty estimate."
+  },
+  "metrics": [
+    {
+      "condition": "main_512",
+      "questions": 37,
+      "documents": 6,
+      "correct": 10,
+      "answer_accuracy": 0.2702702702702703,
+      "mean_answer_score": 0.2702702702702703,
+      "false_abstention_rate": 0.0,
+      "citation_coverage": 0.972972972972973,
+      "citation_validity_given_citation": 0.9444444444444444,
+      "evidence_citation_rate": 0.9459459459459459,
+      "mean_input_tokens": 21630.243243243243,
+      "mean_output_tokens": 20.972972972972972,
+      "mean_cost_upper_usd": 0.0032571202702702706,
+      "total_cost_upper_usd": 0.12051345000000001,
+      "mean_recorded_live_api_latency_s": 1.459486486486486,
+      "live_calls": 37,
+      "cache_hits": 0
+    },
+    {
+      "condition": "main_768",
+      "questions": 37,
+      "documents": 6,
+      "correct": 16,
+      "answer_accuracy": 0.43243243243243246,
+      "mean_answer_score": 0.42471042471042475,
+      "false_abstention_rate": 0.0,
+      "citation_coverage": 1.0,
+      "citation_validity_given_citation": 0.8918918918918919,
+      "evidence_citation_rate": 0.9459459459459459,
+      "mean_input_tokens": 45829.86486486487,
+      "mean_output_tokens": 21.0,
+      "mean_cost_upper_usd": 0.006887079729729731,
+      "total_cost_upper_usd": 0.25482195,
+      "mean_recorded_live_api_latency_s": 1.946378378378379,
+      "live_calls": 37,
+      "cache_hits": 0
+    },
+    {
+      "condition": "control_r2",
+      "questions": 37,
+      "documents": 6,
+      "correct": 11,
+      "answer_accuracy": 0.2972972972972973,
+      "mean_answer_score": 0.2972972972972973,
+      "false_abstention_rate": 0.0,
+      "citation_coverage": 0.972972972972973,
+      "citation_validity_given_citation": 0.9444444444444444,
+      "evidence_citation_rate": 0.9459459459459459,
+      "mean_input_tokens": 21630.243243243243,
+      "mean_output_tokens": 20.7027027027027,
+      "mean_cost_upper_usd": 0.0032569581081081087,
+      "total_cost_upper_usd": 0.12050745000000003,
+      "mean_recorded_live_api_latency_s": 1.4025405405405404,
+      "live_calls": 37,
+      "cache_hits": 0
+    }
+  ],
+  "transitions": {
+    "fixed": 6,
+    "broken": 0,
+    "both correct": 10,
+    "both wrong": 21
+  },
+  "all_documents": [
+    {
+      "doc_id": "2210.02442v1.pdf",
+      "questions": 6,
+      "correct_512": 0,
+      "correct_768": 0,
+      "accuracy_512": 0.0,
+      "accuracy_768": 0.0,
+      "accuracy_difference": 0.0,
+      "mean_score_difference": 0.0
+    },
+    {
+      "doc_id": "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+      "questions": 7,
+      "correct_512": 2,
+      "correct_768": 3,
+      "accuracy_512": 0.2857142857142857,
+      "accuracy_768": 0.42857142857142855,
+      "accuracy_difference": 0.14285714285714285,
+      "mean_score_difference": 0.14285714285714285
+    },
+    {
+      "doc_id": "bdf54dxa.pdf",
+      "questions": 5,
+      "correct_512": 0,
+      "correct_768": 1,
+      "accuracy_512": 0.0,
+      "accuracy_768": 0.2,
+      "accuracy_difference": 0.2,
+      "mean_score_difference": 0.2
+    },
+    {
+      "doc_id": "earlybird-110722143746-phpapp02_95.pdf",
+      "questions": 4,
+      "correct_512": 1,
+      "correct_768": 2,
+      "accuracy_512": 0.25,
+      "accuracy_768": 0.5,
+      "accuracy_difference": 0.25,
+      "mean_score_difference": 0.25
+    },
+    {
+      "doc_id": "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+      "questions": 11,
+      "correct_512": 5,
+      "correct_768": 6,
+      "accuracy_512": 0.45454545454545453,
+      "accuracy_768": 0.5454545454545454,
+      "accuracy_difference": 0.09090909090909091,
+      "mean_score_difference": 0.09090909090909091
+    },
+    {
+      "doc_id": "watch_d.pdf",
+      "questions": 4,
+      "correct_512": 2,
+      "correct_768": 4,
+      "accuracy_512": 0.5,
+      "accuracy_768": 1.0,
+      "accuracy_difference": 0.5,
+      "mean_score_difference": 0.4285714285714286
+    }
+  ],
+  "visual_reading_subgroup": {
+    "predefined_qids": [
+      "mmlb-0033",
+      "mmlb-0095",
+      "mmlb-0096",
+      "mmlb-0313",
+      "mmlb-0315",
+      "mmlb-0317",
+      "mmlb-0731",
+      "mmlb-0737",
+      "mmlb-0769"
+    ],
+    "questions": 9,
+    "paired_accuracy_difference": 0.4444444444444444,
+    "selected_mechanism_subgroup_not_generalizable": true
+  },
+  "decision": {
+    "verdict": "adopt_768_for_this_model_and_population",
+    "criteria": {
+      "accuracy_gain": true,
+      "exceeds_control_correctness_change_rate": true,
+      "incremental_cost_per_additional_correct": true
+    },
+    "observed_mean_input_token_ratio_descriptive_only": 2.1187863839294083,
+    "observed_incremental_cost_per_additional_correct_answer_usd": 0.02238475,
+    "rule": {
+      "status": "engineering adoption rule, not a confirmatory significance test",
+      "minimum_primary_accuracy_gain": 0.05,
+      "maximum_incremental_cost_per_additional_correct_answer_usd": 0.1,
+      "mean_input_token_ratio_768_over_512": {
+        "expected_pre_live": 2.118838109566378,
+        "role": "descriptive only; no threshold because incremental cost per additional correct answer is the computational trade-off criterion"
+      },
+      "control_variability_measure": "The correctness-change rate between main_r1 E1_512 and control_r2 E1_512: (control fixed + control broken) / 37. This is an observed sensitivity margin, not an estimate of a stochastic variance or uncertainty distribution.",
+      "run_variability_rule": "The main paired 512-to-768 net accuracy gain must be strictly greater than the observed control correctness-change rate. Using all discordant control questions prevents fixed and broken changes from cancelling.",
+      "adopt_768": "Adopt only when the minimum accuracy-gain, strict control-discordance-margin, and maximum incremental-cost-per-additional-correct criteria all pass.",
+      "retain_512": "Retain 512 when the primary paired accuracy difference is non-positive.",
+      "otherwise": "Inconclusive; report the observed trade-off without changing the default."
+    }
+  },
+  "uncertainty_qualification": "With only six document clusters, intervals and McNemar p-values are descriptive and unstable; document-level effects and leave-one-document-out sensitivity must also be shown. Two 512-pixel control replicates do not precisely estimate stochastic uncertainty; their discordance rate is used only as a conservative observed sensitivity margin."
+}

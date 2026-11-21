@@ -1,0 +1,225 @@
+{
+  "spec_id": "e1-image-resolution-v1",
+  "status": "frozen-before-live-execution",
+  "frozen_at": "2026-11-21",
+  "research_question": "On the same annotated oracle evidence pages, does rendering a page with a 768-pixel rather than 512-pixel short side improve answer accuracy enough to justify the additional input-token cost?",
+  "hypotheses": {
+    "primary_null": "The paired answer-accuracy difference, mean(correct_768 - correct_512), is less than or equal to zero on the frozen matched population.",
+    "primary_directional": "The paired answer-accuracy difference, mean(correct_768 - correct_512), is greater than zero on the frozen matched population.",
+    "engineering_adoption": "The 768-pixel condition gains at least 0.05 answer accuracy, its net gain is strictly larger than the observed 512-pixel control correctness-change rate, and its incremental list-price upper-bound cost is at most USD 0.10 per additional correct answer."
+  },
+  "primary_outcome": {
+    "name": "paired_answer_accuracy_difference",
+    "definition": "mean(correct_768 - correct_512) on the frozen matched population within main_r1",
+    "direction": "higher_is_better"
+  },
+  "secondary_outcomes": [
+    "paired_mean_benchmark_score_difference",
+    "paired_outcome_counts",
+    "document_level_accuracy_differences",
+    "visual_reading_subgroup_accuracy_difference",
+    "input_tokens",
+    "inference_cost_upper_usd",
+    "live_api_latency_s",
+    "citation_coverage_and_validity",
+    "false_abstention_rate"
+  ],
+  "evaluation_metrics": {
+    "primary": "Paired mean of correct_768 - correct_512 in main_r1 on all 37 matched questions.",
+    "paired_512_to_768_outcomes": "Counts and percentages fixed (512 wrong, 768 correct), broken (512 correct, 768 wrong), both correct, and both wrong; net paired improvement is (fixed - broken) / 37.",
+    "control_replicate_variability": "On the same 37 questions, report correctness changes, correctness-change percentage, fixed (main_r1 wrong, control_r2 correct), broken (main_r1 correct, control_r2 wrong), and net accuracy difference control_r2 - main_r1.",
+    "cost_tradeoff": "Incremental 768-minus-512 list-price upper-bound cost divided by the number of additional correct answers; infinity when there is no positive net gain.",
+    "descriptive_only": "Mean input-token ratio 768/512, benchmark-score difference, document-level effects, clustered bootstrap interval, leave-one-document-out sensitivity, visual-reading subgroup, latency, citations, and false abstention."
+  },
+  "model": {
+    "provider": "openai",
+    "requested_snapshot": "gpt-4o-mini-2024-07-18",
+    "image_detail": "high",
+    "temperature": 0.0,
+    "max_output_tokens": 400,
+    "image_prompt_version": "mmlb-image-v1",
+    "image_prompt_hash": "35ff2e8b91f9",
+    "context_window_tokens": 128000,
+    "input_usd_per_1m_tokens": 0.15,
+    "output_usd_per_1m_tokens": 0.6
+  },
+  "conditions": {
+    "E1_512": {
+      "role": "control",
+      "render_short_side_px": 512,
+      "render_long_side_px": 1024,
+      "render_label": "short512-long1024"
+    },
+    "E1_768": {
+      "role": "treatment",
+      "render_short_side_px": 768,
+      "render_long_side_px": 1536,
+      "render_label": "short768-long1536"
+    }
+  },
+  "held_constant": [
+    "question text",
+    "annotated evidence-page list and order",
+    "page tags",
+    "PNG encoding path except render scale",
+    "model snapshot",
+    "system prompt",
+    "generation parameters",
+    "parser",
+    "scorer"
+  ],
+  "population": {
+    "source": "answerable questions in the fixed six-document MMLongBench-Doc subset with nonzero annotated evidence pages",
+    "page_rule": "annotated evidence pages only, in benchmark order; no BM25 padding",
+    "eligible_questions_before_context_gate": 40,
+    "matched_questions": 37,
+    "matched_qids": [
+      "mmlb-0033",
+      "mmlb-0034",
+      "mmlb-0037",
+      "mmlb-0041",
+      "mmlb-0094",
+      "mmlb-0095",
+      "mmlb-0096",
+      "mmlb-0097",
+      "mmlb-0313",
+      "mmlb-0315",
+      "mmlb-0317",
+      "mmlb-0318",
+      "mmlb-0319",
+      "mmlb-0353",
+      "mmlb-0355",
+      "mmlb-0357",
+      "mmlb-0359",
+      "mmlb-0360",
+      "mmlb-0362",
+      "mmlb-0363",
+      "mmlb-0727",
+      "mmlb-0729",
+      "mmlb-0731",
+      "mmlb-0732",
+      "mmlb-0733",
+      "mmlb-0735",
+      "mmlb-0736",
+      "mmlb-0737",
+      "mmlb-0739",
+      "mmlb-0740",
+      "mmlb-0741",
+      "mmlb-0762",
+      "mmlb-0763",
+      "mmlb-0765",
+      "mmlb-0766",
+      "mmlb-0767",
+      "mmlb-0769"
+    ],
+    "excluded_context_qids": {
+      "mmlb-0035": 13,
+      "mmlb-0036": 5,
+      "mmlb-0039": 10
+    },
+    "documents": [
+      "2210.02442v1.pdf",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+      "bdf54dxa.pdf",
+      "earlybird-110722143746-phpapp02_95.pdf",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+      "watch_d.pdf"
+    ]
+  },
+  "technical_smoke": {
+    "qid": "mmlb-0033",
+    "purpose": "verify request construction, decoded image dimensions and hashes, response parsing, and expected-versus-observed prompt-token accounting; never estimate accuracy",
+    "conditions": [
+      "E1_512",
+      "E1_768"
+    ],
+    "observed_prompt_token_absolute_tolerance": 300,
+    "observed_prompt_token_relative_tolerance": 0.02,
+    "essential_gates": [
+      "both calls complete or parse_error",
+      "decoded request images match frozen manifest dimensions and SHA-256 hashes",
+      "served model equals the requested snapshot",
+      "observed prompt tokens are within max(absolute tolerance, relative tolerance times expected tokens)"
+    ]
+  },
+  "pilot": {
+    "purpose": "technical feasibility only; selected outcomes must not be used as an estimate of statistical improvement",
+    "qids": [
+      "mmlb-0033",
+      "mmlb-0313",
+      "mmlb-0737",
+      "mmlb-0763",
+      "mmlb-0769",
+      "mmlb-0729",
+      "mmlb-0732",
+      "mmlb-0739"
+    ]
+  },
+  "visual_reading_subgroup": {
+    "provenance": "question IDs assigned the primary manual-review label 'visual reading' before E1 responses are observed",
+    "qids": [
+      "mmlb-0033",
+      "mmlb-0095",
+      "mmlb-0096",
+      "mmlb-0313",
+      "mmlb-0315",
+      "mmlb-0317",
+      "mmlb-0731",
+      "mmlb-0737",
+      "mmlb-0769"
+    ],
+    "interpretation": "mechanism-focused and selected, not a population-generalizable subgroup"
+  },
+  "execution": {
+    "pairing": "Within main_r1, execute the two resolution requests adjacently for each question.",
+    "question_order_seed": 20261121,
+    "within_pair_order_seed": 20261122,
+    "control_repeat_order_seed": 20261123,
+    "replicates": {
+      "main_r1": [
+        "E1_512",
+        "E1_768"
+      ],
+      "control_r2": [
+        "E1_512"
+      ]
+    },
+    "control_repeat_scope": "full mode only, same 37 questions",
+    "cache_policy": "cache entries are namespaced by immutable run ID and replicate ID; a new replicate cannot reuse another replicate's response",
+    "record": [
+      "global execution index",
+      "pair index and within-pair order",
+      "request start and completion timestamps",
+      "request fingerprint and cache provenance",
+      "served model and system fingerprint when returned",
+      "observed token usage",
+      "live API latency separately from cache lookup latency"
+    ]
+  },
+  "decision_rule": {
+    "status": "engineering adoption rule, not a confirmatory significance test",
+    "minimum_primary_accuracy_gain": 0.05,
+    "maximum_incremental_cost_per_additional_correct_answer_usd": 0.1,
+    "mean_input_token_ratio_768_over_512": {
+      "expected_pre_live": 2.118838109566378,
+      "role": "descriptive only; no threshold because incremental cost per additional correct answer is the computational trade-off criterion"
+    },
+    "control_variability_measure": "The correctness-change rate between main_r1 E1_512 and control_r2 E1_512: (control fixed + control broken) / 37. This is an observed sensitivity margin, not an estimate of a stochastic variance or uncertainty distribution.",
+    "run_variability_rule": "The main paired 512-to-768 net accuracy gain must be strictly greater than the observed control correctness-change rate. Using all discordant control questions prevents fixed and broken changes from cancelling.",
+    "adopt_768": "Adopt only when the minimum accuracy-gain, strict control-discordance-margin, and maximum incremental-cost-per-additional-correct criteria all pass.",
+    "retain_512": "Retain 512 when the primary paired accuracy difference is non-positive.",
+    "otherwise": "Inconclusive; report the observed trade-off without changing the default."
+  },
+  "uncertainty": {
+    "primary_interval": "deterministic percentile bootstrap resampling the six documents as clusters",
+    "bootstrap_seed": 42,
+    "bootstrap_draws": 10000,
+    "qualification": "With only six document clusters, intervals and McNemar p-values are descriptive and unstable; document-level effects and leave-one-document-out sensitivity must also be shown. Two 512-pixel control replicates do not precisely estimate stochastic uncertainty; their discordance rate is used only as a conservative observed sensitivity margin."
+  },
+  "documentation_checked": "2026-11-21",
+  "source_urls": {
+    "vision": "https://developers.openai.com/api/docs/guides/images-vision",
+    "model": "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+    "deprecations": "https://developers.openai.com/api/docs/deprecations"
+  }
+}

@@ -3,6 +3,7 @@
 | Folder | Tracked | Content |
 | --- | --- | --- |
 | `frozen/mmlongbench_doc/` | yes | The canonical text run (conditions A, C) and image run (B, D), copied byte for byte, with `SHA256SUMS` and a provenance [README](frozen/mmlongbench_doc/README.md). Never edited. |
+| `frozen/e1/` | yes | Byte-identical copy of the E1 full run `20261121T131525011829Z_29c92c8a` plus its per-question table, six figures, `PROVENANCE.json`, `SHA256SUMS` and a [README](frozen/e1/README.md) with results and limitations. Notebook 03 evaluates it by default. Never edited. |
 | `runs/` | no (git-ignored) | Raw outputs of live runs. New runs from `notebooks/02_question_answering.ipynb` go to `runs/qa/<UTC timestamp>_<mode>/`; the historical runs of the archived notebooks 14 and 15 stay in `runs/mmlongbench_doc/` and `runs/mmlongbench_doc_multimodal/` where they exist. |
 
 Experiment E1 resolution runs are isolated under
@@ -45,7 +46,8 @@ What is verified on every execution, without API calls:
 - the document subset, question ids, full BM25 rankings (57/57) and the retrieval table (Recall@5 0.689, Hit@5 0.800) equal the frozen run;
 - the 124 page images sent to the model are reproduced byte for byte;
 - page lists, both system prompts (hashes `f60729bf0b66`, `35ff2e8b91f9`), generation parameters, token estimates and all 95 image-request fingerprints equal what was sent;
-- every per-question score, the four-condition counts (A 7/40, B 7/40, C 9/40, D 11/38) and the five paired summaries equal the frozen files.
+- every per-question score, the four-condition counts (A 7/40, B 7/40, C 9/40, D 11/38) and the five paired summaries equal the frozen files;
+- for E1, the 113 frozen requests are rebuilt with identical fingerprints and replicate-specific cache keys (02). The frozen run's evaluation, integrity audit and per-question table are re-derived exactly, and the references 10/37, 11/37, 16/37 hold (03).
 
 What cannot be verified without paying for new calls: whether the model would
 give the same replies today. At temperature 0, 3–6 of 57 text predictions

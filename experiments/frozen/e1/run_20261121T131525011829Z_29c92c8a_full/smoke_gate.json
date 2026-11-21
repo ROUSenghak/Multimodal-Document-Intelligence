@@ -1,0 +1,14 @@
+{
+  "passed": true,
+  "checks": {
+    "one response for each resolution": true,
+    "both calls completed and parsed": true,
+    "responses complete and not truncated": true,
+    "request image dimensions and hashes verified": true,
+    "served pinned model snapshot": true,
+    "observed prompt tokens match documented accounting": true,
+    "all per-response validations passed": true,
+    "projected full cost remains within approved ceiling": true
+  },
+  "stop_reason": null
+}

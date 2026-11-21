@@ -1,0 +1,208 @@
+{
+  "spec_id": "e1-image-resolution-v1",
+  "spec_sha256": "b21ca75a9ad8b700cfd2dc233682bf2396bf313d27630ff116ee5c6948cf5abc",
+  "generated_at": "2026-11-21T13:15:24+00:00",
+  "model": "gpt-4o-mini-2024-07-18",
+  "image_detail": "high",
+  "image_prompt_version": "mmlb-image-v1",
+  "image_prompt_hash": "35ff2e8b91f9",
+  "temperature": 0.0,
+  "max_output_tokens": 400,
+  "hypotheses": {
+    "primary_null": "The paired answer-accuracy difference, mean(correct_768 - correct_512), is less than or equal to zero on the frozen matched population.",
+    "primary_directional": "The paired answer-accuracy difference, mean(correct_768 - correct_512), is greater than zero on the frozen matched population.",
+    "engineering_adoption": "The 768-pixel condition gains at least 0.05 answer accuracy, its net gain is strictly larger than the observed 512-pixel control correctness-change rate, and its incremental list-price upper-bound cost is at most USD 0.10 per additional correct answer."
+  },
+  "primary_outcome": {
+    "name": "paired_answer_accuracy_difference",
+    "definition": "mean(correct_768 - correct_512) on the frozen matched population within main_r1",
+    "direction": "higher_is_better"
+  },
+  "evaluation_metrics": {
+    "primary": "Paired mean of correct_768 - correct_512 in main_r1 on all 37 matched questions.",
+    "paired_512_to_768_outcomes": "Counts and percentages fixed (512 wrong, 768 correct), broken (512 correct, 768 wrong), both correct, and both wrong; net paired improvement is (fixed - broken) / 37.",
+    "control_replicate_variability": "On the same 37 questions, report correctness changes, correctness-change percentage, fixed (main_r1 wrong, control_r2 correct), broken (main_r1 correct, control_r2 wrong), and net accuracy difference control_r2 - main_r1.",
+    "cost_tradeoff": "Incremental 768-minus-512 list-price upper-bound cost divided by the number of additional correct answers; infinity when there is no positive net gain.",
+    "descriptive_only": "Mean input-token ratio 768/512, benchmark-score difference, document-level effects, clustered bootstrap interval, leave-one-document-out sensitivity, visual-reading subgroup, latency, citations, and false abstention."
+  },
+  "decision_rule": {
+    "status": "engineering adoption rule, not a confirmatory significance test",
+    "minimum_primary_accuracy_gain": 0.05,
+    "maximum_incremental_cost_per_additional_correct_answer_usd": 0.1,
+    "mean_input_token_ratio_768_over_512": {
+      "expected_pre_live": 2.118838109566378,
+      "role": "descriptive only; no threshold because incremental cost per additional correct answer is the computational trade-off criterion"
+    },
+    "control_variability_measure": "The correctness-change rate between main_r1 E1_512 and control_r2 E1_512: (control fixed + control broken) / 37. This is an observed sensitivity margin, not an estimate of a stochastic variance or uncertainty distribution.",
+    "run_variability_rule": "The main paired 512-to-768 net accuracy gain must be strictly greater than the observed control correctness-change rate. Using all discordant control questions prevents fixed and broken changes from cancelling.",
+    "adopt_768": "Adopt only when the minimum accuracy-gain, strict control-discordance-margin, and maximum incremental-cost-per-additional-correct criteria all pass.",
+    "retain_512": "Retain 512 when the primary paired accuracy difference is non-positive.",
+    "otherwise": "Inconclusive; report the observed trade-off without changing the default."
+  },
+  "page_rule": "annotated evidence pages only, in benchmark order; no BM25 padding",
+  "conditions": {
+    "E1_512": {
+      "label": "512 px control",
+      "render_label": "short512-long1024"
+    },
+    "E1_768": {
+      "label": "768 px treatment",
+      "render_label": "short768-long1536"
+    }
+  },
+  "questions_total": 40,
+  "matched_feasible_questions": 37,
+  "matched_qids": [
+    "mmlb-0033",
+    "mmlb-0034",
+    "mmlb-0037",
+    "mmlb-0041",
+    "mmlb-0094",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0097",
+    "mmlb-0313",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0318",
+    "mmlb-0319",
+    "mmlb-0353",
+    "mmlb-0355",
+    "mmlb-0357",
+    "mmlb-0359",
+    "mmlb-0360",
+    "mmlb-0362",
+    "mmlb-0363",
+    "mmlb-0727",
+    "mmlb-0729",
+    "mmlb-0731",
+    "mmlb-0732",
+    "mmlb-0733",
+    "mmlb-0735",
+    "mmlb-0736",
+    "mmlb-0737",
+    "mmlb-0739",
+    "mmlb-0740",
+    "mmlb-0741",
+    "mmlb-0762",
+    "mmlb-0763",
+    "mmlb-0765",
+    "mmlb-0766",
+    "mmlb-0767",
+    "mmlb-0769"
+  ],
+  "excluded_context_qids": {
+    "mmlb-0035": 13,
+    "mmlb-0036": 5,
+    "mmlb-0039": 10
+  },
+  "pilot_qids": [
+    "mmlb-0033",
+    "mmlb-0313",
+    "mmlb-0737",
+    "mmlb-0763",
+    "mmlb-0769",
+    "mmlb-0729",
+    "mmlb-0732",
+    "mmlb-0739"
+  ],
+  "visual_reading_qids": [
+    "mmlb-0033",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0313",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0731",
+    "mmlb-0737",
+    "mmlb-0769"
+  ],
+  "documents": [
+    "2210.02442v1.pdf",
+    "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+    "bdf54dxa.pdf",
+    "earlybird-110722143746-phpapp02_95.pdf",
+    "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+    "watch_d.pdf"
+  ],
+  "execution": {
+    "pairing": "Within main_r1, execute the two resolution requests adjacently for each question.",
+    "question_order_seed": 20261121,
+    "within_pair_order_seed": 20261122,
+    "control_repeat_order_seed": 20261123,
+    "replicates": {
+      "main_r1": [
+        "E1_512",
+        "E1_768"
+      ],
+      "control_r2": [
+        "E1_512"
+      ]
+    },
+    "control_repeat_scope": "full mode only, same 37 questions",
+    "cache_policy": "cache entries are namespaced by immutable run ID and replicate ID; a new replicate cannot reuse another replicate's response",
+    "record": [
+      "global execution index",
+      "pair index and within-pair order",
+      "request start and completion timestamps",
+      "request fingerprint and cache provenance",
+      "served model and system fingerprint when returned",
+      "observed token usage",
+      "live API latency separately from cache lookup latency"
+    ]
+  },
+  "source_urls": {
+    "vision": "https://developers.openai.com/api/docs/guides/images-vision",
+    "model": "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+    "deprecations": "https://developers.openai.com/api/docs/deprecations"
+  },
+  "run_id": "20261121T131525011829Z_29c92c8a_full_short768-long1536",
+  "mode": "full",
+  "selected_qids": [
+    "mmlb-0033",
+    "mmlb-0034",
+    "mmlb-0037",
+    "mmlb-0041",
+    "mmlb-0094",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0097",
+    "mmlb-0313",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0318",
+    "mmlb-0319",
+    "mmlb-0353",
+    "mmlb-0355",
+    "mmlb-0357",
+    "mmlb-0359",
+    "mmlb-0360",
+    "mmlb-0362",
+    "mmlb-0363",
+    "mmlb-0727",
+    "mmlb-0729",
+    "mmlb-0731",
+    "mmlb-0732",
+    "mmlb-0733",
+    "mmlb-0735",
+    "mmlb-0736",
+    "mmlb-0737",
+    "mmlb-0739",
+    "mmlb-0740",
+    "mmlb-0741",
+    "mmlb-0762",
+    "mmlb-0763",
+    "mmlb-0765",
+    "mmlb-0766",
+    "mmlb-0767",
+    "mmlb-0769"
+  ],
+  "system_prompt": "You answer questions about a single PDF document using only the page images provided.\nEach page image is preceded by a tag [Page N], where N is the 1-based page number in the PDF.\n\nReturn a JSON object with exactly these keys:\n  \"answer\": the shortest complete answer. Use a number (integer or decimal) when the answer is a number,\n            and a JSON list when several items are asked for. If the page images do not contain the answer,\n            use exactly the string \"Not answerable\".\n  \"cited_pages\": a list of the page numbers N whose images support the answer ([] if \"Not answerable\").\n\nDo not use knowledge outside the page images. Do not guess.",
+  "planned_calls": 113,
+  "max_api_attempts": 113,
+  "max_attempts_per_request": 1,
+  "approved_call_limit": 113,
+  "approved_cost_ceiling_usd": 0.5276,
+  "planned_cost_upper_usd": 0.5275608,
+  "cache_policy": "cache entries are namespaced by immutable run ID and replicate ID; a new replicate cannot reuse another replicate's response"
+}

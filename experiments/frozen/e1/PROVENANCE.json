@@ -1,0 +1,88 @@
+{
+  "package": "E1 image-resolution experiment, frozen result",
+  "frozen_at": "2026-11-21",
+  "run": {
+    "run_id": "20261121T131525011829Z_29c92c8a_full_short768-long1536",
+    "original_location": "experiments/runs/e1/20261121T131525011829Z_29c92c8a_full_short768-long1536/ (git-ignored)",
+    "frozen_location": "experiments/frozen/e1/run_20261121T131525011829Z_29c92c8a_full/",
+    "copy": "byte-identical copy of all 15 files (verified with SHA-256 before and after copying)",
+    "mode": "full",
+    "first_request_started_utc": "2026-11-21T13:15:25.319Z",
+    "last_request_completed_utc": "2026-11-21T13:42:50.139Z",
+    "api_calls": 113,
+    "composition": {"technical_smoke": 2, "main_r1_E1_512": 37, "main_r1_E1_768": 37, "control_r2_E1_512": 37},
+    "requested_model": "gpt-4o-mini-2024-07-18",
+    "served_model": "gpt-4o-mini-2024-07-18",
+    "system_fingerprints": ["fp_9483e83037"],
+    "observed_tokens": {"prompt": 3336385, "completion": 2355, "provider_cached_prompt": 364800},
+    "list_price_cost_usd": 0.50187,
+    "approved_cost_ceiling_usd": 0.5276
+  },
+  "specification": {
+    "spec_id": "e1-image-resolution-v1",
+    "path": "experiments/specs/e1_image_resolution_v1.json",
+    "sha256": "b21ca75a9ad8b700cfd2dc233682bf2396bf313d27630ff116ee5c6948cf5abc",
+    "committed_in": "60d2f1108511bb84fff17d38e30b3d5a8f12ce55 (2026-11-21T12:31:13Z), before the first paid E1 call (smoke, 12:35:08Z)",
+    "unchanged_since": true,
+    "run_snapshot": "run_.../spec_snapshot.json is byte-identical to the tracked spec"
+  },
+  "code_revision": {
+    "status": "identified with high confidence, not cryptographically bound",
+    "finding": "The notebook code that executed the full run was not committed when the run started. The E1 cells changed between the protocol-freeze commit 60d2f11 and the next commit 4d202d5 (2026-11-21T13:59:08Z, 16 minutes after the run ended).",
+    "evidence_that_4d202d5_is_the_executed_code": [
+      "notebooks/02_question_answering.ipynb in 4d202d5 contains saved outputs that name this run ID ('E1 run saved without overwriting any earlier run: .../20261121T131525011829Z_29c92c8a_full_short768-long1536') and sequential execution counts 1-22 (one clean top-to-bottom execution)",
+      "the run's records contain fields that exist only in 4d202d5 (response_checks, response_valid) and its smoke_gate.json has the 8 checks of 4d202d5, including the cost-projection check absent from the pilot run",
+      "rebuilding all 113 requests with notebook 02 (offline replay check) reproduces every logged request fingerprint and cache key"
+    ],
+    "changes_60d2f11_to_4d202d5_in_e1_cells": [
+      "02: per-response validation (model, parse, completeness, image, token checks) that stops the run on failure; one attempt per request instead of retries; stricter smoke-gate checks; mock helper accepts a model name",
+      "03: run-usage summary table, assertion that all responses are valid, synthetic control-flip arithmetic test, richer pilot technical table"
+    ],
+    "unchanged": "specification, prompt (hash 35ff2e8b91f9), generation parameters, page lists, scorer (03 cell 'Scoring rules'), decision function apply_e1_decision",
+    "evaluation_code_for_this_package": "notebooks/03_evaluation.ipynb sections 11-13 in the commit that adds this package; section 11 reproduces the run's own evaluation_summary.json exactly (except the run_dir field, which records the folder evaluated)",
+    "smoke_and_pilot_code": "the smoke run (12:35Z) used the 60d2f11 code (5 smoke checks); the pilot (12:42Z) used an intermediate uncommitted version (7 checks); neither run's outputs are used for any reported result"
+  },
+  "environment_at_packaging": {
+    "note": "library versions were not recorded by the run; these are the versions in the project venv when the package was verified (2026-11-21)",
+    "python": "3.12.6",
+    "openai": "2.54.0", "pymupdf": "2.1", "pandas": "3.1.1", "numpy": "2.3.5", "matplotlib": "3.11.2", "tiktoken": "0.14.0",
+    "platform": "macOS, Apple M1, 8 GB RAM"
+  },
+  "supporting_runs_not_copied": {
+    "reason": "technical gates only; no reported result depends on them; kept in git-ignored experiments/runs/e1/",
+    "20261121T123508686864Z_cf0e7c66_smoke_short768-long1536": {
+      "api_calls": 2, "gate_passed": true, "list_price_cost_usd": 0.00603,
+      "sha256": {
+        "completion.json": "d85ae61a34daea1ccc2bab771d2d15f9069154e0cd88bd8e6c29788600e9d510",
+        "execution_log.jsonl": "e79efdb99692dc1719ce5748c8aacb5c6a7676e0b57040b8d170909a9706159c",
+        "settings.json": "44bd25551c6bcb4a15c1ac9fbc025ecd57d00a0a677c0e0903be4b7f407be900"
+      }
+    },
+    "20261121T124241237575Z_44ee8e69_pilot_short768-long1536": {
+      "api_calls": 18, "gate_passed": true, "list_price_cost_usd": 0.08401,
+      "sha256": {
+        "completion.json": "eac246faae1c7e7733763b71fd10ddf8b7013257f4eb5a5c986915edf62073a8",
+        "execution_log.jsonl": "bac1c05a2ab2ca6233c70fce6c8ea0feb021cb3f5022f572214e14043fe30ab9",
+        "settings.json": "0de6b84742e2f3ccf0cbcc31178c9564d6f5fbb734af72b64bbf5c4f2dade17b"
+      }
+    },
+    "total_e1_list_price_cost_usd_all_three_runs": 0.59191
+  },
+  "external_artifacts": {
+    "page_images": {
+      "what": "94 distinct PNGs sent to the model (47 at short512-long1024, 47 at short768-long1536), 17.2 MB",
+      "where": "data/cache/mmlongbench_doc/page_images/{short512-long1024,short768-long1536}/ (git-ignored, regenerated by notebook 00)",
+      "integrity": "every image's SHA-256 and pixel dimensions are in execution_log.jsonl; notebook 02 offline mode rebuilds each request and checks its fingerprint, which includes every image hash"
+    },
+    "pdfs": {
+      "what": "6 MMLongBench-Doc PDFs, about 23 MB, CC BY-NC 4.0",
+      "where": "data/external/mmlongbench_doc/documents/ (git-ignored, downloaded by notebook 00)",
+      "integrity": "Hugging Face dataset revision 2ff6aa9237fc777b6627dc57a486e9225ac5fb86 pinned in notebook 00; rendered images are checked through their hashes as above"
+    }
+  },
+  "audit": {
+    "independent_recomputation": "55/55 checks passed on 2026-11-21 (accounting, ordering, fingerprints versus cache keys, recomputed fingerprints, scoring, citations, tokens, cost, latency, decision); see README",
+    "in_notebook": "notebooks/03_evaluation.ipynb section 12 (16 checks) and notebook 02 offline replay check",
+    "credentials": "no API key, bearer token or Base64 image payload in any file (pattern scan before freezing)"
+  }
+}

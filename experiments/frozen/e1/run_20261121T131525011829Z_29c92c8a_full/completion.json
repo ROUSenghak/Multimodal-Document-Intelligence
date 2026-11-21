@@ -1,0 +1,13 @@
+{
+  "smoke_gate_passed": true,
+  "smoke_stop": null,
+  "experiment_stop": null,
+  "planned_experiment_calls": 111,
+  "completed_experiment_records": 111,
+  "planned_total_calls": 113,
+  "actual_api_attempts": 113,
+  "all_response_validations_passed": true,
+  "status_counts": {
+    "ok": 111
+  }
+}
