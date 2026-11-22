@@ -1,0 +1,116 @@
+{
+  "package": "E3 text-image fusion experiment (GPT-4o-mini 768 px: text only vs images only vs images + text), frozen result",
+  "frozen_at": "2026-11-22",
+  "run": {
+    "run_id": "20261122T143134629529Z_4c62bfc2_full",
+    "original_location": "experiments/runs/e3/20261122T143134629529Z_4c62bfc2_full/ (git-ignored)",
+    "frozen_location": "experiments/frozen/e3/run_20261122T143134629529Z_4c62bfc2_full/",
+    "copy": "byte-identical copy of all 18 files (SHA-256 compared after copying)",
+    "mode": "full",
+    "first_request_started_utc": "2026-11-22T14:31:35.651+00:00",
+    "last_main_reply_utc": "2026-11-22T14:59:22.949+00:00",
+    "first_repeat_request_utc": "2026-11-22T16:04:23.872+00:00",
+    "repeat_gap_minutes": 65.02,
+    "last_request_completed_utc": "2026-11-22T16:16:42.305+00:00",
+    "replies": 151,
+    "requests_sent": 151,
+    "composition": {
+      "technical_smoke_E3_T": 1,
+      "technical_smoke_E3_I": 1,
+      "technical_smoke_E3_IT": 1,
+      "main_r1_E3_T": 37,
+      "main_r1_E3_I": 37,
+      "main_r1_E3_IT": 37,
+      "repeat_r2_E3_IT": 37
+    },
+    "rate_limited": [],
+    "requested_model": "gpt-4o-mini-2024-07-18",
+    "served_model": [
+      "gpt-4o-mini-2024-07-18"
+    ],
+    "system_fingerprints": {
+      "E3_I and E3_IT (113 calls)": "fp_8b385e4fac",
+      "E3_T (38 calls)": "fp_7f0cfe5367 (34), fp_e17cdfce12 (4)",
+      "note": "the frozen E1 replies were served under fp_9483e83037"
+    },
+    "observed_tokens": {
+      "prompt": 5213388,
+      "completion": 3207,
+      "cached_prompt": 976768
+    },
+    "repeat_cache_state": "fully cold: 0 of 37 repeat calls reported cached prompt tokens",
+    "prompt_token_difference_observed_minus_expected": {
+      "+1": 142,
+      "0": 9,
+      "note": "diagnostic only; delivery is verified by content hashes and the sent fingerprint"
+    },
+    "list_price_cost_usd": 0.783932,
+    "cost_basis": "OpenAI list price 0.15 / 0.60 USD per 1M input / output tokens with cached input counted at the full input price (spec budget.price_basis, conservative); with the 0.075 cached-input price the run would cost 0.710675",
+    "cumulative_list_price_cost_usd_all_e3_runs": 0.909543,
+    "approved_cumulative_ceiling_usd": 1.25
+  },
+  "specification": {
+    "spec_id": "e3-text-image-fusion-v1",
+    "path": "experiments/specs/e3_text_image_fusion_v1.json",
+    "sha256": "c492ef04acc171a71002a22be9b99c1079d79c9989ecdc95c72ccdece8746621",
+    "committed_in": "a433f13d24925dc44da4505d74560dfff22b57ae (2026-11-22T14:18:39Z), before the smoke run (14:20Z) and 13 min before the first request of this run",
+    "run_snapshot": "run_.../spec_snapshot.json is byte-identical to the tracked spec"
+  },
+  "code_revision": {
+    "status": "bound: settings.json and the session record name commit a433f13; the run's notebook02_code_sha256 matches the notebook-02 code cells in that commit (checked by notebook 03 and by the audit)",
+    "inference": "notebooks/02_question_answering.ipynb at a433f13; its code cells are unchanged at HEAD (6264901 changed outputs only). The session record lists 'M notebooks/02_question_answering.ipynb' because outputs, not code, differed from the commit while the run executed",
+    "evaluation": "notebooks/03_evaluation.ipynb section 15; it re-derives run_.../evaluation_summary.json exactly and tables/per_question.csv byte for byte",
+    "scoring_rule": "notebook 03 cell f653d232, unchanged since before E2 (identical in 7d1fadd and a433f13)",
+    "executed_record": "notebooks/02_question_answering.ipynb as committed in 6264901 keeps the outputs of the executed full run (its e3-run cell names this run id); later offline re-executions of 02 are not saved over it"
+  },
+  "environment_at_run": {
+    "python": "3.12.6",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "packages": {
+      "openai": "2.54.0",
+      "httpx": "0.28.1",
+      "transformers": "5.23.0",
+      "tokenizers": "0.23.3",
+      "pillow": "13.0.0",
+      "numpy": "2.3.5",
+      "pandas": "3.1.1",
+      "pymupdf": "2.1"
+    },
+    "hardware": "MacBook Air (Apple silicon, 8 GB RAM) as client only; inference ran at OpenAI"
+  },
+  "what_cannot_be_verified": [
+    "OpenAI's serving stack behind the snapshot name; system fingerprints differ from E1 (fp_9483e83037) and between text-only and image calls",
+    "bitwise determinism at temperature 0",
+    "that the repeat was cold for reasons other than cache expiry; coldness is measured from the cached-token field, not guaranteed",
+    "the OpenAI account's billed amount (no account cross-check was made; costs are recomputed list prices)"
+  ],
+  "supporting_runs_not_copied": {
+    "reason": "technical gates only (no accuracy computed); no reported result depends on them; kept in git-ignored experiments/runs/e3/; they count toward the cumulative budget",
+    "20261122T142031467270Z_d62040e3_smoke": {
+      "result": "complete; smoke gate passed",
+      "api_calls_with_reply": 3,
+      "list_price_cost_usd": 0.007837,
+      "sha256": {
+        "completion.json": "dbf4c52ce8c85085f42f7cc1bccb968221f7b493e2ca4ad0ffad782ea61cffee",
+        "execution_log.jsonl": "35cfb09487df4f53dad019e004658cf0c2d9a0eb2432fbe136c6ddd320f246e4",
+        "settings.json": "f61e2447853bb03d6799de8ba2a35050e45110dd3dac698a16c10bc9bccd4528"
+      }
+    },
+    "20261122T142250539093Z_5eb6b0c6_pilot": {
+      "result": "complete; smoke and pilot gates passed (technical only)",
+      "api_calls_with_reply": 27,
+      "list_price_cost_usd": 0.117773,
+      "sha256": {
+        "completion.json": "9e65607e98e357098192d67896c582882338c55ff96345ecc38227a0b38ae620",
+        "execution_log.jsonl": "be6a16ad7bda8baff800ded231fa6879f2dcf0d4030d5733b2fed426b0ee8688",
+        "settings.json": "fdccfec0ba2b1e9549788c07af50ab8afd1da3e4b65e1e5199bca19b1cef5354"
+      }
+    }
+  },
+  "external_artifacts": {
+    "page_images": "the frozen E1 768-px PNGs (data/cache/mmlongbench_doc/, git-ignored, regenerated by notebook 00); every image's SHA-256 and pixel size is in execution_log.jsonl and equals the frozen E1 768-px request of the same question",
+    "page_texts": "pages.parquet column 'text' (data/processed/, git-ignored, regenerated by notebook 00); every evidence page's SHA-256 is pinned in the spec and logged per request"
+  },
+  "manual_review": "not done: notebook 03 queues 14 questions for manual review; no manual label was assigned before freezing, and no reported number depends on one",
+  "audit": "AUDIT.json: 55/55 independent checks passed"
+}

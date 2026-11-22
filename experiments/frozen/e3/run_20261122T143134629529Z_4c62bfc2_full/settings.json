@@ -1,0 +1,142 @@
+{
+  "spec_id": "e3-text-image-fusion-v1",
+  "spec_sha256": "c492ef04acc171a71002a22be9b99c1079d79c9989ecdc95c72ccdece8746621",
+  "spec_status": "frozen-before-live-execution",
+  "generated_at": "2026-11-22T14:31:31.651+00:00",
+  "model": "gpt-4o-mini-2024-07-18",
+  "system_prompt_version": "mmlb-evidence-v1",
+  "system_prompt_hash": "6a6c9eb0bb27",
+  "request_parameters": {
+    "temperature": 0.0,
+    "max_completion_tokens": 400,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "qids": [
+    "mmlb-0033",
+    "mmlb-0034",
+    "mmlb-0037",
+    "mmlb-0041",
+    "mmlb-0094",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0097",
+    "mmlb-0313",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0318",
+    "mmlb-0319",
+    "mmlb-0353",
+    "mmlb-0355",
+    "mmlb-0357",
+    "mmlb-0359",
+    "mmlb-0360",
+    "mmlb-0362",
+    "mmlb-0363",
+    "mmlb-0727",
+    "mmlb-0729",
+    "mmlb-0731",
+    "mmlb-0732",
+    "mmlb-0733",
+    "mmlb-0735",
+    "mmlb-0736",
+    "mmlb-0737",
+    "mmlb-0739",
+    "mmlb-0740",
+    "mmlb-0741",
+    "mmlb-0762",
+    "mmlb-0763",
+    "mmlb-0765",
+    "mmlb-0766",
+    "mmlb-0767",
+    "mmlb-0769"
+  ],
+  "pilot_qids": [
+    "mmlb-0033",
+    "mmlb-0313",
+    "mmlb-0737",
+    "mmlb-0763",
+    "mmlb-0769",
+    "mmlb-0729",
+    "mmlb-0732",
+    "mmlb-0739"
+  ],
+  "documents": [
+    "2210.02442v1.pdf",
+    "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+    "bdf54dxa.pdf",
+    "earlybird-110722143746-phpapp02_95.pdf",
+    "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+    "watch_d.pdf"
+  ],
+  "specific_answer_in_text_qids": [
+    "mmlb-0097",
+    "mmlb-0318",
+    "mmlb-0355",
+    "mmlb-0765",
+    "mmlb-0767",
+    "mmlb-0769"
+  ],
+  "token_tolerance": 16,
+  "frozen_offsets": {
+    "e1_image_requests": {
+      "1": 74
+    },
+    "text_requests": {
+      "2": 97
+    }
+  },
+  "planned_generations": {
+    "smoke": 3,
+    "pilot": 27,
+    "full": 151
+  },
+  "decision_rule": {
+    "status": "engineering screening rule for this pipeline and these 37 questions, fixed before any E3 generation. It decides which evidence representation to carry forward; it is not a confirmatory significance test and not statistical evidence of general superiority of fusion",
+    "minimum_primary_accuracy_gain": 0.05,
+    "variability_margin": "max(frozen GPT-4o-mini repeat correctness-change rate 1/37, E3_IT repeat correctness-change rate between main_r1 and repeat_r2)",
+    "variability_rule": "the primary paired gain must be strictly greater than the variability margin",
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "broken_rule": "broken <= fixed / 2 on the primary comparison",
+    "adopt": "adopt_image_plus_text_768_for_this_pipeline when all three criteria pass",
+    "retain": "retain_image_only_768 when the primary paired gain is <= 0",
+    "otherwise": "inconclusive",
+    "never_change_the_verdict": [
+      "text-only results",
+      "subgroups",
+      "sensitivity analyses S1-S3",
+      "strict accuracy",
+      "citations",
+      "cost",
+      "latency",
+      "E3_I vs E1_768"
+    ],
+    "cost_note": "IT adds about 1.3 % input tokens to I (mean 581 tokens), so cost is reported but is not a criterion",
+    "scope": "an engineering choice of evidence representation for GPT-4o-mini on oracle evidence pages, not a general claim about fusion",
+    "fixed_before_results": "the rule, its thresholds, the metrics, the sensitivity sets S1-S3, the subgroups and the error taxonomy are frozen in this spec and are not changed after any result is observed; a change requires a new spec version, and the v1 result under the v1 rule is still reported"
+  },
+  "notebook02_code_sha256": "2a751e8d81f90e0eb1485d068e79dbd8f19101c1ff6975c9eb4f7e1b2dd62380",
+  "run_id": "20261122T143134629529Z_4c62bfc2_full",
+  "mode": "full",
+  "system_prompt": "You answer questions about a single PDF document using only the page evidence provided.\nEach page is introduced by a tag [Page N], where N is the 1-based page number in the PDF.\nA page may be given as an image, as text extracted from the page, or as both.\n\nReturn a JSON object with exactly these keys:\n  \"answer\": the shortest complete answer. Use a number (integer or decimal) when the answer is a number,\n            and a JSON list when several items are asked for. If the page evidence does not contain the answer,\n            use exactly the string \"Not answerable\".\n  \"cited_pages\": a list of the page numbers N whose evidence supports the answer ([] if \"Not answerable\").\n\nDo not use knowledge outside the page evidence. Do not guess.",
+  "planned_calls": 151,
+  "max_attempts_per_request": 2,
+  "approved_budget_usd": 1.25,
+  "budget_scope": "cumulative over every E3 run made under this spec version (smoke, pilot, full, and any interrupted, resumed or abandoned run), at list price",
+  "prior_spent_usd_at_creation": 0.1256103,
+  "planned_cost_upper_usd": 0.8182269,
+  "cache_policy": "cache entries are keyed SHA-256(run_id:replicate_id:request_fingerprint); a new replicate can never reuse another replicate's reply",
+  "repeat_delay_minutes": 65,
+  "code_provenance": {
+    "git_commit": "a433f13d24925dc44da4505d74560dfff22b57ae",
+    "branch": "refactor/simplify-structure",
+    "spec_sha256": "c492ef04acc171a71002a22be9b99c1079d79c9989ecdc95c72ccdece8746621",
+    "spec_committed": true,
+    "notebook02_code_sha256": "2a751e8d81f90e0eb1485d068e79dbd8f19101c1ff6975c9eb4f7e1b2dd62380",
+    "notebook02_code_committed": true,
+    "git_status": [
+      "M notebooks/02_question_answering.ipynb"
+    ]
+  }
+}

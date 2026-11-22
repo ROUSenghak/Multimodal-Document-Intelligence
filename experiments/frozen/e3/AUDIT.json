@@ -1,0 +1,321 @@
+{
+  "audit": "independent E3 audit",
+  "run_id": "20261122T143134629529Z_4c62bfc2_full",
+  "audited_at": "2026-11-22T18:21:00+01:00",
+  "shared_with_notebook_03": "only the frozen scoring-rule cell f653d232 (eval_score and helpers), executed verbatim",
+  "passed": 55,
+  "total": 55,
+  "checks": {
+    "spec snapshot = tracked spec = spec in a433f13 = settings hash": {
+      "passed": true,
+      "detail": "c492ef04acc171a71002a22be9b99c1079d79c9989ecdc95c72ccdece8746621"
+    },
+    "spec frozen with an approved budget": {
+      "passed": true
+    },
+    "spec and code committed before the first request": {
+      "passed": true,
+      "detail": "commit 2026-11-22T15:18:39+01:00, first request 2026-11-22T14:31:35.651000+00:00"
+    },
+    "settings record the commit a433f13": {
+      "passed": true,
+      "detail": "a433f13d24925dc44da4505d74560dfff22b57ae"
+    },
+    "notebook 02 code cells at HEAD = at a433f13 (no code change after the run)": {
+      "passed": true
+    },
+    "plan = 3 smoke + 37 x 3 main + 37 repeat = 151": {
+      "passed": true,
+      "detail": {
+        "technical_smoke:E3_IT": 1,
+        "technical_smoke:E3_T": 1,
+        "technical_smoke:E3_I": 1,
+        "main_r1:E3_T": 37,
+        "main_r1:E3_IT": 37,
+        "main_r1:E3_I": 37,
+        "repeat_r2:E3_IT": 37
+      }
+    },
+    "main: 37 adjacent (T, I, IT) triplets covering the 37 matched questions": {
+      "passed": true
+    },
+    "condition orders counterbalanced: each of 6 orders used 6 or 7 times": {
+      "passed": true,
+      "detail": {
+        "E3_T-E3_IT-E3_I": 6,
+        "E3_T-E3_I-E3_IT": 7,
+        "E3_I-E3_IT-E3_T": 6,
+        "E3_I-E3_T-E3_IT": 6,
+        "E3_IT-E3_I-E3_T": 6,
+        "E3_IT-E3_T-E3_I": 6
+      }
+    },
+    "plan phases in order: smoke, main, repeat": {
+      "passed": true
+    },
+    "151 log records, all status ok, live, attempt 1": {
+      "passed": true,
+      "detail": {
+        "ok": 151
+      }
+    },
+    "exactly one record per planned item, in plan order": {
+      "passed": true
+    },
+    "request start times increase in log order": {
+      "passed": true
+    },
+    "requested and served model = pinned snapshot on every reply": {
+      "passed": true,
+      "detail": "gpt-4o-mini-2024-07-18"
+    },
+    "every reply finished with stop": {
+      "passed": true
+    },
+    "sent fingerprint = planned fingerprint on every reply": {
+      "passed": true
+    },
+    "every raw reply is plain JSON whose answer and cited pages equal the logged pred and citations": {
+      "passed": true,
+      "detail": []
+    },
+    "frozen E1 comparator files equal their spec hashes": {
+      "passed": true
+    },
+    "supplied pages and document equal the frozen E1 768-px request (annotated evidence pages)": {
+      "passed": true,
+      "detail": []
+    },
+    "I and IT images = frozen E1 768-px image hashes and sizes; T has none": {
+      "passed": true,
+      "detail": []
+    },
+    "T and IT texts = SHA-256 of str.strip() page text in pages.parquet = spec hashes; I has none": {
+      "passed": true,
+      "detail": []
+    },
+    "conditions have distinct fingerprints; repeat IT fingerprint = main IT (37/37)": {
+      "passed": true
+    },
+    "no E3 fingerprint equals a frozen E1 fingerprint": {
+      "passed": true
+    },
+    "cache: one entry per reply, key = SHA-256(run:replicate:fingerprint), reply = logged reply": {
+      "passed": true
+    },
+    "repeat cache keys differ from main keys (no reused reply)": {
+      "passed": true
+    },
+    "predictions_main_r1_E3_I.jsonl = log records": {
+      "passed": true
+    },
+    "predictions_main_r1_E3_IT.jsonl = log records": {
+      "passed": true
+    },
+    "predictions_main_r1_E3_T.jsonl = log records": {
+      "passed": true
+    },
+    "predictions_repeat_r2_E3_IT.jsonl = log records": {
+      "passed": true
+    },
+    "predictions_technical_smoke_E3_I.jsonl = log records": {
+      "passed": true
+    },
+    "predictions_technical_smoke_E3_IT.jsonl = log records": {
+      "passed": true
+    },
+    "predictions_technical_smoke_E3_T.jsonl = log records": {
+      "passed": true
+    },
+    "first repeat request >= 65 min after the last main reply": {
+      "passed": true,
+      "detail": "65.02 min"
+    },
+    "repeat cold: no repeat call reports cached prompt tokens": {
+      "passed": true,
+      "detail": "0/37 cached"
+    },
+    "every reply records cached_prompt_tokens (not null)": {
+      "passed": true
+    },
+    "observed - expected prompt tokens within the spec tolerance (diagnostic)": {
+      "passed": true,
+      "detail": {
+        "1": 142,
+        "0": 9
+      }
+    },
+    "recomputed list-price cost (spec price basis) = completion.json": {
+      "passed": true,
+      "detail": {
+        "spec_basis": 0.783932,
+        "with_cached_discount": 0.710675
+      }
+    },
+    "cumulative cost of all E3 runs (smoke, pilot, full) <= approved 1.25 USD and = completion.json": {
+      "passed": true,
+      "detail": 0.909543
+    },
+    "every reply cost <= its planned upper bound": {
+      "passed": true
+    },
+    "completion.json: complete, 151 sent and replied, no rate limit": {
+      "passed": true
+    },
+    "hygiene: no credential-like strings in the run files": {
+      "passed": true,
+      "detail": []
+    },
+    "scoring rule cell f653d232 identical at HEAD, a433f13 and the E2 freeze 7d1fadd": {
+      "passed": true
+    },
+    "questions.parquet references = raw MMLongBench parquet references for the 37 questions": {
+      "passed": true
+    },
+    "frozen E1 768 anchor reproduces its reference 16/37": {
+      "passed": true,
+      "detail": {
+        "T": 13,
+        "I": 17,
+        "IT": 16,
+        "IT_r2": 16,
+        "G768": 16
+      }
+    },
+    "independent counts T, I, IT, IT repeat = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "T": 13,
+        "I": 17,
+        "IT": 16,
+        "IT_r2": 16,
+        "G768": 16
+      }
+    },
+    "independent primary IT - I: gain, fixed, broken = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "gain": -0.02702702702702703,
+        "fixed": 1,
+        "broken": 2
+      }
+    },
+    "fixed / broken questions": {
+      "passed": true,
+      "detail": {
+        "fixed": [
+          "mmlb-0362"
+        ],
+        "broken": [
+          "mmlb-0094",
+          "mmlb-0729"
+        ]
+      }
+    },
+    "independent secondary IT − T = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "gain": 0.08108108108108109,
+        "fixed": 4,
+        "broken": 1
+      }
+    },
+    "independent secondary I − T = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "gain": 0.10810810810810811,
+        "fixed": 6,
+        "broken": 2
+      }
+    },
+    "independent secondary I − frozen E1_768 (prompt + session) = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "gain": 0.02702702702702703,
+        "fixed": 2,
+        "broken": 1
+      }
+    },
+    "independent IT repeat correctness changes = evaluation_summary": {
+      "passed": true,
+      "detail": 0
+    },
+    "independent verdict = evaluation_summary verdict": {
+      "passed": true,
+      "detail": "retain_image_only_768"
+    },
+    "independent leave-one-document-out = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "2210.02442v1.pdf": -0.0323,
+        "PG_2020.05.21_Internatio": -0.0667,
+        "bdf54dxa.pdf": -0.0312,
+        "earlybird-110722143746-p": -0.0303,
+        "germanwingsdigitalcrisis": 0.0,
+        "watch_d.pdf": 0.0
+      }
+    },
+    "independent cluster-bootstrap interval brackets the same sign pattern (lower < 0 < upper)": {
+      "passed": true,
+      "detail": {
+        "independent": [
+          -0.1112,
+          0.0606
+        ],
+        "notebook": [
+          -0.1112,
+          0.0606
+        ],
+        "note": "same seed and draws; exact equality is not required because the resampling code is written independently"
+      }
+    },
+    "independent sensitivity S1/S2/S3 fixed/broken = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "S1": [
+          1,
+          2
+        ],
+        "S2": [
+          1,
+          2
+        ],
+        "S3": [
+          1,
+          2
+        ]
+      }
+    },
+    "notebook-03 per_question.csv correctness columns = independent scores": {
+      "passed": true
+    }
+  },
+  "recomputed": {
+    "correct": {
+      "T": 13,
+      "I": 17,
+      "IT": 16,
+      "IT_r2": 16,
+      "G768": 16
+    },
+    "primary_IT_minus_I": {
+      "gain": -0.02702702702702703,
+      "fixed": 1,
+      "broken": 2,
+      "fixed_qids": [
+        "mmlb-0362"
+      ],
+      "broken_qids": [
+        "mmlb-0094",
+        "mmlb-0729"
+      ]
+    },
+    "variability_margin": 0.02702702702702703,
+    "verdict": "retain_image_only_768",
+    "repeat_gap_minutes": 65.02,
+    "cost_usd": {
+      "full_run": 0.783932,
+      "all_e3_runs": 0.909543
+    }
+  }
+}

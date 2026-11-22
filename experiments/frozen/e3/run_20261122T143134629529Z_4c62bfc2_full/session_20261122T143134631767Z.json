@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-11-22T14:31:34.631+00:00",
+  "environment": {
+    "python": "3.12.6",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "packages": {
+      "openai": "2.54.0",
+      "httpx": "0.28.1",
+      "transformers": "5.23.0",
+      "tokenizers": "0.23.3",
+      "pillow": "13.0.0",
+      "numpy": "2.3.5",
+      "pandas": "3.1.1",
+      "pymupdf": "2.1"
+    }
+  },
+  "code_provenance": {
+    "git_commit": "a433f13d24925dc44da4505d74560dfff22b57ae",
+    "branch": "refactor/simplify-structure",
+    "spec_sha256": "c492ef04acc171a71002a22be9b99c1079d79c9989ecdc95c72ccdece8746621",
+    "spec_committed": true,
+    "notebook02_code_sha256": "2a751e8d81f90e0eb1485d068e79dbd8f19101c1ff6975c9eb4f7e1b2dd62380",
+    "notebook02_code_committed": true,
+    "git_status": [
+      "M notebooks/02_question_answering.ipynb"
+    ]
+  }
+}

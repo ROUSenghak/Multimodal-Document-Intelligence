@@ -4,6 +4,8 @@
 | --- | --- | --- |
 | `frozen/mmlongbench_doc/` | yes | The canonical text run (conditions A, C) and image run (B, D), copied byte for byte, with `SHA256SUMS` and a provenance [README](frozen/mmlongbench_doc/README.md). Never edited. |
 | `frozen/e1/` | yes | Byte-identical copy of the E1 full run `20261121T131525011829Z_29c92c8a` plus its per-question table, six figures, `PROVENANCE.json`, `SHA256SUMS` and a [README](frozen/e1/README.md) with results and limitations. Notebook 03 evaluates it by default. Never edited. |
+| `frozen/e2/` | yes | Byte-identical copy of the E2 full run `20261122T120924635816Z_4f2e1369` (Qwen3-VL-8B vs GPT-4o-mini) plus its per-question table, four figures, an independent `AUDIT.json` (44/44), `PROVENANCE.json`, `SHA256SUMS` and a [README](frozen/e2/README.md). Notebook 03 evaluates it by default. Never edited. |
+| `frozen/e3/` | yes | Byte-identical copy of the E3 full run `20261122T143134629529Z_4c62bfc2` (text vs images vs both) plus its per-question table, four figures, an independent `AUDIT.json` (55/55), `PROVENANCE.json`, `SHA256SUMS` and a [README](frozen/e3/README.md). Notebook 03 evaluates it by default. Never edited. |
 | `runs/` | no (git-ignored) | Raw outputs of live runs. New runs from `notebooks/02_question_answering.ipynb` go to `runs/qa/<UTC timestamp>_<mode>/`; the historical runs of the archived notebooks 14 and 15 stay in `runs/mmlongbench_doc/` and `runs/mmlongbench_doc_multimodal/` where they exist. |
 
 Experiment E1 resolution runs are isolated under
@@ -40,7 +42,9 @@ response cache, gates, predictions per replicate and condition, and `completion.
 (or a `stop_*.json` record that a resumed run continues). The protocol
 [`specs/e3_text_image_fusion_v1.json`](specs/e3_text_image_fusion_v1.json) was frozen on
 2026-11-22 with a cumulative USD 1.25 budget for all E3 runs. Paid modes also require the spec and notebook 02's code
-to equal git HEAD, and record the commit in `settings.json`. No E3 run exists yet; each paid stage needs separate approval.
+to equal git HEAD, and record the commit in `settings.json`. The approved smoke, pilot and full runs completed on
+2026-11-22 ($0.91 in all, list price); the full run is frozen in [`frozen/e3/`](frozen/e3/README.md), and the
+smoke and pilot runs stay git-ignored in `runs/e3/` with their checksums in its `PROVENANCE.json`.
 
 ## How results are reproduced
 

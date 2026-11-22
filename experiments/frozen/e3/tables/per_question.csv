@@ -1,0 +1,622 @@
+qid,doc_id,answer_format,reference,evidence_pages,S1,S2,visual reading (E1 labels),specific answer in text,OCR-text documents,pred_T,score_T,correct_T,strict_T,cited_T,citation_valid_T,off_by_one_T,raw_T,pred_I,score_I,correct_I,strict_I,cited_I,citation_valid_I,off_by_one_I,raw_I,pred_IT,score_IT,correct_IT,strict_IT,cited_IT,citation_valid_IT,off_by_one_IT,raw_IT,pred_IT_r2,score_IT_r2,correct_IT_r2,strict_IT_r2,cited_IT_r2,citation_valid_IT_r2,off_by_one_IT_r2,raw_IT_r2,pred_G768,score_G768,correct_G768,strict_G768,cited_G768,citation_valid_G768,off_by_one_G768,raw_G768,transition IT − I (primary),transition IT − T,transition I − T,transition I − frozen E1_768 (prompt + session),repeat_transition,modality_following,"scoring defect (S2, pre-declared)","extraction loss (T wrong, I right)","visual-reading loss (I wrong, T right)",reasoning with answer in text (all wrong),unresolved (all wrong),"fusion interference (IT wrong, T or I right)","fusion synergy (IT right, T and I wrong)"
+mmlb-0033,earlybird-110722143746-phpapp02_95.pdf,Int,63,[6],False,False,True,False,True,63,1.0,True,True,[6],True,False,"{
+  ""answer"": 63,
+  ""cited_pages"": [6]
+}",63,1.0,True,True,[6],True,False,"{
+  ""answer"": 63,
+  ""cited_pages"": [6]
+}",63,1.0,True,True,[6],True,False,"{
+  ""answer"": 63,
+  ""cited_pages"": [6]
+}",63,1.0,True,True,[6],True,False,"{
+  ""answer"": 63,
+  ""cited_pages"": [6]
+}",63,1.0,True,True,[6],True,False,"{
+  ""answer"": 63,
+  ""cited_pages"": [6]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0034,earlybird-110722143746-phpapp02_95.pdf,Str,Europe IPO,[11],False,True,False,False,True,"""Not answerable""",0.0,False,False,[],True,False,"{
+  ""answer"": ""Not answerable"",
+  ""cited_pages"": []
+}","""Europe IPO index value""",0.0,False,False,[11],True,False,"{
+  ""answer"": ""Europe IPO index value"",
+  ""cited_pages"": [11]
+}","""Not answerable""",0.0,False,False,[11],True,False,"{
+  ""answer"": ""Not answerable"",
+  ""cited_pages"": [11]
+}","""Not answerable""",0.0,False,False,[11],True,False,"{
+  ""answer"": ""Not answerable"",
+  ""cited_pages"": [11]
+}","""Europe IPO index value""",0.0,False,False,[11],True,False,"{
+  ""answer"": ""Europe IPO index value"",
+  ""cited_pages"": [11]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives T's answer,True,False,False,False,False,False,False
+mmlb-0037,earlybird-110722143746-phpapp02_95.pdf,List,"['The Economist', 'TIME']",[33],False,False,False,False,True,"""Not answerable""",0.0,False,False,[],True,False,"{
+  ""answer"": ""Not answerable"",
+  ""cited_pages"": []
+}","[""The Economist"", ""TIME""]",1.0,True,True,[33],True,False,"{
+  ""answer"": [""The Economist"", ""TIME""],
+  ""cited_pages"": [33]
+}","[""The Economist"", ""TIME""]",1.0,True,True,[33],True,False,"{
+  ""answer"": [""The Economist"", ""TIME""],
+  ""cited_pages"": [33]
+}","[""The Economist"", ""TIME""]",1.0,True,True,[33],True,False,"{
+  ""answer"": [""The Economist"", ""TIME""],
+  ""cited_pages"": [33]
+}","[""The Economist"", ""TIME""]",1.0,True,True,[33],True,False,"{
+  ""answer"": [""The Economist"", ""TIME""],
+  ""cited_pages"": [33]
+}",both correct,fixed,fixed,both correct,both correct,IT gives I's answer,False,True,False,False,False,False,False
+mmlb-0041,earlybird-110722143746-phpapp02_95.pdf,Str,300 million,[26],False,False,False,False,True,350,0.0,False,False,[26],True,False,"{
+  ""answer"": 350,
+  ""cited_pages"": [26]
+}",350,0.0,False,False,[26],True,False,"{
+  ""answer"": 350,
+  ""cited_pages"": [26]
+}",350,0.0,False,False,[26],True,False,"{
+  ""answer"": 350,
+  ""cited_pages"": [26]
+}",350,0.0,False,False,[26],True,False,"{
+  ""answer"": 350,
+  ""cited_pages"": [26]
+}",350,0.0,False,False,[26],True,False,"{
+  ""answer"": 350,
+  ""cited_pages"": [26]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,T and I agree,False,False,False,False,True,False,False
+mmlb-0094,watch_d.pdf,Int,8,[15],False,False,False,False,False,1,0.0,False,False,[15],True,False,"{
+  ""answer"": 1,
+  ""cited_pages"": [15]
+}",8,1.0,True,True,[15],True,False,"{
+  ""answer"": 8,
+  ""cited_pages"": [15]
+}",6,0.0,False,False,[15],True,False,"{
+  ""answer"": 6,
+  ""cited_pages"": [15]
+}",6,0.0,False,False,[15],True,False,"{
+  ""answer"": 6,
+  ""cited_pages"": [15]
+}",8,1.0,True,True,[15],True,False,"{
+  ""answer"": 8,
+  ""cited_pages"": [15]
+}",broken,both wrong,fixed,both correct,both wrong,IT gives neither,False,True,False,False,False,True,False
+mmlb-0095,watch_d.pdf,Str,2.5-3cm,[6],False,False,True,False,False,"""Not answerable""",0.0,False,False,[],True,False,"{
+  ""answer"": ""Not answerable"",
+  ""cited_pages"": []
+}","""2.5-3""",0.714286,True,False,[6],True,False,"{
+  ""answer"": ""2.5-3"",
+  ""cited_pages"": [6]
+}","""2.5-3""",0.714286,True,False,[6],True,False,"{
+  ""answer"": ""2.5-3"",
+  ""cited_pages"": [6]
+}","""2.5-3""",0.714286,True,False,[6],True,False,"{
+  ""answer"": ""2.5-3"",
+  ""cited_pages"": [6]
+}","""2.5-3""",0.714286,True,False,[6],True,False,"{
+  ""answer"": ""2.5-3"",
+  ""cited_pages"": [6]
+}",both correct,fixed,fixed,both correct,both correct,IT gives I's answer,False,True,False,False,False,False,False
+mmlb-0096,watch_d.pdf,Int,2,"[9, 10]",False,False,True,False,False,2,1.0,True,True,"[9, 10]",True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [9, 10]
+}",2,1.0,True,True,"[9, 10]",True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [9, 10]
+}",2,1.0,True,True,"[9, 10]",True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [9, 10]
+}",2,1.0,True,True,"[9, 10]",True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [9, 10]
+}",2,1.0,True,True,"[9, 10]",True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [9, 10]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0097,watch_d.pdf,Str,Wake up the voice assistant. ,[3],False,False,False,True,False,"""Wake up the voice assistant.""",1.0,True,True,[3],True,False,"{
+  ""answer"": ""Wake up the voice assistant."",
+  ""cited_pages"": [3]
+}","""Wake up the voice assistant.""",1.0,True,True,[3],True,False,"{
+  ""answer"": ""Wake up the voice assistant."",
+  ""cited_pages"": [3]
+}","""Wake up the voice assistant.""",1.0,True,True,[3],True,False,"{
+  ""answer"": ""Wake up the voice assistant."",
+  ""cited_pages"": [3]
+}","""Wake up the voice assistant.""",1.0,True,True,[3],True,False,"{
+  ""answer"": ""Wake up the voice assistant."",
+  ""cited_pages"": [3]
+}","""Wake up the voice assistant.""",1.0,True,True,[3],True,False,"{
+  ""answer"": ""Wake up the voice assistant."",
+  ""cited_pages"": [3]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0313,bdf54dxa.pdf,Int,2,[11],False,False,True,False,True,2,1.0,True,True,[11],True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [11]
+}",2,1.0,True,True,[11],True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [11]
+}",2,1.0,True,True,[11],True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [11]
+}",2,1.0,True,True,[11],True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [11]
+}",2,1.0,True,True,[10],False,True,"{
+  ""answer"": 2,
+  ""cited_pages"": [10]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0315,bdf54dxa.pdf,Int,2,[14],False,False,True,False,True,"""Not answerable""",0.0,False,False,[],True,False,"{
+  ""answer"": ""Not answerable"",
+  ""cited_pages"": []
+}",0.0,0.0,False,False,[13],False,True,"{
+  ""answer"": 0.00,
+  ""cited_pages"": [13]
+}","""0.00""",0.0,False,False,[],True,False,"{
+  ""answer"": ""0.00"",
+  ""cited_pages"": []
+}","""0.00""",0.0,False,False,[13],False,True,"{
+  ""answer"": ""0.00"",
+  ""cited_pages"": [13]
+}","""0.00""",0.0,False,False,[13],False,True,"{
+  ""answer"": ""0.00"",
+  ""cited_pages"": [13]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives neither,False,False,False,False,True,False,False
+mmlb-0317,bdf54dxa.pdf,Int,1,"[14, 15]",False,False,True,False,True,0.0,0.0,False,False,[14],True,False,"{
+  ""answer"": 0.0,
+  ""cited_pages"": [14]
+}",2.0,0.0,False,False,[15],True,False,"{
+  ""answer"": 2.0,
+  ""cited_pages"": [15]
+}",2.0,0.0,False,False,[14],True,False,"{
+  ""answer"": 2.0,
+  ""cited_pages"": [14]
+}",2.0,0.0,False,False,[14],True,False,"{
+  ""answer"": 2.0,
+  ""cited_pages"": [14]
+}",2.0,0.0,False,False,[15],True,False,"{
+  ""answer"": 2.0,
+  ""cited_pages"": [15]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives I's answer,False,False,False,False,True,False,False
+mmlb-0318,bdf54dxa.pdf,Int,100,[24],False,False,False,True,True,"[600, 450]",0.0,False,False,[24],True,False,"{
+  ""answer"": [600, 450],
+  ""cited_pages"": [24]
+}","[600, 450]",0.0,False,False,[24],True,False,"{
+  ""answer"": [600, 450],
+  ""cited_pages"": [24]
+}","[600, 450]",0.0,False,False,[24],True,False,"{
+  ""answer"": [600, 450],
+  ""cited_pages"": [24]
+}","[600, 450]",0.0,False,False,[24],True,False,"{
+  ""answer"": [600, 450],
+  ""cited_pages"": [24]
+}","[600, 450]",0.0,False,False,[24],True,False,"{
+  ""answer"": [600, 450],
+  ""cited_pages"": [24]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,T and I agree,False,False,False,True,False,False,False
+mmlb-0319,bdf54dxa.pdf,Int,17,"[30, 31, 32]",False,False,False,False,True,12,0.0,False,False,"[30, 31, 32]",True,False,"{
+  ""answer"": 12,
+  ""cited_pages"": [
+    30,
+    31,
+    32
+  ]
+}",15,0.0,False,False,"[30, 31, 32]",True,False,"{
+  ""answer"": 15,
+  ""cited_pages"": [30, 31, 32]
+}",12,0.0,False,False,"[30, 31, 32]",True,False,"{
+  ""answer"": 12,
+  ""cited_pages"": [30, 31, 32]
+}",12,0.0,False,False,"[30, 31, 32]",True,False,"{
+  ""answer"": 12,
+  ""cited_pages"": [30, 31, 32]
+}",12,0.0,False,False,"[30, 31, 32]",True,False,"{
+  ""answer"": 12,
+  ""cited_pages"": [
+    30,
+    31,
+    32
+  ]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives T's answer,False,False,False,False,True,False,False
+mmlb-0353,PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf,Float,19%,[19],False,False,False,False,False,19,1.0,True,True,[19],True,False,"{
+  ""answer"": 19,
+  ""cited_pages"": [
+    19
+  ]
+}",19,1.0,True,True,[19],True,False,"{
+  ""answer"": 19,
+  ""cited_pages"": [19]
+}",19,1.0,True,True,[19],True,False,"{
+  ""answer"": 19,
+  ""cited_pages"": [19]
+}",19,1.0,True,True,[19],True,False,"{
+  ""answer"": 19,
+  ""cited_pages"": [19]
+}",19,1.0,True,True,[19],True,False,"{
+  ""answer"": 19,
+  ""cited_pages"": [19]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0355,PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf,Str,Liberal,[19],False,False,False,True,False,"""Liberals""",0.875,True,False,[19],True,False,"{
+  ""answer"": ""Liberals"",
+  ""cited_pages"": [19]
+}","""Democrats and those with more education""",0.0,False,False,[19],True,False,"{
+  ""answer"": ""Democrats and those with more education"",
+  ""cited_pages"": [19]
+}","""Democrats""",0.0,False,False,[19],True,False,"{
+  ""answer"": ""Democrats"",
+  ""cited_pages"": [19]
+}","""Democrats""",0.0,False,False,[19],True,False,"{
+  ""answer"": ""Democrats"",
+  ""cited_pages"": [19]
+}","""Democrats and those with more education""",0.0,False,False,[19],True,False,"{
+  ""answer"": ""Democrats and those with more education"",
+  ""cited_pages"": [19]
+}",both wrong,broken,broken,both wrong,both wrong,IT gives neither,False,False,True,False,False,True,False
+mmlb-0357,PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf,Float,53%,[9],False,False,False,False,False,53,1.0,True,True,[9],True,False,"{
+  ""answer"": 53,
+  ""cited_pages"": [
+    9
+  ]
+}",53,1.0,True,True,[9],True,False,"{
+  ""answer"": 53,
+  ""cited_pages"": [9]
+}",53,1.0,True,True,[9],True,False,"{
+  ""answer"": 53,
+  ""cited_pages"": [9]
+}",53,1.0,True,True,[9],True,False,"{
+  ""answer"": 53,
+  ""cited_pages"": [9]
+}",53,1.0,True,True,[9],True,False,"{
+  ""answer"": 53,
+  ""cited_pages"": [9]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0359,PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf,Float,13%,"[11, 12]",False,False,False,False,False,13,1.0,True,True,"[11, 12]",True,False,"{
+  ""answer"": 13,
+  ""cited_pages"": [11, 12]
+}",13,1.0,True,True,"[11, 12]",True,False,"{
+  ""answer"": 13,
+  ""cited_pages"": [11, 12]
+}",13,1.0,True,True,"[11, 12]",True,False,"{
+  ""answer"": 13,
+  ""cited_pages"": [11, 12]
+}",13,1.0,True,True,"[11, 12]",True,False,"{
+  ""answer"": 13,
+  ""cited_pages"": [11, 12]
+}",13,1.0,True,True,"[10, 11]",False,True,"{
+  ""answer"": 13,
+  ""cited_pages"": [10, 11]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0360,PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf,Float,35%,[14],False,False,False,False,False,9,0.0,False,False,[14],True,False,"{
+  ""answer"": 9,
+  ""cited_pages"": [
+    14
+  ]
+}",27,0.0,False,False,[14],True,False,"{
+  ""answer"": 27,
+  ""cited_pages"": [14]
+}",9,0.0,False,False,[14],True,False,"{
+  ""answer"": 9,
+  ""cited_pages"": [14]
+}",9,0.0,False,False,[14],True,False,"{
+  ""answer"": 9,
+  ""cited_pages"": [14]
+}",44,0.0,False,False,[14],True,False,"{
+  ""answer"": 44,
+  ""cited_pages"": [14]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives T's answer,False,False,False,False,True,False,False
+mmlb-0362,PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf,Float,1%,"[12, 16]",False,False,False,False,False,1,1.0,True,True,"[12, 16]",True,False,"{
+  ""answer"": 1,
+  ""cited_pages"": [12, 16]
+}",5,0.0,False,False,"[12, 15]",False,True,"{
+  ""answer"": 5,
+  ""cited_pages"": [12, 15]
+}",1,1.0,True,True,"[12, 16]",True,False,"{
+  ""answer"": 1,
+  ""cited_pages"": [12, 16]
+}",1,1.0,True,True,"[12, 16]",True,False,"{
+  ""answer"": 1,
+  ""cited_pages"": [12, 16]
+}",5,0.0,False,False,"[12, 15]",False,True,"{
+  ""answer"": 5,
+  ""cited_pages"": [12, 15]
+}",fixed,both correct,broken,both wrong,both correct,IT gives T's answer,False,False,True,False,False,False,False
+mmlb-0363,PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf,Float,29%,"[17, 18]",False,False,False,False,False,11,0.0,False,False,"[17, 18]",True,False,"{
+  ""answer"": 11,
+  ""cited_pages"": [17, 18]
+}",15,0.0,False,False,"[17, 18]",True,False,"{
+  ""answer"": 15,
+  ""cited_pages"": [17, 18]
+}",11,0.0,False,False,"[17, 18]",True,False,"{
+  ""answer"": 11,
+  ""cited_pages"": [17, 18]
+}",10,0.0,False,False,"[17, 18]",True,False,"{
+  ""answer"": 10,
+  ""cited_pages"": [17, 18]
+}",15,0.0,False,False,[17],True,False,"{
+  ""answer"": 15,
+  ""cited_pages"": [17]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives T's answer,False,False,False,False,True,False,False
+mmlb-0727,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Int,12,[16],False,False,False,False,True,18,0.0,False,False,[16],True,False,"{
+  ""answer"": 18,
+  ""cited_pages"": [16]
+}",12,1.0,True,True,[16],True,False,"{
+  ""answer"": 12,
+  ""cited_pages"": [16]
+}",12,1.0,True,True,[16],True,False,"{
+  ""answer"": 12,
+  ""cited_pages"": [16]
+}",12,1.0,True,True,[16],True,False,"{
+  ""answer"": 12,
+  ""cited_pages"": [16]
+}",12,1.0,True,True,[16],True,False,"{
+  ""answer"": 12,
+  ""cited_pages"": [16]
+}",both correct,fixed,fixed,both correct,both correct,IT gives I's answer,False,True,False,False,False,False,False
+mmlb-0729,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Int,41,[16],False,False,False,False,True,71,0.0,False,False,[16],True,False,"{
+  ""answer"": 71,
+  ""cited_pages"": [
+    16
+  ]
+}",41,1.0,True,True,[16],True,False,"{
+  ""answer"": 41,
+  ""cited_pages"": [16]
+}",71,0.0,False,False,[16],True,False,"{
+  ""answer"": 71,
+  ""cited_pages"": [16]
+}",71,0.0,False,False,[16],True,False,"{
+  ""answer"": 71,
+  ""cited_pages"": [16]
+}",41,1.0,True,True,[16],True,False,"{
+  ""answer"": 41,
+  ""cited_pages"": [16]
+}",broken,both wrong,fixed,both correct,both wrong,IT gives T's answer,False,True,False,False,False,True,False
+mmlb-0731,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,List,"['yellow', 'black and white']","[7, 8]",False,False,True,False,True,"[""dark"", ""black"", ""white""]",0.0,False,False,"[7, 8]",True,False,"{
+  ""answer"": [""dark"", ""black"", ""white""],
+  ""cited_pages"": [7, 8]
+}","{""first_90_minutes"": ""Not answerable"", ""after_90_minutes_until_120_minutes"": ""black and white""}",0.0,False,False,[8],True,False,"{
+  ""answer"": {
+    ""first_90_minutes"": ""Not answerable"",
+    ""after_90_minutes_until_120_minutes"": ""black and white""
+  },
+  ""cited_pages"": [8]
+}","{""first_90_minutes"": ""Not answerable"", ""after_90_minutes_until_120_minutes"": ""black and white""}",0.0,False,False,[8],True,False,"{
+  ""answer"": {
+    ""first_90_minutes"": ""Not answerable"",
+    ""after_90_minutes_until_120_minutes"": ""black and white""
+  },
+  ""cited_pages"": [8]
+}","{""first_90_minutes"": ""Not answerable"", ""after_90_minutes_until_120_minutes"": ""black and white""}",0.0,False,False,[8],True,False,"{
+  ""answer"": {
+    ""first_90_minutes"": ""Not answerable"",
+    ""after_90_minutes_until_120_minutes"": ""black and white""
+  },
+  ""cited_pages"": [8]
+}","[""Not specified"", ""black and white""]",0.0,False,False,"[7, 8]",True,False,"{
+  ""answer"": [""Not specified"", ""black and white""],
+  ""cited_pages"": [7, 8]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives I's answer,False,False,False,False,True,False,False
+mmlb-0732,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Int,5,"[7, 11, 14]",False,False,False,False,True,3,0.0,False,False,"[7, 11, 14]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [
+    7,
+    11,
+    14
+  ]
+}",3,0.0,False,False,"[7, 11, 14]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [7, 11, 14]
+}",3,0.0,False,False,"[7, 11, 14]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [7, 11, 14]
+}",0,0.0,False,False,[],True,False,"{
+  ""answer"": 0,
+  ""cited_pages"": []
+}",3,0.0,False,False,"[7, 11, 14]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [7, 11, 14]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,T and I agree,False,False,False,False,True,False,False
+mmlb-0733,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Int,14:04 CET,[19],True,True,False,False,True,"""Not answerable""",0.0,False,False,[],True,False,"{
+  ""answer"": ""Not answerable"",
+  ""cited_pages"": []
+}","""14:04 CET""",0.0,False,False,[19],True,False,"{
+  ""answer"": ""14:04 CET"",
+  ""cited_pages"": [19]
+}","""14:04 CET""",0.0,False,False,[19],True,False,"{
+  ""answer"": ""14:04 CET"",
+  ""cited_pages"": [19]
+}","""14:04 CET""",0.0,False,False,[19],True,False,"{
+  ""answer"": ""14:04 CET"",
+  ""cited_pages"": [19]
+}","""14:04 CET""",0.0,False,False,[19],True,False,"{
+  ""answer"": ""14:04 CET"",
+  ""cited_pages"": [19]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives I's answer,True,False,False,False,False,False,False
+mmlb-0735,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Int,yes,"[8, 9, 10]",True,True,False,False,True,"""Yes""",0.0,False,False,[8],True,False,"{
+  ""answer"": ""Yes"",
+  ""cited_pages"": [8]
+}","""Yes, the Germanwings Facebook account logo was recolored to black and white within the first 120 minutes.""",0.0,False,False,[8],True,False,"{
+  ""answer"": ""Yes, the Germanwings Facebook account logo was recolored to black and white within the first 120 minutes."",
+  ""cited_pages"": [8]
+}","""Yes""",0.0,False,False,[8],True,False,"{
+  ""answer"": ""Yes"",
+  ""cited_pages"": [8]
+}","""Yes""",0.0,False,False,[8],True,False,"{
+  ""answer"": ""Yes"",
+  ""cited_pages"": [8]
+}","""Yes""",0.0,False,False,[8],True,False,"{
+  ""answer"": ""Yes"",
+  ""cited_pages"": [8]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives T's answer,True,False,False,False,False,False,False
+mmlb-0736,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Int,3,[14],False,True,False,False,True,4,0.0,False,False,[14],True,False,"{
+  ""answer"": 4,
+  ""cited_pages"": [14]
+}",4,0.0,False,False,[14],True,False,"{
+  ""answer"": 4,
+  ""cited_pages"": [14]
+}",4,0.0,False,False,[14],True,False,"{
+  ""answer"": 4,
+  ""cited_pages"": [14]
+}",4,0.0,False,False,[14],True,False,"{
+  ""answer"": 4,
+  ""cited_pages"": [14]
+}",4,0.0,False,False,[14],True,False,"{
+  ""answer"": 4,
+  ""cited_pages"": [14]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,T and I agree,True,False,False,False,False,False,False
+mmlb-0737,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Int,18,[18],False,False,True,False,True,0,0.0,False,False,[18],True,False,"{
+  ""answer"": 0,
+  ""cited_pages"": [18]
+}",18,1.0,True,True,[18],True,False,"{
+  ""answer"": 18,
+  ""cited_pages"": [18]
+}",18,1.0,True,True,[18],True,False,"{
+  ""answer"": 18,
+  ""cited_pages"": [18]
+}",18,1.0,True,True,[18],True,False,"{
+  ""answer"": 18,
+  ""cited_pages"": [18]
+}",18,1.0,True,True,[18],True,False,"{
+  ""answer"": 18,
+  ""cited_pages"": [18]
+}",both correct,fixed,fixed,both correct,both correct,IT gives I's answer,False,True,False,False,False,False,False
+mmlb-0739,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Int,4,"[11, 13]",False,False,False,False,True,3,0.0,False,False,"[11, 13]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [11, 13]
+}",5,0.0,False,False,"[11, 13]",True,False,"{
+  ""answer"": 5,
+  ""cited_pages"": [11, 13]
+}",3,0.0,False,False,"[11, 13]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [11, 13]
+}",3,0.0,False,False,"[11, 13]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [11, 13]
+}",4,1.0,True,True,"[11, 13]",True,False,"{
+  ""answer"": 4,
+  ""cited_pages"": [11, 13]
+}",both wrong,both wrong,both wrong,broken,both wrong,IT gives T's answer,False,False,False,False,True,False,False
+mmlb-0740,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,List,"['2015-03-24', '2015-03-25']","[1, 2]",False,False,False,False,True,"[""2015-03-24"", ""2015-03-25""]",1.0,True,True,"[1, 2]",True,False,"{
+  ""answer"": [""2015-03-24"", ""2015-03-25""],
+  ""cited_pages"": [1, 2]
+}","[""2015-03-24"", ""2015-03-25""]",1.0,True,True,"[1, 2]",True,False,"{
+  ""answer"": [""2015-03-24"", ""2015-03-25""],
+  ""cited_pages"": [1, 2]
+}","[""2015-03-24"", ""2015-03-25""]",1.0,True,True,"[1, 2]",True,False,"{
+  ""answer"": [""2015-03-24"", ""2015-03-25""],
+  ""cited_pages"": [1, 2]
+}","[""2015-03-24"", ""2015-03-25""]",1.0,True,True,"[1, 2]",True,False,"{
+  ""answer"": [""2015-03-24"", ""2015-03-25""],
+  ""cited_pages"": [1, 2]
+}","[""2015-03-24"", ""2015-03-25""]",1.0,True,True,"[1, 2]",True,False,"{
+  ""answer"": [""2015-03-24"", ""2015-03-25""],
+  ""cited_pages"": [1, 2]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0741,germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf,Float,41.67,[16],False,False,False,False,True,41.67,1.0,True,True,[16],True,False,"{
+  ""answer"": 41.67,
+  ""cited_pages"": [16]
+}",41.67,1.0,True,True,[16],True,False,"{
+  ""answer"": 41.67,
+  ""cited_pages"": [16]
+}",41.67,1.0,True,True,[16],True,False,"{
+  ""answer"": 41.67,
+  ""cited_pages"": [16]
+}",41.67,1.0,True,True,[16],True,False,"{
+  ""answer"": 41.67,
+  ""cited_pages"": [16]
+}",41.67,1.0,True,True,[16],True,False,"{
+  ""answer"": 41.67,
+  ""cited_pages"": [16]
+}",both correct,both correct,both correct,both correct,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0762,2210.02442v1.pdf,Int,2,"[2, 16, 20]",False,False,False,False,False,1,0.0,False,False,[2],True,False,"{
+  ""answer"": 1,
+  ""cited_pages"": [2]
+}",5,0.0,False,False,"[2, 16, 20]",True,False,"{
+  ""answer"": 5,
+  ""cited_pages"": [2, 16, 20]
+}",5,0.0,False,False,"[2, 16, 20]",True,False,"{
+  ""answer"": 5,
+  ""cited_pages"": [2, 16, 20]
+}",5,0.0,False,False,"[2, 16, 20]",True,False,"{
+  ""answer"": 5,
+  ""cited_pages"": [2, 16, 20]
+}",4,0.0,False,False,"[2, 16, 20]",True,False,"{
+  ""answer"": 4,
+  ""cited_pages"": [2, 16, 20]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives I's answer,False,False,False,False,True,False,False
+mmlb-0763,2210.02442v1.pdf,Int,4,[7],False,False,False,False,False,1,0.0,False,False,[7],True,False,"{
+  ""answer"": 1,
+  ""cited_pages"": [7]
+}",3,0.0,False,False,[7],True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [7]
+}",1,0.0,False,False,[7],True,False,"{
+  ""answer"": 1,
+  ""cited_pages"": [7]
+}",1,0.0,False,False,[7],True,False,"{
+  ""answer"": 1,
+  ""cited_pages"": [7]
+}",2,0.0,False,False,[7],True,False,"{
+  ""answer"": 2,
+  ""cited_pages"": [7]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives T's answer,False,False,False,False,True,False,False
+mmlb-0765,2210.02442v1.pdf,Str,VAAL,"[4, 17]",False,False,False,True,False,"""VAAL""",1.0,True,True,"[4, 17]",True,False,"{
+  ""answer"": ""VAAL"",
+  ""cited_pages"": [4, 17]
+}","""VAAL""",1.0,True,True,"[4, 17]",True,False,"{
+  ""answer"": ""VAAL"",
+  ""cited_pages"": [4, 17]
+}","""VAAL""",1.0,True,True,"[4, 17]",True,False,"{
+  ""answer"": ""VAAL"",
+  ""cited_pages"": [4, 17]
+}","""VAAL""",1.0,True,True,"[4, 17]",True,False,"{
+  ""answer"": ""VAAL"",
+  ""cited_pages"": [4, 17]
+}","""Entropy""",0.0,False,False,"[4, 17]",True,False,"{
+  ""answer"": ""Entropy"",
+  ""cited_pages"": [4, 17]
+}",both correct,both correct,both correct,fixed,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0766,2210.02442v1.pdf,Int,3,"[8, 24]",False,False,False,False,False,3,1.0,True,True,"[8, 24]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [8, 24]
+}",3,1.0,True,True,"[8, 24]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [8, 24]
+}",3,1.0,True,True,"[8, 24]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [8, 24]
+}",3,1.0,True,True,"[8, 24]",True,False,"{
+  ""answer"": 3,
+  ""cited_pages"": [8, 24]
+}",6,0.0,False,False,"[8, 24]",True,False,"{
+  ""answer"": 6,
+  ""cited_pages"": [8, 24]
+}",both correct,both correct,both correct,fixed,both correct,T and I agree,False,False,False,False,False,False,False
+mmlb-0767,2210.02442v1.pdf,Str,SGD,"[14, 15]",False,False,False,True,False,"[""SGD""]",0.0,False,False,"[14, 15]",True,False,"{
+  ""answer"": [""SGD""],
+  ""cited_pages"": [14, 15]
+}","[""SGD""]",0.0,False,False,"[14, 15]",True,False,"{
+  ""answer"": [""SGD""],
+  ""cited_pages"": [14, 15]
+}","[""SGD""]",0.0,False,False,[14],True,False,"{
+  ""answer"": [""SGD""],
+  ""cited_pages"": [14]
+}","[""SGD""]",0.0,False,False,[14],True,False,"{
+  ""answer"": [""SGD""],
+  ""cited_pages"": [14]
+}","[""SGD""]",0.0,False,False,[14],True,False,"{
+  ""answer"": [""SGD""],
+  ""cited_pages"": [14]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,T and I agree,False,False,False,True,False,False,False
+mmlb-0769,2210.02442v1.pdf,Str,ground truth,[22],False,False,True,True,False,"""Not answerable""",0.0,False,False,[],True,False,"{
+  ""answer"": ""Not answerable"",
+  ""cited_pages"": []
+}","""The map by pseudo-labels has a larger confidence variance.""",0.0,False,False,[22],True,False,"{
+  ""answer"": ""The map by pseudo-labels has a larger confidence variance."",
+  ""cited_pages"": [22]
+}","""The map by pseudo-labels has a larger confidence variance.""",0.0,False,False,[22],True,False,"{
+  ""answer"": ""The map by pseudo-labels has a larger confidence variance."",
+  ""cited_pages"": [22]
+}","""The map by pseudo-labels has a larger confidence variance.""",0.0,False,False,[22],True,False,"{
+  ""answer"": ""The map by pseudo-labels has a larger confidence variance."",
+  ""cited_pages"": [22]
+}","""The map by pseudo-labels has a larger confidence variance.""",0.0,False,False,[22],True,False,"{
+  ""answer"": ""The map by pseudo-labels has a larger confidence variance."",
+  ""cited_pages"": [22]
+}",both wrong,both wrong,both wrong,both wrong,both wrong,IT gives I's answer,False,False,False,True,False,False,False

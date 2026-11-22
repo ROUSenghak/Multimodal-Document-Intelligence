@@ -1,0 +1,624 @@
+{
+  "primary": {
+    "questions": 37,
+    "accuracy_before": 0.4594594594594595,
+    "accuracy_after": 0.43243243243243246,
+    "paired_accuracy_difference": -0.02702702702702703,
+    "fixed": 1,
+    "broken": 2,
+    "both_correct": 15,
+    "both_wrong": 19,
+    "exact_mcnemar_p_ignores_clustering": 1.0,
+    "document_cluster_bootstrap_95": [
+      -0.11119047619047612,
+      0.06060606060606061
+    ],
+    "leave_one_document_out": {
+      "2210.02442v1.pdf": -0.03225806451612903,
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf": -0.06666666666666667,
+      "bdf54dxa.pdf": -0.03125,
+      "earlybird-110722143746-phpapp02_95.pdf": -0.030303030303030304,
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf": 0.0,
+      "watch_d.pdf": 0.0
+    }
+  },
+  "secondary": {
+    "IT \u2212 T": {
+      "questions": 37,
+      "accuracy_before": 0.35135135135135137,
+      "accuracy_after": 0.43243243243243246,
+      "paired_accuracy_difference": 0.08108108108108109,
+      "fixed": 4,
+      "broken": 1,
+      "both_correct": 12,
+      "both_wrong": 20,
+      "exact_mcnemar_p_ignores_clustering": 0.375,
+      "document_cluster_bootstrap_95": [
+        -0.03125,
+        0.1875
+      ],
+      "leave_one_document_out": {
+        "2210.02442v1.pdf": 0.0967741935483871,
+        "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf": 0.13333333333333333,
+        "bdf54dxa.pdf": 0.09375,
+        "earlybird-110722143746-phpapp02_95.pdf": 0.06060606060606061,
+        "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf": 0.038461538461538464,
+        "watch_d.pdf": 0.06060606060606061
+      }
+    },
+    "I \u2212 T": {
+      "questions": 37,
+      "accuracy_before": 0.35135135135135137,
+      "accuracy_after": 0.4594594594594595,
+      "paired_accuracy_difference": 0.10810810810810811,
+      "fixed": 6,
+      "broken": 2,
+      "both_correct": 11,
+      "both_wrong": 18,
+      "exact_mcnemar_p_ignores_clustering": 0.2890625,
+      "document_cluster_bootstrap_95": [
+        -0.1111111111111111,
+        0.2894736842105263
+      ],
+      "leave_one_document_out": {
+        "2210.02442v1.pdf": 0.12903225806451613,
+        "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf": 0.2,
+        "bdf54dxa.pdf": 0.125,
+        "earlybird-110722143746-phpapp02_95.pdf": 0.09090909090909091,
+        "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf": 0.038461538461538464,
+        "watch_d.pdf": 0.06060606060606061
+      }
+    },
+    "I \u2212 frozen E1_768 (prompt + session)": {
+      "questions": 37,
+      "accuracy_before": 0.43243243243243246,
+      "accuracy_after": 0.4594594594594595,
+      "paired_accuracy_difference": 0.02702702702702703,
+      "fixed": 2,
+      "broken": 1,
+      "both_correct": 15,
+      "both_wrong": 19,
+      "exact_mcnemar_p_ignores_clustering": 1.0,
+      "document_cluster_bootstrap_95": [
+        -0.061224489795918366,
+        0.17647058823529413
+      ],
+      "leave_one_document_out": {
+        "2210.02442v1.pdf": -0.03225806451612903,
+        "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf": 0.03333333333333333,
+        "bdf54dxa.pdf": 0.03125,
+        "earlybird-110722143746-phpapp02_95.pdf": 0.030303030303030304,
+        "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf": 0.07692307692307693,
+        "watch_d.pdf": 0.030303030303030304
+      }
+    }
+  },
+  "sensitivity": {
+    "S1: without unscorable references": {
+      "questions": 35,
+      "accuracy_before": 0.4857142857142857,
+      "accuracy_after": 0.45714285714285713,
+      "paired_accuracy_difference": -0.02857142857142857,
+      "fixed": 1,
+      "broken": 2,
+      "both_correct": 15,
+      "both_wrong": 17,
+      "exact_mcnemar_p_ignores_clustering": 1.0
+    },
+    "S2: without annotation or scoring issues": {
+      "questions": 33,
+      "accuracy_before": 0.5151515151515151,
+      "accuracy_after": 0.48484848484848486,
+      "paired_accuracy_difference": -0.030303030303030304,
+      "fixed": 1,
+      "broken": 2,
+      "both_correct": 15,
+      "both_wrong": 15,
+      "exact_mcnemar_p_ignores_clustering": 1.0
+    },
+    "S3: strict accuracy (score = 1)": {
+      "questions": 37,
+      "paired_accuracy_difference": -0.02702702702702703,
+      "fixed": 1,
+      "broken": 2
+    },
+    "mean benchmark score": {
+      "questions": 37,
+      "paired_difference": -0.02702702702702703,
+      "document_cluster_bootstrap_95": [
+        -0.11119047619047612,
+        0.06060606060606061
+      ]
+    }
+  },
+  "subgroups": {
+    "visual reading (E1 labels)": {
+      "questions": 9,
+      "accuracy_before": 0.5555555555555556,
+      "accuracy_after": 0.5555555555555556,
+      "paired_accuracy_difference": 0.0,
+      "fixed": 0,
+      "broken": 0,
+      "both_correct": 5,
+      "both_wrong": 4,
+      "exact_mcnemar_p_ignores_clustering": 1.0
+    },
+    "not visual reading (E1 labels)": {
+      "questions": 28,
+      "accuracy_before": 0.42857142857142855,
+      "accuracy_after": 0.39285714285714285,
+      "paired_accuracy_difference": -0.03571428571428571,
+      "fixed": 1,
+      "broken": 2,
+      "both_correct": 10,
+      "both_wrong": 15,
+      "exact_mcnemar_p_ignores_clustering": 1.0
+    },
+    "specific answer in text": {
+      "questions": 6,
+      "accuracy_before": 0.3333333333333333,
+      "accuracy_after": 0.3333333333333333,
+      "paired_accuracy_difference": 0.0,
+      "fixed": 0,
+      "broken": 0,
+      "both_correct": 2,
+      "both_wrong": 4,
+      "exact_mcnemar_p_ignores_clustering": 1.0
+    },
+    "not specific answer in text": {
+      "questions": 31,
+      "accuracy_before": 0.4838709677419355,
+      "accuracy_after": 0.45161290322580644,
+      "paired_accuracy_difference": -0.03225806451612903,
+      "fixed": 1,
+      "broken": 2,
+      "both_correct": 13,
+      "both_wrong": 15,
+      "exact_mcnemar_p_ignores_clustering": 1.0
+    },
+    "OCR-text documents": {
+      "questions": 20,
+      "accuracy_before": 0.4,
+      "accuracy_after": 0.35,
+      "paired_accuracy_difference": -0.05,
+      "fixed": 0,
+      "broken": 1,
+      "both_correct": 7,
+      "both_wrong": 12,
+      "exact_mcnemar_p_ignores_clustering": 1.0
+    },
+    "not OCR-text documents": {
+      "questions": 17,
+      "accuracy_before": 0.5294117647058824,
+      "accuracy_after": 0.5294117647058824,
+      "paired_accuracy_difference": 0.0,
+      "fixed": 1,
+      "broken": 1,
+      "both_correct": 8,
+      "both_wrong": 7,
+      "exact_mcnemar_p_ignores_clustering": 1.0
+    }
+  },
+  "complementarity": {
+    "T correct": 13,
+    "I correct": 17,
+    "either T or I correct": 19,
+    "IT correct": 16,
+    "IT correct among either": 16,
+    "share of either reached by IT": 0.8421052631578947,
+    "synergy": 0,
+    "interference": 3
+  },
+  "modality_following": {
+    "IT correct": {
+      "T and I agree": 11,
+      "IT gives T's answer": 1,
+      "IT gives I's answer": 4,
+      "IT gives neither": 0
+    },
+    "IT wrong": {
+      "T and I agree": 5,
+      "IT gives T's answer": 8,
+      "IT gives I's answer": 5,
+      "IT gives neither": 3
+    }
+  },
+  "repeat": {
+    "correctness_changed": 0,
+    "correctness_change_rate": 0.0,
+    "parsed_answer_changed": 2,
+    "reply_text_changed": 3,
+    "repeat_calls_with_cached_prompt_tokens": 0,
+    "correctness_changed_cached / uncached": "0/0 / 0/37",
+    "correctness_change_rate_uncached_calls": 0.0
+  },
+  "decision": {
+    "verdict": "retain_image_only_768",
+    "criteria": {
+      "paired gain >= 0.05": false,
+      "paired gain > max repeat change rate": false,
+      "broken <= fixed / 2": false
+    },
+    "variability_margin": 0.02702702702702703
+  },
+  "caching": {
+    "by_condition": {
+      "text only": {
+        "calls": 37,
+        "calls with cached tokens": 0,
+        "cached tokens": 0,
+        "share of prompt tokens cached": 0.0,
+        "responses without a cached-token field": 0
+      },
+      "images only": {
+        "calls": 37,
+        "calls with cached tokens": 19,
+        "cached tokens": 455040,
+        "share of prompt tokens cached": 0.26823735799406745,
+        "responses without a cached-token field": 0
+      },
+      "images + text": {
+        "calls": 37,
+        "calls with cached tokens": 20,
+        "cached tokens": 470272,
+        "share of prompt tokens cached": 0.2737488183219473,
+        "responses without a cached-token field": 0
+      },
+      "images + text, repeat": {
+        "calls": 37,
+        "calls with cached tokens": 0,
+        "cached tokens": 0,
+        "share of prompt tokens cached": 0.0,
+        "responses without a cached-token field": 0
+      }
+    },
+    "repeat_assessment": "fully cold: no repeat call used cached prompt tokens"
+  },
+  "token_diagnostic": {
+    "text only": {
+      "differences": {
+        "1": 34,
+        "0": 3
+      },
+      "outside tolerance": 0
+    },
+    "images only": {
+      "differences": {
+        "1": 37
+      },
+      "outside tolerance": 0
+    },
+    "images + text": {
+      "differences": {
+        "1": 34,
+        "0": 3
+      },
+      "outside tolerance": 0
+    },
+    "images + text, repeat": {
+      "differences": {
+        "1": 34,
+        "0": 3
+      },
+      "outside tolerance": 0
+    }
+  },
+  "error_taxonomy": {
+    "scoring defect (S2, pre-declared)": [
+      "mmlb-0034",
+      "mmlb-0733",
+      "mmlb-0735",
+      "mmlb-0736"
+    ],
+    "extraction loss (T wrong, I right)": [
+      "mmlb-0037",
+      "mmlb-0094",
+      "mmlb-0095",
+      "mmlb-0727",
+      "mmlb-0729",
+      "mmlb-0737"
+    ],
+    "visual-reading loss (I wrong, T right)": [
+      "mmlb-0355",
+      "mmlb-0362"
+    ],
+    "reasoning with answer in text (all wrong)": [
+      "mmlb-0318",
+      "mmlb-0767",
+      "mmlb-0769"
+    ],
+    "unresolved (all wrong)": [
+      "mmlb-0041",
+      "mmlb-0315",
+      "mmlb-0317",
+      "mmlb-0319",
+      "mmlb-0360",
+      "mmlb-0363",
+      "mmlb-0731",
+      "mmlb-0732",
+      "mmlb-0739",
+      "mmlb-0762",
+      "mmlb-0763"
+    ],
+    "fusion interference (IT wrong, T or I right)": [
+      "mmlb-0094",
+      "mmlb-0355",
+      "mmlb-0729"
+    ],
+    "fusion synergy (IT right, T and I wrong)": []
+  },
+  "manual_review_queue": [
+    "mmlb-0041",
+    "mmlb-0094",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0319",
+    "mmlb-0355",
+    "mmlb-0360",
+    "mmlb-0363",
+    "mmlb-0729",
+    "mmlb-0731",
+    "mmlb-0732",
+    "mmlb-0739",
+    "mmlb-0762",
+    "mmlb-0763"
+  ],
+  "metrics": [
+    {
+      "condition": "text only",
+      "correct": "13/37",
+      "accuracy": 0.35135135135135137,
+      "strict accuracy": 0.32432432432432434,
+      "mean score": 0.34797297297297297,
+      "false abstention": 0.16216216216216217,
+      "cites a page": 0.8378378378378378,
+      "validity given a citation": 1.0,
+      "cites evidence": 0.8378378378378378,
+      "off-by-one citations": 0,
+      "parse failures": 0,
+      "truncated": 0,
+      "mean input tokens": 788.0540540540541,
+      "mean output tokens": 20.783783783783782,
+      "median API latency s": 0.798,
+      "calls with cached prompt tokens": 0,
+      "list-price cost USD (37 questions)": 0.0048351
+    },
+    {
+      "condition": "images only",
+      "correct": "17/37",
+      "accuracy": 0.4594594594594595,
+      "strict accuracy": 0.43243243243243246,
+      "mean score": 0.4517374517374518,
+      "false abstention": 0.0,
+      "cites a page": 1.0,
+      "validity given a citation": 0.9459459459459459,
+      "cites evidence": 0.972972972972973,
+      "off-by-one citations": 2,
+      "parse failures": 0,
+      "truncated": 0,
+      "mean input tokens": 45848.86486486487,
+      "mean output tokens": 22.10810810810811,
+      "median API latency s": 1.383,
+      "calls with cached prompt tokens": 19,
+      "list-price cost USD (37 questions)": 0.25495199999999996
+    },
+    {
+      "condition": "images + text",
+      "correct": "16/37",
+      "accuracy": 0.43243243243243246,
+      "strict accuracy": 0.40540540540540543,
+      "mean score": 0.42471042471042475,
+      "false abstention": 0.02702702702702703,
+      "cites a page": 0.972972972972973,
+      "validity given a citation": 1.0,
+      "cites evidence": 0.972972972972973,
+      "off-by-one citations": 0,
+      "parse failures": 0,
+      "truncated": 0,
+      "mean input tokens": 46429.62162162162,
+      "mean output tokens": 21.243243243243242,
+      "median API latency s": 1.401,
+      "calls with cached prompt tokens": 20,
+      "list-price cost USD (37 questions)": 0.258156
+    },
+    {
+      "condition": "images + text, repeat",
+      "correct": "16/37",
+      "accuracy": 0.43243243243243246,
+      "strict accuracy": 0.40540540540540543,
+      "mean score": 0.42471042471042475,
+      "false abstention": 0.02702702702702703,
+      "cites a page": 0.972972972972973,
+      "validity given a citation": 0.9722222222222222,
+      "cites evidence": 0.9459459459459459,
+      "off-by-one citations": 1,
+      "parse failures": 0,
+      "truncated": 0,
+      "mean input tokens": 46429.62162162162,
+      "mean output tokens": 21.08108108108108,
+      "median API latency s": 1.434,
+      "calls with cached prompt tokens": 0,
+      "list-price cost USD (37 questions)": 0.2581524
+    },
+    {
+      "condition": "frozen E1 768 px (old prompt)",
+      "correct": "16/37",
+      "accuracy": 0.43243243243243246,
+      "strict accuracy": 0.40540540540540543,
+      "mean score": 0.42471042471042475,
+      "false abstention": 0.0,
+      "cites a page": 1.0,
+      "validity given a citation": 0.8918918918918919,
+      "cites evidence": 0.9459459459459459,
+      "off-by-one citations": 4,
+      "parse failures": 0,
+      "truncated": 0,
+      "mean input tokens": 45829.86486486487,
+      "mean output tokens": 21.0,
+      "median API latency s": 1.681,
+      "calls with cached prompt tokens": 1,
+      "list-price cost USD (37 questions)": 0.25482195
+    }
+  ],
+  "by_document": [
+    {
+      "doc_id": "2210.02442v1.pdf",
+      "questions": 6,
+      "correct_T": 2,
+      "correct_I": 2,
+      "correct_IT": 2,
+      "correct_G768": 0,
+      "IT\u2212I fixed": 0,
+      "IT\u2212I broken": 0,
+      "IT\u2212T fixed": 0,
+      "IT\u2212T broken": 0,
+      "I\u2212T fixed": 0,
+      "I\u2212T broken": 0,
+      "S2 questions": 0,
+      "IT\u2212I difference": 0.0
+    },
+    {
+      "doc_id": "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+      "questions": 7,
+      "correct_T": 5,
+      "correct_I": 3,
+      "correct_IT": 4,
+      "correct_G768": 3,
+      "IT\u2212I fixed": 1,
+      "IT\u2212I broken": 0,
+      "IT\u2212T fixed": 0,
+      "IT\u2212T broken": 1,
+      "I\u2212T fixed": 0,
+      "I\u2212T broken": 2,
+      "S2 questions": 0,
+      "IT\u2212I difference": 0.14285714285714285
+    },
+    {
+      "doc_id": "bdf54dxa.pdf",
+      "questions": 5,
+      "correct_T": 1,
+      "correct_I": 1,
+      "correct_IT": 1,
+      "correct_G768": 1,
+      "IT\u2212I fixed": 0,
+      "IT\u2212I broken": 0,
+      "IT\u2212T fixed": 0,
+      "IT\u2212T broken": 0,
+      "I\u2212T fixed": 0,
+      "I\u2212T broken": 0,
+      "S2 questions": 0,
+      "IT\u2212I difference": 0.0
+    },
+    {
+      "doc_id": "earlybird-110722143746-phpapp02_95.pdf",
+      "questions": 4,
+      "correct_T": 1,
+      "correct_I": 2,
+      "correct_IT": 2,
+      "correct_G768": 2,
+      "IT\u2212I fixed": 0,
+      "IT\u2212I broken": 0,
+      "IT\u2212T fixed": 1,
+      "IT\u2212T broken": 0,
+      "I\u2212T fixed": 1,
+      "I\u2212T broken": 0,
+      "S2 questions": 1,
+      "IT\u2212I difference": 0.0
+    },
+    {
+      "doc_id": "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+      "questions": 11,
+      "correct_T": 2,
+      "correct_I": 5,
+      "correct_IT": 4,
+      "correct_G768": 6,
+      "IT\u2212I fixed": 0,
+      "IT\u2212I broken": 1,
+      "IT\u2212T fixed": 2,
+      "IT\u2212T broken": 0,
+      "I\u2212T fixed": 3,
+      "I\u2212T broken": 0,
+      "S2 questions": 3,
+      "IT\u2212I difference": -0.09090909090909091
+    },
+    {
+      "doc_id": "watch_d.pdf",
+      "questions": 4,
+      "correct_T": 2,
+      "correct_I": 4,
+      "correct_IT": 3,
+      "correct_G768": 4,
+      "IT\u2212I fixed": 0,
+      "IT\u2212I broken": 1,
+      "IT\u2212T fixed": 1,
+      "IT\u2212T broken": 0,
+      "I\u2212T fixed": 2,
+      "I\u2212T broken": 0,
+      "S2 questions": 0,
+      "IT\u2212I difference": -0.25
+    }
+  ],
+  "uncertainty_qualification": "37 questions in 6 documents: one question moves accuracy by 0.027, only large effects are detectable, intervals and McNemar p-values are descriptive. A null result means no large effect on these questions, not equivalence.",
+  "run_dir": "experiments/runs/e3/20261122T143134629529Z_4c62bfc2_full",
+  "mode": "full",
+  "performance_reported": true,
+  "execution": {
+    "run_id": "20261122T143134629529Z_4c62bfc2_full",
+    "mode": "full",
+    "complete": true,
+    "stop_reason": null,
+    "smoke_gate_passed": true,
+    "gates": {
+      "smoke": {
+        "one reply per condition for the smoke question": true,
+        "integrity: request content, served snapshot, prompt-token accounting": true,
+        "contract: every reply parses and finishes with stop": true,
+        "diagnostics: prompt tokens within tolerance, cached-token field recorded": true
+      }
+    },
+    "planned_calls": 151,
+    "api_calls_sent": 151,
+    "rate_limited_responses": 0,
+    "replied": 151,
+    "status_counts": {
+      "ok": 151
+    },
+    "integrity_valid": true,
+    "contract_failures": 0,
+    "prompt_token_differences": {
+      "1": 142,
+      "0": 9
+    },
+    "diagnostic_flags": 0,
+    "calls_with_cached_prompt_tokens": 41,
+    "list_price_cost_usd": 0.783932,
+    "cumulative_list_price_cost_usd": 0.909543,
+    "approved_cumulative_budget_usd": 1.25,
+    "completed_at": "2026-11-22T16:16:42.331+00:00"
+  },
+  "checks": {
+    "spec hash equals the expected spec": true,
+    "run linked to a commit holding its spec and notebook-02 code": true,
+    "spec was frozen before execution": true,
+    "run is complete (completion.json)": true,
+    "every planned item has a reply": true,
+    "log follows the plan": true,
+    "request fingerprints and hashes equal the offline rebuild (02)": true,
+    "logged text hashes equal the pinned page texts, in page order": true,
+    "the SDK received exactly the planned request (sent fingerprint)": true,
+    "every reply served by the pinned snapshot": true,
+    "every reply records the cached-token field": true,
+    "every reply passed the executor's integrity checks": true,
+    "cache key = SHA-256(run:replicate:fingerprint)": true,
+    "attempts within the limit": true,
+    "list-price cost within the approved budget": true,
+    "cumulative list-price cost of all E3 runs within the approved budget": true,
+    "a live run outside experiments/frozen/, or the frozen copy matching its SHA256SUMS": true,
+    "main: 37 adjacent triplets (T, I, IT) in plan order": true,
+    "repeat: same request fingerprint as main IT (37/37)": true,
+    "repeat: different cache key (no reused reply)": true,
+    "repeat: every call live": true,
+    "repeat: started >= 65 min after the last main reply": true,
+    "prediction files equal the final log records": true
+  }
+}

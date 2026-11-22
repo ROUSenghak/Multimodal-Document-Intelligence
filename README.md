@@ -18,8 +18,9 @@ The project has three parts, one notebook stage each (plus evaluation):
 > public benchmark [MMLongBench-Doc](https://huggingface.co/datasets/yubo2333/MMLongBench-Doc)
 > (57 questions). All four conditions have been run with gpt-4o-mini; their
 > predictions are frozen in the repository and are re-evaluated without API
-> calls. The project's own annotated question set
-> (`data/annotations/questions.csv`) is still empty.
+> calls. Experiments E1–E3 (image resolution, a stronger VLM, text–image
+> fusion) are frozen with independent audits. The project's own annotated
+> question set (`data/annotations/questions.csv`) is still empty.
 
 ## Research question and design
 
@@ -198,71 +199,34 @@ JSON answers instead of its GPT-4o extraction stage, so they are **local
 diagnostics, not leaderboard numbers**. Details, limitations and the manual
 error review are in `notebooks/03_evaluation.ipynb`.
 
-## Experiment E3 — text–image fusion (spec frozen, not run)
+## Experiment E3 — text–image fusion (done: retain images only)
 
-E3 asks whether adding the **extracted page text** to the 768-px page images
-improves GPT-4o-mini's answers on the same 37 questions and evidence pages,
-and how both compare with the text alone. No E3 reply exists yet: the spec is
-frozen, and each paid stage awaits separate approval.
+**Result (frozen in [`experiments/frozen/e3/`](experiments/frozen/e3/README.md)).**
+GPT-4o-mini, 768-px page images, the 37 matched questions and their annotated
+evidence pages, one shared prompt (`mmlb-evidence-v1`):
 
-| condition | per page, in order | role |
-|---|---|---|
-| T | `[Page N]`, extracted text | secondary |
-| I | `[Page N]`, 768-px image | primary comparator (same session) |
-| IT | `[Page N]`, 768-px image, extracted text | primary treatment, plus a cold repeat |
+| | text only (T) | images only (I) | images + text (IT) | IT repeat |
+|---|---:|---:|---:|---:|
+| correct (37 questions) | 13/37 | **17/37** | **16/37** | 16/37 |
 
-- **Only the text changes between I and IT.** All three conditions share one
-  new, modality-neutral prompt (`mmlb-evidence-v1`, the frozen JSON contract
-  plus one sentence). Notebook 02 asserts for every question that I is IT minus
-  its text parts and T is IT minus its image parts. The images are E1's exact
-  PNGs. The text is native, or OCR at 150 dpi, sent **untruncated**: 10 of the
-  47 evidence pages exceed the old 3,500-character cap. Each page's text is
-  pinned by SHA-256.
-- **Text delivery is verified by hashes.** Each text part is checked against
-  its pinned page hash when built and again just before each call. The exact
-  arguments handed to the SDK are fingerprinted and must equal the plan.
-  Billed prompt tokens are a **diagnostic**: the offline rule reproduces every
-  billed count of the frozen runs exactly, so a deviation above 16 tokens is
-  flagged. A deviation stops smoke and pilot, but is only reported in the full
-  run. Cached tokens are recorded for every response, and the evaluation
-  reports whether caching touched the repeat.
-- **Design.** Questions are run as adjacent T/I/IT triplets in seeded,
-  counterbalanced order. A cold repeat of IT starts at least 65 minutes later,
-  so the prompt cache should normally not serve it. OpenAI documents a
-  "typically" 5–10 minute, at most one-hour in-memory cache, which is not a
-  guarantee, so cached tokens on every call measure it.
-- **Decision rule, fixed in advance.** Adopt IT if:
-  - the paired gain is ≥ 0.05;
-  - it exceeds max(1/37, the IT repeat change rate);
-  - broken ≤ fixed / 2.
+- **Primary, IT − I:** 1 fixed, 2 broken, −0.027, cluster bootstrap [−0.11, +0.06]. All three criteria of the pre-registered rule fail and the gain is ≤ 0, so the verdict is **retain images only at 768 px**. S1–S3 (known scoring defects, strict scoring) each give 1 fixed, 2 broken.
+- **Images are the stronger single source** here (I − T: 6 fixed, 2 broken). Fusion reaches 16 of the 19 questions that T or I answers, with no synergy: where T and I disagree, IT follows the text 9 times and is right once. On OCR documents a misread digit pulls the fused reader to a wrong answer (`mmlb-0729`: OCR reads 12 as "42").
+- **Repeat:** 65 min later, fully cold (no cached tokens), 0/37 correctness changes.
+- **Cost:** $0.78 for the full run, $0.91 for all three E3 runs (list price; ceiling $1.25).
+- **Validation:** an independent 55-check audit; notebook 03 reproduces the result by default without any API call. The 14-question manual-review queue is not labelled yet.
 
-  Retain image-only if the gain is ≤ 0; otherwise inconclusive. This is an
-  engineering screening rule for these 37 questions, frozen before any reply.
-  It is not statistical evidence that fusion is generally better. Results are
-  reported per document with fixed and broken counts, beside the sensitivity
-  analyses.
-- **Pre-declared extras.** Sensitivity analyses for the known scoring defects
-  (S1 unscorable references, S2 annotation issues, S3 strict scoring) never
-  change the verdict. There are also complementarity and modality-following
-  analyses, and a mechanical error taxonomy.
-- **Cost.** The list-price upper bound is about $0.95 for smoke (3 calls),
-  pilot (27) and full (151) together, 181 calls in all, since each stage opens with its own smoke. The ceiling is **cumulative**: $1.25 across
-  every E3 run under the spec, enforced before each call. The full run is 3
-  technical calls + 37 questions × 3 conditions + 37 IT repeats = 151. The model
-  snapshot shuts down on 2027-01-14.
+Design in brief: per page, `[Page N]` then the image (I, IT) then the extracted
+text (T, IT); I is IT minus its text parts and T is IT minus its image parts,
+asserted for every question. Images are E1's exact PNGs; texts are untruncated
+and pinned by SHA-256. The T/I/IT requests of a question were sent as an
+adjacent, counterbalanced triplet. Spec:
+[`experiments/specs/e3_text_image_fusion_v1.json`](experiments/specs/e3_text_image_fusion_v1.json),
+frozen and committed with the implementation before the first call.
 
 ```bash
-# Offline (default): rebuild and verify every request, mocked execution tests; nothing is sent
-jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
-# Paid, after the spec is frozen with a budget and each stage is approved (OPENAI_API_KEY in .env)
-VISUALDOC_E3_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
-# Evaluate a saved run without any API call
+# Evaluate without any API call: the frozen run by default, or another saved run
 VISUALDOC_E3_RUN_DIR=experiments/runs/e3/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
 ```
-
-Spec: [`experiments/specs/e3_text_image_fusion_v1.json`](experiments/specs/e3_text_image_fusion_v1.json),
-frozen and committed with the implementation. Paid modes require the spec and
-notebook 02's code to equal git HEAD, and each run records its commit.
 
 ## Workflow
 
@@ -345,7 +309,8 @@ predefined accuracy–cost decision readout.
 │   ├── frozen/mmlongbench_doc/  # committed canonical predictions and results, with SHA256SUMS
 │   ├── frozen/e1/             # frozen E1 full run, figures, per-question table, provenance, SHA256SUMS
 │   ├── frozen/e2/             # frozen E2 full run, figures, audit, provenance, SHA256SUMS
-│   ├── specs/                 # experiment specifications (E1, E2 frozen; E3 draft)
+│   ├── frozen/e3/             # frozen E3 full run, figures, audit, provenance, SHA256SUMS
+│   ├── specs/                 # experiment specifications (E1, E2, E3, all frozen)
 │   └── runs/                  # git-ignored outputs of new live runs (e1/, e2/, e3/, ...)
 ├── data/
 │   ├── external/              # MMLongBench-Doc question table (tracked) and PDFs (git-ignored); other benchmarks
@@ -367,7 +332,8 @@ predefined accuracy–cost decision readout.
 | Native text + OCR fallback, page records, rendering | Implemented (00); routing module and tests in `src/` |
 | BM25 page retrieval and metrics | Implemented (01) |
 | Text and image QA with page citations, four conditions | Implemented and run (02) |
-| Evaluation, paired comparisons, error analysis | Implemented (03); manual review partly done (10 questions) |
+| Experiments E1–E3 (resolution, stronger VLM, text–image fusion) | Run, audited and frozen (`experiments/frozen/`) |
+| Evaluation, paired comparisons, error analysis | Implemented (03); manual review of the E0 queue done (29 cases); E3's 14-question queue not labelled |
 | Dense or visual retrieval (embeddings, ColPali) | Planned; no model chosen |
 | Project's own verified question set | Not started (needs annotation) |
 | User interface (e.g. Streamlit) | Deferred until after the experimental phase |

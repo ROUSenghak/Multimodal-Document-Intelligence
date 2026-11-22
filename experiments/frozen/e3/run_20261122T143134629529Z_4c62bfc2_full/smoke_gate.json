@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": {
+    "one reply per condition for the smoke question": true,
+    "integrity: request content, served snapshot, prompt-token accounting": true,
+    "contract: every reply parses and finishes with stop": true,
+    "diagnostics: prompt tokens within tolerance, cached-token field recorded": true
+  },
+  "stop_reason": null
+}
