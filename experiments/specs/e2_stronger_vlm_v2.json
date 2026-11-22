@@ -1,0 +1,538 @@
+{
+  "spec_id": "e2-stronger-vlm-v2",
+  "status": "frozen-before-live-execution",
+  "status_rule": "Paid modes (smoke, pilot, full) refuse to run unless status is 'frozen-before-live-execution' and budget.approved_ceiling_usd is a number. Setting both and committing this file before the first API call is the approval act. After that commit the file is never edited; any change is a new spec version (e2-stronger-vlm-v3).",
+  "drafted_at": "2026-11-22",
+  "frozen_at": "2026-11-22",
+  "supersedes": {
+    "spec": "experiments/specs/e2_stronger_vlm_v1.json",
+    "spec_sha256": "adbe89cff12778769e7aae6e899eedce3b13c6fbe8b8f6e24e375eca3f5cf827",
+    "reason": "v1 treated an HTTP 429 like any API error: stop, and count it toward the 2-attempt limit. On 2026-11-22 the only endpoint (Parasail) returned 'temporarily rate-limited upstream' twice within 22 calls of the v1 full run, so the run could not be completed reliably under v1.",
+    "v1_runs": {
+      "20261122T115212943456Z_3cb28d5d_smoke": "complete; smoke gate passed",
+      "20261122T115525545788Z_802bfa76_pilot": "complete; smoke and pilot gates passed",
+      "20261122T115706385527Z_8061fd16_full": "incomplete (20/113 replies, two 429 stops); abandoned, kept as a record, never evaluated or merged"
+    },
+    "changes": [
+      "execution.rate_limit added: a 429 is logged, waited out with a fixed backoff and retried without consuming an attempt",
+      "execution.pause_between_calls_s added",
+      "execution.resume and execution.stop_rules.api_failure reworded accordingly",
+      "status_rule: the next version is v3"
+    ],
+    "unchanged": "everything else: model, provider routing, prompts, images, request bodies, generation parameters, population, seeds and plan, output contract, scoring, decision rule, uncertainty and budget",
+    "why_not_outcome_dependent": "a 429 is returned before the model runs: there is no reply and no charge, so retrying it cannot select on model outputs. v1 replies were not looked at for accuracy before this change; smoke and pilot compute none."
+  },
+  "research_question": "On the same 37 matched questions, annotated evidence pages and byte-identical page images as E1, does Qwen3-VL-8B-Instruct, served through OpenRouter, answer more questions correctly than GPT-4o-mini, and does its 512-to-768-px resolution effect differ from GPT-4o-mini's?",
+  "hypotheses": {
+    "primary_null": "The paired answer-accuracy difference mean(correct_E2_Q_768 - correct_E1_768) is less than or equal to zero on the 37 matched questions.",
+    "primary_directional": "The paired answer-accuracy difference mean(correct_E2_Q_768 - correct_E1_768) is greater than zero on the 37 matched questions.",
+    "engineering_adoption": "Qwen3-VL-8B at 768 px gains at least 0.05 paired answer accuracy over frozen GPT-4o-mini at 768 px, the gain is strictly larger than the larger of the two models' observed repeat correctness-change rates, and broken answers are at most half the fixed answers."
+  },
+  "design": {
+    "type": "2 x 2 model-by-resolution comparison on matched questions; the GPT-4o-mini row is reused from the frozen E1 run and is not re-executed",
+    "cells": {
+      "E1_512": {
+        "model": "gpt-4o-mini-2024-07-18",
+        "render_label": "short512-long1024",
+        "source": "frozen E1 run, replicate main_r1, condition E1_512",
+        "new_generation": false
+      },
+      "E1_768": {
+        "model": "gpt-4o-mini-2024-07-18",
+        "render_label": "short768-long1536",
+        "source": "frozen E1 run, replicate main_r1, condition E1_768",
+        "new_generation": false,
+        "role": "primary comparator"
+      },
+      "E2_Q_512": {
+        "model": "qwen/qwen3-vl-8b-instruct via OpenRouter (pinned provider Parasail, bf16)",
+        "render_label": "short512-long1024",
+        "source": "new E2 API call, replicate main_r1",
+        "new_generation": true,
+        "role": "resolution factor and interaction"
+      },
+      "E2_Q_768": {
+        "model": "qwen/qwen3-vl-8b-instruct via OpenRouter (pinned provider Parasail, bf16)",
+        "render_label": "short768-long1536",
+        "source": "new E2 API call, replicate main_r1",
+        "new_generation": true,
+        "role": "primary treatment"
+      }
+    },
+    "repeat": {
+      "replicate_id": "repeat_r2",
+      "condition": "E2_Q_768",
+      "role": "independent repeat of the primary treatment: the same 37 requests sent again after main_r1, as new API calls with replicate-scoped cache keys, to measure output stability; the provider's own prompt (prefix) cache may serve part of the repeated input and is recorded"
+    },
+    "primary_comparison": "E2_Q_768 (main_r1) versus E1_768 (frozen main_r1), paired by question",
+    "not_a_comparison": "Frozen baseline condition D (oracle pages padded to five with BM25 distractors, 512 px) has a different page set and is shown only as context, never paired with E2."
+  },
+  "comparator": {
+    "spec_id": "e1-image-resolution-v1",
+    "spec_sha256": "b21ca75a9ad8b700cfd2dc233682bf2396bf313d27630ff116ee5c6948cf5abc",
+    "run_id": "20261121T131525011829Z_29c92c8a_full_short768-long1536",
+    "frozen_run_dir": "experiments/frozen/e1/run_20261121T131525011829Z_29c92c8a_full",
+    "file_sha256": {
+      "execution_log.jsonl": "855f4d6877d5ed45a848a48bab5bb5150aee76eb172fc2296cfd786eee2bf363",
+      "predictions_main_r1_E1_512.jsonl": "dc6bfa8bf978e32621571fc229822c4a394b0d3321ce8affbc0c7b5707bc8243",
+      "predictions_main_r1_E1_768.jsonl": "e4ceb6d9d328f70854169602f635a985a68357b83e32a2b5c77b3be816ac4585",
+      "predictions_control_r2_E1_512.jsonl": "f27ff138dcb62883b7a9c86da3a9efb1e201eea35d349ded4c33e200ec39e62c",
+      "settings.json": "e54b6e14d673c41adea9cfe237f8a20fbd4d566dfcc4e6196aef28b91a818810"
+    },
+    "regression_references": {
+      "E1_512_correct": 10,
+      "E1_768_correct": 16,
+      "E1_512_repeat_correct": 11,
+      "E1_repeat_correctness_changes": 1,
+      "questions": 37
+    },
+    "repeat_note": "GPT-4o-mini was repeated only at 512 px (control_r2). Its 1/37 correctness-change rate is used as the GPT-4o-mini repeat margin at 768 px; this is an assumption, not a measurement at 768 px."
+  },
+  "primary_outcome": {
+    "name": "paired_answer_accuracy_difference_qwen768_minus_gpt768",
+    "definition": "mean over the 37 matched questions of correct(E2_Q_768, main_r1) - correct(E1_768, frozen main_r1), with correct = frozen benchmark score > 0",
+    "direction": "higher_is_better"
+  },
+  "secondary_outcomes": [
+    "paired_mean_benchmark_score_difference",
+    "strict_accuracy_difference (score == 1 only; sensitivity check, not the decision metric)",
+    "fixed_and_broken_counts",
+    "model_by_resolution_interaction",
+    "qwen_resolution_effect (E2_Q_768 - E2_Q_512)",
+    "citation_coverage_validity_evidence_citation_and_off_by_one_rate",
+    "results_by_document_and_leave_one_document_out",
+    "visual_reading_subgroup",
+    "repeat_answer_and_correctness_variability",
+    "parse_failure_and_truncation_rates",
+    "visual_and_prompt_tokens_latency_and_cost"
+  ],
+  "evaluation_metrics": {
+    "correct": "frozen MMLongBench-Doc rule-based score > 0 (notebook 03 section 1, unchanged)",
+    "strict_correct": "score == 1",
+    "paired_transitions": "fixed = GPT wrong and Qwen correct; broken = GPT correct and Qwen wrong; both correct; both wrong",
+    "interaction": "per question d_i = (correct_Q768_i - correct_Q512_i) - (correct_G768_i - correct_G512_i); reported as mean(d_i) with the document-cluster bootstrap; descriptive only, never changes the verdict",
+    "repeat_variability": "correctness-change rate between E2_Q_768 main_r1 and repeat_r2 = (fixed + broken) / 37; also reply-text and parsed-answer change counts",
+    "citations": "coverage = cites at least one page; validity = every cited page was supplied, given a citation; evidence citation = cites at least one annotated evidence page; off-by-one = every invalid cited page equals a supplied page minus one (printed page number instead of the [Page N] tag)",
+    "cost": "actual OpenRouter cost per call from usage.cost (credits, USD) plus a list-price upper bound from the spec prices; GPT-4o-mini comparator cost is its frozen list-price upper bound",
+    "descriptive_only": "document-cluster bootstrap interval, leave-one-document-out, exact McNemar p (ignores clustering), visual-reading subgroup, latency, memory, cost"
+  },
+  "model": {
+    "hosting": "hosted inference API (OpenRouter); no local model weights, no GPU",
+    "provider_api": "OpenRouter OpenAI-compatible Chat Completions",
+    "base_url": "https://openrouter.ai/api/v1",
+    "api_key_env": "OPENROUTER_API_KEY (read from .env, never printed or saved)",
+    "model_slug": "qwen/qwen3-vl-8b-instruct",
+    "model_slug_created_unix": 1760463308,
+    "listed_hugging_face_id": "Qwen/Qwen3-VL-8B-Instruct",
+    "endpoint_checked_2026_11_22": {
+      "provider_name": "Parasail",
+      "tag": "parasail/bf16",
+      "quantization": "bf16",
+      "context_length": 262144,
+      "price_usd_per_token": {
+        "prompt": 2.5e-07,
+        "completion": 7.5e-07,
+        "input_cache_read": 1.2e-07
+      },
+      "supported_parameters_used": [
+        "max_tokens",
+        "temperature",
+        "response_format"
+      ],
+      "supports_implicit_caching": true,
+      "endpoints_listed": 1
+    },
+    "provider_routing": {
+      "order": [
+        "parasail"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "quantizations": [
+        "bf16"
+      ]
+    },
+    "served_identity_checks": [
+      "response.model equals the slug",
+      "serving provider (response 'provider' field, else GET /api/v1/generation?id=) equals Parasail"
+    ],
+    "reference_open_weights": {
+      "hf_repo": "Qwen/Qwen3-VL-8B-Instruct",
+      "revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+      "license": "apache-2.0",
+      "parameters_bf16": 8767123696,
+      "use": "processor and tokenizer files of this revision define the offline token expectation; the weights are never downloaded"
+    },
+    "processor_files_sha256": {
+      "chat_template.json": "5c72a170d2a4a1a3bc5adad2e689ae28138a9700e5b8c96c0266331e86c0acce",
+      "config.json": "5cd452860dc1e9c29dd71cc3cef7f39b338b7a40793f7a260655c2d3568f3661",
+      "generation_config.json": "8469742d1fce0de951c8909b26a2c0c0d8490837ce476efb114da9e0cefc4d44",
+      "preprocessor_config.json": "27225450ac9c6529872ee1924fcb0962ff5634834f817040f444118116f4e516",
+      "tokenizer.json": "a5d85b6dcc535e6b93115a9ef287e6132fdbf30270da6218194ba742261173c7",
+      "tokenizer_config.json": "c2da771801886ad9ae98181793ffd3dfb7f1af30f6f7c6a4e15d7dbba52e2399",
+      "video_preprocessor_config.json": "7768af27c1fafa9cc9011c1dc20067e03f8915e03b63504550e11d5066986d13",
+      "vocab.json": "ca10d7e9fb3ed18575dd1e277a2579c16d108e32f27439684afa0e10b1440910",
+      "merges.txt": "599bab54075088774b1733fde865d5bd747cbcc7a547c5bc12610e874e26f5e3"
+    },
+    "special_token_ids": {
+      "image_pad": 151655,
+      "vision_start": 151652,
+      "vision_end": 151653,
+      "im_end": 151645,
+      "endoftext": 151643
+    },
+    "context_window_tokens": 262144,
+    "what_cannot_be_verified": [
+      "which weight revision Parasail serves: OpenRouter exposes no revision hash, and the slug can be re-pointed or the deployment updated without notice",
+      "the provider's image preprocessing (max_pixels, resizing, resampling) and chat-template rendering, beyond what the returned prompt-token counts imply",
+      "the serving stack, kernels and batching, and therefore bitwise determinism at temperature 0",
+      "unspecified sampling defaults the provider applies (irrelevant to the choice of token only if temperature 0 is implemented as greedy decoding)"
+    ],
+    "contamination_note": "Qwen3-VL was released in 2025, after MMLongBench-Doc (2024). Exposure to these public documents during pretraining cannot be ruled out."
+  },
+  "preprocessing": {
+    "input_images": "the exact PNG bytes sent to GPT-4o-mini in E1 (SHA-256 checked against the frozen E1 execution log), sent as the same base64 data URLs",
+    "processor": "provider-side and not observable; the offline expectation uses Qwen3VLProcessor rules from the pinned reference revision",
+    "rule": "smart_resize with factor = patch_size 16 x merge_size 2 = 32: each side is rounded to the nearest multiple of 32 px; images are only rescaled further if their area falls outside [min_pixels 65536, max_pixels 16777216], which no E1 image does",
+    "resample": "bicubic",
+    "visual_tokens_per_image": "(resized_height / 32) x (resized_width / 32), plus one vision_start and one vision_end token",
+    "expected_shapes_512": {
+      "512x663": {
+        "resized": "512x672",
+        "visual_tokens": 336
+      },
+      "512x725": {
+        "resized": "512x736",
+        "visual_tokens": 368
+      },
+      "683x512": {
+        "resized": "672x512",
+        "visual_tokens": 336
+      },
+      "911x512": {
+        "resized": "896x512",
+        "visual_tokens": 448
+      }
+    },
+    "expected_shapes_768": {
+      "768x994": {
+        "resized": "768x992",
+        "visual_tokens": 744
+      },
+      "768x1087": {
+        "resized": "768x1088",
+        "visual_tokens": 816
+      },
+      "1024x768": {
+        "resized": "1024x768",
+        "visual_tokens": 768
+      },
+      "1366x768": {
+        "resized": "1376x768",
+        "visual_tokens": 1032
+      }
+    },
+    "consequence": "To reach a multiple of 32 px, Qwen resamples every 512-px render (by up to 1.7 percent per side) and every 768-px render except the 1024x768 slides (by up to 0.7 percent per side). No image is downscaled beyond that rounding. This is the model's own preprocessing of identical input bytes and is part of the treatment, not a protocol deviation. The expected per-image grids are computed offline; through the hosted API only their sum is indirectly checked via prompt-token counts.",
+    "offline_expectation_backend": "transformers 5.23.0 tokenizer and PIL image-processor configuration of the reference revision (no weights, no torch inference)",
+    "provider_check": "observed prompt_tokens must lie within max(16, 2 percent) of the offline Qwen expectation for every reply; equality is evidence, not proof, that the provider applies the shipped resize rule. A mismatch stops the run (technical gate, not an accuracy decision)."
+  },
+  "prompt": {
+    "system_prompt_version": "mmlb-image-v1",
+    "system_prompt_hash": "35ff2e8b91f9",
+    "user_content": "the E1 request messages verbatim: system prompt, 'Question: ...\\n\\nPage images:', then for each supplied page '[Page N]' followed by an image_url part with the same base64 PNG and detail: high",
+    "construction": "the request messages are the rebuilt E1 OpenAI messages (object-equal), whose fingerprint must equal the frozen E1 log",
+    "chat_template": "applied by the provider; expected to be the model's own template (chat_template.json of the reference revision), which joins content items without separators; not verifiable",
+    "unavoidable_differences": [
+      "the provider renders the OpenAI messages with its own (expected: Qwen's) chat template; how either API serialises content parts is not public",
+      "detail: high is sent unchanged but is an OpenAI-specific hint that a Qwen deployment is expected to ignore",
+      "token-cap parameter name: GPT-4o-mini received max_completion_tokens = 400; OpenRouter documents max_tokens, so E2 sends max_tokens = 400",
+      "JSON mode: both receive response_format json_object; how each server enforces it differs and is not observable"
+    ]
+  },
+  "generation": {
+    "request_parameters": {
+      "temperature": 0.0,
+      "max_tokens": 400,
+      "response_format": {
+        "type": "json_object"
+      }
+    },
+    "not_sent": [
+      "seed",
+      "top_p",
+      "top_k",
+      "presence_penalty",
+      "repetition_penalty"
+    ],
+    "not_sent_reason": "E1 sent none of these to GPT-4o-mini; temperature 0 is the only decoding control in both conditions",
+    "batch_size": 1,
+    "retries": "no automatic retries (SDK max_retries = 0); a failed request may be retried once by resuming the run",
+    "timeout_s": 120,
+    "completion_tokens_definition": "usage.completion_tokens as reported by OpenRouter",
+    "finish_reason_definition": "OpenRouter's normalized finish_reason (stop, length, content_filter, error); native_finish_reason is recorded"
+  },
+  "output_contract": {
+    "keys": "JSON object with 'answer' and 'cited_pages', exactly as in E0/E1",
+    "constrained_decoding": "response_format json_object, as for GPT-4o-mini; enforcement is the provider's and not observable",
+    "normalization": "strip-one-markdown-fence-v1: if the whole reply, after trimming whitespace, is one markdown code fence (``` or ```json), its body is parsed; nothing else is changed. Kept as a safeguard in case JSON mode is ignored",
+    "normalization_check": "the rule is the identity on all 113 frozen GPT-4o-mini E1 replies, so applying it does not change any comparator score",
+    "parser": "parse_model_output of notebook 02, unchanged",
+    "parse_failures": "scored 0 (as in E0/E1) and reported separately"
+  },
+  "population": {
+    "same_as": "e1-image-resolution-v1 population",
+    "page_rule": "annotated evidence pages only, in benchmark order; no BM25 padding",
+    "matched_questions": 37,
+    "matched_qids": [
+      "mmlb-0033",
+      "mmlb-0034",
+      "mmlb-0037",
+      "mmlb-0041",
+      "mmlb-0094",
+      "mmlb-0095",
+      "mmlb-0096",
+      "mmlb-0097",
+      "mmlb-0313",
+      "mmlb-0315",
+      "mmlb-0317",
+      "mmlb-0318",
+      "mmlb-0319",
+      "mmlb-0353",
+      "mmlb-0355",
+      "mmlb-0357",
+      "mmlb-0359",
+      "mmlb-0360",
+      "mmlb-0362",
+      "mmlb-0363",
+      "mmlb-0727",
+      "mmlb-0729",
+      "mmlb-0731",
+      "mmlb-0732",
+      "mmlb-0733",
+      "mmlb-0735",
+      "mmlb-0736",
+      "mmlb-0737",
+      "mmlb-0739",
+      "mmlb-0740",
+      "mmlb-0741",
+      "mmlb-0762",
+      "mmlb-0763",
+      "mmlb-0765",
+      "mmlb-0766",
+      "mmlb-0767",
+      "mmlb-0769"
+    ],
+    "excluded_context_qids": {
+      "mmlb-0035": 13,
+      "mmlb-0036": 5,
+      "mmlb-0039": 10
+    },
+    "excluded_note": "Excluded because GPT-4o-mini could not fit them at 768 px. Qwen could, but running them would not be paired with a GPT-4o-mini answer; they are not part of E2.",
+    "documents": [
+      "2210.02442v1.pdf",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+      "bdf54dxa.pdf",
+      "earlybird-110722143746-phpapp02_95.pdf",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+      "watch_d.pdf"
+    ],
+    "visual_reading_subgroup_qids": [
+      "mmlb-0033",
+      "mmlb-0095",
+      "mmlb-0096",
+      "mmlb-0313",
+      "mmlb-0315",
+      "mmlb-0317",
+      "mmlb-0731",
+      "mmlb-0737",
+      "mmlb-0769"
+    ],
+    "visual_reading_subgroup_provenance": "frozen in the E1 spec from manual labels assigned before E1; mechanism-focused and selected, not generalizable"
+  },
+  "execution": {
+    "modes": {
+      "offline": {
+        "generations": 0,
+        "purpose": "rebuild and verify every request, image, expected token count, plan, cache isolation, recovery, spending limits and evaluation interface; no network call to OpenRouter"
+      },
+      "smoke": {
+        "generations": 2,
+        "purpose": "technical: routing to the pinned provider, served model slug, JSON contract, prompt-token accounting; never accuracy"
+      },
+      "pilot": {
+        "generations": 18,
+        "purpose": "technical feasibility on the 8 E1 pilot questions at both resolutions (2 smoke + 16); accuracy is never shown or used"
+      },
+      "full": {
+        "generations": 113,
+        "purpose": "2 smoke + 37 x 2 main_r1 pairs + 37 repeat_r2 at 768 px"
+      }
+    },
+    "technical_smoke_qid": "mmlb-0033",
+    "pilot_qids": [
+      "mmlb-0033",
+      "mmlb-0313",
+      "mmlb-0737",
+      "mmlb-0763",
+      "mmlb-0769",
+      "mmlb-0729",
+      "mmlb-0732",
+      "mmlb-0739"
+    ],
+    "pairing": "within main_r1 the 512-px and 768-px requests of a question are generated adjacently",
+    "question_order_seed": 20261124,
+    "within_pair_order_seed": 20261125,
+    "repeat_order_seed": 20261126,
+    "repeat_independence": "repeat_r2 requests are new API calls with their own cache keys, sent after all main_r1 calls; provider-side prompt caching cannot be disabled and is recorded per call (cached_tokens)",
+    "same_hardware": "not controllable through a hosted API; provider name, served model, generation id, system fingerprint (if any) and timestamps are recorded per call",
+    "cache_policy": "cache entries are keyed SHA-256(run_id:replicate_id:request_fingerprint); a new replicate can never reuse another replicate's reply",
+    "persistence": "each reply is appended (and fsynced) to the run's response cache before its log record is written; execution log and cache are append-only; every output file is created exclusively and never overwritten",
+    "pause_between_calls_s": 2.0,
+    "rate_limit": {
+      "applies_to": "HTTP 429 only (openai.RateLimitError), including OpenRouter's 'rate-limited upstream'; every other API error still stops the run",
+      "backoff_s": [
+        30,
+        60,
+        120,
+        240,
+        480
+      ],
+      "counts_as_attempt": false,
+      "logging": "each 429 is appended to the execution log with status 'rate_limited', its wait and the error, so every request actually sent is on record",
+      "exhausted": "if the request is still rate-limited after the last wait, the run stops (resumable); the counter restarts for the next request"
+    },
+    "resume": "VISUALDOC_E2_RESUME_DIR resumes an interrupted run: settings, spec hash and plan must be identical; items with a logged reply are never re-sent; a reply present in the cache but not in the log is reused; a failed request is retried at most once (max 2 attempts per request); 'rate_limited' records do not count as attempts",
+    "stop_rules": {
+      "integrity_failure": "stop in every mode: image bytes, served model, serving provider or prompt-token accounting differ from expectation",
+      "api_failure": "stop in every mode on any API error, including an error delivered inside an HTTP 200 body; 402 (credits) is never retried; a 429 is first waited out per execution.rate_limit and stops the run only when the backoff is exhausted",
+      "budget": "stop before a call whose list-price upper bound would take the run's actual cost plus remaining upper bound above the approved ceiling",
+      "contract_failure": "unparseable or truncated reply; stops smoke and pilot (technical gate failure); recorded and scored 0 in full mode without stopping, so the population is not truncated by outcome"
+    },
+    "record": [
+      "execution index, pair index and within-pair order",
+      "request start and completion timestamps (UTC)",
+      "request fingerprint (request body with images replaced by hashes), E1 fingerprint and cache provenance",
+      "image SHA-256 and pixel dimensions",
+      "offline expected visual and prompt tokens",
+      "served model, serving provider, generation id, system fingerprint, finish and native finish reason",
+      "prompt, completion and cached prompt tokens, usage.cost",
+      "API latency"
+    ]
+  },
+  "gates": {
+    "offline": [
+      "spec and comparator file hashes match",
+      "37 questions, pages and order equal the frozen E1 requests (fingerprints); E2 messages are object-equal to E1 messages",
+      "every PNG hash and size equals the frozen E1 log",
+      "reference processor files equal the pinned hashes",
+      "image grids and prompt token counts computed offline",
+      "max prompt plus 400 fits the context",
+      "output normalization is the identity on all 113 frozen replies",
+      "plan composition 2 / 18 / 113",
+      "mocked OpenRouter responses (real SDK objects): field extraction, provider check, error in HTTP 200, 402 never retried, key redaction",
+      "fake-engine tests: cache isolation, resume without re-sending, budget stop, stop rules, no overwrite",
+      "mocked evaluation reproduces known synthetic outcomes"
+    ],
+    "smoke": [
+      "spec frozen and budget approved",
+      "OPENROUTER_API_KEY present",
+      "public endpoint listing still shows the pinned provider, quantization and prices",
+      "planned upper-bound cost within the approved budget",
+      "both replies: served by the slug and the pinned provider, prompt tokens within tolerance, parsed, finish stop"
+    ],
+    "pilot": [
+      "smoke gate passed in the same run",
+      "all 16 pilot replies pass integrity checks, parse and finish with stop",
+      "accuracy not computed"
+    ],
+    "full": [
+      "smoke gate passed in the same run",
+      "explicit approval of the full stage",
+      "all 113 planned calls logged with a reply or a recorded stop"
+    ]
+  },
+  "decision_rule": {
+    "status": "engineering adoption rule, fixed before any E2 generation; not a confirmatory significance test",
+    "minimum_primary_accuracy_gain": 0.05,
+    "variability_margin": "max(GPT-4o-mini repeat correctness-change rate from frozen E1 = 1/37, Qwen repeat correctness-change rate between E2_Q_768 main_r1 and repeat_r2)",
+    "variability_rule": "the primary paired gain must be strictly greater than the variability margin",
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "broken_rule": "broken <= fixed / 2, counted on the primary comparison",
+    "adopt": "adopt_qwen3_vl_8b_768_for_this_pipeline when all three criteria pass",
+    "retain": "retain_gpt4o_mini_768_reference when the primary paired gain is <= 0",
+    "otherwise": "inconclusive",
+    "never_change_the_verdict": [
+      "interaction",
+      "Qwen 512-px results",
+      "subgroups",
+      "strict accuracy",
+      "cost",
+      "latency"
+    ],
+    "scope": "an engineering choice of image reader for this pipeline and question set, not evidence of general superiority"
+  },
+  "uncertainty": {
+    "primary_interval": "deterministic percentile bootstrap resampling the six documents as clusters",
+    "bootstrap_seed": 42,
+    "bootstrap_draws": 10000,
+    "qualification": "37 questions in 6 documents: one question moves accuracy by 0.027, only large effects are detectable, intervals and McNemar p-values are descriptive. A null result means no large effect on these questions, not equivalence."
+  },
+  "software": {
+    "python": "3.12",
+    "pinned": {
+      "transformers": "5.23.0"
+    },
+    "pinned_role": "offline token expectation only (tokenizer and image-processor rules); not used for inference",
+    "recorded_at_run_time": [
+      "openai SDK",
+      "transformers",
+      "tokenizers",
+      "pandas",
+      "numpy",
+      "pymupdf",
+      "pillow"
+    ],
+    "offline_gate_environment": {
+      "python": "3.12.6",
+      "transformers": "5.23.0",
+      "torch": "2.15.0 (CPU, macOS arm64)",
+      "tokenizers": "0.23.3",
+      "huggingface_hub": "2.4.0",
+      "pillow": "13.0.0",
+      "pymupdf": "2.1"
+    }
+  },
+  "budget": {
+    "approved_ceiling_usd": 1.0,
+    "proposed_ceiling_usd": 1.0,
+    "price_basis": "OpenRouter endpoint listing for qwen/qwen3-vl-8b-instruct read on 2026-11-22: Parasail bf16, USD 0.25 per 1M prompt tokens, 0.75 per 1M completion tokens, 0.12 per 1M cached prompt tokens; images are billed as prompt tokens. Re-read automatically in paid modes; a price change closes the gate.",
+    "estimate": "computed in notebook 02 from the offline expected prompt tokens: list-price upper bound with the full 400 output tokens per call, and a typical estimate with E1's mean output length",
+    "per_call_guard": "before each call, actual cost so far plus the upper bound of all remaining calls must stay within approved_ceiling_usd",
+    "not_included": "OpenRouter credit-purchase fees, which are charged when buying credits, not per call"
+  },
+  "alternative_rejected": {
+    "self_hosted_open_weights": "Running the pinned revision 0c351dd0 in BF16 on a rented GPU (about USD 1-3) would verify the weights by SHA-256, observe the processor's grids and token ids exactly and control decoding. It was set aside by the project owner in favour of the simpler hosted API. The hosted setup is therefore less reproducible: same slug, not provably the same weights or preprocessing."
+  },
+  "limitations": [
+    "37 questions in 6 documents; questions from one PDF are dependent",
+    "hosted inference: the weight revision, image preprocessing, chat-template rendering and serving stack are the provider's and cannot be verified; prompt-token accounting is the only indirect check",
+    "the slug or the provider deployment may change after the run; the result is tied to the recorded date, provider and generation ids, not to a weight hash",
+    "one Qwen repeat and one GPT-4o-mini repeat (at 512 px only); both are observed margins, not variance estimates; provider prompt caching may make the Qwen repeat look more stable than cold runs",
+    "possible pretraining exposure to the public benchmark documents",
+    "different visual tokenization between models, recorded but not equalised",
+    "local rule-based scoring without the official GPT-4o extraction stage; not leaderboard numbers",
+    "citations of printed page numbers instead of [Page N] tags are measured, not corrected",
+    "counting, aggregation and chart-reasoning failures dominate the remaining E1 errors; a gain there is the main thing to look for, but the sample per category is small"
+  ],
+  "documentation_checked": "2026-11-22",
+  "source_urls": {
+    "openrouter_model": "https://openrouter.ai/qwen/qwen3-vl-8b-instruct",
+    "openrouter_endpoints_api": "https://openrouter.ai/api/v1/models/qwen/qwen3-vl-8b-instruct/endpoints",
+    "openrouter_provider_routing": "https://openrouter.ai/docs/features/provider-routing",
+    "openrouter_usage_accounting": "https://openrouter.ai/docs/use-cases/usage-accounting",
+    "openrouter_errors": "https://openrouter.ai/docs/api-reference/errors",
+    "openrouter_structured_outputs": "https://openrouter.ai/docs/features/structured-outputs",
+    "reference_model_card": "https://huggingface.co/Qwen/Qwen3-VL-8B-Instruct/tree/0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+    "technical_report": "https://arxiv.org/abs/2511.21631"
+  }
+}

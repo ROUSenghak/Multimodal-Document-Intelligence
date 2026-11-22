@@ -1,10 +1,12 @@
 # E2 proposal: does a stronger pretrained VLM beat GPT-4o-mini at 768 px?
 
-**Status (2026-11-22): implemented and validated offline; not executed.**
-The proposed specification is `experiments/specs/e2_stronger_vlm_v1.json`
-(status `proposed-awaiting-approval`). Paid modes stay locked until it is frozen
-with a budget. Notebook 02 section 11 and notebook 03 section 14 hold the
-implementation.
+**Status (2026-11-22): implemented and frozen.**
+The specification is `experiments/specs/e2_stronger_vlm_v2.json`, frozen with a
+$1.00 budget. It supersedes v1 (`e2_stronger_vlm_v1.json`). v1's smoke and pilot
+runs passed, but its full run was stopped twice by HTTP 429 "rate-limited
+upstream" from the only endpoint. v2 adds a pause between calls and waits out
+429s without using an attempt; nothing else changed. Notebook 02 section 11 and
+notebook 03 section 14 hold the implementation.
 
 **Changes from this proposal:**
 

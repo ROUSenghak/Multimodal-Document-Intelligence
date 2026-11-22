@@ -159,14 +159,19 @@ Image resolution is controlled with a 2 × 2 design:
   tokens), smoke + pilot + full (133 calls) costs about **$0.04**, with a
   list-price upper bound of about **$0.08**. Paid modes re-check the public price
   listing, and every call is checked against the approved budget.
-- **Spec.** [`experiments/specs/e2_stronger_vlm_v1.json`](experiments/specs/e2_stronger_vlm_v1.json)
-  is *proposed*. Paid modes refuse to run until its status is frozen and a
-  budget is set.
+- **Spec.** [`experiments/specs/e2_stronger_vlm_v2.json`](experiments/specs/e2_stronger_vlm_v2.json),
+  frozen on 2026-11-22 with a $1.00 budget. Paid modes refuse to run unless the
+  spec is frozen with a budget. It supersedes
+  [`v1`](experiments/specs/e2_stronger_vlm_v1.json). v1's smoke and pilot passed,
+  but its full run was stopped twice by HTTP 429 "rate-limited upstream". v2
+  changes only the execution rules: a 2-s pause between calls, and 429s waited
+  out (30–480 s) without using one of a request's two attempts.
 
 ```bash
 # Offline (default): nothing is sent to OpenRouter
 jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
-# Paid, after approval, one stage at a time (OPENROUTER_API_KEY in .env)
+# Paid, after approval, one stage at a time (OPENROUTER_API_KEY in .env);
+# add VISUALDOC_E2_RESUME_DIR=experiments/runs/e2/<run-id> to resume an interrupted run
 VISUALDOC_E2_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
 # Evaluate a saved run without any API call
 VISUALDOC_E2_RUN_DIR=experiments/runs/e2/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
