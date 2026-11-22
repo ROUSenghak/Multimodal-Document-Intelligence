@@ -28,7 +28,7 @@ Show the underlying operation once before wrapping it in a helper when that impr
 
 - Do not change the dataset revision, subset, seeds, OCR or BM25 parameters, prompts, model snapshot, page lists or scoring rules without recording it as a new condition.
 - Paid API calls are opt-in (`VISUALDOC_QA_MODE`, default `replay`). Never run `smoke`, `pilot` or `full` without the user's explicit approval. Never print or commit credentials.
-- Regression references (Recall@5 0.689, Hit@5 0.800, A 7/40, B 7/40, C 9/40, D 11/38; E1 10/37 → 16/37 with 6 fixed / 0 broken, repeat 11/37, verdict adopt_768) are asserted in the notebooks; a change that breaks them must be explained, not silenced.
+- Regression references (Recall@5 0.689, Hit@5 0.800, A 7/40, B 7/40, C 9/40, D 11/38; E1 10/37 → 16/37 with 6 fixed / 0 broken, repeat 11/37, verdict adopt_768; E2 Qwen 11/37 → 15/37 vs GPT-4o-mini 16/37 with 4 fixed / 5 broken, repeat 15/37, verdict retain_gpt4o_mini_768) are asserted in the notebooks; a change that breaks them must be explained, not silenced.
 
 ## Completion standard
 
