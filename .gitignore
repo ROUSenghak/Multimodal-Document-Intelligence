@@ -56,5 +56,8 @@ data/external/vidore/cache/
 # MMLongBench-Doc PDFs are CC BY-NC 4.0 and downloaded on demand by
 # notebooks/00_document_processing.ipynb.
 data/external/mmlongbench_doc/documents/
+# OmniDocBench annotations (40 MB, archived notebooks only, research use only);
+# download instructions and checksum in data/external/README.md.
+data/external/omnidocbench/OmniDocBench.json
 # Hugging Face cache redirected into the project by notebooks (if any).
 .hf_cache/

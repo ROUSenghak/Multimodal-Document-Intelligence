@@ -7,8 +7,8 @@ annotation set in `data/annotations/`.
 | Folder | Source (Hugging Face) | Used by | What is local | Licence |
 | --- | --- | --- | --- | --- |
 | `mmlongbench_doc/` | `yubo2333/MMLongBench-Doc`, pinned revision `2ff6aa92…` | **notebooks 00–03** (archived 12–15) | question table (`data/*.parquet`, tracked); PDFs downloaded on demand (`documents/`, git-ignored) | data **CC BY-NC 4.0**, research use only (dataset README) |
-| `vidore/` | `vidore/vidore_v3_finance_fr` | archived notebooks 12, 13 only | query and relevance tables in a `datasets` cache (tracked before the ignore rules existed) | see the dataset card |
-| `omnidocbench/` | `opendatalab/OmniDocBench` | archived notebooks 12, 13 only | `OmniDocBench.json` layout annotations (40 MB, tracked) | see the dataset card |
+| `vidore/` | `vidore/vidore_v3_finance_fr` | archived notebooks 12, 13 only | query and relevance tables in a `datasets` cache (git-ignored; untracked on 2026-11-22) | see the dataset card |
+| `omnidocbench/` | `opendatalab/OmniDocBench` | archived notebooks 12, 13 only | `OmniDocBench.json` layout annotations (40 MB, git-ignored; untracked on 2026-11-22, see below) | no SPDX licence; dataset README: "for research purposes only and not for commercial use" |
 | `doclaynet/` | — | — | empty placeholder created by archived notebook 12 | — |
 
 ## MMLongBench-Doc in brief
@@ -34,10 +34,32 @@ annotation set in `data/annotations/`.
 
 The ignore rules in the root `.gitignore` keep Hugging Face `.cache/`
 folders, `*.lock` files, the ViDoRe `datasets` cache and downloaded
-MMLongBench PDFs out of Git. Files committed before those rules existed (the
-ViDoRe Arrow cache, `OmniDocBench.json`, one MMLongBench PDF) remain tracked
-until the owner decides otherwise. Removing them from tracking would keep the
-local copies but make fresh clones re-download them.
+MMLongBench PDFs and `OmniDocBench.json` out of Git. Three of them had been
+committed before those rules existed: the ViDoRe Arrow cache, one MMLongBench
+PDF (not in the 6-document subset) and `OmniDocBench.json`. On 2026-11-22 they
+were removed from tracking with `git rm --cached`: local copies are kept, Git
+history still holds them (history was not rewritten), and fresh clones
+re-download them only for the archived notebooks.
+
+## OmniDocBench (archived notebooks only)
+
+- **Source:** Hugging Face dataset `opendatalab/OmniDocBench`, file
+  `OmniDocBench.json` (42,208,096 bytes), revision
+  `aa1ee96d106dbe53d0ae59474d75c6e6d9b53fec`. The archived notebook 12
+  downloaded it on 2026-11-18 without pinning a revision; the local file's
+  SHA-256 equals the Hub's LFS hash of that file at this revision (checked
+  2026-11-22).
+- **SHA-256:** `a45cd84b04ad8b793e775089640e6b681209abea33ead54c1828ddca35fae496`
+- **Licence:** the dataset card declares no licence. Its README "Copyright
+  Statement" says the PDFs come from public online channels and community
+  contributions and that "the dataset is for research purposes only and not
+  for commercial use". It is therefore not redistributed here.
+- **Download and verify:**
+
+  ```bash
+  python -c "from huggingface_hub import hf_hub_download; hf_hub_download('opendatalab/OmniDocBench', 'OmniDocBench.json', repo_type='dataset', revision='aa1ee96d106dbe53d0ae59474d75c6e6d9b53fec', local_dir='data/external/omnidocbench')"
+  shasum -a 256 data/external/omnidocbench/OmniDocBench.json   # expect a45cd84b…fae496
+  ```
 
 Anything committed here is redistributed publicly. Check each dataset's
 licence before committing more of its files.

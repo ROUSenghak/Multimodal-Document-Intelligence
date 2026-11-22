@@ -14,7 +14,8 @@ During the learning and experimentation phase, project features are implemented 
 - Do not create new Python modules or scripts for exploratory or experimental functionality that can reasonably live in a notebook.
 - Do not develop a `.py` implementation and convert or generate a notebook from it.
 - Do not use `src/visualdoc/` as a hidden implementation layer for the notebooks. Rebuild important operations visibly in notebook cells.
-- Preserve `src/`, `tests/` and `archive/` as historical, regression or reference material unless the user explicitly requests a change.
+- Preserve `src/visualdoc/parsing.py`, `tests/` and `archive/` as historical, regression or reference material unless the user explicitly requests a change.
+- `src/visualdoc/` also holds the application baseline approved on 2026-11-22 (`documents`, `retrieval`, `answering`, `citations`, `pipeline`). The notebooks never import it. Its constants are pinned to the frozen runs by parity tests; a change that breaks one is a new condition, not a fix.
 - Keep each notebook executable from top to bottom on a fresh kernel (`visualdoc-venv`), given the outputs of the notebooks before it.
 - Prefer extending an existing stage over adding a notebook. A new stage gets the next number.
 
@@ -32,6 +33,6 @@ Show the underlying operation once before wrapping it in a helper when that impr
 
 ## Completion standard
 
-Validate notebook JSON, execute the notebooks in order from a fresh kernel, save their outputs, and inspect their rendered presentation. If credentials, annotations or an unresolved model choice block execution, keep an explicit readiness gate and state the missing input inside the notebook.
+Validate notebook JSON, execute the notebooks in order from a fresh kernel, save their outputs, inspect their rendered presentation, and run `pytest`. If credentials, annotations or an unresolved model choice block execution, keep an explicit readiness gate and state the missing input inside the notebook.
 
-Moving notebook code into production modules, adding an application framework, or deleting the existing Python baseline is a separate phase that requires explicit user approval.
+Extending the application baseline beyond its five modules, adding an application framework or user interface, or deleting the existing Python baseline is a separate phase that requires explicit user approval.

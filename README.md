@@ -19,8 +19,10 @@ The project has three parts, one notebook stage each (plus evaluation):
 > (57 questions). All four conditions have been run with gpt-4o-mini; their
 > predictions are frozen in the repository and are re-evaluated without API
 > calls. Experiments E1–E3 (image resolution, a stronger VLM, text–image
-> fusion) are frozen with independent audits. The project's own annotated
-> question set (`data/annotations/questions.csv`) is still empty.
+> fusion) are frozen with independent audits, and their retained
+> configuration is packaged as a small tested application baseline
+> (`src/visualdoc/`). The project's own annotated question set
+> (`data/annotations/questions.csv`) is still empty.
 
 ## Research question and design
 
@@ -228,6 +230,59 @@ frozen and committed with the implementation before the first call.
 VISUALDOC_E3_RUN_DIR=experiments/runs/e3/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
 ```
 
+## Application baseline (`src/visualdoc/`)
+
+Small reusable modules that answer a question about **any** PDF with the
+configuration the frozen experiments retained. The notebooks do not import
+them; they stay the record of how each choice was measured.
+
+| Module | Does | Pinned to |
+| --- | --- | --- |
+| `documents.py` | page text (native layer; full-page OCR at 150 dpi below 30 native words), 768 × 1536-px page PNGs, 1-based page access | notebook 00; tests reproduce E3's pinned page texts and E1's 768-px PNG byte for byte |
+| `retrieval.py` | BM25 per document (k1 1.5, b 0.75), ties by page number | notebook 01; tests reproduce the frozen rankings of all 57 questions |
+| `answering.py` | image request (`mmlb-image-v1` prompt, GPT-4o-mini, temperature 0, 400 tokens, JSON), context guard, reply parser, one model call through an injected `create` | notebook 02; tests rebuild a frozen E1 request with an identical fingerprint and re-parse all 264 frozen GPT-4o-mini replies |
+| `citations.py` | cited pages vs supplied pages: invalid, off-by-one (printed page number), missing citation | notebook 03's definitions |
+| `pipeline.py` | PDF → text → BM25 top 5 → images → context guard → answer → citation check; command-line demo | — |
+
+```bash
+# Offline demonstration (default): no model is called, the answer is a placeholder
+PYTHONPATH=src python -m visualdoc.pipeline data/documents/ch2.pdf "What does Cromwell's rule say about prior probability?"
+# Live (paid, sends page images to OpenAI): add --live with OPENAI_API_KEY set
+```
+
+- **OCR policy.** The application uses notebook 00's policy, the one behind
+  every frozen result. The older routing in `src/visualdoc/parsing.py`
+  (NATIVE / OCR / HYBRID / REVIEW by image coverage, OCR at 200 dpi) is kept
+  unchanged with its tests but not used: on the vector-outlined benchmark PDF
+  `bdf54dxa.pdf` it routes 53 of 54 pages to REVIEW and returns no text, where
+  notebook 00's policy recovers a median of 158 words per page.
+**Limitations of the application baseline.**
+
+1. **Its default configuration is untested.** The experiments measured BM25
+   top-5 pages at 512 px (condition B: 7/40) and 768-px images on annotated
+   evidence pages only (E1–E3: 16–17/37). They never measured BM25-retrieved
+   pages at 768 px, which is what the pipeline sends. It follows each
+   decision, but its accuracy is unknown until that condition is run.
+2. **Retrieved pages are truncated to fit the context.** At 768 px a 4:3 or
+   US-letter page costs about 25.5k prompt tokens and a 16:9 slide 36.8k, so
+   only 4 (or 3) of the 5 retrieved pages fit GPT-4o-mini's 128k context. The
+   guard keeps the best-ranked prefix that fits and lists the rest in
+   `dropped_pages`; nothing is dropped silently. The cost in retrieval is
+   measurable on the benchmark: BM25 Recall@5 0.689 and Hit@5 0.800 fall to
+   Recall@3 0.608 and Hit@3 0.725.
+3. **A valid citation is not evidence support.** `citations.ok` only checks
+   form: every cited page was supplied, and an answer other than "Not
+   answerable" cites at least one page. It does not check that the cited page
+   contains the answer, and the answer itself is not verified at all. In the
+   frozen E0 text condition A, citation validity was 1.000 while 7 of 40
+   answers were correct. `cites_evidence` (a cited page is an annotated
+   evidence page) is available only when evidence annotations exist, i.e. in
+   evaluation, never for a new user PDF.
+4. **Engineering gaps.** No retry, rate limiting, response cache or spending
+   limit; API errors propagate to the caller. The token estimate uses a fixed
+   1,000-token text allowance, which covered all 113 frozen E1 requests but
+   is not exact for very long questions.
+
 ## Workflow
 
 Run the notebooks in order. Each one reads only the saved files of the
@@ -265,7 +320,7 @@ OCR uses the Tesseract engine built into PyMuPDF with the model in
 6 PDFs (≈ 22 MB) from Hugging Face and OCRs 120 pages (≈ 1 minute).
 
 ```bash
-pytest                                   # 18 tests: parsing module and annotation schema
+pytest                                   # 82 tests: application modules, parsing module, annotation schema
 jupyter lab notebooks/                   # then run 00 → 01 → 02 → 03 with the visualdoc-venv kernel
 ```
 
@@ -298,7 +353,9 @@ predefined accuracy–cost decision readout.
 
 **Troubleshooting.** `ModuleNotFoundError: No module named 'visualdoc'` while
 `pip show visualdoc-ai` works: the editable-install `.pth` file has the macOS
-`hidden` flag. Run `chflags nohidden .venv/lib/python3.12/site-packages/*.pth`.
+`hidden` flag. Run `chflags nohidden .venv/lib/python3.12/site-packages/*.pth`
+(the flag can come back; `pytest` does not depend on it, and `PYTHONPATH=src`
+works for the demo).
 
 ## Repository layout
 
@@ -317,8 +374,9 @@ predefined accuracy–cost decision readout.
 │   ├── processed/, cache/     # git-ignored outputs of the notebooks
 │   ├── annotations/           # schema and guide for the project's own question set (empty)
 │   └── documents/             # three local candidate PDFs, used by the tests
-├── src/visualdoc/parsing.py   # tested page-routing baseline (native / OCR / hybrid / review)
-├── tests/                     # parsing and annotation-schema tests
+├── src/visualdoc/             # application modules (documents, retrieval, answering, citations, pipeline);
+│                              #   parsing.py = older page-routing baseline, kept for reference
+├── tests/                     # application, parsing and annotation-schema tests
 ├── resources/tessdata/        # Tesseract English model
 ├── archive/                   # superseded notebooks, course labs, old docs (see archive/README.md)
 ├── AGENTS.md                  # development policy for coding agents
@@ -329,10 +387,11 @@ predefined accuracy–cost decision readout.
 
 | Component | Status |
 | --- | --- |
-| Native text + OCR fallback, page records, rendering | Implemented (00); routing module and tests in `src/` |
-| BM25 page retrieval and metrics | Implemented (01) |
+| Native text + OCR fallback, page records, rendering | Implemented (00); application module `documents.py` |
+| BM25 page retrieval and metrics | Implemented (01); application module `retrieval.py` |
 | Text and image QA with page citations, four conditions | Implemented and run (02) |
 | Experiments E1–E3 (resolution, stronger VLM, text–image fusion) | Run, audited and frozen (`experiments/frozen/`) |
+| End-to-end application baseline (image answering, citation check) | Implemented with offline tests (`src/visualdoc/`); accuracy on retrieved pages at 768 px not measured |
 | Evaluation, paired comparisons, error analysis | Implemented (03); manual review of the E0 queue done (29 cases); E3's 14-question queue not labelled |
 | Dense or visual retrieval (embeddings, ColPali) | Planned; no model chosen |
 | Project's own verified question set | Not started (needs annotation) |

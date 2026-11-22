@@ -30,12 +30,17 @@ Detailed provenance and current rights assessments are recorded in
 `data/external/README.md`.
 
 - MMLongBench-Doc (`yubo2333/MMLongBench-Doc`): data licensed CC BY-NC 4.0,
-  research use only. The question table and one PDF are committed; further
-  PDFs are downloaded on demand and git-ignored.
-- ViDoRe (`vidore/vidore_v3_finance_fr`) and OmniDocBench
-  (`opendatalab/OmniDocBench`): committed cache and annotation files whose
-  licence terms have not yet been recorded here. Check each dataset card
-  before redistributing them.
+  research use only. The question table is committed; the PDFs are
+  downloaded on demand and git-ignored (the one PDF committed earlier was
+  removed from tracking on 2026-11-22; it remains in Git history).
+- ViDoRe (`vidore/vidore_v3_finance_fr`): its `datasets` cache was committed
+  before the ignore rules existed and removed from tracking on 2026-11-22
+  (it remains in Git history); its licence terms have not been recorded here.
+- OmniDocBench (`opendatalab/OmniDocBench`): no licence declared; its README
+  states research use only, not for commercial use. The annotation file
+  committed earlier was removed from tracking on 2026-11-22 (it remains in Git
+  history); source revision, checksum and download command are in
+  `data/external/README.md`.
 
 Do not add private, confidential, or rights-restricted documents to the
 repository. A top-level project license should be added only after the owner

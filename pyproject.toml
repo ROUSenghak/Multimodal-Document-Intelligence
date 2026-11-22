@@ -28,7 +28,7 @@ notebooks = [
     # E2 offline token expectation only (Qwen3-VL tokenizer and image-processor rules; no weights, no local inference)
     "transformers==5.23.0",
 ]
-# Kept for compatibility: live API runs need nothing beyond the notebooks extra.
+# Live answering in the application (`python -m visualdoc.pipeline --live`). The core modules need only pymupdf.
 llm = [
     "openai>=1.0",
     "python-dotenv",
@@ -42,5 +42,7 @@ where = ["src"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
+# Import the package from src/ even when the editable install's .pth file is hidden by macOS.
+pythonpath = ["src"]
 addopts = "-ra"
 
