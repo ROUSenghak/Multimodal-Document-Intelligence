@@ -234,13 +234,14 @@ VISUALDOC_E3_RUN_DIR=experiments/runs/e3/<run-id> jupyter nbconvert --execute --
 
 Small reusable modules that answer a question about **any** PDF with the
 configuration the frozen experiments retained. The notebooks do not import
-them; they stay the record of how each choice was measured.
+them, with one exception: section 16 of `03_evaluation` runs the application
+offline to measure it. The notebooks stay the record of how each choice was measured.
 
 | Module | Does | Pinned to |
 | --- | --- | --- |
 | `documents.py` | page text (native layer; full-page OCR at 150 dpi below 30 native words), 768 × 1536-px page PNGs, 1-based page access | notebook 00; tests reproduce E3's pinned page texts and E1's 768-px PNG byte for byte |
 | `retrieval.py` | BM25 per document (k1 1.5, b 0.75), ties by page number | notebook 01; tests reproduce the frozen rankings of all 57 questions |
-| `answering.py` | image request (`mmlb-image-v1` prompt, GPT-4o-mini, temperature 0, 400 tokens, JSON), context guard, reply parser, one model call through an injected `create` | notebook 02; tests rebuild a frozen E1 request with an identical fingerprint and re-parse all 264 frozen GPT-4o-mini replies |
+| `answering.py` | image request (`mmlb-image-v1` prompt, GPT-4o-mini, temperature 0, 400 tokens, JSON), question-aware context guard, context and cost check before every call, reply parser, one model call through an injected `create` | notebook 02; tests rebuild a frozen E1 request with an identical fingerprint and re-parse all 264 frozen GPT-4o-mini replies |
 | `citations.py` | cited pages vs supplied pages: invalid, off-by-one (printed page number), missing citation | notebook 03's definitions |
 | `pipeline.py` | PDF → text → BM25 top 5 → images → context guard → answer → citation check; command-line demo | — |
 
@@ -267,9 +268,12 @@ PYTHONPATH=src python -m visualdoc.pipeline data/documents/ch2.pdf "What does Cr
    US-letter page costs about 25.5k prompt tokens and a 16:9 slide 36.8k, so
    only 4 (or 3) of the 5 retrieved pages fit GPT-4o-mini's 128k context. The
    guard keeps the best-ranked prefix that fits and lists the rest in
-   `dropped_pages`; nothing is dropped silently. The cost in retrieval is
-   measurable on the benchmark: BM25 Recall@5 0.689 and Hit@5 0.800 fall to
-   Recall@3 0.608 and Hit@3 0.725.
+   `dropped_pages`; nothing is dropped silently. Measured offline on the
+   benchmark (notebook 03, section 16): BM25 top-5 retrieves Recall 0.689 and
+   Hit 0.800 of the evidence, but the pages actually sent keep Recall 0.608 and
+   Hit 0.725 (29/40), the same as top-3. Three questions lose their only
+   retrieved evidence page, which BM25 ranked 5th; eight others have no evidence
+   page in the top 5 at all.
 3. **A valid citation is not evidence support.** `citations.ok` only checks
    form: every cited page was supplied, and an answer other than "Not
    answerable" cites at least one page. It does not check that the cited page
@@ -278,10 +282,30 @@ PYTHONPATH=src python -m visualdoc.pipeline data/documents/ch2.pdf "What does Cr
    answers were correct. `cites_evidence` (a cited page is an annotated
    evidence page) is available only when evidence annotations exist, i.e. in
    evaluation, never for a new user PDF.
-4. **Engineering gaps.** No retry, rate limiting, response cache or spending
-   limit; API errors propagate to the caller. The token estimate uses a fixed
-   1,000-token text allowance, which covered all 113 frozen E1 requests but
-   is not exact for very long questions.
+4. **Context and cost limits rest on an upper bound.** Before every call,
+   `check_request` requires the prompt bound plus the 400-token output
+   allowance to fit the 128k context, and the maximum cost to stay under a
+   per-request ceiling ($0.02 by default, `--max-cost-usd`). Otherwise it raises
+   `ValueError` and nothing is sent. The bound has three parts:
+   - **Text:** UTF-8 bytes of the system prompt, question and page tags. A
+     byte-level BPE tokenizer never produces more tokens than bytes, so this
+     bound accounts for the question's length.
+   - **Images:** the billed image tokens, by a rule that reproduced every
+     frozen billed count.
+   - **Framing:** 100 tokens; 10–29 were observed.
+
+   On all 151 billed image-only E1/E3 requests it exceeded the billed prompt
+   by 637–867 tokens. It is therefore safe but loose, and could drop a page
+   that would barely fit (no benchmark case: counted exactly, every dropped
+   page still overflows).
+
+   Assumptions: only the `gpt-4o-mini-2024-07-18` snapshot (other models are
+   refused); list prices of 2026-11-22, hard-coded; framing measured on
+   1–3-page requests only. The ceiling applies per request, not in total. A
+   request that fills the context costs at most about $0.0194, so the default
+   only catches price or configuration mistakes; lower it to cap spending.
+5. **Engineering gaps.** No retry, rate limiting, response cache or
+   cumulative budget; API errors propagate to the caller.
 
 ## Workflow
 
@@ -294,7 +318,7 @@ top.
 | [`00_document_processing`](notebooks/00_document_processing.ipynb) | Pinned questions, seeded subset, page anatomy, native text + OCR fallback, page-number checks, page rendering | MMLongBench-Doc question table (tracked) and PDFs (downloaded at a pinned revision) | `data/processed/mmlongbench_doc/{questions,pages}.parquet`, `render_manifest.csv`; PNGs in `data/cache/` |
 | [`01_retrieval`](notebooks/01_retrieval.ipynb) | BM25 by hand and per document, Recall@k / Hit@k against a random reference, OCR ablation, failure cases | 00 outputs | `rankings.parquet`, `retrieval_*.csv` |
 | [`02_question_answering`](notebooks/02_question_answering.ipynb) | Page lists for A–D, text and image prompts, token/cost budget, API error handling, response cache, mocked tests, generation | 00–01 outputs, `experiments/frozen/` | `predictions/{A,B,C,D}.jsonl`, `predictions/manifest.json` |
-| [`03_evaluation`](notebooks/03_evaluation.ipynb) | Scoring rules, four-condition metrics, paired comparisons, citations, abstention, legibility, error categories, manual review, cost | 00–02 outputs | `evaluation_summary.json` |
+| [`03_evaluation`](notebooks/03_evaluation.ipynb) | Scoring rules, four-condition metrics, paired comparisons, citations, abstention, legibility, error categories, manual review, cost; offline evidence loss of the application (section 16) | 00–02 outputs; `src/visualdoc/` (section 16) | `evaluation_summary.json`, `app_context/` |
 
 **No paid call by default.** `02_question_answering` runs in `replay` mode
 unless `VISUALDOC_QA_MODE` is set to `smoke`, `pilot` or `full`. Replay
