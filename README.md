@@ -124,6 +124,54 @@ snapshot is deprecated and scheduled for shutdown on 2027-01-14; retain it
 for E1 comparability, then treat a newer-model resolution study as a separate
 experiment.
 
+## Experiment E2 — a stronger VLM through OpenRouter (implemented, not yet run)
+
+E2 asks whether **Qwen3-VL-8B-Instruct** answers the same 37 questions better
+than GPT-4o-mini. Qwen is served through OpenRouter as `qwen/qwen3-vl-8b-instruct`,
+pinned to the provider Parasail in BF16, the only endpoint listed on 2026-11-22.
+Image resolution is controlled with a 2 × 2 design:
+
+| | 512 px | 768 px |
+|---|---|---|
+| GPT-4o-mini | frozen E1, 10/37 | frozen E1, 16/37 (comparator) |
+| Qwen3-VL-8B | new | new (primary), plus an independent repeat |
+
+- **Same request.** Each E2 request body reuses the E1 request messages that
+  GPT-4o-mini answered: the same prompt, page tags, page order and PNG bytes.
+  It also keeps temperature 0, the 400-token cap and JSON mode. Only the model
+  slug, the cap's parameter name (`max_tokens`) and a provider-pinning block
+  (no fallbacks) change.
+- **What the hosted API cannot verify.** OpenRouter exposes a slug, a provider
+  name and a generation id, not a weight hash. The served weight revision, the
+  provider's image resizing, its chat-template rendering and its serving stack
+  cannot be checked, and the slug can change later. The only indirect check:
+  each reply's prompt-token count must lie within 2 % of the count the shipped
+  Qwen processor implies (336–448 visual tokens per page at 512 px, 744–1,032 at
+  768 px). This is **less reproducible than self-hosting** the pinned weights,
+  which was set aside for simplicity.
+- **Decision rule, fixed in advance.** Adopt only if all three hold:
+  - the paired gain is ≥ 0.05;
+  - it exceeds the larger repeat change rate of the two models;
+  - broken ≤ fixed / 2.
+
+  Retain GPT-4o-mini if the gain is ≤ 0; otherwise the result is inconclusive.
+- **Cost.** At the 2026-11-22 price ($0.25 / $0.75 per million input / output
+  tokens), smoke + pilot + full (133 calls) costs about **$0.04**, with a
+  list-price upper bound of about **$0.08**. Paid modes re-check the public price
+  listing, and every call is checked against the approved budget.
+- **Spec.** [`experiments/specs/e2_stronger_vlm_v1.json`](experiments/specs/e2_stronger_vlm_v1.json)
+  is *proposed*. Paid modes refuse to run until its status is frozen and a
+  budget is set.
+
+```bash
+# Offline (default): nothing is sent to OpenRouter
+jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+# Paid, after approval, one stage at a time (OPENROUTER_API_KEY in .env)
+VISUALDOC_E2_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+# Evaluate a saved run without any API call
+VISUALDOC_E2_RUN_DIR=experiments/runs/e2/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
+```
+
 Answer scores re-implement the benchmark's rule-based scorer with structured
 JSON answers instead of its GPT-4o extraction stage, so they are **local
 diagnostics, not leaderboard numbers**. Details, limitations and the manual

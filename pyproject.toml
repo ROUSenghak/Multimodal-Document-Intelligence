@@ -25,6 +25,8 @@ notebooks = [
     "pyarrow",
     "python-dotenv",
     "tiktoken",
+    # E2 offline token expectation only (Qwen3-VL tokenizer and image-processor rules; no weights, no local inference)
+    "transformers==5.23.0",
 ]
 # Kept for compatibility: live API runs need nothing beyond the notebooks extra.
 llm = [

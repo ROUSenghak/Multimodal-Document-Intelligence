@@ -1,8 +1,25 @@
 # E2 proposal: does a stronger pretrained VLM beat GPT-4o-mini at 768 px?
 
-**Status: design for review. Nothing is implemented or executed.** After approval,
-the design is frozen as `experiments/specs/e2_stronger_vlm_v1.json` before any
-model call, as E1 was.
+**Status (2026-11-22): implemented and validated offline; not executed.**
+The proposed specification is `experiments/specs/e2_stronger_vlm_v1.json`
+(status `proposed-awaiting-approval`). Paid modes stay locked until it is frozen
+with a budget. Notebook 02 section 11 and notebook 03 section 14 hold the
+implementation.
+
+**Changes from this proposal:**
+
+- **Compute.** The project owner chose the hosted OpenRouter API
+  (`qwen/qwen3-vl-8b-instruct`, pinned to Parasail, BF16) over the rented GPU
+  recommended in §4. The weight revision and the provider's image preprocessing
+  therefore cannot be verified (§2 "Internal visual resolution" and §4.1 no
+  longer hold). The only indirect check is prompt-token accounting against the
+  shipped processor's expectation.
+- **JSON.** JSON mode (`response_format: json_object`) is used for both models.
+- **Resampling.** Qwen rounds every image side to a multiple of 32 px, so most
+  E1 pages are resampled: by at most 1.7 % per side at 512 px and 0.7 % at 768 px.
+- **GPT-4o-mini repeat.** The E1 repeat was at 512 px only.
+
+The original design text follows.
 
 ## 1. Question and estimand
 
