@@ -1,0 +1,607 @@
+{
+  "spec_id": "e3-text-image-fusion-v1",
+  "status": "frozen-before-live-execution",
+  "status_rule": "Paid modes (smoke, pilot, full) refuse to run unless status is 'frozen-before-live-execution' and budget.approved_ceiling_usd is a number. Setting both, adding frozen_at, and committing this file before the first API call is the approval act. After that commit the file is never edited; any change is a new spec version (e3-text-image-fusion-v2).",
+  "drafted_at": "2026-11-22",
+  "frozen_at": "2026-11-22",
+  "research_question": "On the 37 matched questions and their annotated evidence pages, with GPT-4o-mini and the same 768-px page images as E1, does adding the extracted page text (native text layer, or OCR at 150 dpi when the page has fewer than 30 native words) to the page images improve answer accuracy over the images alone, and how does each compare with the extracted text alone?",
+  "motivation": {
+    "frozen_evidence": [
+      "E0 (frozen baseline, oracle pages padded to 5 with BM25 distractors, 512 px): text 9/38 vs images 11/38, 6 fixed and 4 broken; the two readers fail on different questions.",
+      "E0 manual review (notebook 03, labels fixed before E1): text-representation failures where images were right (0729 OCR misread a table digit; 0732 and 0739 lost visual grouping) and visual-reading failures where text was right (0033 small table values, 0096, 0313 outlined vector text read by OCR at 150 dpi).",
+      "E1: 768 px fixes small printed digits but 21/37 questions stay wrong at both resolutions, mostly counting, aggregation and chart reasoning.",
+      "E2: a stronger open VLM ties GPT-4o-mini (15/37 vs 16/37); every invalid citation is the printed page number (physical page - 1)."
+    ],
+    "what_fusion_can_plausibly_fix": "visual-reading failures where the exact string is in the extracted text (small digits, outlined vector text, dense academic text that is illegible at 768 px)",
+    "what_fusion_cannot_fix": "retrieval failures (none here: oracle pages), reasoning and aggregation failures where both modalities carry the information, and the pre-declared scoring defects"
+  },
+  "hypotheses": {
+    "primary_null": "The paired answer-accuracy difference mean(correct_IT - correct_I) on the 37 matched questions (main_r1, same session) is less than or equal to zero.",
+    "primary_directional": "mean(correct_IT - correct_I) > 0.",
+    "secondary_descriptive": [
+      "H-T: IT > T (images add information to the extracted text).",
+      "H-mech: the IT - I gain is larger on the pre-registered 'specific answer string in the extracted text' subgroup and on the frozen visual-reading subgroup than on the remaining questions.",
+      "H-cite: adding page-labelled text reduces off-by-one (printed page number) citations relative to I."
+    ],
+    "engineering_adoption": "IT gains at least 0.05 paired accuracy over the same-session I, the gain is strictly larger than the variability margin, and broken answers are at most half the fixed answers."
+  },
+  "design": {
+    "type": "within-question comparison of three evidence representations, executed in one session as adjacent triplets in seeded random order, plus a delayed independent repeat of IT",
+    "conditions": {
+      "E3_T": {
+        "label": "text only",
+        "content": "header, then per page: [Page N] tag, extracted-text part",
+        "images": false,
+        "text": true
+      },
+      "E3_I": {
+        "label": "images only (same-session control)",
+        "content": "header, then per page: [Page N] tag, image part",
+        "images": true,
+        "text": false,
+        "role": "primary comparator"
+      },
+      "E3_IT": {
+        "label": "images plus text",
+        "content": "header, then per page: [Page N] tag, image part, extracted-text part",
+        "images": true,
+        "text": true,
+        "role": "primary treatment"
+      }
+    },
+    "primary_comparison": "E3_IT (main_r1) versus E3_I (main_r1), paired by question",
+    "control_by_construction": [
+      "E3_I content = E3_IT content with every extracted-text part removed (asserted object-equal)",
+      "E3_T content = E3_IT content with every image part removed (asserted object-equal)",
+      "the three conditions share the system prompt, header, page tags, page order, model, parameters, parser and scorer byte for byte"
+    ],
+    "repeat": {
+      "replicate_id": "repeat_r2",
+      "condition": "E3_IT",
+      "role": "independent repeat of the primary treatment to measure run-to-run variability",
+      "delay": "the first repeat call starts at least 65 minutes after the last main_r1 reply. OpenAI documents that in-memory cache entries 'typically remain active for around 5 to 10 minutes of inactivity, up to one hour', and lists no extended (24h) retention for gpt-4o-mini, so the delay should normally make the repeat cold. 'Typically' is not a guarantee: cached tokens are recorded for every call and the cold state of the repeat is reported from them, never assumed"
+    },
+    "frozen_anchors_descriptive_only": {
+      "E1_768": "frozen GPT-4o-mini 768-px replies (16/37) to the same images under the frozen image prompt mmlb-image-v1; E3_I vs E1_768 measures the combined effect of the prompt wording change and the session, never part of the verdict",
+      "E1_512_repeat_rate": "frozen GPT-4o-mini repeat correctness-change rate 1/37 (512 px, frozen image prompt), used only inside the variability margin"
+    },
+    "not_comparisons": "Frozen conditions C (text) and D (images) used oracle pages padded to five with BM25 distractors, 3,500-character truncation and 512-px images; they are never paired with E3."
+  },
+  "comparator_files": {
+    "e1_spec_sha256": "b21ca75a9ad8b700cfd2dc233682bf2396bf313d27630ff116ee5c6948cf5abc",
+    "e2_spec_sha256_v2": "see experiments/specs/e2_stronger_vlm_v2.json (population and pilot are asserted equal)",
+    "frozen_e1_run_dir": "experiments/frozen/e1/run_20261121T131525011829Z_29c92c8a_full",
+    "frozen_e1_file_sha256": {
+      "execution_log.jsonl": "855f4d6877d5ed45a848a48bab5bb5150aee76eb172fc2296cfd786eee2bf363",
+      "predictions_main_r1_E1_512.jsonl": "dc6bfa8bf978e32621571fc229822c4a394b0d3321ce8affbc0c7b5707bc8243",
+      "predictions_main_r1_E1_768.jsonl": "e4ceb6d9d328f70854169602f635a985a68357b83e32a2b5c77b3be816ac4585",
+      "predictions_control_r2_E1_512.jsonl": "f27ff138dcb62883b7a9c86da3a9efb1e201eea35d349ded4c33e200ec39e62c",
+      "settings.json": "e54b6e14d673c41adea9cfe237f8a20fbd4d566dfcc4e6196aef28b91a818810"
+    },
+    "image_source": "the E3_I and E3_IT image parts are the exact 768-px PNG bytes of the frozen E1 main_r1 E1_768 requests (SHA-256 and pixel size checked per page)"
+  },
+  "prompt": {
+    "system_prompt_version": "mmlb-evidence-v1",
+    "system_prompt_hash": "6a6c9eb0bb27",
+    "system_prompt_hash_rule": "sha256(version + prompt)[:12], as for the frozen prompts",
+    "system_prompt": "You answer questions about a single PDF document using only the page evidence provided.\nEach page is introduced by a tag [Page N], where N is the 1-based page number in the PDF.\nA page may be given as an image, as text extracted from the page, or as both.\n\nReturn a JSON object with exactly these keys:\n  \"answer\": the shortest complete answer. Use a number (integer or decimal) when the answer is a number,\n            and a JSON list when several items are asked for. If the page evidence does not contain the answer,\n            use exactly the string \"Not answerable\".\n  \"cited_pages\": a list of the page numbers N whose evidence supports the answer ([] if \"Not answerable\").\n\nDo not use knowledge outside the page evidence. Do not guess.",
+    "why_a_new_prompt": "The frozen image prompt (mmlb-image-v1) says 'using only the page images provided'; adding text under it would contradict the instruction, and giving IT a different prompt from I would change two things at once. One modality-neutral prompt for all three conditions makes the added text parts the only difference between I and IT. The JSON contract, the abstention phrase and every other line are those of the frozen prompts.",
+    "header": "Question: {question}\\n\\nDocument pages:",
+    "page_tag": "[Page {N}]",
+    "text_part": "Text extracted from page {N}:\\n{text}",
+    "empty_text_placeholder": "(no extractable text on this page)",
+    "per_page_order_in_IT": "tag, image, text",
+    "image_part": "data:image/png;base64 URL of the frozen E1 768-px PNG, detail: high"
+  },
+  "text_extraction": {
+    "source": "pages.parquet column 'text' written by notebook 00: native text layer, or Tesseract OCR at 150 dpi (PyMuPDF, resources/tessdata/eng) when the page has fewer than 30 native words",
+    "normalization": "str.strip() only, as in the frozen text conditions; internal whitespace is kept",
+    "truncation": "none. The frozen text conditions truncated pages at 3,500 characters; 12 of the 56 evidence-page instances (10 unique pages) are longer. E3 sends every page in full, and the prompt-token check verifies it.",
+    "evidence_pages_unique": 47,
+    "text_sha256_by_doc_page": {
+      "2210.02442v1.pdf|14": "94272b17ba661c6e03bdc8eb5a72b07ed25bca17224c672149f614d90a35ccd9",
+      "2210.02442v1.pdf|15": "5be36178a01ea213059deebe1e9d367782da3ff6995e10c2ee7fa334f0214c93",
+      "2210.02442v1.pdf|16": "fa4ca28e224122b3dc645725576d61f4efa9cb1cc1934da04de9273550f60cc8",
+      "2210.02442v1.pdf|17": "d0bd508273f2b366c4cb4c3487b4ddbe9bcf389853b70e75b1f657bc56d03d7c",
+      "2210.02442v1.pdf|2": "832b0e50afe2e48032fb99389db9935034f63e1286969afe5f6b05820eb83b7b",
+      "2210.02442v1.pdf|20": "8600fd1e79d8beb3c206a81d4d22cabffba6732510917a41268dc0bef8742b90",
+      "2210.02442v1.pdf|22": "27e8e0d6b6304903b77e4b7c47db13aa81f52aaba53d4a0c6d5331f725c53629",
+      "2210.02442v1.pdf|24": "524d2fd941eb9f038461e5da590dc2f3bc0cfc28a2556e5b2e9c4e9b3ba0d7c9",
+      "2210.02442v1.pdf|4": "e47820d1844a736ee8d8739512bfb3e5648a3ab5fec2b057248a2dfeb839adf8",
+      "2210.02442v1.pdf|7": "b1b872be480b6425678edf3873d0edd4907bfc9a3554ecdd30bdf3814152a870",
+      "2210.02442v1.pdf|8": "c91246312cd30a09993b993e83616abb34d9ba1121adcf605f43ea85ffed2d14",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf|11": "91b3e08fd8727ec67a7d53c7b2d13f49b7f632fea670e46f285bd9ca9338729f",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf|12": "8790b0f1eecc032335f2cb79c66068b20c09df7278091264e26a9e1c08f19b34",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf|14": "4650027b96cce25886d9ffb0f72355a79af48a65e29081ab6139e12066c11246",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf|16": "73ef80f1c599002d073ad364ab2d60a1459356485dd7e3c45712d662256dfe42",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf|17": "7e3073b2d89ab84764e8f9e143166870ab8f255b63ea153eb46944cb9d39f2c4",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf|18": "543c1bad6b1cef3423585e503366778a390486313b0f4c6771d2cf7f9148c484",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf|19": "063f1bd6da70d34948918ce442b504b43e67cf5f26217aa99d16b06a72e0ecc8",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf|9": "a8abb47acc3d3b05b374c1a7794439af68493a5b5fd4bfae3e44fc4e34ab0ba6",
+      "bdf54dxa.pdf|11": "7fe28233078f49cd17be706a4ea1f1995e0a7afe4c63de93137fbd0c49487285",
+      "bdf54dxa.pdf|14": "3cf124a59bce43da67c032e4bc06aae1849b5a743ff002178843245b4216735c",
+      "bdf54dxa.pdf|15": "e360d34261a2fbdaa1ed9a002bf979954cd742be86f8f8ca9138566ab947b3ed",
+      "bdf54dxa.pdf|24": "64168a04b8a107252eb987c4c405e91342bf25b8b912edcbad5bc41fe92c97ad",
+      "bdf54dxa.pdf|30": "41caef4d44799866ff57201e03924d63d2149666005f6e9f053fa3a99e8ab463",
+      "bdf54dxa.pdf|31": "aab189e2395a729596fc61c5b6db055fa9f11ddabb661326d1e0478ba41440a9",
+      "bdf54dxa.pdf|32": "1377c0a8902e9855c630a77fa134e19bac570a102b0a38e63521ab8d820700be",
+      "earlybird-110722143746-phpapp02_95.pdf|11": "170c69ec2607ee74aae9e2d6d69f5fc50d98bd779029f5806ce11c8686adcd5b",
+      "earlybird-110722143746-phpapp02_95.pdf|26": "b92da1924b1422a4b49a40428708c7d7860af9d954b57cfe9cc2b49b501f5f4d",
+      "earlybird-110722143746-phpapp02_95.pdf|33": "44562e7e4d50da7f797e957f4d78e01004572c006e4102a12d25992de780259c",
+      "earlybird-110722143746-phpapp02_95.pdf|6": "a8281be6da2f0fa6d72a3f88664cd3612957fe032fd48c2d8af23a20f34213ed",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|1": "e401ee98d78fc87117cb9e79b079519212fdff353dc706854f6a531e32819a25",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|10": "a6250994e746c8015c52e5d999acf27e21a741942228581cec196a239e48952c",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|11": "f53775b8f92d0fd974158a16791026b827cb6c9c19752542a875f5bb8a7d1d47",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|13": "0892f130fdedf40ca3fecf6c3b37a2c7e3aa6d1bce131fabac417060ba97b364",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|14": "79ae1a5a68356a2db485399aa9d2c509cd721e5f6401d34560ae03c62ae69914",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|16": "b064903537620edaca726c01f2e7db2561ecfcd30c595e2327298cb72bb32bd7",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|18": "ded76a9f696b87f06355fa450fde16f0fcb5e8402b1ed0335bc445beb3819191",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|19": "fd72da8abd1e83abca4950135f5b150b2b609d5c17cae02d2d9ba822aecc1fee",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|2": "bee1b124d45a304a545d1b0afa57983f76575126e9f53b00b9af4e7bfc1592e0",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|7": "6d8d45eb163490840e77153dad69674464efeef19311b6d45b2c88fd38073b14",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|8": "031973fbb8b926726f6ff619dac200a3f7020b8d88e210b1e19579d9ce5e1bf5",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf|9": "3c96ec5628c348b5316bf03f1c22dd3afa257aad0d8e64d419425ab54d4da52e",
+      "watch_d.pdf|10": "5e4d80a6497691a819f01bad9278233b2e4d6574a8970fae5a2f410a76889391",
+      "watch_d.pdf|15": "f7f786c15a35faeada1488ccfe39cb8d7df2de1923e3e3bdbbaf4c8e8dc8ebc1",
+      "watch_d.pdf|3": "697370a28ea8175e2953109c8f53e412c5b7694b38c74501fcae69e60ca104bc",
+      "watch_d.pdf|6": "e3bdfeaae613a0e1a0e37809ab52ae9b80a56d078560b5b599416775374158f8",
+      "watch_d.pdf|9": "e028532246e316205726872dc924b693d39ec045875dff4df5503ffd39ed0d2c"
+    }
+  },
+  "model": {
+    "provider": "openai",
+    "api": "Chat Completions",
+    "requested_snapshot": "gpt-4o-mini-2024-07-18",
+    "deprecation": "deprecated; shutdown Jan 14, 2027 (OpenAI deprecations page, checked 2026-11-22; listed replacement gpt-6-luna); E3 must run before then",
+    "image_detail": "high",
+    "context_window_tokens": 128000,
+    "input_usd_per_1m_tokens": 0.15,
+    "output_usd_per_1m_tokens": 0.6
+  },
+  "generation": {
+    "request_parameters": {
+      "temperature": 0.0,
+      "max_completion_tokens": 400,
+      "response_format": {
+        "type": "json_object"
+      }
+    },
+    "not_sent": [
+      "seed",
+      "top_p",
+      "presence_penalty",
+      "frequency_penalty"
+    ],
+    "not_sent_reason": "E0-E2 sent none of these to GPT-4o-mini; temperature 0 is the only decoding control",
+    "batch_size": 1,
+    "sdk": "openai Python SDK, max_retries = 0, timeout 120 s"
+  },
+  "output_contract": {
+    "keys": "JSON object with 'answer' and 'cited_pages', exactly as in E0-E2",
+    "parser": "parse_model_output of notebook 02 section 6, unchanged; no reply normalization (GPT-4o-mini never fenced a reply in 113 E1 calls)",
+    "parse_failures": "scored 0 and reported separately"
+  },
+  "token_accounting": {
+    "expected_prompt_tokens": "sum over the system prompt and every text part of len(tiktoken o200k_base encode) + 9, plus 2,833 + 5,667 x high-detail tiles per image (downscale_only rule measured in E0)",
+    "evidence_for_the_rule": "observed minus this estimate was exactly +1 on all 113 frozen E1 calls (content-part messages) and exactly +2 on all 97 frozen text calls (string messages, OCR text included)",
+    "tolerance_tokens": 16,
+    "role": "diagnostic only. The observed minus expected prompt-token difference is recorded for every reply and reported. It is consistent with, but not proof of, exact text delivery: OpenAI's server-side tokenization is not observable, and a different text of the same token count would pass. It is a gate only in the technical stages (smoke and pilot gates require every reply within tolerance); in full mode a reply outside the tolerance is flagged and reported, never dropped and never a stop.",
+    "why_16": "the smallest evidence page adds 69 text tokens, so the loss of a whole page would show as a large deviation; the observed constant offsets (+1 for content parts, +2 for string messages) stay well inside it"
+  },
+  "population": {
+    "same_as": "e1-image-resolution-v1 and e2-stronger-vlm-v2",
+    "page_rule": "annotated evidence pages only, in benchmark order; no BM25 padding",
+    "matched_questions": 37,
+    "matched_qids": [
+      "mmlb-0033",
+      "mmlb-0034",
+      "mmlb-0037",
+      "mmlb-0041",
+      "mmlb-0094",
+      "mmlb-0095",
+      "mmlb-0096",
+      "mmlb-0097",
+      "mmlb-0313",
+      "mmlb-0315",
+      "mmlb-0317",
+      "mmlb-0318",
+      "mmlb-0319",
+      "mmlb-0353",
+      "mmlb-0355",
+      "mmlb-0357",
+      "mmlb-0359",
+      "mmlb-0360",
+      "mmlb-0362",
+      "mmlb-0363",
+      "mmlb-0727",
+      "mmlb-0729",
+      "mmlb-0731",
+      "mmlb-0732",
+      "mmlb-0733",
+      "mmlb-0735",
+      "mmlb-0736",
+      "mmlb-0737",
+      "mmlb-0739",
+      "mmlb-0740",
+      "mmlb-0741",
+      "mmlb-0762",
+      "mmlb-0763",
+      "mmlb-0765",
+      "mmlb-0766",
+      "mmlb-0767",
+      "mmlb-0769"
+    ],
+    "excluded_context_qids": {
+      "mmlb-0035": 13,
+      "mmlb-0036": 5,
+      "mmlb-0039": 10
+    },
+    "excluded_note": "excluded in E1 because five or more 768-px pages do not fit GPT-4o-mini's context; kept excluded so E3 stays paired with E1/E2",
+    "documents": [
+      "2210.02442v1.pdf",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+      "bdf54dxa.pdf",
+      "earlybird-110722143746-phpapp02_95.pdf",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+      "watch_d.pdf"
+    ],
+    "all_answerable": "all 37 questions are answerable: correct abstention cannot be measured in E3, only false abstention"
+  },
+  "subgroups_preregistered": {
+    "visual_reading_qids": [
+      "mmlb-0033",
+      "mmlb-0095",
+      "mmlb-0096",
+      "mmlb-0313",
+      "mmlb-0315",
+      "mmlb-0317",
+      "mmlb-0731",
+      "mmlb-0737",
+      "mmlb-0769"
+    ],
+    "visual_reading_provenance": "frozen in the E1 spec from manual labels assigned before E1",
+    "specific_answer_in_text_rule": "non-list reference whose whitespace-normalized lower-case string has at least 3 characters and occurs as whole tokens in the concatenated full extracted text of the evidence pages",
+    "specific_answer_in_text_qids": [
+      "mmlb-0097",
+      "mmlb-0318",
+      "mmlb-0355",
+      "mmlb-0765",
+      "mmlb-0767",
+      "mmlb-0769"
+    ],
+    "specific_answer_in_text_note": "computed mechanically before any E3 reply; shorter strings (single digits) occur in almost any page and are not evidence that the text carries the answer",
+    "text_source_by_document": {
+      "native": [
+        "2210.02442v1.pdf",
+        "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+        "watch_d.pdf"
+      ],
+      "ocr": [
+        "bdf54dxa.pdf",
+        "earlybird-110722143746-phpapp02_95.pdf",
+        "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf"
+      ]
+    },
+    "interpretation": "mechanism-focused, small and selected; descriptive only, never changes the verdict"
+  },
+  "scoring": {
+    "correct": "frozen MMLongBench-Doc rule-based score > 0 (notebook 03 section 1, unchanged)",
+    "strict_correct": "score == 1",
+    "known_defects_sensitivity": {
+      "rule": "the primary analysis always scores all 37 questions with the frozen scorer; the sensitivity analyses below are pre-declared, reported beside it and never change the verdict",
+      "S1_reference_unscorable": {
+        "qids": [
+          "mmlb-0733",
+          "mmlb-0735"
+        ],
+        "definition": "the reference cannot score 1.0 against itself under the frozen rules (Int format for '14:04 CET' and 'yes')"
+      },
+      "S2_manual_annotation_or_scoring_issue": {
+        "qids": [
+          "mmlb-0034",
+          "mmlb-0733",
+          "mmlb-0735",
+          "mmlb-0736"
+        ],
+        "definition": "questions in the population whose frozen notebook-03 manual-review primary label (assigned 2026-11-20/21, before E3) is 'annotation or scoring issue'"
+      },
+      "S3_strict": "strict accuracy (score == 1) on all 37"
+    }
+  },
+  "evaluation_metrics": {
+    "primary": "mean over the 37 questions of correct(E3_IT, main_r1) - correct(E3_I, main_r1)",
+    "paired_transitions": "fixed = I wrong and IT correct; broken = I correct and IT wrong; both correct; both wrong",
+    "secondary": [
+      "IT - T and I - T paired differences with fixed/broken counts",
+      "mean benchmark-score difference IT - I",
+      "complementarity: either-correct rate max(T, I) per question, and the share of it IT reaches",
+      "modality following: on questions where the T and I parsed answers differ, whether IT's answer equals T's, I's or neither",
+      "fusion interference (IT wrong while T or I correct) and synergy (IT correct while both T and I wrong)",
+      "citations: coverage, validity given a citation, cites an evidence page, off-by-one (every invalid page equals a supplied page minus one)",
+      "false abstention ('Not answerable' on an answerable question)",
+      "E3_I vs frozen E1_768: combined prompt-wording and session effect (descriptive)",
+      "by document, by text source (native vs OCR) and on the pre-registered subgroups",
+      "mechanical error categories per question (see error_taxonomy)",
+      "input and output tokens, list-price cost, latency, parse failures and truncation",
+      "caching: see the caching section; repeat variability on all 37 and split by cached and uncached repeat calls",
+      "token diagnostic: distribution of observed minus expected prompt tokens per condition"
+    ],
+    "uncertainty": "document-cluster percentile bootstrap (seed 42, 10,000 draws), leave-one-document-out, exact McNemar p (ignores clustering); all descriptive",
+    "per_document_reporting": "for each of the 6 documents: questions, correct T, I, IT and frozen E1_768, and paired fixed and broken counts for IT - I (primary), IT - T and I - T; leave-one-document-out for the primary, IT - T and I - T; the sensitivity analyses S1-S3 are each reported with their question count and fixed and broken counts beside the primary"
+  },
+  "uncertainty": {
+    "primary_interval": "deterministic percentile bootstrap resampling the six documents as clusters",
+    "bootstrap_seed": 42,
+    "bootstrap_draws": 10000,
+    "qualification": "37 questions in 6 documents: one question moves accuracy by 0.027, only large effects are detectable, intervals and McNemar p-values are descriptive. A null result means no large effect on these questions, not equivalence."
+  },
+  "error_taxonomy": {
+    "retrieval": "none by construction: every condition receives exactly the annotated evidence pages",
+    "scoring_defect": "question in S2 (pre-declared)",
+    "extraction_loss_candidate": "T wrong and I correct (the image carried what the extracted text lost)",
+    "visual_reading_loss_candidate": "I wrong and T correct (the text carried what the image reader missed)",
+    "reasoning_with_answer_in_text_candidate": "T, I and IT all wrong and the question is in the specific-answer-in-text subgroup",
+    "unresolved_all_wrong": "T, I and IT all wrong otherwise: reasoning, aggregation or reading in both modalities; queued for manual review",
+    "fusion_interference": "IT wrong while T or I is correct",
+    "fusion_synergy": "IT correct while T and I are both wrong",
+    "manual_review": "after a full run, every fusion_interference, fusion_synergy and unresolved case is reviewed with one primary label from the frozen notebook-03 categories; labels are descriptive and never change the verdict"
+  },
+  "decision_rule": {
+    "status": "engineering screening rule for this pipeline and these 37 questions, fixed before any E3 generation. It decides which evidence representation to carry forward; it is not a confirmatory significance test and not statistical evidence of general superiority of fusion",
+    "minimum_primary_accuracy_gain": 0.05,
+    "variability_margin": "max(frozen GPT-4o-mini repeat correctness-change rate 1/37, E3_IT repeat correctness-change rate between main_r1 and repeat_r2)",
+    "variability_rule": "the primary paired gain must be strictly greater than the variability margin",
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "broken_rule": "broken <= fixed / 2 on the primary comparison",
+    "adopt": "adopt_image_plus_text_768_for_this_pipeline when all three criteria pass",
+    "retain": "retain_image_only_768 when the primary paired gain is <= 0",
+    "otherwise": "inconclusive",
+    "never_change_the_verdict": [
+      "text-only results",
+      "subgroups",
+      "sensitivity analyses S1-S3",
+      "strict accuracy",
+      "citations",
+      "cost",
+      "latency",
+      "E3_I vs E1_768"
+    ],
+    "cost_note": "IT adds about 1.3 % input tokens to I (mean 581 tokens), so cost is reported but is not a criterion",
+    "scope": "an engineering choice of evidence representation for GPT-4o-mini on oracle evidence pages, not a general claim about fusion",
+    "fixed_before_results": "the rule, its thresholds, the metrics, the sensitivity sets S1-S3, the subgroups and the error taxonomy are frozen in this spec and are not changed after any result is observed; a change requires a new spec version, and the v1 result under the v1 rule is still reported"
+  },
+  "execution": {
+    "modes": {
+      "offline": {
+        "generations": 0,
+        "purpose": "rebuild and verify every request, text, image, token count, plan, cache isolation, recovery, spending limit and stop rule with mocked responses; no client is created"
+      },
+      "smoke": {
+        "generations": 3,
+        "purpose": "technical: served snapshot, JSON contract, prompt-token accounting for each of T, I and IT on one question; never accuracy"
+      },
+      "pilot": {
+        "generations": 27,
+        "purpose": "technical feasibility on the 8 E1 pilot questions in all three conditions (3 smoke + 24); accuracy is never computed"
+      },
+      "full": {
+        "generations": 151,
+        "purpose": "3 smoke + 37 x 3 main_r1 triplets + 37 repeat_r2 (E3_IT)"
+      }
+    },
+    "technical_smoke_qid": "mmlb-0033",
+    "pilot_qids": [
+      "mmlb-0033",
+      "mmlb-0313",
+      "mmlb-0737",
+      "mmlb-0763",
+      "mmlb-0769",
+      "mmlb-0729",
+      "mmlb-0732",
+      "mmlb-0739"
+    ],
+    "seeds": {
+      "smoke_order": 20261130,
+      "question_order": 20261127,
+      "within_triplet_order": 20261128,
+      "repeat_order": 20261129
+    },
+    "triplets": "within main_r1, the T, I and IT requests of one question are sent adjacently; condition order is counterbalanced: each of the 6 orders of (T, I, IT) is used floor(n/6) times, the n mod 6 remaining triplets get distinct orders drawn at random, and the orders are assigned to the seeded question order in a seeded random permutation (seed within_triplet_order)",
+    "pacing": "token pacer at pacer_tokens_per_minute estimated prompt tokens per minute (the E1 setting) and a pause of pause_between_calls_s before every live call",
+    "pacer_tokens_per_minute": 150000,
+    "pause_between_calls_s": 1.0,
+    "timeout_s": 120,
+    "repeat_delay_minutes": 65,
+    "cache_policy": "cache entries are keyed SHA-256(run_id:replicate_id:request_fingerprint); a new replicate can never reuse another replicate's reply",
+    "persistence": "each reply is appended (and fsynced) to the run's response cache before its log record is written; logs and caches are append-only; every output file is created exclusively and never overwritten",
+    "rate_limit": {
+      "applies_to": "HTTP 429 classified as rate_limit; a 429 with a quota or billing code (insufficient_quota, credit_balance_exhausted, ...) stops the run and is never retried",
+      "backoff_s": [
+        30,
+        60,
+        120,
+        240,
+        480
+      ],
+      "counts_as_attempt": false
+    },
+    "max_attempts_per_request": 2,
+    "resume": "VISUALDOC_E3_RESUME_DIR resumes an interrupted run: settings, spec hash and plan must be identical; items with a logged reply are never re-sent; a reply in the cache but not in the log is reused; a failed request is retried at most once; rate-limited records do not count as attempts; a logged integrity failure blocks resumption",
+    "stop_rules": {
+      "integrity_failure": "stop in every mode, not resumable: the request about to be sent differs from the plan (image hashes, text hashes, fingerprint), the exact SDK arguments differ from the plan (sent_fingerprint), or the served model differs from the snapshot",
+      "api_failure": "stop on any API error other than a waitable 429 rate limit; a 429 with a quota or billing code is never retried",
+      "budget": "stop before a call whose list-price upper bound would take the cumulative E3 spend plus the upper bound of every remaining call of the run above the approved ceiling",
+      "technical_gate_failure": "smoke and pilot only: an unparseable or truncated reply, or a prompt-token difference outside the diagnostic tolerance, stops the stage and fails its gate",
+      "full_mode": "contract failures are recorded and scored 0, and token-diagnostic deviations are flagged; neither stops the run, so the population is not truncated by outcome"
+    },
+    "record": [
+      "execution index, triplet index and within-triplet order",
+      "request start and completion timestamps (UTC)",
+      "request fingerprint, sent fingerprint and cache provenance",
+      "image SHA-256 and pixel size, text SHA-256 per page",
+      "expected and observed prompt tokens and their difference, completion tokens, cached prompt tokens",
+      "served model, system fingerprint, finish reason",
+      "API latency"
+    ],
+    "plan_composition": {
+      "technical_smoke": {
+        "calls": 3,
+        "questions": [
+          "mmlb-0033"
+        ],
+        "conditions": [
+          "E3_T",
+          "E3_I",
+          "E3_IT"
+        ],
+        "use": "technical gate only; never scored or paired; mmlb-0033 is asked again in main_r1"
+      },
+      "main_r1": {
+        "calls": 111,
+        "per_condition": {
+          "E3_T": 37,
+          "E3_I": 37,
+          "E3_IT": 37
+        },
+        "rule": "each of the 37 matched questions exactly once per condition, as one adjacent triplet"
+      },
+      "repeat_r2": {
+        "calls": 37,
+        "per_condition": {
+          "E3_IT": 37
+        },
+        "rule": "each of the 37 matched questions exactly once, after all main_r1 calls and the 65-minute delay"
+      },
+      "total_full": 151,
+      "pilot": {
+        "calls": 27,
+        "technical_smoke": 3,
+        "main_r1": 24,
+        "rule": "each of the 8 E1 pilot questions exactly once per condition; no repeat"
+      },
+      "smoke": {
+        "calls": 3
+      },
+      "attempt_bound": "at most 2 attempts per planned call (a 429 rate limit is not an attempt), so a full run sends at most 302 non-rate-limited requests; the budget guard binds long before",
+      "all_stages": {
+        "smoke_stage": 3,
+        "pilot_stage": 27,
+        "full_stage": 151,
+        "total_calls": 181,
+        "note": "each stage is a separate run that starts with its own 3-call technical smoke, so mmlb-0033 is sent as smoke in all three stages (9 smoke calls in total); only the full stage's main_r1 and repeat_r2 replies are scored",
+        "upper_bound_usd_all_181": 0.9507
+      }
+    }
+  },
+  "gates": {
+    "offline": [
+      "spec and frozen E1 comparator hashes match",
+      "population, pilot, smoke question and subgroups equal E1/E2",
+      "every page text equals its spec hash; no truncation",
+      "E3_I images equal the frozen E1_768 request images",
+      "I = IT minus text parts and T = IT minus image parts for all 37 questions",
+      "every request fits the context",
+      "plan composition 3 / 27 / 151 and repeat delay",
+      "mocked tests with real SDK objects: success, quota stop, waited-out 429, server error and resume, cached-but-unlogged recovery, integrity stops, contract handling by mode, budget stop, no overwrite",
+      "mocked evaluation reproduces constructed outcomes",
+      "plan composition: 37 questions in each arm, the repeat and the 3 technical calls (execution.plan_composition)",
+      "cumulative budget across runs, and caching fields recorded and reported",
+      "all-stage plan of 181 calls (3 + 27 + 151) and its upper bound within the cumulative ceiling"
+    ],
+    "smoke": [
+      "spec frozen and budget approved",
+      "spec and notebook-02 code committed: on-disk spec bytes and code-cell sources equal git HEAD",
+      "OPENAI_API_KEY present",
+      "baseline replay and E1/E2 offline",
+      "planned upper bound within the remaining cumulative budget",
+      "three replies: request and sent fingerprints verified, served snapshot, parsed, finish stop, prompt-token difference within the diagnostic tolerance, cached-token field recorded"
+    ],
+    "pilot": [
+      "smoke gate passed in the same run",
+      "all 24 pilot replies pass the integrity checks, the contract and the token diagnostic",
+      "accuracy not computed"
+    ],
+    "full": [
+      "smoke gate passed in the same run",
+      "explicit approval of the full stage",
+      "all 151 planned calls logged with a reply"
+    ]
+  },
+  "budget": {
+    "approved_ceiling_usd": 1.25,
+    "proposed_ceiling_usd": 1.25,
+    "scope": "cumulative over every E3 run made under this spec version (smoke, pilot, full, and any interrupted, resumed or abandoned run), at list price",
+    "enforcement": "before each call: list-price cost of every reply already received by any run under this spec hash in experiments/runs/e3/, plus the upper bound of this and every remaining call of the current run, must stay within the ceiling; readiness also requires the planned upper bound to fit the remaining budget",
+    "estimate_upper_bound_usd": {
+      "smoke": 0.0085,
+      "pilot": 0.1239,
+      "full": 0.8182,
+      "all_three_stages": 0.9507
+    },
+    "headroom": "1.25 - 0.9507 = 0.2993 USD for retries and resumptions",
+    "price_basis": "OpenAI list price for gpt-4o-mini, USD 0.15 / 0.60 per 1M input / output tokens, as in E0-E2; cached input may be billed lower, so the bound is conservative",
+    "freezing_act": "at freezing, approved_ceiling_usd is set to 1.25 together with status and frozen_at",
+    "cached_price_note": "cached input is listed at USD 0.075 per 1M; the guard counts it at the full 0.15, so the bound is conservative"
+  },
+  "limitations": [
+    "37 answerable questions in 6 documents; one question is 0.027 and questions within a document are dependent",
+    "oracle evidence pages only: the result does not say whether fusion helps when retrieval is imperfect, and abstention on unanswerable questions is not measured",
+    "one model snapshot, deprecated and shut down on 2027-01-14",
+    "one naive fusion layout (tag, image, text per page) and one prompt; ordering and conflict-resolution instructions are not varied",
+    "the new neutral prompt makes E3_I differ from frozen E1_768 in wording; that difference is measured descriptively, not controlled",
+    "OCR quality is a property of the pipeline: on OCR documents the text can be wrong (e.g. a misread table digit in 0729) and may mislead the fused reader",
+    "one cold repeat of IT and a frozen 512-px GPT-4o-mini repeat are observed margins, not variance estimates; I is not repeated",
+    "local rule-based scoring without the official GPT-4o extraction stage; not leaderboard numbers",
+    "the adoption rule is an engineering screening rule for these 37 questions; a positive verdict is not evidence that fusion is generally superior",
+    "a cold repeat is expected after 65 minutes but not guaranteed by OpenAI's documentation; its cold state is measured from cached tokens"
+  ],
+  "documentation_checked": "2026-11-22: prompt-caching guide, gpt-4o-mini model page, pricing, deprecations and images-vision guide re-read (all reachable). Confirmed: USD 0.15 / 0.075 (cached) / 0.60 per 1M input / input / output tokens; 128,000-token context; default snapshot gpt-4o-mini-2024-07-18, deprecated, shutdown Jan 14, 2027 (replacement gpt-6-luna); high-detail images cost 2833 + 5667 per 512-px tile after fitting within 2048 px and scaling a shortest side above 768 px down to 768, with smaller images never enlarged; in-memory prompt cache typically 5-10 min of inactivity, up to one hour, no 24h retention listed for gpt-4o-mini",
+  "source_urls": {
+    "vision": "https://developers.openai.com/api/docs/guides/images-vision",
+    "prompt_caching": "https://developers.openai.com/api/docs/guides/prompt-caching",
+    "model": "https://developers.openai.com/api/docs/models/gpt-4o-mini",
+    "deprecations": "https://developers.openai.com/api/docs/deprecations"
+  },
+  "text_delivery_verification": {
+    "principle": "exact text delivery is verified on the constructed request, by content hashes and request checks, not by token counts",
+    "offline": [
+      "the text of every evidence page (str.strip() of pages.parquet 'text') equals its SHA-256 in text_extraction.text_sha256_by_doc_page",
+      "every extracted-text part of every request, stripped of its 'Text extracted from page N:' label, equals the full page text: same SHA-256, no truncation marker",
+      "E3_T and E3_IT carry identical text parts; E3_I carries none; E3_I = E3_IT minus text parts and E3_T = E3_IT minus image parts, object-equal",
+      "the request fingerprint (SHA-256 of the request with each image replaced by its hash; all text verbatim) is recorded per request in e3/design.json"
+    ],
+    "before_every_call": [
+      "image SHA-256s, text SHA-256s and the fingerprint are re-derived from the request object and must equal the plan; otherwise the call is not sent (integrity_error, run stopped, not resumable)",
+      "the engine fingerprints the exact keyword arguments it hands to the OpenAI SDK (sent_fingerprint) and the reply is valid only if it equals the planned fingerprint"
+    ],
+    "after_the_run": "notebook 03 re-checks every logged record: fingerprint and sent_fingerprint equal the offline rebuild; logged image and text hashes equal the design and, for text, the pinned page hashes in page order",
+    "not_verifiable": "what OpenAI's servers do with the received bytes"
+  },
+  "caching": {
+    "record": "usage.prompt_tokens_details.cached_tokens is recorded for every response (cached_prompt_tokens; null when the API omits it), together with prompt_tokens",
+    "report": [
+      "per condition (T, I, IT, IT repeat): calls with any cached tokens, total cached tokens, share of prompt tokens served from cache, responses without a cached-token field",
+      "IT repeat: number of repeat calls with cached tokens > 0; the correctness-change rate on all 37 and separately on uncached and cached repeat calls; a statement of whether the repeat was fully cold"
+    ],
+    "decision_use": "the variability margin uses the IT repeat change rate on all 37 questions whatever the cache state; cache use never changes the verdict, but a repeat that was not fully cold is reported as a qualification of the margin",
+    "expectation": "the repeat should normally be cold after 65 minutes, but this is not guaranteed and is verified from the recorded cached tokens; I and IT share their prefix up to the first text part, so within-triplet cache hits are expected and balanced by the counterbalanced order",
+    "output_effect": "OpenAI states caching does not change outputs; E1 observed cached repeats reproducing the first reply more often (18/20 vs 10/17), confounded with time, which is why it is measured here",
+    "documentation_2026_11_22": {
+      "retention": "in_memory: 'Entries typically remain active for around 5 to 10 minutes of inactivity, up to one hour.' Extended 24h retention is listed only for other models (gpt-4.1, gpt-5.x), not gpt-4o-mini",
+      "enabled_by_default": "'Prompt caching is enabled by default for supported OpenAI models'; the page gives no way to disable it",
+      "minimum_and_granularity": "the minimum cacheable length 'varies by request settings for earlier models'; reported cached tokens are rounded down to a multiple of 128",
+      "output_effect": "the page states caching does not change how output tokens are generated",
+      "field": "Chat Completions reports usage.prompt_tokens_details.cached_tokens (the field that carried cached counts on 22 of 113 frozen E1 calls); the guide names the Responses API field usage.input_tokens_details.cached_tokens",
+      "prompt_cache_key": "documented to separate cache reuse between groups of requests without guaranteeing anything; not used, because it would add a field that E0-E2 requests never carried and would make the repeat body differ from main_r1"
+    }
+  },
+  "code_provenance": {
+    "rule": "the E3 implementation (notebooks 02 and 03), its documentation and this spec are committed before the first live call",
+    "live_run_gate": "paid modes refuse to run unless the spec file on disk equals the committed HEAD version byte for byte and the code-cell sources of notebook 02 on disk equal those at HEAD",
+    "recorded_per_run": "git commit (HEAD), branch, SHA-256 of the spec bytes and of notebook 02's code-cell sources, and git status of the working tree, in settings.json",
+    "evaluation_check": "notebook 03 accepts a run only if the recorded commit exists and holds the run's spec snapshot and the recorded notebook-02 code hash",
+    "limits": "the check binds the executed code to a commit only when the notebook is executed from disk (nbconvert); unsaved edits in an interactive kernel are not detectable",
+    "dependencies": "no new package: E3 uses the libraries already pinned for E0-E2 (openai, tiktoken, pymupdf, pandas, numpy, matplotlib); versions are recorded per session"
+  },
+  "approval": "design approved by the project owner on 2026-11-22 with the final requirements of that day (screening-rule wording, per-document fixed/broken reporting, measured not assumed cold repeat, 181-call plan, cumulative USD 1.25 ceiling, committed code provenance); each paid stage (smoke, pilot, full) still requires its own explicit approval"
+}

@@ -198,6 +198,72 @@ JSON answers instead of its GPT-4o extraction stage, so they are **local
 diagnostics, not leaderboard numbers**. Details, limitations and the manual
 error review are in `notebooks/03_evaluation.ipynb`.
 
+## Experiment E3 — text–image fusion (spec frozen, not run)
+
+E3 asks whether adding the **extracted page text** to the 768-px page images
+improves GPT-4o-mini's answers on the same 37 questions and evidence pages,
+and how both compare with the text alone. No E3 reply exists yet: the spec is
+frozen, and each paid stage awaits separate approval.
+
+| condition | per page, in order | role |
+|---|---|---|
+| T | `[Page N]`, extracted text | secondary |
+| I | `[Page N]`, 768-px image | primary comparator (same session) |
+| IT | `[Page N]`, 768-px image, extracted text | primary treatment, plus a cold repeat |
+
+- **Only the text changes between I and IT.** All three conditions share one
+  new, modality-neutral prompt (`mmlb-evidence-v1`, the frozen JSON contract
+  plus one sentence). Notebook 02 asserts for every question that I is IT minus
+  its text parts and T is IT minus its image parts. The images are E1's exact
+  PNGs. The text is native, or OCR at 150 dpi, sent **untruncated**: 10 of the
+  47 evidence pages exceed the old 3,500-character cap. Each page's text is
+  pinned by SHA-256.
+- **Text delivery is verified by hashes.** Each text part is checked against
+  its pinned page hash when built and again just before each call. The exact
+  arguments handed to the SDK are fingerprinted and must equal the plan.
+  Billed prompt tokens are a **diagnostic**: the offline rule reproduces every
+  billed count of the frozen runs exactly, so a deviation above 16 tokens is
+  flagged. A deviation stops smoke and pilot, but is only reported in the full
+  run. Cached tokens are recorded for every response, and the evaluation
+  reports whether caching touched the repeat.
+- **Design.** Questions are run as adjacent T/I/IT triplets in seeded,
+  counterbalanced order. A cold repeat of IT starts at least 65 minutes later,
+  so the prompt cache should normally not serve it. OpenAI documents a
+  "typically" 5–10 minute, at most one-hour in-memory cache, which is not a
+  guarantee, so cached tokens on every call measure it.
+- **Decision rule, fixed in advance.** Adopt IT if:
+  - the paired gain is ≥ 0.05;
+  - it exceeds max(1/37, the IT repeat change rate);
+  - broken ≤ fixed / 2.
+
+  Retain image-only if the gain is ≤ 0; otherwise inconclusive. This is an
+  engineering screening rule for these 37 questions, frozen before any reply.
+  It is not statistical evidence that fusion is generally better. Results are
+  reported per document with fixed and broken counts, beside the sensitivity
+  analyses.
+- **Pre-declared extras.** Sensitivity analyses for the known scoring defects
+  (S1 unscorable references, S2 annotation issues, S3 strict scoring) never
+  change the verdict. There are also complementarity and modality-following
+  analyses, and a mechanical error taxonomy.
+- **Cost.** The list-price upper bound is about $0.95 for smoke (3 calls),
+  pilot (27) and full (151) together, 181 calls in all, since each stage opens with its own smoke. The ceiling is **cumulative**: $1.25 across
+  every E3 run under the spec, enforced before each call. The full run is 3
+  technical calls + 37 questions × 3 conditions + 37 IT repeats = 151. The model
+  snapshot shuts down on 2027-01-14.
+
+```bash
+# Offline (default): rebuild and verify every request, mocked execution tests; nothing is sent
+jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+# Paid, after the spec is frozen with a budget and each stage is approved (OPENAI_API_KEY in .env)
+VISUALDOC_E3_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+# Evaluate a saved run without any API call
+VISUALDOC_E3_RUN_DIR=experiments/runs/e3/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
+```
+
+Spec: [`experiments/specs/e3_text_image_fusion_v1.json`](experiments/specs/e3_text_image_fusion_v1.json),
+frozen and committed with the implementation. Paid modes require the spec and
+notebook 02's code to equal git HEAD, and each run records its commit.
+
 ## Workflow
 
 Run the notebooks in order. Each one reads only the saved files of the
@@ -278,7 +344,9 @@ predefined accuracy–cost decision readout.
 ├── experiments/
 │   ├── frozen/mmlongbench_doc/  # committed canonical predictions and results, with SHA256SUMS
 │   ├── frozen/e1/             # frozen E1 full run, figures, per-question table, provenance, SHA256SUMS
-│   └── runs/                  # git-ignored outputs of new live runs
+│   ├── frozen/e2/             # frozen E2 full run, figures, audit, provenance, SHA256SUMS
+│   ├── specs/                 # experiment specifications (E1, E2 frozen; E3 draft)
+│   └── runs/                  # git-ignored outputs of new live runs (e1/, e2/, e3/, ...)
 ├── data/
 │   ├── external/              # MMLongBench-Doc question table (tracked) and PDFs (git-ignored); other benchmarks
 │   ├── processed/, cache/     # git-ignored outputs of the notebooks

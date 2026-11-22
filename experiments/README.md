@@ -33,6 +33,15 @@ Cached-response lookup latency is recorded separately from the originating
 live API latency. A new run or replicate has a new cache namespace and cannot
 reuse a previous replicate's response.
 
+Experiment E3 (text–image fusion) runs go to `runs/e3/<UTC timestamp>_<unique id>_<mode>/`,
+with the same exclusive creation and the same audit files as E2: settings, spec snapshot,
+execution plan, request plan, session records, an append-only execution log, a run-scoped
+response cache, gates, predictions per replicate and condition, and `completion.json`
+(or a `stop_*.json` record that a resumed run continues). The protocol
+[`specs/e3_text_image_fusion_v1.json`](specs/e3_text_image_fusion_v1.json) was frozen on
+2026-11-22 with a cumulative USD 1.25 budget for all E3 runs. Paid modes also require the spec and notebook 02's code
+to equal git HEAD, and record the commit in `settings.json`. No E3 run exists yet; each paid stage needs separate approval.
+
 ## How results are reproduced
 
 ```text
