@@ -230,11 +230,38 @@ frozen and committed with the implementation before the first call.
 VISUALDOC_E3_RUN_DIR=experiments/runs/e3/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
 ```
 
+## Experiment E4 — the application end to end (designed, not run)
+
+E4 measures the application in `src/visualdoc/` **as shipped**: BM25 top 5, the context guard, 768-px page images and GPT-4o-mini. It runs on all 57 questions and asks how much of the application's error on the 37 matched questions comes from **page selection** (retrieval, the guard, distractor pages) rather than from **reading**. No paid call has been made; the spec is a draft awaiting approval.
+
+| arm | pages sent (same prompt, model, parameters and parser) | questions |
+|---|---|---:|
+| `APP` | the application's own request, built by `answer_question`: top 5 after the guard (3–4 pages) | 57 |
+| `ORACLE` | the annotated evidence pages: byte-identical to the frozen E1_768 requests | 37 |
+
+- **Known before any call** (recomputed independently): 29/40 answerable questions reach the model with an evidence page (32/40 before the guard). By stratum, 20 / 9 / 3 / 8 have all evidence, some evidence, evidence dropped by the guard, or none retrieved. The frozen anchor suggests a page-selection gap of about 4–6/37 against a reading loss of 21/37.
+- **Primary outcome.** $\Delta_{\text{sel}}$ = ORACLE − APP accuracy on the 37 questions, in one session. The pre-registered screening rule decides only whether page selection costs measurable accuracy; it does not rank page selection against the reader.
+- **Also reported.**
+  - APP accuracy on 40 and 57 questions, F1, and abstention on the 17 unanswerable questions.
+  - Grounded abstention when no evidence page was supplied, and unsupported answers.
+  - Citations, a mechanical error label per question, and ORACLE vs frozen E1_768 (a cross-day reproducibility check).
+  - APP vs frozen B (confounded; descriptive).
+- **Limits.** In-sample: E1–E3 chose the application's settings on these questions. One session, and no APP repeat. The model snapshot shuts down on 2027-01-14.
+- **Cost.** 2 + 96 calls (no pilot), list-price upper bound $1.22, proposed cumulative ceiling $1.50.
+- **Implementation.** Notebook 02 §13 builds every request through the application, verifies it against its own construction and the frozen E1 requests, and tests the executor with mocked SDK replies. Notebook 03 §17 holds the analysis and run validation, tested on synthetic replies.
+- **Spec.** [`experiments/specs/e4_application_end_to_end_v1.json`](experiments/specs/e4_application_end_to_end_v1.json). To freeze it, set `status`, `frozen_at` and `budget.approved_ceiling_usd`, then commit it with the notebooks and `src/visualdoc/`. Each paid stage still needs its own approval:
+
+```bash
+VISUALDOC_E4_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb   # then full
+VISUALDOC_E4_RUN_DIR=experiments/runs/e4/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
+```
+
 ## Application baseline (`src/visualdoc/`)
 
 Small reusable modules that answer a question about **any** PDF with the
 configuration the frozen experiments retained. The notebooks do not import
-them, with one exception: section 16 of `03_evaluation` runs the application
+them, except where the application itself is the object measured: section 16 of `03_evaluation`, section 13 of
+`02_question_answering` (E4 requests) and section 17 of `03_evaluation` (E4 parser) run the application
 offline to measure it. The notebooks stay the record of how each choice was measured.
 
 | Module | Does | Pinned to |
@@ -344,7 +371,7 @@ OCR uses the Tesseract engine built into PyMuPDF with the model in
 6 PDFs (≈ 22 MB) from Hugging Face and OCRs 120 pages (≈ 1 minute).
 
 ```bash
-pytest                                   # 82 tests: application modules, parsing module, annotation schema
+pytest                                   # 125 tests: application modules, parsing module, annotation schema
 jupyter lab notebooks/                   # then run 00 → 01 → 02 → 03 with the visualdoc-venv kernel
 ```
 
@@ -391,7 +418,7 @@ works for the demo).
 │   ├── frozen/e1/             # frozen E1 full run, figures, per-question table, provenance, SHA256SUMS
 │   ├── frozen/e2/             # frozen E2 full run, figures, audit, provenance, SHA256SUMS
 │   ├── frozen/e3/             # frozen E3 full run, figures, audit, provenance, SHA256SUMS
-│   ├── specs/                 # experiment specifications (E1, E2, E3, all frozen)
+│   ├── specs/                 # experiment specifications (E1, E2, E3 frozen; E4 draft)
 │   └── runs/                  # git-ignored outputs of new live runs (e1/, e2/, e3/, ...)
 ├── data/
 │   ├── external/              # MMLongBench-Doc question table (tracked) and PDFs (git-ignored); other benchmarks
@@ -415,7 +442,7 @@ works for the demo).
 | BM25 page retrieval and metrics | Implemented (01); application module `retrieval.py` |
 | Text and image QA with page citations, four conditions | Implemented and run (02) |
 | Experiments E1–E3 (resolution, stronger VLM, text–image fusion) | Run, audited and frozen (`experiments/frozen/`) |
-| End-to-end application baseline (image answering, citation check) | Implemented with offline tests (`src/visualdoc/`); accuracy on retrieved pages at 768 px not measured |
+| End-to-end application baseline (image answering, citation check) | Implemented with offline tests (`src/visualdoc/`); accuracy on retrieved pages at 768 px not measured (E4 designed, not run) |
 | Evaluation, paired comparisons, error analysis | Implemented (03); manual review of the E0 queue done (29 cases); E3's 14-question queue not labelled |
 | Dense or visual retrieval (embeddings, ColPali) | Planned; no model chosen |
 | Project's own verified question set | Not started (needs annotation) |

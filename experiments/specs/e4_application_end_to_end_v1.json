@@ -1,0 +1,283 @@
+{
+  "spec_id": "e4-application-end-to-end-v1",
+  "status": "draft-awaiting-approval",
+  "status_rule": "Paid modes (smoke, full) refuse to run unless status is 'frozen-before-live-execution', frozen_at is set and budget.approved_ceiling_usd is a number, and unless this file, notebook 02's code cells and every module of src/visualdoc/ on disk equal git HEAD. Setting those three fields and committing this file with the implementation is the approval act. After that commit the file is never edited; any change is a new spec version (e4-application-end-to-end-v2).",
+  "drafted_at": "2026-11-22",
+  "frozen_at": null,
+  "research_question": "On the 57 questions of the 6-document MMLongBench-Doc subset, how accurate is the application in src/visualdoc/ end to end, as shipped (BM25 top 5, context guard, 768-px page images, GPT-4o-mini, mmlb-image-v1), and on the 37 matched answerable questions, how much of its error is caused by page selection (retrieval, the context guard and distractor pages) rather than by reading the pages it is given?",
+  "why_this_experiment": {
+    "gap": "The application's default configuration has never been measured. E0 condition B measured BM25 top 5 at 512 px (7/40); E1-E3 measured 768-px images on annotated evidence pages only (16-17/37). The shipped combination, retrieved pages at 768 px truncated by the context guard to 3-4 pages, has no measured accuracy, abstention or citation behaviour.",
+    "offline_facts_verified_2026_11_22": [
+      "BM25 top 5 holds an evidence page for 32/40 answerable questions; after the context guard the pages actually sent hold one for 29/40 (recomputed independently of notebook 03 section 16 and of the application code: same supplied pages for all 57 questions).",
+      "The guard keeps 4 pages on US-letter and 4:3 documents (36 questions) and 3 on 16:9 slide decks (21 questions); 78 retrieved pages are never sent.",
+      "On the 37 matched questions, evidence availability splits into 20 all-evidence, 9 some-evidence, 2 guard-dropped and 6 not-retrieved questions (strata below)."
+    ],
+    "why_an_oracle_arm": "Without a same-session reader on the evidence pages, an APP error cannot be attributed to page selection or to reading. The frozen E1_768 replies answer exactly the ORACLE requests (identical bytes) but come from another session (2026-11-21); re-sending them gives a same-session control and, as a by-product, the project's first cross-day reproducibility check of GPT-4o-mini on identical requests, which sets the variability margin. It adds 37 calls and about USD 0.26.",
+    "why_not_more_arms": "A 'no guard' arm is impossible (five 768-px pages exceed the 128k context); a smaller output reservation, another k, another retriever, prompt or model would each be a new configuration, not a measurement of the shipped one. Comparing APP with frozen condition B is reported descriptively only, because resolution, page count and session all differ.",
+    "what_e4_is_not": "Not a held-out evaluation: E1-E3 chose the application's resolution, model and representation on these same 37 questions, so APP accuracy here is an in-sample, optimistic estimate. Not a test of a new configuration. Not a leaderboard score."
+  },
+  "hypotheses": {
+    "primary_null": "On the 37 matched questions, mean(correct_ORACLE - correct_APP) <= 0: page selection costs the application nothing measurable.",
+    "primary_directional": "mean(correct_ORACLE - correct_APP) > 0.",
+    "pre_run_expectation": "From the frozen E1_768 replies (another session, descriptive only): ORACLE was correct on 4 of the 6 not-retrieved, 0 of the 2 guard-dropped, 2 of the 9 some-evidence and 10 of the 20 all-evidence questions. If APP failed exactly where evidence is missing and matched ORACLE elsewhere, the gap would be about 4/37 to 6/37 (0.11-0.16). A gap clearly outside that range would point to distractor or page-order effects, or to answers that do not need the annotated pages.",
+    "descriptive": [
+      "H-acc: end-to-end answerable accuracy of APP on 40 questions, with an interval; no threshold.",
+      "H-abstain: on answerable questions where no evidence page is supplied (11 of 40), how often APP says 'Not answerable' (the grounded behaviour) rather than answering; on the 17 unanswerable questions, how often it abstains.",
+      "H-cite: citation validity, off-by-one printed page numbers and evidence citation of APP replies."
+    ]
+  },
+  "application_under_test": {
+    "entry_point": "visualdoc.pipeline.answer_question(pdf_path, question, create) with the defaults (top_k 5, tessdata resources/tessdata, max_cost_usd 0.02)",
+    "how_requests_are_obtained": "answer_question runs end to end with OfflineReader standing in for the model, which records the exact keyword arguments the application would pass to client.chat.completions.create; that dict is the APP request. Text extraction is memoised once per PDF (unittest.mock.patch.object on pipeline.extract_pages), as in notebook 03 section 16; every other step runs per question.",
+    "how_requests_are_sent": "visualdoc.answering.ask(create, request): the application's own context and cost check, one call, its own reply parser (parse_reply) and its finish-reason rule. The executor only wraps create to record usage, latency and the fingerprint of the arguments the SDK received.",
+    "modules": [
+      "src/visualdoc/__init__.py",
+      "src/visualdoc/answering.py",
+      "src/visualdoc/citations.py",
+      "src/visualdoc/documents.py",
+      "src/visualdoc/parsing.py",
+      "src/visualdoc/pipeline.py",
+      "src/visualdoc/retrieval.py"
+    ],
+    "module_sha256": {
+      "src/visualdoc/__init__.py": "d91c5dc096bc8835c261c4deeefcf57a480226104310f58bff4adc1d97c84778",
+      "src/visualdoc/answering.py": "081b50d68a73a372e268fceefdcde0b160521b579f92e0eb6a984415fcebe55d",
+      "src/visualdoc/citations.py": "38ef03a8018b521e12810d46bb38ab21474ed2b93711e4cf4d03369777675c3c",
+      "src/visualdoc/documents.py": "52f0466a0eba57ac3822087b7f717e12e5328f647ae27c9ea9a337eba19f8bc9",
+      "src/visualdoc/parsing.py": "720cc2d3cf01b35473e19fcb876d69632ea0d9c3e47974546e50d3a7b0f70e69",
+      "src/visualdoc/pipeline.py": "b6124304ef9618c5240148114d1b5eb774ca18ed134b899695fddf8a0574dc0e",
+      "src/visualdoc/retrieval.py": "6b1f4d835f1753b279184c21fca8db1578ef023ee2bb8a105d72556f9ff0b43e"
+    },
+    "configuration": {
+      "text": "native text layer; full-page Tesseract OCR at 150 dpi (resources/tessdata/eng) below 30 native words",
+      "retrieval": "BM25 per document, k1 1.5, b 0.75, lower-cased [a-z0-9]+ tokens, ties by page number, top_k 5",
+      "rendering": "whole page fitted in a 768 x 1536-px box, opaque RGB PNG",
+      "context_guard": "keep the longest ranked prefix whose prompt bound (UTF-8 bytes of system prompt, question header and page tags + billed image tokens + 100 framing tokens) plus 400 output tokens fits 128,000 tokens; the rest is dropped, never reordered",
+      "request": "system prompt mmlb-image-v1 (hash 35ff2e8b91f9); user content 'Question: {q}\\n\\nPage images:' then '[Page N]' and the image (detail high) per supplied page, in rank order; temperature 0, max_completion_tokens 400, response_format json_object",
+      "pre_call_check": "check_request: known model, bounded output, prompt bound + 400 <= 128,000, cost bound <= USD 0.02 per request",
+      "reply": "parse_reply (strict cited-page parsing); an error when finish_reason is not 'stop'",
+      "citations": "check_citations: invalid (not supplied), off_by_one (every invalid page = a supplied page - 1), missing (an answer without a citation)"
+    },
+    "system_prompt_hash": "35ff2e8b91f9",
+    "top_k": 5,
+    "bm25": {"k1": 1.5, "b": 0.75},
+    "ocr": {"min_native_words": 30, "dpi": 150},
+    "image_box_px": {"short": 768, "long": 1536},
+    "framing_token_allowance": 100,
+    "max_request_cost_usd": 0.02
+  },
+  "design": {
+    "type": "one session; two arms of the same reader that differ only in the page list; matched questions sent as adjacent, counterbalanced pairs",
+    "arms": {
+      "APP": {"label": "application as shipped", "pages": "the application's supplied pages: BM25 top 5 after the context guard (3 or 4 pages)", "questions": 57, "role": "object of evaluation; treatment of the primary comparison"},
+      "ORACLE": {"label": "application reader on the annotated evidence pages", "pages": "the annotated evidence pages in benchmark order, no padding (the E1 page lists)", "questions": 37, "role": "same-session control of the primary comparison", "identity": "built with visualdoc.answering.build_request and the application's 768-px rendering; byte-identical (same fingerprint) to the frozen E1 main_r1 E1_768 request of each question"}
+    },
+    "control_by_construction": [
+      "APP and ORACLE share the system prompt, the question header, the page-tag format, the rendering, the model, the parameters, the parser and the scorer; only the list of pages differs (which pages, how many, in which order)",
+      "every APP request equals, object for object, the request this notebook builds itself from the 768-px E1 page images and the supplied page list",
+      "every ORACLE request has the fingerprint of the frozen E1_768 request of the same question"
+    ],
+    "primary_comparison": "ORACLE (main_r1) versus APP (main_r1), paired by question, on the 37 matched questions",
+    "what_the_primary_difference_contains": "missing evidence (retrieval misses and guard drops), extra non-evidence pages (distractors), page order and request length, all together; the strata separate the first from the others",
+    "frozen_anchors_descriptive_only": {
+      "E1_768": "frozen GPT-4o-mini replies to the identical ORACLE requests on 2026-11-21 (run 20261121T131525011829Z_29c92c8a, 16/37): ORACLE vs E1_768 is the cross-session reproducibility check and enters the variability margin",
+      "B": "frozen E0 condition B, BM25 top 5 at 512 px, all five pages (7/40 answerable, 6/17 correct abstentions): APP vs B is 'shipped application versus the original retrieved-page baseline', confounded by resolution, page count and session; never part of the verdict"
+    },
+    "no_repeat_of_APP": "Not run: it would double the cost (about USD 0.91). Variability enters through the cross-session ORACLE check and the frozen 1/37 repeat rate; the limitation is stated."
+  },
+  "population": {
+    "documents": [
+      "2210.02442v1.pdf",
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+      "bdf54dxa.pdf",
+      "earlybird-110722143746-phpapp02_95.pdf",
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+      "watch_d.pdf"
+    ],
+    "app_questions": 57,
+    "answerable": 40,
+    "unanswerable": 17,
+    "matched_qids_same_as": "e1-image-resolution-v1, e2-stronger-vlm-v2 and e3-text-image-fusion-v1 (asserted equal)",
+    "matched_questions": 37,
+    "app_only_answerable_qids": ["mmlb-0035", "mmlb-0036", "mmlb-0039"],
+    "app_only_answerable_note": "13, 5 and 10 evidence pages: their evidence does not fit the context at 768 px, so they have no ORACLE request (excluded since E1); APP still answers them",
+    "selection_note": "the 37 matched questions exclude the three long-evidence questions, which are those the context guard affects most; APP accuracy is reported on 40 and on 37"
+  },
+  "strata_preregistered": {
+    "definition": "computed mechanically from the application's supplied pages and the annotated evidence pages before any E4 reply; E = evidence pages, S = supplied pages, R = BM25 top 5",
+    "all_evidence_supplied": ["mmlb-0033", "mmlb-0034", "mmlb-0041", "mmlb-0094", "mmlb-0095", "mmlb-0097", "mmlb-0318", "mmlb-0353", "mmlb-0355", "mmlb-0357", "mmlb-0360", "mmlb-0363", "mmlb-0729", "mmlb-0731", "mmlb-0733", "mmlb-0736", "mmlb-0737", "mmlb-0739", "mmlb-0741", "mmlb-0769"],
+    "some_evidence_supplied": ["mmlb-0096", "mmlb-0317", "mmlb-0359", "mmlb-0362", "mmlb-0732", "mmlb-0735", "mmlb-0762", "mmlb-0765", "mmlb-0766"],
+    "evidence_retrieved_but_dropped_by_guard": ["mmlb-0035", "mmlb-0315", "mmlb-0763"],
+    "evidence_not_retrieved": ["mmlb-0036", "mmlb-0037", "mmlb-0039", "mmlb-0313", "mmlb-0319", "mmlb-0727", "mmlb-0740", "mmlb-0767"],
+    "rules": {
+      "all_evidence_supplied": "E is a subset of S",
+      "some_evidence_supplied": "E and S intersect, E not a subset of S",
+      "evidence_retrieved_but_dropped_by_guard": "E and S disjoint, E and R intersect",
+      "evidence_not_retrieved": "E and R disjoint"
+    },
+    "counts_answerable_40": {"all_evidence_supplied": 20, "some_evidence_supplied": 9, "evidence_retrieved_but_dropped_by_guard": 3, "evidence_not_retrieved": 8},
+    "counts_matched_37": {"all_evidence_supplied": 20, "some_evidence_supplied": 9, "evidence_retrieved_but_dropped_by_guard": 2, "evidence_not_retrieved": 6}
+  },
+  "scoring": {
+    "parser": "visualdoc.answering.parse_reply (the application's); notebook 03 re-parses every raw reply and requires the logged application fields to match",
+    "correct": "frozen MMLongBench-Doc rule-based score > 0 (notebook 03 section 1, unchanged)",
+    "strict_correct": "score == 1",
+    "parse_failures": "scored 0 and reported separately",
+    "unanswerable": "correct when the parsed answer is exactly 'Not answerable' (the frozen scorer's rule)",
+    "known_defects_sensitivity": {
+      "rule": "the primary analysis scores every question with the frozen scorer; S1-S3 are reported beside it and never change the verdict",
+      "S1_reference_unscorable": ["mmlb-0733", "mmlb-0735"],
+      "S2_manual_annotation_or_scoring_issue": ["mmlb-0034", "mmlb-0733", "mmlb-0735", "mmlb-0736"],
+      "S2_definition": "frozen notebook-03 manual-review primary label 'annotation or scoring issue' (labels assigned 2026-11-20/21, before any E4 reply; same set as E3)",
+      "S3_strict": "strict accuracy (score == 1)"
+    }
+  },
+  "evaluation_metrics": {
+    "primary": "mean over the 37 matched questions of correct(ORACLE) - correct(APP), same session, with fixed (APP wrong, ORACLE right), broken (APP right, ORACLE wrong), both correct, both wrong; reported beside the reading loss 1 - mean correct(ORACLE) on the same 37",
+    "application": [
+      "APP accuracy on the 40 answerable questions and on the 37 matched questions",
+      "APP accuracy on all 57 questions and F1 (the benchmark's definitions, notebook 03 section 1)",
+      "correct abstention on the 17 unanswerable questions",
+      "false abstention on answerable questions, split by stratum: abstaining where no evidence page was supplied is grounded behaviour and is reported as such, even though it scores 0",
+      "unsupported answers: an answer other than 'Not answerable' on a question whose supplied pages hold no evidence page (answerable) or on an unanswerable question",
+      "citations: validity (all cited pages supplied), off-by-one printed page numbers, missing citation, cites an evidence page (answerable, evidence supplied), and correct answers that cite no evidence page",
+      "billed prompt and completion tokens, cached prompt tokens, list-price cost per question and API latency"
+    ],
+    "decomposition": "for each stratum: questions, APP correct, ORACLE correct, fixed and broken; reported for the 37 matched questions, and APP alone for the 3 APP-only questions",
+    "secondary_descriptive": [
+      "ORACLE vs frozen E1_768 (identical requests, 2026-11-21 vs E4 session): identical raw replies, identical parsed answers, correctness changes",
+      "APP vs frozen B on 57 and on 40 questions: fixed, broken, and the confounds named",
+      "per document: questions, APP and ORACLE correct, fixed and broken, leave-one-document-out for the primary"
+    ]
+  },
+  "error_taxonomy": {
+    "rule": "one mechanical label per answerable APP error, assigned in this order; descriptive, never part of the verdict",
+    "contract": "APP reply unparseable or truncated",
+    "retrieval": "stratum evidence_not_retrieved",
+    "context_guard": "stratum evidence_retrieved_but_dropped_by_guard",
+    "incomplete_evidence": "stratum some_evidence_supplied and ORACLE correct",
+    "selection_interference": "stratum all_evidence_supplied and ORACLE correct (distractor pages, page order or request length)",
+    "reader": "ORACLE also wrong (visual reading or reasoning; the split needs a manual label)",
+    "unlabelled_app_only": "APP-only questions with some or all evidence supplied (no ORACLE reply to compare)",
+    "other_axes": {
+      "unanswerable_answered": "an unanswerable question answered with content (score 0)",
+      "correct_without_supplied_evidence": "APP correct while no evidence page was supplied: an answer elsewhere in the document (incomplete annotation) or a guess; queued for manual review",
+      "citation": "invalid, off-by-one or missing citation, reported for every reply whatever its correctness"
+    },
+    "manual_review": "after a full run, every APP error labelled reader or selection_interference, every correct_without_supplied_evidence case and every unanswerable_answered case is reviewed with one primary label from the frozen notebook-03 categories; labels are descriptive and never change the verdict"
+  },
+  "decision_rule": {
+    "status": "engineering screening rule for this application and these 37 questions, fixed before any E4 reply. It decides only whether page selection (retrieval, the context guard, distractor pages) costs the application measurable accuracy. It does not rank page selection against the reader: on the frozen anchor the reader misses 21 of 37 questions even with the evidence pages. Both losses are reported side by side (page-selection loss = the primary gap; reading loss = 1 - ORACLE accuracy on the 37) and the next step is chosen from both. Not a significance test and not a claim about other documents",
+    "minimum_primary_gap": 0.05,
+    "variability_margin": "max(frozen GPT-4o-mini 512-px repeat correctness-change rate 1/37, correctness-change rate between ORACLE and frozen E1_768 on the 37 identical requests)",
+    "variability_rule": "the primary gap must be strictly greater than the variability margin",
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "broken_rule": "broken <= fixed / 2 on the primary comparison",
+    "page_selection_costs": "page_selection_costs_accuracy when all three criteria pass",
+    "no_cost": "no_measurable_page_selection_cost when the primary gap is <= 0",
+    "otherwise": "inconclusive",
+    "never_change_the_verdict": ["APP accuracy and its interval", "abstention and citation metrics", "strata breakdown", "APP vs B", "sensitivity analyses S1-S3", "cost", "latency", "manual labels"],
+    "fixed_before_results": "the rule, its thresholds, the metrics, the strata, the sensitivity sets and the error taxonomy are frozen in this spec and are not changed after any E4 reply is seen; a change requires a new spec version, and the v1 result under the v1 rule is still reported"
+  },
+  "uncertainty": {
+    "intervals": "deterministic percentile bootstrap resampling the six documents as clusters, for APP answerable accuracy (40) and for the primary gap (37); leave-one-document-out; exact McNemar p for the primary (ignores clustering)",
+    "bootstrap_seed": 42,
+    "bootstrap_draws": 10000,
+    "qualification": "37 paired questions in 6 documents: one question is 0.027, questions within a document are dependent, six clusters make the bootstrap interval unstable, and only large effects are detectable. A gap at or below the margin means no large effect on these questions, not equivalence. APP accuracy on 40 questions has a binomial standard error of about 0.07 before clustering."
+  },
+  "model": {
+    "provider": "openai",
+    "api": "Chat Completions",
+    "requested_snapshot": "gpt-4o-mini-2024-07-18",
+    "deprecation": "deprecated; shutdown Jan 14, 2027 (OpenAI deprecations page as re-read for E3 on 2026-11-22). The application is pinned to this snapshot, so E4 measures a configuration that stops working on that date",
+    "image_detail": "high",
+    "context_window_tokens": 128000,
+    "input_usd_per_1m_tokens": 0.15,
+    "output_usd_per_1m_tokens": 0.6,
+    "documentation_checked": "not re-read for E4; the E3 spec records the 2026-11-22 reading (prices 0.15 / 0.075 cached / 0.60 per 1M, 128k context, image tile rule, shutdown date). The paid gate does not fetch documentation"
+  },
+  "token_accounting": {
+    "expected_prompt_tokens": "o200k_base tokens of the system prompt and every text part + 9, plus 2,833 + 5,667 x tiles per image (the rule of notebook 02 section 12: billed minus expected was +1 on every frozen E1 image call, and +1 or 0 on the 151 frozen E3 calls)",
+    "application_bound": "the application's own upper bound (estimate_prompt_tokens), recorded beside it; it exceeded the billed prompt by 637-867 tokens on the frozen image-only requests",
+    "tolerance_tokens": 16,
+    "role": "diagnostic: gates the smoke stage; in full mode a deviation is flagged and reported, never a stop. Request bytes are verified by image hashes and fingerprints, not by token counts"
+  },
+  "execution": {
+    "modes": {
+      "offline": {"generations": 0, "purpose": "build every APP and ORACLE request through the application, verify them against the notebook's own construction, the frozen E1 requests and the spec, plan, cost, and test the executor with mocked SDK replies; no client is created"},
+      "smoke": {"generations": 2, "purpose": "technical only: one APP and one ORACLE call on the largest APP request; served snapshot, JSON contract, prompt-token accounting near the context limit; never scored"},
+      "full": {"generations": 96, "purpose": "the smoke pair again (never scored), then the 37 matched questions as adjacent APP/ORACLE pairs and the 20 APP-only questions, in one seeded order"}
+    },
+    "no_pilot": "E1-E3 used a pilot to test new request formats. APP and ORACLE requests have E1's format (113 E1 and 151 E3 calls without a format failure); the only new property is size (up to 110,732 prompt tokens), which the smoke pair tests on the largest request. A pilot would add about USD 0.15 and an approval round without testing anything the smoke and the mocked executor tests do not.",
+    "technical_smoke_qid": "mmlb-0095",
+    "technical_smoke_reason": "largest APP request (expected 110,732 prompt tokens, application bound 111,562), and a matched question so the ORACLE request exists",
+    "seeds": {"smoke_order": 20261203, "question_order": 20261201, "pair_order": 20261202},
+    "ordering": "the 57 questions in a seeded random order; a matched question is an adjacent APP/ORACLE pair, an APP-only question a single call; exactly 19 pairs open with APP and 18 with ORACLE, assigned by a seeded permutation, so prefix-cache state and drift are balanced across arms",
+    "pacer_tokens_per_minute": 150000,
+    "pause_between_calls_s": 1.0,
+    "timeout_s": 120,
+    "max_attempts_per_request": 2,
+    "rate_limit": {"applies_to": "HTTP 429 classified as rate_limit; a 429 with a quota or billing code stops the run and is never retried", "backoff_s": [30, 60, 120, 240, 480], "counts_as_attempt": false},
+    "cache_policy": "cache entries are keyed SHA-256(run_id:replicate_id:request_fingerprint); no reply of another run or replicate can be reused",
+    "persistence": "each reply is appended (and fsynced) to the run's response cache before its log record; logs and caches are append-only; every output file is created exclusively and never overwritten",
+    "resume": "VISUALDOC_E4_RESUME_DIR resumes an interrupted run: settings, spec hash and plan must be identical; answered items are never re-sent; a reply cached but not logged is reused; a failed request is retried at most once; a logged integrity failure blocks resumption",
+    "stop_rules": {
+      "integrity_failure": "stop in every mode, not resumable: the request about to be sent differs from the plan (image hashes or fingerprint), the arguments the SDK received differ from the plan, or the served model differs from the snapshot",
+      "application_refusal": "check_request raising ValueError inside ask stops the run before any call (asserted impossible offline for every planned request)",
+      "api_failure": "stop on any API error other than a waitable 429 rate limit",
+      "budget": "stop before a call whose list-price upper bound would take the cumulative E4 spend plus the upper bound of every remaining call of the run above the approved ceiling",
+      "smoke": "an unparseable or truncated reply, or a prompt-token difference outside the tolerance, fails the smoke gate and stops the stage",
+      "full_mode": "contract failures are recorded and scored 0 and token deviations flagged; neither stops the run, so the population is not truncated by outcome"
+    },
+    "record": ["execution index, pair index and position in the pair", "request start and completion timestamps (UTC)", "request fingerprint, sent fingerprint, cache provenance", "image SHA-256 and pixel size per page", "expected prompt tokens, application bound, billed prompt and completion tokens, cached prompt tokens", "served model, system fingerprint, finish reason, API latency", "the application's parsed answer, cited pages and error"],
+    "plan_composition": {
+      "smoke": {"calls": 2, "replicate": "technical_smoke", "arms": ["APP", "ORACLE"], "qid": "mmlb-0095"},
+      "full": {"calls": 96, "technical_smoke": 2, "main_r1_APP": 57, "main_r1_ORACLE": 37, "pairs": 37, "singles": 20},
+      "all_stages_calls": 98
+    }
+  },
+  "gates": {
+    "offline": [
+      "spec hash recorded; application module hashes equal the spec",
+      "application constants equal the spec and the frozen settings (model, prompt hash, parameters, top_k, BM25, OCR, rendering, context, prices)",
+      "application text equals pages.parquet on all 195 pages; BM25 top 5 equals the frozen E0 ranking and condition B's pages on 57/57",
+      "supplied pages equal the guard rule re-implemented in the notebook on 57/57",
+      "every supplied page image equals the 768-px E1 render (SHA-256)",
+      "every APP request equals the notebook-built request object for object; every ORACLE fingerprint equals the frozen E1_768 fingerprint",
+      "every request passes the application's check_request and fits the context by the exact token rule",
+      "no APP request equals an ORACLE request; no annotation field in a logged request",
+      "strata equal the spec",
+      "plan composition 2 / 96, counterbalanced pairs, cost estimates equal the spec",
+      "mocked executor tests pass"
+    ],
+    "smoke": ["spec frozen with an approved budget", "spec, notebook-02 code and application modules equal git HEAD", "OPENAI_API_KEY present", "baseline replay and E1-E3 offline", "before 2027-01-14", "planned upper bound within the remaining cumulative budget", "two replies: verified request and sent fingerprints, served snapshot, parsed by the application, finish 'stop', prompt tokens within tolerance"],
+    "full": ["smoke gate passed in the same run", "explicit approval of the full stage", "all 96 planned calls logged with a reply"]
+  },
+  "budget": {
+    "approved_ceiling_usd": null,
+    "proposed_ceiling_usd": 1.5,
+    "scope": "cumulative over every E4 run under this spec version (smoke, full, and any interrupted or resumed run), at list price",
+    "enforcement": "before each call: list-price cost of every reply already received by any E4 run under this spec hash, plus the upper bound of this and every remaining call of the current run, must stay within the ceiling",
+    "estimate_upper_bound_usd": {"smoke": 0.0226, "full": 1.2001, "all_stages": 1.2228},
+    "estimate_typical_usd": {"note": "with GPT-4o-mini's mean E1 reply length (21 output tokens), no cache discount", "all_stages": 1.2005},
+    "price_basis": "OpenAI list price, USD 0.15 / 0.60 per 1M input / output tokens; cached input is billed lower, so the bound is conservative",
+    "headroom": "1.50 - 1.2228 = 0.2772 USD, enough to resume about 20 % of the full run"
+  },
+  "code_provenance": {
+    "rule": "the E4 implementation (notebooks 02 and 03), this spec and the application modules are committed before the first paid call",
+    "live_run_gate": "paid modes refuse to run unless the spec bytes, notebook 02's code-cell sources and every src/visualdoc module on disk equal git HEAD",
+    "recorded_per_run": "commit, branch, SHA-256 of the spec, of notebook 02's code cells and of each application module, and git status, in settings.json",
+    "evaluation_check": "notebook 03 accepts a run only if its recorded commit holds the spec snapshot, the recorded notebook-02 code hash and the recorded application module hashes",
+    "limits": "the binding holds only when notebook 02 is executed from disk (nbconvert); edits in an interactive kernel are not detectable"
+  },
+  "limitations": [
+    "In-sample: the application's resolution, model and representation were chosen on these 37 questions (E1-E3), so APP accuracy is optimistic for new documents. A held-out sample is needed before any claim about the application's accuracy in general.",
+    "57 questions in 6 documents; one matched question is 0.027 and questions within a document are dependent.",
+    "One session, no APP repeat: APP's run-to-run variability is inferred from ORACLE's cross-day reproducibility and earlier repeats, not measured.",
+    "The primary gap mixes missing evidence with distractor pages, page order and request length; the strata separate missing evidence only.",
+    "The visual-reading versus reasoning split of reader errors needs manual labels.",
+    "Annotated evidence pages are single annotations: an answer may also sit on another page, so 'no evidence supplied' can be pessimistic.",
+    "The model snapshot shuts down on 2027-01-14."
+  ],
+  "approval": "drafted 2026-11-22 for the project owner's review; nothing approved. Freezing requires the owner to set status, frozen_at and approved_ceiling_usd and to commit; each paid stage (smoke, full) then needs its own explicit approval"
+}
