@@ -124,7 +124,22 @@ snapshot is deprecated and scheduled for shutdown on 2027-01-14; retain it
 for E1 comparability, then treat a newer-model resolution study as a separate
 experiment.
 
-## Experiment E2 — a stronger VLM through OpenRouter (implemented, not yet run)
+## Experiment E2 — a stronger VLM through OpenRouter (done: retain GPT-4o-mini)
+
+**Result (frozen in [`experiments/frozen/e2/`](experiments/frozen/e2/README.md)).**
+
+| | 512 px | 768 px | 768 px repeat |
+|---|---:|---:|---:|
+| GPT-4o-mini (frozen E1) | 10/37 | **16/37** | |
+| Qwen3-VL-8B (E2) | 11/37 | **15/37** | 15/37 |
+
+- **Primary 768-px comparison:** 4 fixed, 5 broken, −0.027, bootstrap [−0.29, +0.22]. That is a tie within noise, and the pre-registered rule **retains GPT-4o-mini at 768 px**.
+- **Resolution:** 768 px helps Qwen too (+4 fixed, 0 broken).
+- **Repeat:** Qwen's repeat changed no answer's correctness.
+- **Cost:** Qwen's 768-px cell cost $0.014 for 37 questions, against $0.255 for GPT-4o-mini.
+- **Validation:** the frozen run passed an independent 44-check audit, and notebook 03 reproduces it by default without any API call.
+- **Not verifiable:** the hosted weight revision and image preprocessing.
+
 
 E2 asks whether **Qwen3-VL-8B-Instruct** answers the same 37 questions better
 than GPT-4o-mini. Qwen is served through OpenRouter as `qwen/qwen3-vl-8b-instruct`,
@@ -156,8 +171,9 @@ Image resolution is controlled with a 2 × 2 design:
 
   Retain GPT-4o-mini if the gain is ≤ 0; otherwise the result is inconclusive.
 - **Cost.** At the 2026-11-22 price ($0.25 / $0.75 per million input / output
-  tokens), smoke + pilot + full (133 calls) costs about **$0.04**, with a
-  list-price upper bound of about **$0.08**. Paid modes re-check the public price
+  tokens), smoke + pilot + full (133 calls) was estimated at about **$0.04**, with a
+  list-price upper bound of about **$0.08**. Actual spend for all four E2 runs
+  was **$0.0436**. Paid modes re-check the public price
   listing, and every call is checked against the approved budget.
 - **Spec.** [`experiments/specs/e2_stronger_vlm_v2.json`](experiments/specs/e2_stronger_vlm_v2.json),
   frozen on 2026-11-22 with a $1.00 budget. Paid modes refuse to run unless the
@@ -173,7 +189,7 @@ jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answer
 # Paid, after approval, one stage at a time (OPENROUTER_API_KEY in .env);
 # add VISUALDOC_E2_RESUME_DIR=experiments/runs/e2/<run-id> to resume an interrupted run
 VISUALDOC_E2_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
-# Evaluate a saved run without any API call
+# Evaluate without any API call: the frozen run by default, or another saved run
 VISUALDOC_E2_RUN_DIR=experiments/runs/e2/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
 ```
 

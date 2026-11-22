@@ -1,0 +1,204 @@
+{
+  "audit": "independent E2 audit",
+  "run_id": "20261122T120924635816Z_4f2e1369_full",
+  "audited_at": "2026-11-22T13:35:44+01:00",
+  "shared_with_notebook_03": "only the frozen scoring-rule cell f653d232 (eval_score and helpers), executed verbatim",
+  "passed": 44,
+  "total": 44,
+  "checks": {
+    "spec snapshot = tracked v2 = v2 in commit f0f4584 = settings hash": {
+      "passed": true,
+      "detail": "7a307bb9b713260e4830a93d465ac707706c2030398c3d16b44ec35dc2945ca9"
+    },
+    "spec frozen with an approved budget": {
+      "passed": true
+    },
+    "spec committed before the first request": {
+      "passed": true,
+      "detail": "commit 2026-11-22T13:09:02+01:00, first request 2026-11-22T12:09:26.657000+00:00"
+    },
+    "v1 spec unchanged and named in v2.supersedes": {
+      "passed": true
+    },
+    "plan = re-derivation from the spec seeds (113 items)": {
+      "passed": true
+    },
+    "log statuses: 113 ok + 3 rate_limited, nothing else": {
+      "passed": true,
+      "detail": {
+        "ok": 113,
+        "rate_limited": 3
+      }
+    },
+    "exactly one ok record per planned item, in plan order": {
+      "passed": true
+    },
+    "each 429 has no reply, HTTP 429, a 30-s wait, and is followed by an ok record of the same item": {
+      "passed": true,
+      "detail": [
+        "mmlb-0362 repeat_r2",
+        "mmlb-0762 repeat_r2",
+        "mmlb-0357 repeat_r2"
+      ]
+    },
+    "every record is attempt 1 (no API error consumed an attempt)": {
+      "passed": true
+    },
+    "all ok records are live calls": {
+      "passed": true
+    },
+    "every raw reply is plain JSON whose answer and cited pages equal the logged pred and citations": {
+      "passed": true,
+      "detail": []
+    },
+    "served model = slug and provider = Parasail on every reply": {
+      "passed": true
+    },
+    "every reply finished with stop": {
+      "passed": true
+    },
+    "reported prompt tokens equal the offline expectation exactly (113/113)": {
+      "passed": true
+    },
+    "generation ids present and unique": {
+      "passed": true
+    },
+    "image SHA-256, dimensions and E1 fingerprint equal the frozen E1 request of the same question and resolution": {
+      "passed": true
+    },
+    "cache: one entry per ok record, key = SHA-256(run:replicate:fingerprint)": {
+      "passed": true
+    },
+    "cache replies equal logged replies": {
+      "passed": true
+    },
+    "repeat: same fingerprint as main 768, different cache key (37/37)": {
+      "passed": true
+    },
+    "first repeat request started after the last main reply": {
+      "passed": true,
+      "detail": "2026-11-22T12:14:13.956000+00:00 < 2026-11-22T12:14:15.986000+00:00"
+    },
+    "request start times increase in log order": {
+      "passed": true
+    },
+    "reported cost = token counts x spec prices on every reply (|diff| < 1e-8 USD)": {
+      "passed": true,
+      "detail": "max diff 1.08e-19"
+    },
+    "total cost = completion.json and within the approved budget": {
+      "passed": true,
+      "detail": 0.034284
+    },
+    "every reply cost <= its list-price upper bound": {
+      "passed": true
+    },
+    "predictions_technical_smoke_E2_Q_512.jsonl = final log records": {
+      "passed": true
+    },
+    "predictions_technical_smoke_E2_Q_768.jsonl = final log records": {
+      "passed": true
+    },
+    "predictions_main_r1_E2_Q_512.jsonl = final log records": {
+      "passed": true
+    },
+    "predictions_main_r1_E2_Q_768.jsonl = final log records": {
+      "passed": true
+    },
+    "predictions_repeat_r2_E2_Q_768.jsonl = final log records": {
+      "passed": true
+    },
+    "completion.json counts": {
+      "passed": true
+    },
+    "scoring rule cell identical to its pre-E2 committed version": {
+      "passed": true
+    },
+    "all six conditions cover the same 37 questions": {
+      "passed": true
+    },
+    "comparator reproduces the frozen E1 references (10, 16, 11)": {
+      "passed": true,
+      "detail": {
+        "G512": 10,
+        "G768": 16,
+        "G512_r2": 11,
+        "Q512": 11,
+        "Q768": 15,
+        "Q768_r2": 15
+      }
+    },
+    "independent counts Q512 11, Q768 15, Q768_r2 15": {
+      "passed": true,
+      "detail": {
+        "G512": 10,
+        "G768": 16,
+        "G512_r2": 11,
+        "Q512": 11,
+        "Q768": 15,
+        "Q768_r2": 15
+      }
+    },
+    "independent primary: gain, fixed, broken = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "gain": -0.02702702702702703,
+        "fixed": 4,
+        "broken": 5
+      }
+    },
+    "independent repeat rates = evaluation_summary": {
+      "passed": true,
+      "detail": {
+        "gpt": 0.02702702702702703,
+        "qwen": 0.0
+      }
+    },
+    "independent verdict = evaluation_summary verdict": {
+      "passed": true,
+      "detail": "retain_gpt4o_mini_768_reference"
+    },
+    "independent leave-one-document-out = evaluation_summary": {
+      "passed": true
+    },
+    "independent interaction = evaluation_summary": {
+      "passed": true
+    },
+    "per_question.csv correctness = independent scoring (6 conditions x 37)": {
+      "passed": true
+    },
+    "no credential-like strings in the run files": {
+      "passed": true
+    },
+    "run file inventory": {
+      "passed": true
+    },
+    "external: OpenRouter account usage equals the cost recorded by all four E2 runs": {
+      "passed": true,
+      "detail": "GET /api/v1/credits (no model call) on 2026-11-22 returned total_usage 0.04357488 USD on an account used only for E2; recorded: smoke 0.000386 + pilot 0.004504 + abandoned v1 full 0.004401 + this run 0.034284 = 0.043575 USD"
+    },
+    "code: executed notebook 02 source equals commit f0f4584": {
+      "passed": true,
+      "detail": "the executed copy's 32 code cells and all markdown equal notebooks/02_question_answering.ipynb at f0f4584 (committed 2026-11-22T12:09:02Z, 22 s before the first request); sequential execution counts; outputs name this run"
+    }
+  },
+  "recomputed": {
+    "counts": {
+      "G512": 10,
+      "G768": 16,
+      "G512_r2": 11,
+      "Q512": 11,
+      "Q768": 15,
+      "Q768_r2": 15
+    },
+    "gain": -0.02702702702702703,
+    "fixed": 4,
+    "broken": 5,
+    "gpt_repeat_rate": 0.02702702702702703,
+    "qwen_repeat_rate": 0.0,
+    "verdict": "retain_gpt4o_mini_768_reference",
+    "total_cost_usd": 0.034284
+  },
+  "audited_copy": "experiments/frozen/e2/run_20261122T120924635816Z_4f2e1369_full (byte-identical to experiments/runs/e2/20261122T120924635816Z_4f2e1369_full)",
+  "method": "A standalone script outside the notebooks recomputed every check from the raw run files, the frozen E1 run, questions.parquet, the spec and git history. It re-derived the plan from the spec seeds, re-parsed each raw reply with json.loads, recomputed costs from token counts and spec prices, and rescored all six conditions. Only the frozen scoring-rule cell of notebook 03 (f653d232, unchanged since before E2) was executed verbatim; no other notebook code was used. The script is not kept in the repository (AGENTS.md: no new scripts); its results are recorded here."
+}

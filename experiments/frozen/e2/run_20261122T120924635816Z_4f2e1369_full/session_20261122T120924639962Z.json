@@ -1,0 +1,27 @@
+{
+  "started_at": "2026-11-22T12:09:24.639+00:00",
+  "environment": {
+    "python": "3.12.6",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "packages": {
+      "openai": "2.54.0",
+      "httpx": "0.28.1",
+      "transformers": "5.23.0",
+      "tokenizers": "0.23.3",
+      "pillow": "13.0.0",
+      "numpy": "2.3.5",
+      "pandas": "3.1.1",
+      "pymupdf": "2.1"
+    }
+  },
+  "endpoint_listing": {
+    "pricing": {
+      "prompt": "0.00000025",
+      "completion": "0.00000075",
+      "input_cache_read": "0.00000012",
+      "discount": 0
+    },
+    "supports_used_parameters": true,
+    "status": 0
+  }
+}

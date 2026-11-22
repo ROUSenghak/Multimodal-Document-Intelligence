@@ -1,0 +1,182 @@
+{
+  "spec_id": "e2-stronger-vlm-v2",
+  "spec_sha256": "7a307bb9b713260e4830a93d465ac707706c2030398c3d16b44ec35dc2945ca9",
+  "spec_status": "frozen-before-live-execution",
+  "generated_at": "2026-11-22T12:09:20+00:00",
+  "api": {
+    "provider_api": "OpenRouter OpenAI-compatible Chat Completions",
+    "base_url": "https://openrouter.ai/api/v1",
+    "model_slug": "qwen/qwen3-vl-8b-instruct",
+    "provider_routing": {
+      "order": [
+        "parasail"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "quantizations": [
+        "bf16"
+      ]
+    },
+    "endpoint_checked_2026_11_22": {
+      "provider_name": "Parasail",
+      "tag": "parasail/bf16",
+      "quantization": "bf16",
+      "context_length": 262144,
+      "price_usd_per_token": {
+        "prompt": 2.5e-07,
+        "completion": 7.5e-07,
+        "input_cache_read": 1.2e-07
+      },
+      "supported_parameters_used": [
+        "max_tokens",
+        "temperature",
+        "response_format"
+      ],
+      "supports_implicit_caching": true,
+      "endpoints_listed": 1
+    }
+  },
+  "reference_open_weights": {
+    "hf_repo": "Qwen/Qwen3-VL-8B-Instruct",
+    "revision": "0c351dd01ed87e9c1b53cbc748cba10e6187ff3b",
+    "license": "apache-2.0",
+    "parameters_bf16": 8767123696,
+    "use": "processor and tokenizer files of this revision define the offline token expectation; the weights are never downloaded"
+  },
+  "what_cannot_be_verified": [
+    "which weight revision Parasail serves: OpenRouter exposes no revision hash, and the slug can be re-pointed or the deployment updated without notice",
+    "the provider's image preprocessing (max_pixels, resizing, resampling) and chat-template rendering, beyond what the returned prompt-token counts imply",
+    "the serving stack, kernels and batching, and therefore bitwise determinism at temperature 0",
+    "unspecified sampling defaults the provider applies (irrelevant to the choice of token only if temperature 0 is implemented as greedy decoding)"
+  ],
+  "processor": {
+    "patch_size": 16,
+    "merge_size": 2,
+    "min_pixels": 65536,
+    "max_pixels": 16777216,
+    "offline_backend": "Qwen2VLImageProcessorPil",
+    "transformers_offline": "5.23.0"
+  },
+  "request_parameters": {
+    "temperature": 0.0,
+    "max_tokens": 400,
+    "response_format": {
+      "type": "json_object"
+    }
+  },
+  "comparator_run_id": "20261121T131525011829Z_29c92c8a_full_short768-long1536",
+  "questions": 37,
+  "qids": [
+    "mmlb-0033",
+    "mmlb-0034",
+    "mmlb-0037",
+    "mmlb-0041",
+    "mmlb-0094",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0097",
+    "mmlb-0313",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0318",
+    "mmlb-0319",
+    "mmlb-0353",
+    "mmlb-0355",
+    "mmlb-0357",
+    "mmlb-0359",
+    "mmlb-0360",
+    "mmlb-0362",
+    "mmlb-0363",
+    "mmlb-0727",
+    "mmlb-0729",
+    "mmlb-0731",
+    "mmlb-0732",
+    "mmlb-0733",
+    "mmlb-0735",
+    "mmlb-0736",
+    "mmlb-0737",
+    "mmlb-0739",
+    "mmlb-0740",
+    "mmlb-0741",
+    "mmlb-0762",
+    "mmlb-0763",
+    "mmlb-0765",
+    "mmlb-0766",
+    "mmlb-0767",
+    "mmlb-0769"
+  ],
+  "pilot_qids": [
+    "mmlb-0033",
+    "mmlb-0313",
+    "mmlb-0737",
+    "mmlb-0763",
+    "mmlb-0769",
+    "mmlb-0729",
+    "mmlb-0732",
+    "mmlb-0739"
+  ],
+  "visual_reading_qids": [
+    "mmlb-0033",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0313",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0731",
+    "mmlb-0737",
+    "mmlb-0769"
+  ],
+  "documents": [
+    "2210.02442v1.pdf",
+    "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+    "bdf54dxa.pdf",
+    "earlybird-110722143746-phpapp02_95.pdf",
+    "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+    "watch_d.pdf"
+  ],
+  "requests": 74,
+  "max_prompt_tokens": 3298,
+  "images_resampled_by_rounding": {
+    "E2_Q_512": 47,
+    "E2_Q_768": 43
+  },
+  "distinct_images": {
+    "E2_Q_512": 47,
+    "E2_Q_768": 47
+  },
+  "prompt_token_tolerance": "max(16, 0.02 x expected)",
+  "decision_rule": {
+    "status": "engineering adoption rule, fixed before any E2 generation; not a confirmatory significance test",
+    "minimum_primary_accuracy_gain": 0.05,
+    "variability_margin": "max(GPT-4o-mini repeat correctness-change rate from frozen E1 = 1/37, Qwen repeat correctness-change rate between E2_Q_768 main_r1 and repeat_r2)",
+    "variability_rule": "the primary paired gain must be strictly greater than the variability margin",
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "broken_rule": "broken <= fixed / 2, counted on the primary comparison",
+    "adopt": "adopt_qwen3_vl_8b_768_for_this_pipeline when all three criteria pass",
+    "retain": "retain_gpt4o_mini_768_reference when the primary paired gain is <= 0",
+    "otherwise": "inconclusive",
+    "never_change_the_verdict": [
+      "interaction",
+      "Qwen 512-px results",
+      "subgroups",
+      "strict accuracy",
+      "cost",
+      "latency"
+    ],
+    "scope": "an engineering choice of image reader for this pipeline and question set, not evidence of general superiority"
+  },
+  "planned_generations": {
+    "offline": 0,
+    "smoke": 2,
+    "pilot": 18,
+    "full": 113
+  },
+  "run_id": "20261122T120924635816Z_4f2e1369_full",
+  "mode": "full",
+  "system_prompt": "You answer questions about a single PDF document using only the page images provided.\nEach page image is preceded by a tag [Page N], where N is the 1-based page number in the PDF.\n\nReturn a JSON object with exactly these keys:\n  \"answer\": the shortest complete answer. Use a number (integer or decimal) when the answer is a number,\n            and a JSON list when several items are asked for. If the page images do not contain the answer,\n            use exactly the string \"Not answerable\".\n  \"cited_pages\": a list of the page numbers N whose images support the answer ([] if \"Not answerable\").\n\nDo not use knowledge outside the page images. Do not guess.",
+  "planned_calls": 113,
+  "max_attempts_per_request": 2,
+  "approved_budget_usd": 1.0,
+  "planned_cost_upper_usd": 0.068588,
+  "cache_policy": "cache entries are keyed SHA-256(run_id:replicate_id:request_fingerprint); a new replicate can never reuse another replicate's reply"
+}

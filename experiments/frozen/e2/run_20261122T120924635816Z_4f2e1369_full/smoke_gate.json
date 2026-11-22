@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": {
+    "one reply per resolution for the smoke question": true,
+    "integrity: images, served slug, pinned provider, prompt-token accounting": true,
+    "contract: both replies parse and finish with stop": true,
+    "actual cost within the list-price upper bound": true
+  },
+  "stop_reason": null
+}

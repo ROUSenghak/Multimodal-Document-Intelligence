@@ -1,6 +1,10 @@
 # E2 proposal: does a stronger pretrained VLM beat GPT-4o-mini at 768 px?
 
-**Status (2026-11-22): implemented and frozen.**
+**Status (2026-11-22): done. The verdict is to retain GPT-4o-mini at 768 px.**
+Qwen3-VL-8B scored 15/37 at 768 px against GPT-4o-mini's 16/37 (4 fixed, 5 broken), a
+tie within noise. The frozen result and its independent audit are in
+`experiments/frozen/e2/`.
+
 The specification is `experiments/specs/e2_stronger_vlm_v2.json`, frozen with a
 $1.00 budget. It supersedes v1 (`e2_stronger_vlm_v1.json`). v1's smoke and pilot
 runs passed, but its full run was stopped twice by HTTP 429 "rate-limited

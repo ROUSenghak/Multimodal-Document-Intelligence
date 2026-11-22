@@ -1,0 +1,168 @@
+{
+  "package": "E2 stronger-VLM experiment (Qwen3-VL-8B via OpenRouter vs frozen GPT-4o-mini), frozen result",
+  "frozen_at": "2026-11-22",
+  "run": {
+    "run_id": "20261122T120924635816Z_4f2e1369_full",
+    "original_location": "experiments/runs/e2/20261122T120924635816Z_4f2e1369_full/ (git-ignored)",
+    "frozen_location": "experiments/frozen/e2/run_20261122T120924635816Z_4f2e1369_full/",
+    "copy": "byte-identical copy of all 15 files (SHA-256 compared before and after copying)",
+    "mode": "full",
+    "first_request_started_utc": "2026-11-22T12:09:26.657+00:00",
+    "last_request_completed_utc": "2026-11-22T12:18:38.901+00:00",
+    "replies": 113,
+    "requests_sent": 116,
+    "composition": {
+      "technical_smoke_E2_Q_512": 1,
+      "technical_smoke_E2_Q_768": 1,
+      "main_r1_E2_Q_512": 37,
+      "main_r1_E2_Q_768": 37,
+      "repeat_r2_E2_Q_768": 37
+    },
+    "rate_limited": [
+      {
+        "execution_index": 90,
+        "qid": "mmlb-0362",
+        "replicate": "repeat_r2",
+        "at": "2026-11-22T12:15:07.178+00:00",
+        "waited_s": 30,
+        "retried_ok": true
+      },
+      {
+        "execution_index": 96,
+        "qid": "mmlb-0762",
+        "replicate": "repeat_r2",
+        "at": "2026-11-22T12:16:23.494+00:00",
+        "waited_s": 30,
+        "retried_ok": true
+      },
+      {
+        "execution_index": 98,
+        "qid": "mmlb-0357",
+        "replicate": "repeat_r2",
+        "at": "2026-11-22T12:17:07.656+00:00",
+        "waited_s": 30,
+        "retried_ok": true
+      }
+    ],
+    "requested_model": "qwen/qwen3-vl-8b-instruct",
+    "served_model": [
+      "qwen/qwen3-vl-8b-instruct"
+    ],
+    "served_provider": [
+      "Parasail"
+    ],
+    "provider_routing": {
+      "order": [
+        "parasail"
+      ],
+      "allow_fallbacks": false,
+      "require_parameters": true,
+      "quantizations": [
+        "bf16"
+      ]
+    },
+    "observed_tokens": {
+      "prompt": 138752,
+      "completion": 2700,
+      "provider_cached_prompt": 18688
+    },
+    "prompt_tokens_equal_offline_expectation": "113/113",
+    "actual_cost_usd": 0.034284,
+    "cost_basis": "OpenRouter usage.cost per reply (actual charge), equal to token counts x the spec prices; GPT-4o-mini E1 costs are OpenAI list prices",
+    "approved_cost_ceiling_usd": 1.0,
+    "endpoint_listing_at_start": {
+      "pricing": {
+        "prompt": "0.00000025",
+        "completion": "0.00000075",
+        "input_cache_read": "0.00000012",
+        "discount": 0
+      },
+      "supports_used_parameters": true,
+      "status": 0
+    }
+  },
+  "specification": {
+    "spec_id": "e2-stronger-vlm-v2",
+    "path": "experiments/specs/e2_stronger_vlm_v2.json",
+    "sha256": "7a307bb9b713260e4830a93d465ac707706c2030398c3d16b44ec35dc2945ca9",
+    "committed_in": "f0f4584b7d535eb3bd7b2a524dc69c212ee2a1ff (2026-11-22T12:09:02Z), 22 s before the first request of this run",
+    "run_snapshot": "run_.../spec_snapshot.json is byte-identical to the tracked spec",
+    "supersedes": {
+      "spec": "experiments/specs/e2_stronger_vlm_v1.json",
+      "sha256": "adbe89cff12778769e7aae6e899eedce3b13c6fbe8b8f6e24e375eca3f5cf827",
+      "committed_in": "8c5e102",
+      "difference": "execution rules only: 2-s pause before every call; HTTP 429 waited out (30/60/120/240/480 s) without consuming an attempt"
+    }
+  },
+  "code_revision": {
+    "status": "bound: the executed notebook equals the committed source",
+    "inference": "notebooks/02_question_answering.ipynb at f0f4584; the executed copy has the same 32 code cells and markdown, sequential execution counts and outputs naming this run",
+    "evaluation": "notebooks/03_evaluation.ipynb section 14 in the commit that adds this package; it re-derives run_.../evaluation_summary.json exactly and tables/per_question.csv byte for byte",
+    "scoring_rule": "notebook 03 cell f653d232, unchanged since before E2 (identical in 8c5e102)"
+  },
+  "environment_at_run": {
+    "python": "3.12.6",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "packages": {
+      "openai": "2.54.0",
+      "httpx": "0.28.1",
+      "transformers": "5.23.0",
+      "tokenizers": "0.23.3",
+      "pillow": "13.0.0",
+      "numpy": "2.3.5",
+      "pandas": "3.1.1",
+      "pymupdf": "2.1"
+    },
+    "hardware": "MacBook Air (Apple silicon, 8 GB RAM) as client only; inference ran on the provider"
+  },
+  "what_cannot_be_verified": [
+    "the weight revision, quantization kernel and serving stack behind the slug (OpenRouter returns a provider name and generation id, never a weight hash)",
+    "the provider's image preprocessing; the exact prompt-token match (113/113) with the reference Qwen3-VL processor (revision 0c351dd01ed87e9c1b53cbc748cba10e6187ff3b) is indirect evidence that pages were read at the intended resolution",
+    "bitwise determinism at temperature 0",
+    "whether the slug will point to the same deployment in future"
+  ],
+  "supporting_runs_not_copied": {
+    "reason": "technical gates or an abandoned v1 attempt; no reported result depends on them; kept in git-ignored experiments/runs/e2/",
+    "20261122T115212943456Z_3cb28d5d_smoke": {
+      "spec": "v1",
+      "result": "complete; smoke gate passed",
+      "api_calls_with_reply": 2,
+      "actual_cost_usd": 0.000386,
+      "sha256": {
+        "completion.json": "59cccbd1072076665b09195145cd6a34d599cbd193bd95614305500b33650b46",
+        "execution_log.jsonl": "bd295dd09359de23867de03ab0d46270278de42e404b21ef988718ea38d27c71",
+        "settings.json": "31996f5a5c16f81f620fad43876779ea5718ff94d5dc3b5c86d6c0218b2b84bc"
+      }
+    },
+    "20261122T115525545788Z_802bfa76_pilot": {
+      "spec": "v1",
+      "result": "complete; smoke and pilot gates passed (technical only, no accuracy computed)",
+      "api_calls_with_reply": 18,
+      "actual_cost_usd": 0.004504,
+      "sha256": {
+        "completion.json": "d0885d61994c30c1d2393006451d58ecde7194b30b222435a33f752278ab462c",
+        "execution_log.jsonl": "c3e44a1b1909cdfe7feed41940c83d4066e237bc6fa0ddc57c6868e1c14388b6",
+        "settings.json": "60409e64cf65c81c56874a87cb2f4bec715c9555060aec9e94f23d8cb89736bf"
+      }
+    },
+    "20261122T115706385527Z_8061fd16_full": {
+      "spec": "v1",
+      "result": "incomplete: stopped twice by HTTP 429 (20/113 replies); abandoned when spec v2 was adopted; never evaluated or merged",
+      "api_calls_with_reply": 20,
+      "actual_cost_usd": 0.004401,
+      "sha256": {
+        "execution_log.jsonl": "0217b6fe695a789bdb2f42e00373e0cb3148ab7d210a2bb05d9c161cd0d661ff",
+        "settings.json": "c342791d4975f45ac789f3589b1a7e9ecaed395ca701f6bbc029aa39324e15e2",
+        "stop_20261122T115730282425Z.json": "5bb5bd865ad06177eac9b13e2dd8746b37bcc41e4f5d239f0027548b9caada61",
+        "stop_20261122T120136255541Z.json": "49c00e69c9dd47a11f56b09a3ee6c597b0aeed0350fa2abfc30ae0a94d6e1ca6"
+      }
+    },
+    "total_e2_actual_cost_usd_all_four_runs": 0.043575,
+    "account_cross_check": "OpenRouter GET /api/v1/credits on 2026-11-22: total_usage 0.04357488 USD"
+  },
+  "external_artifacts": {
+    "page_images": "the same 94 PNGs as E1 (data/cache/mmlongbench_doc/page_images/, git-ignored, regenerated by notebook 00); every image's SHA-256 and pixel size is in execution_log.jsonl and equals the frozen E1 request of the same question and resolution",
+    "reference_processor": "Qwen/Qwen3-VL-8B-Instruct processor and tokenizer files (~12 MB, no weights) at revision 0c351dd0, cached in data/cache/hf/ for the offline token expectation"
+  },
+  "audit": "AUDIT.json: 44/44 independent checks passed"
+}

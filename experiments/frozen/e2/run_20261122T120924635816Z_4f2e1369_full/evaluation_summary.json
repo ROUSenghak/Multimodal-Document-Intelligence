@@ -1,0 +1,301 @@
+{
+  "primary": {
+    "questions": 37,
+    "documents": 6,
+    "paired_accuracy_difference": -0.02702702702702703,
+    "fixed": 4,
+    "broken": 5,
+    "both_correct": 11,
+    "both_wrong": 17,
+    "document_cluster_bootstrap_95": [
+      -0.2857142857142857,
+      0.21621621621621623
+    ],
+    "leave_one_document_out": {
+      "2210.02442v1.pdf": -0.12903225806451613,
+      "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf": 0.0,
+      "bdf54dxa.pdf": -0.0625,
+      "earlybird-110722143746-phpapp02_95.pdf": 0.030303030303030304,
+      "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf": -0.038461538461538464,
+      "watch_d.pdf": 0.030303030303030304
+    },
+    "exact_mcnemar_p_ignores_clustering": 1.0
+  },
+  "secondary": {
+    "paired_mean_score_difference": -0.019305027027027025,
+    "score_difference_bootstrap_95": [
+      -0.27551021428571426,
+      0.2180451052631579
+    ],
+    "strict_accuracy_difference": 0.0,
+    "qwen_resolution_effect_768_minus_512": 0.10810810810810811,
+    "gpt_resolution_effect_768_minus_512": 0.16216216216216217,
+    "interaction_mean": -0.05405405405405406,
+    "interaction_bootstrap_95": [
+      -0.24324324324324326,
+      0.13513513513513514
+    ],
+    "qwen_resolution_transitions": {
+      "both wrong": 22,
+      "both correct": 11,
+      "fixed": 4
+    },
+    "visual_reading_subgroup": {
+      "questions": 9,
+      "paired_accuracy_difference": -0.1111111111111111
+    }
+  },
+  "repeat": {
+    "gpt4o_mini_512": {
+      "correctness_changed": 1,
+      "correctness_change_rate": 0.02702702702702703,
+      "parsed_answer_changed": 5,
+      "reply_text_changed": 9
+    },
+    "qwen_768": {
+      "correctness_changed": 0,
+      "correctness_change_rate": 0.0,
+      "parsed_answer_changed": 1,
+      "reply_text_changed": 1
+    }
+  },
+  "decision": {
+    "verdict": "retain_gpt4o_mini_768_reference",
+    "criteria": {
+      "paired gain >= 0.05": false,
+      "paired gain > max repeat change rate": false,
+      "broken <= fixed / 2": false
+    },
+    "variability_margin": 0.02702702702702703
+  },
+  "metrics": [
+    {
+      "condition": "GPT-4o-mini, 512 px",
+      "correct": "10/37",
+      "accuracy": 0.2702702702702703,
+      "strict accuracy": 0.2702702702702703,
+      "mean score": 0.2702702702702703,
+      "false abstention": 0.0,
+      "cites a page": 0.972972972972973,
+      "validity given a citation": 0.9444444444444444,
+      "cites evidence": 0.9459459459459459,
+      "off-by-one citations": 2,
+      "parse failures": 0,
+      "truncated": 0,
+      "fence stripped": 0,
+      "mean input tokens": 21630.243243243243,
+      "mean output tokens": 20.972972972972972,
+      "median API latency s": 1.3,
+      "provider prompt-cache hits": 1,
+      "served by": "gpt-4o-mini-2024-07-18",
+      "cost USD (37 questions)": 0.12051345000000001,
+      "cost basis": "OpenAI list-price upper bound"
+    },
+    {
+      "condition": "GPT-4o-mini, 768 px",
+      "correct": "16/37",
+      "accuracy": 0.43243243243243246,
+      "strict accuracy": 0.40540540540540543,
+      "mean score": 0.42471042471042475,
+      "false abstention": 0.0,
+      "cites a page": 1.0,
+      "validity given a citation": 0.8918918918918919,
+      "cites evidence": 0.9459459459459459,
+      "off-by-one citations": 4,
+      "parse failures": 0,
+      "truncated": 0,
+      "fence stripped": 0,
+      "mean input tokens": 45829.86486486487,
+      "mean output tokens": 21.0,
+      "median API latency s": 1.681,
+      "provider prompt-cache hits": 1,
+      "served by": "gpt-4o-mini-2024-07-18",
+      "cost USD (37 questions)": 0.25482195,
+      "cost basis": "OpenAI list-price upper bound"
+    },
+    {
+      "condition": "GPT-4o-mini, 512 px repeat",
+      "correct": "11/37",
+      "accuracy": 0.2972972972972973,
+      "strict accuracy": 0.2972972972972973,
+      "mean score": 0.2972972972972973,
+      "false abstention": 0.0,
+      "cites a page": 0.972972972972973,
+      "validity given a citation": 0.9444444444444444,
+      "cites evidence": 0.9459459459459459,
+      "off-by-one citations": 2,
+      "parse failures": 0,
+      "truncated": 0,
+      "fence stripped": 0,
+      "mean input tokens": 21630.243243243243,
+      "mean output tokens": 20.7027027027027,
+      "median API latency s": 1.211,
+      "provider prompt-cache hits": 20,
+      "served by": "gpt-4o-mini-2024-07-18",
+      "cost USD (37 questions)": 0.12050745,
+      "cost basis": "OpenAI list-price upper bound"
+    },
+    {
+      "condition": "Qwen3-VL-8B, 512 px",
+      "correct": "11/37",
+      "accuracy": 0.2972972972972973,
+      "strict accuracy": 0.2972972972972973,
+      "mean score": 0.2972972972972973,
+      "false abstention": 0.05405405405405406,
+      "cites a page": 0.9459459459459459,
+      "validity given a citation": 0.9428571428571428,
+      "cites evidence": 0.8918918918918919,
+      "off-by-one citations": 1,
+      "parse failures": 0,
+      "truncated": 0,
+      "fence stripped": 0,
+      "mean input tokens": 762.5405405405405,
+      "mean output tokens": 23.513513513513512,
+      "median API latency s": 0.971,
+      "provider prompt-cache hits": 37,
+      "served by": "Parasail",
+      "cost USD (37 questions)": 0.0070237599999999996,
+      "cost basis": "OpenRouter usage.cost (actual)"
+    },
+    {
+      "condition": "Qwen3-VL-8B, 768 px",
+      "correct": "15/37",
+      "accuracy": 0.40540540540540543,
+      "strict accuracy": 0.40540540540540543,
+      "mean score": 0.40540540540540543,
+      "false abstention": 0.02702702702702703,
+      "cites a page": 0.972972972972973,
+      "validity given a citation": 0.8888888888888888,
+      "cites evidence": 0.8648648648648649,
+      "off-by-one citations": 2,
+      "parse failures": 0,
+      "truncated": 0,
+      "fence stripped": 0,
+      "mean input tokens": 1473.6756756756756,
+      "mean output tokens": 24.216216216216218,
+      "median API latency s": 1.286,
+      "provider prompt-cache hits": 37,
+      "served by": "Parasail",
+      "cost USD (37 questions)": 0.013529739999999998,
+      "cost basis": "OpenRouter usage.cost (actual)"
+    },
+    {
+      "condition": "Qwen3-VL-8B, 768 px repeat",
+      "correct": "15/37",
+      "accuracy": 0.40540540540540543,
+      "strict accuracy": 0.40540540540540543,
+      "mean score": 0.40540540540540543,
+      "false abstention": 0.05405405405405406,
+      "cites a page": 0.9459459459459459,
+      "validity given a citation": 0.8857142857142857,
+      "cites evidence": 0.8378378378378378,
+      "off-by-one citations": 2,
+      "parse failures": 0,
+      "truncated": 0,
+      "fence stripped": 0,
+      "mean input tokens": 1473.6756756756756,
+      "mean output tokens": 24.135135135135137,
+      "median API latency s": 1.343,
+      "provider prompt-cache hits": 37,
+      "served by": "Parasail",
+      "cost USD (37 questions)": 0.01334445,
+      "cost basis": "OpenRouter usage.cost (actual)"
+    }
+  ],
+  "by_document": [
+    {
+      "doc_id": "2210.02442v1.pdf",
+      "questions": 6,
+      "correct_G512": 0,
+      "correct_G768": 0,
+      "correct_Q512": 1,
+      "correct_Q768": 3
+    },
+    {
+      "doc_id": "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+      "questions": 7,
+      "correct_G512": 2,
+      "correct_G768": 3,
+      "correct_Q512": 2,
+      "correct_Q768": 2
+    },
+    {
+      "doc_id": "bdf54dxa.pdf",
+      "questions": 5,
+      "correct_G512": 0,
+      "correct_G768": 1,
+      "correct_Q512": 0,
+      "correct_Q768": 2
+    },
+    {
+      "doc_id": "earlybird-110722143746-phpapp02_95.pdf",
+      "questions": 4,
+      "correct_G512": 1,
+      "correct_G768": 2,
+      "correct_Q512": 0,
+      "correct_Q768": 0
+    },
+    {
+      "doc_id": "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+      "questions": 11,
+      "correct_G512": 5,
+      "correct_G768": 6,
+      "correct_Q512": 6,
+      "correct_Q768": 6
+    },
+    {
+      "doc_id": "watch_d.pdf",
+      "questions": 4,
+      "correct_G512": 2,
+      "correct_G768": 4,
+      "correct_Q512": 2,
+      "correct_Q768": 2
+    }
+  ],
+  "uncertainty_qualification": "37 questions in 6 documents: one question moves accuracy by 0.027, only large effects are detectable, intervals and McNemar p-values are descriptive. A null result means no large effect on these questions, not equivalence.",
+  "run_dir": "experiments/runs/e2/20261122T120924635816Z_4f2e1369_full",
+  "mode": "full",
+  "performance_reported": true,
+  "execution": {
+    "run_id": "20261122T120924635816Z_4f2e1369_full",
+    "mode": "full",
+    "complete": true,
+    "stop_reason": null,
+    "smoke_gate_passed": true,
+    "planned_calls": 113,
+    "api_calls_sent": 116,
+    "rate_limited_responses": 3,
+    "replied": 113,
+    "status_counts": {
+      "ok": 113
+    },
+    "integrity_valid": true,
+    "contract_failures": 0,
+    "served_providers": [
+      "Parasail"
+    ],
+    "actual_cost_usd": 0.034284,
+    "approved_budget_usd": 1.0,
+    "session_started_at": "2026-11-22T12:09:24.639+00:00",
+    "session_completed_at": "2026-11-22T12:18:38.926+00:00"
+  },
+  "checks": {
+    "spec hash equals the expected spec": true,
+    "spec was frozen before execution": true,
+    "run is complete (completion.json)": true,
+    "every planned item has a reply": true,
+    "log follows the plan": true,
+    "every reply passed the integrity checks": true,
+    "each session saw the pinned endpoint listing": true,
+    "every reply served by the slug and the pinned provider": true,
+    "actual cost within the approved budget": true,
+    "each request derives from the frozen E1 request": true,
+    "cache key = SHA-256(run:replicate:fingerprint)": true,
+    "attempts within the limit": true,
+    "not inside experiments/frozen/": true,
+    "repeat: same request fingerprint as main 768 (37/37)": true,
+    "repeat: different cache key (no reused reply)": true,
+    "repeat sent as new calls after every main call": true,
+    "prediction files equal the final log records": true
+  }
+}
