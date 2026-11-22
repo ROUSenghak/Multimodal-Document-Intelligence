@@ -7,7 +7,7 @@ import pymupdf
 import pytest
 
 from conftest import LOCAL_DOCUMENTS
-from visualdoc import pipeline
+from visualdoc import answering, pipeline
 from visualdoc.pipeline import OfflineReader, answer_question, main
 
 DEMO_PDF = LOCAL_DOCUMENTS / "ch2.pdf"
@@ -21,7 +21,10 @@ def test_offline_demo_runs_end_to_end(capsys):
     assert result.retrieved_pages[0] == 9  # the slide that states Cromwell's rule
     # Five 4:3 slides at 768 px (25,501 image tokens each) exceed the context: the 5th-ranked page is dropped.
     assert len(result.retrieved_pages) == 5 and result.supplied_pages == result.retrieved_pages[:4] and result.dropped_pages == result.retrieved_pages[4:]
-    assert result.estimated_prompt_tokens == 1_000 + 4 * 25_501
+    text_bytes = len(answering.IMAGE_SYSTEM_PROMPT.encode()) + len(f"Question: {DEMO_QUESTION}\n\nPage images:".encode()) \
+        + sum(len(f"[Page {n}]".encode()) for n in result.supplied_pages)
+    assert result.estimated_prompt_tokens == answering.FRAMING_TOKEN_ALLOWANCE + text_bytes + 4 * 25_501
+    assert result.cost_upper_usd <= answering.MAX_REQUEST_COST_USD
     assert result.reply.answer == OfflineReader.ANSWER and result.reply.cited_pages == [9] and result.reply.error is None
     assert result.citations.ok
     assert printed["citations"]["ok"] is True and printed["request_fingerprint"] == result.request_fingerprint
@@ -78,3 +81,21 @@ def test_failure_cases(tmp_path, monkeypatch):
     with pytest.raises(SystemExit, match="OPENAI_API_KEY"):
         main([str(DEMO_PDF), DEMO_QUESTION, "--live"])  # refuses before any network call
     assert pipeline.OfflineReader().requests == []
+
+
+def test_the_cost_ceiling_stops_the_request_before_the_model_is_called():
+    reader = OfflineReader()
+    with pytest.raises(ValueError, match="per-request ceiling"):
+        answer_question(DEMO_PDF, DEMO_QUESTION, reader, top_k=1, max_cost_usd=0.001)
+    assert reader.requests == []
+    assert answer_question(DEMO_PDF, DEMO_QUESTION, reader, top_k=1, max_cost_usd=0.01).supplied_pages == [9]
+
+
+def test_the_live_path_enforces_the_ceiling_without_calling_openai(monkeypatch, capsys):
+    calls = []
+    monkeypatch.setattr(pipeline, "openai_create", lambda: lambda **request: calls.append(request))  # stands in for the paid client
+    with pytest.raises(ValueError, match="per-request ceiling"):
+        main([str(DEMO_PDF), DEMO_QUESTION, "--live", "--max-cost-usd", "0.005"])
+    with pytest.raises(ValueError, match="cost ceiling"):
+        main([str(DEMO_PDF), DEMO_QUESTION, "--live", "--max-cost-usd", "nan"])
+    assert calls == [] and capsys.readouterr().out == ""

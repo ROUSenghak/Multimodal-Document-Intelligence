@@ -4,9 +4,15 @@ This is the configuration the frozen experiments retained: GPT-4o-mini
 (``gpt-4o-mini-2024-07-18``) reading 768-px page images (E1 adopted 768 px;
 E2 retained GPT-4o-mini over Qwen3-VL-8B; E3 retained images only over images
 plus extracted text). The system prompt, the user-message layout
-(``Question: ...``, then ``[Page N]`` before each image), the parameters and the
-reply parser are those of notebook 02's image conditions, byte for byte; the
-tests check them against the frozen runs.
+(``Question: ...``, then ``[Page N]`` before each image) and the parameters are
+those of notebook 02's image conditions, byte for byte; the tests check them
+against the frozen runs. The reply parser is stricter than notebook 02's about
+cited pages (it rejects 2.7, true, 0 and negatives instead of coercing them)
+and gives the same result on every frozen reply.
+
+Every request passes ``check_request`` before it is sent: its prompt-token upper
+bound plus the full output allowance must fit the context window, and its
+maximum cost must stay under a per-request ceiling.
 
 The model is called through ``create``, any callable with the signature of
 ``openai.OpenAI().chat.completions.create``. Nothing here imports a client or
@@ -43,9 +49,16 @@ MAX_OUTPUT_TOKENS = 400
 CONTEXT_WINDOW_TOKENS = 128_000
 IMAGE_BASE_TOKENS = 2_833
 IMAGE_TILE_TOKENS = 5_667
-TEXT_TOKEN_ALLOWANCE = 1_000  # system prompt, question and page tags (about 200 tokens for a typical question)
+# Text is bounded without a tokenizer: o200k_base is byte-level BPE, so a text never encodes to more
+# tokens than its UTF-8 bytes (about 4x the real count for English). Message framing added 10-29
+# tokens beyond the exact text tokens in all 151 billed image-only requests of E1 and E3.
+FRAMING_TOKEN_ALLOWANCE = 100
 USD_PER_1M_INPUT_TOKENS = 0.15  # list prices checked on 2026-11-22; verify before relying on costs
 USD_PER_1M_OUTPUT_TOKENS = 0.60
+# Per-request spending ceiling, checked before every call. A request that fills the context costs at
+# most about $0.0194 at the prices above, so this default only stops price or configuration mistakes;
+# pass a lower value (``--max-cost-usd``) to cap spending more tightly.
+MAX_REQUEST_COST_USD = 0.02
 
 NOT_ANSWERABLE = "Not answerable"
 PNG_SIGNATURE = b"\x89PNG\r\n\x1a\n"
@@ -74,28 +87,82 @@ def image_tokens(width: int, height: int) -> int:
     return IMAGE_BASE_TOKENS + IMAGE_TILE_TOKENS * tiles
 
 
-def estimate_prompt_tokens(pages: Sequence[tuple[int, bytes]]) -> int:
-    """Upper estimate of a request's prompt tokens: the images plus a fixed text allowance."""
-    return TEXT_TOKEN_ALLOWANCE + sum(image_tokens(*png_size(png)) for _, png in pages)
+def text_token_bound(text: str) -> int:
+    """Upper bound on the tokens of a text: its UTF-8 bytes (byte-level BPE never needs more)."""
+    return len(text.encode("utf-8"))
+
+
+def _question_text(question: str) -> str:
+    return f"Question: {question}\n\nPage images:"
+
+
+def _page_tag(number: int) -> str:
+    return f"[Page {number}]"
+
+
+def _decoded_image(part: dict) -> bytes:
+    return base64.b64decode(part["image_url"]["url"].split(",", 1)[1])
+
+
+def estimate_prompt_tokens(request: dict) -> int:
+    """Upper bound on a built request's prompt tokens: text bytes, billed image tokens and framing."""
+    total = FRAMING_TOKEN_ALLOWANCE
+    for message in request["messages"]:
+        content = message["content"]
+        for part in [{"type": "text", "text": content}] if isinstance(content, str) else content:
+            if part["type"] == "text":
+                total += text_token_bound(part["text"])
+            elif part["type"] == "image_url":
+                total += image_tokens(*png_size(_decoded_image(part)))
+            else:
+                raise ValueError(f"cannot estimate tokens for a {part['type']!r} part")
+    return total
 
 
 def select_pages_within_context(
+    question: str,
     pages: Sequence[tuple[int, bytes]],
     max_prompt_tokens: int = CONTEXT_WINDOW_TOKENS - MAX_OUTPUT_TOKENS,
 ) -> tuple[list[tuple[int, bytes]], list[int]]:
-    """Keep the longest prefix of the ranked pages whose estimated prompt fits.
+    """Keep the longest prefix of the ranked pages whose prompt, with this question, fits.
 
+    The running total equals ``estimate_prompt_tokens(build_request(question, kept))``.
     Returns (kept pages, dropped page numbers). Pages after the first one that
     does not fit are dropped too, so the kept pages are always the best-ranked.
     """
-    kept, total = [], TEXT_TOKEN_ALLOWANCE
+    kept = []
+    total = FRAMING_TOKEN_ALLOWANCE + text_token_bound(IMAGE_SYSTEM_PROMPT) + text_token_bound(_question_text(question))
     for number, png in pages:
-        cost = image_tokens(*png_size(png))
+        cost = text_token_bound(_page_tag(number)) + image_tokens(*png_size(png))
         if total + cost > max_prompt_tokens:
             break
         kept.append((number, png))
         total += cost
     return kept, [number for number, _ in pages[len(kept):]]
+
+
+def check_request(request: dict, max_cost_usd: float = MAX_REQUEST_COST_USD) -> tuple[int, float]:
+    """(prompt-token bound, maximum cost in USD) of a request, checked before it is sent.
+
+    Raises ValueError, so nothing is sent, when the model's price and context are
+    unknown, the output is unbounded, the prompt plus the full output allowance
+    could exceed the context window, or the maximum cost exceeds ``max_cost_usd``.
+    """
+    if isinstance(max_cost_usd, bool) or not isinstance(max_cost_usd, (int, float)) or not 0 < max_cost_usd < float("inf"):  # and NaN
+        raise ValueError(f"the cost ceiling must be a positive number of USD, not {max_cost_usd!r}")
+    if request.get("model") != MODEL:
+        raise ValueError(f"no context size or price is known for model {request.get('model')!r}")
+    output = request.get("max_completion_tokens")
+    if not isinstance(output, int) or isinstance(output, bool) or output < 1:
+        raise ValueError("the request must bound its output with a positive max_completion_tokens")
+    prompt = estimate_prompt_tokens(request)
+    if prompt + output > CONTEXT_WINDOW_TOKENS:
+        raise ValueError(f"the request could need {prompt + output:,} tokens ({prompt:,} prompt + {output:,} output), "
+                         f"more than the {CONTEXT_WINDOW_TOKENS:,}-token context")
+    cost = (prompt * USD_PER_1M_INPUT_TOKENS + output * USD_PER_1M_OUTPUT_TOKENS) / 1e6
+    if cost > max_cost_usd:
+        raise ValueError(f"the request could cost ${cost:.4f}, above the ${max_cost_usd:.4f} per-request ceiling")
+    return prompt, cost
 
 
 def build_request(question: str, pages: Sequence[tuple[int, bytes]], model: str = MODEL) -> dict:
@@ -106,11 +173,11 @@ def build_request(question: str, pages: Sequence[tuple[int, bytes]], model: str 
         raise ValueError("at least one page image is needed")
     if len({number for number, _ in pages}) != len(pages):
         raise ValueError("a page is supplied twice")
-    content = [{"type": "text", "text": f"Question: {question}\n\nPage images:"}]
+    content = [{"type": "text", "text": _question_text(question)}]
     for number, png in pages:
         png_size(png)  # rejects anything that is not a PNG
         content += [
-            {"type": "text", "text": f"[Page {number}]"},
+            {"type": "text", "text": _page_tag(number)},
             {"type": "image_url", "image_url": {"url": "data:image/png;base64," + base64.b64encode(png).decode("ascii"), "detail": IMAGE_DETAIL}},
         ]
     return {
@@ -127,7 +194,7 @@ def loggable(request: dict) -> dict:
 
     def strip(part):
         if part.get("type") == "image_url":
-            raw = base64.b64decode(part["image_url"]["url"].split(",", 1)[1])
+            raw = _decoded_image(part)
             return {"type": "image", "sha256": hashlib.sha256(raw).hexdigest(), "bytes": len(raw), "detail": part["image_url"].get("detail")}
         return part
 
@@ -141,12 +208,34 @@ def request_fingerprint(request: dict) -> str:
     return hashlib.sha256(json.dumps(loggable(request), sort_keys=True).encode()).hexdigest()
 
 
+def _page_number(value: Any) -> int:
+    """A cited page >= 1: a JSON integer, a whole float such as 2.0, or ASCII digits such as "4". Never rounded."""
+    if isinstance(value, int) and not isinstance(value, bool):
+        number = value
+    elif isinstance(value, float) and value.is_integer():  # 2.0 loses nothing; 2.7, inf and NaN are refused
+        number = int(value)
+    elif isinstance(value, str) and value.isascii() and value.isdigit():
+        number = int(value)
+    else:
+        raise ValueError(f"cited page {value!r} is not a page number")
+    if number < 1:
+        raise ValueError(f"cited page {value!r} is not a page number (pages start at 1)")
+    return number
+
+
 def parse_reply(raw_text: str) -> tuple[Any, list[int], str | None]:
-    """(answer, cited pages, error or None) from the model's JSON reply."""
+    """(answer, cited pages, error or None) from the model's JSON reply.
+
+    A citation that is not a whole page number (2.7, true, -1, 0, "page 4") makes
+    the reply unparseable, as any other breach of the JSON contract does.
+    """
     try:
         payload = json.loads(raw_text)
         answer = payload["answer"]
-        cited = [int(page) for page in payload.get("cited_pages", [])]
+        cited_pages = payload.get("cited_pages", [])
+        if not isinstance(cited_pages, list):
+            raise TypeError(f"cited_pages is a {type(cited_pages).__name__}, not a list")
+        cited = [_page_number(page) for page in cited_pages]
     except (json.JSONDecodeError, KeyError, TypeError, ValueError) as error:
         return "", [], f"unparseable model output: {error}"
     if isinstance(answer, str) and answer.strip().lower() == "not answerable":
@@ -164,8 +253,13 @@ class ModelReply:
     raw: str
 
 
-def ask(create: Callable[..., Any], request: dict) -> ModelReply:
-    """Send one request and parse the reply. API errors propagate to the caller (no retry here)."""
+def ask(create: Callable[..., Any], request: dict, max_cost_usd: float = MAX_REQUEST_COST_USD) -> ModelReply:
+    """Check the request's context and cost limits, send it, and parse the reply.
+
+    A request over a limit raises ValueError before ``create`` is called. API
+    errors propagate to the caller (no retry here).
+    """
+    check_request(request, max_cost_usd)
     response = create(**request)
     choice = response.choices[0]
     raw = choice.message.content or ""

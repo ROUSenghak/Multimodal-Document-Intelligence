@@ -1,7 +1,7 @@
 """End-to-end question answering over one PDF, and a command-line demonstration.
 
     PDF -> page text (native, OCR fallback) -> BM25 top-k pages -> 768-px page images
-        -> context guard -> VLM JSON answer -> citation check
+        -> context guard -> context and cost check -> VLM JSON answer -> citation check
 
 Offline by default: the demonstration uses ``OfflineReader``, a stand-in that
 calls no model and always cites the first page it was given. Its answer is a
@@ -28,13 +28,11 @@ from types import SimpleNamespace
 from typing import Any
 
 from .answering import (
-    MAX_OUTPUT_TOKENS,
-    USD_PER_1M_INPUT_TOKENS,
-    USD_PER_1M_OUTPUT_TOKENS,
+    MAX_REQUEST_COST_USD,
     ModelReply,
     ask,
     build_request,
-    estimate_prompt_tokens,
+    check_request,
     request_fingerprint,
     select_pages_within_context,
 )
@@ -52,8 +50,8 @@ class QAResult:
     retrieved_pages: list[int]  # BM25 top-k, best first
     supplied_pages: list[int]  # the retrieved pages that fit the model's context
     dropped_pages: list[int]
-    estimated_prompt_tokens: int
-    cost_upper_usd: float  # list price, full output allowance
+    estimated_prompt_tokens: int  # upper bound
+    cost_upper_usd: float  # list price, full output allowance; checked against the ceiling before the call
     request_fingerprint: str
     reply: ModelReply
     citations: CitationCheck
@@ -64,8 +62,13 @@ class QAResult:
         return result
 
 
-def answer_question(pdf_path: str | Path, question: str, create: Callable[..., Any], *, top_k: int = TOP_K, tessdata: str | Path | None = None) -> QAResult:
-    """Answer one question about one PDF with the model behind ``create``."""
+def answer_question(pdf_path: str | Path, question: str, create: Callable[..., Any], *, top_k: int = TOP_K,
+                    tessdata: str | Path | None = None, max_cost_usd: float = MAX_REQUEST_COST_USD) -> QAResult:
+    """Answer one question about one PDF with the model behind ``create``.
+
+    Raises ValueError, before ``create`` is called, if the request could exceed
+    the context window or cost more than ``max_cost_usd``.
+    """
     if not str(question).strip():
         raise ValueError("the question is empty")
     pages = extract_pages(pdf_path, tessdata=tessdata)
@@ -73,12 +76,12 @@ def answer_question(pdf_path: str | Path, question: str, create: Callable[..., A
         raise ValueError(f"{Path(pdf_path).name} has no pages")
     retrieved = BM25Index({p.page: p.text for p in pages}).top_pages(question, k=top_k)
     images = render_pages(pdf_path, retrieved)
-    kept, dropped = select_pages_within_context([(number, images[number]) for number in retrieved])
+    kept, dropped = select_pages_within_context(question, [(number, images[number]) for number in retrieved])
     if not kept:
-        raise ValueError("even the best-ranked page image does not fit the model's context")
+        raise ValueError("even the best-ranked page image does not fit the model's context with this question")
     request = build_request(question, kept)
-    estimate = estimate_prompt_tokens(kept)
-    reply = ask(create, request)
+    estimate, cost = check_request(request, max_cost_usd)
+    reply = ask(create, request, max_cost_usd)
     supplied = [number for number, _ in kept]
     return QAResult(
         question=question,
@@ -89,7 +92,7 @@ def answer_question(pdf_path: str | Path, question: str, create: Callable[..., A
         supplied_pages=supplied,
         dropped_pages=dropped,
         estimated_prompt_tokens=estimate,
-        cost_upper_usd=round((estimate * USD_PER_1M_INPUT_TOKENS + MAX_OUTPUT_TOKENS * USD_PER_1M_OUTPUT_TOKENS) / 1e6, 6),
+        cost_upper_usd=round(cost, 6),
         request_fingerprint=request_fingerprint(request),
         reply=reply,
         citations=check_citations(reply.answer, reply.cited_pages, supplied),
@@ -126,10 +129,12 @@ def main(argv: list[str] | None = None) -> QAResult:
     parser.add_argument("question")
     parser.add_argument("--top-k", type=int, default=TOP_K, help="pages retrieved by BM25 (default %(default)s)")
     parser.add_argument("--live", action="store_true", help="call OpenAI (paid) instead of the offline stand-in")
+    parser.add_argument("--max-cost-usd", type=float, default=MAX_REQUEST_COST_USD,
+                        help="refuse, before calling the model, a request that could cost more (default %(default)s)")
     args = parser.parse_args(argv)
 
     create = openai_create() if args.live else OfflineReader()
-    result = answer_question(args.pdf, args.question, create, top_k=args.top_k)
+    result = answer_question(args.pdf, args.question, create, top_k=args.top_k, max_cost_usd=args.max_cost_usd)
     print(json.dumps(result.to_dict(), indent=2, default=str))
     if not args.live:
         print("Offline mode: the answer above is a placeholder from OfflineReader, not a model result.", file=sys.stderr)

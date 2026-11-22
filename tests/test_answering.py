@@ -1,4 +1,4 @@
-"""VLM answering: prompt and parameters pinned to the frozen runs, request building, context guard, parser, model call."""
+"""VLM answering: prompt and parameters pinned to the frozen runs, request building, context and cost guards, parser, model call."""
 
 import json
 from types import SimpleNamespace
@@ -11,6 +11,7 @@ from visualdoc import answering
 from visualdoc.answering import (
     ask,
     build_request,
+    check_request,
     estimate_prompt_tokens,
     image_tokens,
     loggable,
@@ -18,6 +19,7 @@ from visualdoc.answering import (
     png_size,
     request_fingerprint,
     select_pages_within_context,
+    text_token_bound,
 )
 from visualdoc.documents import render_pages
 
@@ -54,11 +56,32 @@ def test_parser_reproduces_every_frozen_gpt4o_mini_reply():
         assert (answer, cited, error) == (record["pred"], record["cited_pages"], record["parse_error"]), record["qid"]
 
 
-def test_text_allowance_covers_every_frozen_e1_request():
-    # The frozen estimate = text tokens (tiktoken) + image tokens; the allowance must cover the text part.
-    for record in read_jsonl(FROZEN_E1_LOG):
-        images = sum(image_tokens(w, h) for w, h in record["image_dimensions"])
-        assert 0 < record["estimated_prompt_tokens"] - images <= answering.TEXT_TOKEN_ALLOWANCE, record["qid"]
+def test_prompt_bound_covers_every_billed_frozen_request():
+    # Rebuild each billed image-only request of E1 and E3 (blank PNGs of the frozen sizes, the real
+    # question) and check the bound against the prompt tokens OpenAI actually billed.
+    pd = pytest.importorskip("pandas")
+    if not MMLB_QUESTIONS.is_file():
+        pytest.skip("MMLongBench-Doc questions not downloaded (git-ignored; notebook 00 downloads them)")
+    questions = pd.read_parquet(MMLB_QUESTIONS)["question"]
+    records = read_jsonl(FROZEN_E1_LOG) + [r for r in read_jsonl(FROZEN_E3_LOG) if r["condition"] == "E3_I"]
+    billed = [r for r in records if r.get("prompt_tokens") is not None]
+    assert len(billed) == 151
+    for record in billed:
+        question = questions.iloc[int(record["qid"].removeprefix("mmlb-"))]
+        pages = [(n, blank_png(w, h)) for n, (w, h) in zip(record["supplied_pages"], record["image_dimensions"], strict=True)]
+        bound = estimate_prompt_tokens(build_request(question, pages))
+        assert record["prompt_tokens"] < bound <= record["prompt_tokens"] + 1_200, record["qid"]  # safe, not wildly loose
+
+
+@pytest.mark.parametrize("text", [
+    answering.IMAGE_SYSTEM_PROMPT,
+    "Question: What is the CAGR of revenue between 2019 and 2021, in %?\n\nPage images:",
+    "Quelle est la part (en %) des ménages équipés ? 東京の人口は？ 🚀🚀🚀",
+    "\x00\x7f" * 50 + " " * 200 + "a" * 300,
+])
+def test_utf8_bytes_bound_the_real_token_count(text):
+    tiktoken = pytest.importorskip("tiktoken")
+    assert len(tiktoken.get_encoding("o200k_base").encode(text)) <= text_token_bound(text)
 
 
 def test_request_fingerprint_equals_the_frozen_e1_768_request(mmlb_pdf):
@@ -80,17 +103,99 @@ def test_image_token_rule_matches_documented_examples():
 
 def test_five_portrait_768_px_pages_do_not_fit_and_the_last_is_dropped():
     pages = [(n, blank_png(768, 994)) for n in (7, 3, 9, 1, 4)]  # ranked order, US-letter pages at 768 px
-    assert estimate_prompt_tokens(pages) > answering.CONTEXT_WINDOW_TOKENS - answering.MAX_OUTPUT_TOKENS
-    kept, dropped = select_pages_within_context(pages)
+    with pytest.raises(ValueError, match="more than the 128,000-token context"):
+        check_request(build_request("Q?", pages))
+    kept, dropped = select_pages_within_context("Q?", pages)
     assert [n for n, _ in kept] == [7, 3, 9, 1] and dropped == [4]
-    assert estimate_prompt_tokens(kept) <= answering.CONTEXT_WINDOW_TOKENS - answering.MAX_OUTPUT_TOKENS
+    prompt, _ = check_request(build_request("Q?", kept))
+    assert prompt + answering.MAX_OUTPUT_TOKENS <= answering.CONTEXT_WINDOW_TOKENS
+
+
+def test_selection_total_equals_the_bound_of_the_built_request():
+    pages = [(12, blank_png(768, 994)), (3, blank_png(1366, 768)), (140, blank_png(10, 10))]
+    for question in ("Q?", "Wie hoch ist der Umsatz 2021 (in €)?", "x" * 5_000):
+        kept, _ = select_pages_within_context(question, pages, max_prompt_tokens=10**9)
+        total = (answering.FRAMING_TOKEN_ALLOWANCE + text_token_bound(answering.IMAGE_SYSTEM_PROMPT)
+                 + text_token_bound(f"Question: {question}\n\nPage images:")
+                 + sum(text_token_bound(f"[Page {n}]") + image_tokens(*png_size(png)) for n, png in pages))
+        assert estimate_prompt_tokens(build_request(question, kept)) == total
 
 
 def test_context_guard_keeps_a_ranked_prefix_only():
     pages = [(1, blank_png(768, 994)), (2, blank_png(768, 994)), (3, blank_png(100, 100))]
-    kept, dropped = select_pages_within_context(pages, max_prompt_tokens=answering.TEXT_TOKEN_ALLOWANCE + 30_000)
+    one_page = estimate_prompt_tokens(build_request("Q?", pages[:1]))
+    kept, dropped = select_pages_within_context("Q?", pages, max_prompt_tokens=one_page + 20_000)
     assert [n for n, _ in kept] == [1] and dropped == [2, 3]  # page 3 would fit but is ranked below a page that does not
-    assert select_pages_within_context(pages, max_prompt_tokens=10) == ([], [1, 2, 3])
+    assert select_pages_within_context("Q?", pages, max_prompt_tokens=one_page) == (pages[:1], [2, 3])  # exactly at the limit
+    assert select_pages_within_context("Q?", pages, max_prompt_tokens=one_page - 1) == ([], [1, 2, 3])
+
+
+def test_a_long_question_leaves_room_for_fewer_pages():
+    pages = [(n, blank_png(768, 994)) for n in (1, 2, 3, 4)]
+    assert len(select_pages_within_context("Q?", pages)[0]) == 4
+    long_question = "Compare the revenue figures. " * 1_000  # 29,000 bytes: the old fixed 1,000-token allowance overflowed
+    kept, dropped = select_pages_within_context(long_question, pages)
+    assert [n for n, _ in kept] == [1, 2, 3] and dropped == [4]
+    check_request(build_request(long_question, kept))
+    with pytest.raises(ValueError, match="context"):
+        check_request(build_request(long_question, pages))
+    assert select_pages_within_context("x" * 130_000, pages) == ([], [1, 2, 3, 4])
+
+
+# --- Cost ceiling: checked before the call --------------------------------------------------------
+
+def test_cost_is_the_list_price_of_the_bound_and_full_output():
+    request = build_request("Q?", [(1, blank_png(768, 994))])
+    prompt, cost = check_request(request)
+    assert prompt == estimate_prompt_tokens(request)
+    assert cost == pytest.approx((prompt * 0.15 + 400 * 0.60) / 1e6)
+    assert check_request(request, max_cost_usd=cost) == (prompt, cost)  # a ceiling equal to the cost passes
+    with pytest.raises(ValueError, match="per-request ceiling"):
+        check_request(request, max_cost_usd=cost * (1 - 1e-9))
+
+
+def test_a_full_context_request_stays_under_the_default_ceiling():
+    full = answering.CONTEXT_WINDOW_TOKENS - answering.MAX_OUTPUT_TOKENS
+    assert (full * answering.USD_PER_1M_INPUT_TOKENS + answering.MAX_OUTPUT_TOKENS * answering.USD_PER_1M_OUTPUT_TOKENS) / 1e6 \
+        < answering.MAX_REQUEST_COST_USD
+
+
+@pytest.mark.parametrize("ceiling", [0, -0.01, float("nan"), float("inf"), "0.05", None, True])
+def test_an_invalid_ceiling_is_refused(ceiling):
+    with pytest.raises(ValueError, match="cost ceiling"):
+        check_request(build_request("Q?", [(1, blank_png(10, 10))]), max_cost_usd=ceiling)
+
+
+@pytest.mark.parametrize(("change", "message"), [
+    ({"model": "gpt-4o"}, "no context size or price"),
+    ({"max_completion_tokens": None}, "max_completion_tokens"),
+    ({"max_completion_tokens": 0}, "max_completion_tokens"),
+    ({"max_completion_tokens": True}, "max_completion_tokens"),
+])
+def test_requests_of_unknown_price_or_unbounded_output_are_refused(change, message):
+    with pytest.raises(ValueError, match=message):
+        check_request({**build_request("Q?", [(1, blank_png(10, 10))]), **change})
+
+
+def test_context_limit_counts_the_full_output_allowance(monkeypatch):
+    request = build_request("Q?", [(1, blank_png(768, 994))])
+    prompt, _ = check_request(request)
+    monkeypatch.setattr(answering, "CONTEXT_WINDOW_TOKENS", prompt + answering.MAX_OUTPUT_TOKENS)
+    check_request(request)  # exactly full
+    monkeypatch.setattr(answering, "CONTEXT_WINDOW_TOKENS", prompt + answering.MAX_OUTPUT_TOKENS - 1)
+    with pytest.raises(ValueError, match="context"):
+        check_request(request)
+
+
+def test_ask_never_calls_the_model_for_a_request_over_a_limit():
+    sent = []
+    create = lambda **kwargs: sent.append(kwargs) or completion('{"answer": 1, "cited_pages": [1]}')
+    too_long = build_request("Q?", [(n, blank_png(768, 994)) for n in range(1, 6)])
+    with pytest.raises(ValueError, match="context"):
+        ask(create, too_long)
+    with pytest.raises(ValueError, match="ceiling"):
+        ask(create, build_request("Q?", [(1, blank_png(768, 994))]), max_cost_usd=0.001)
+    assert sent == []
 
 
 # --- Request building ---------------------------------------------------------------------------
@@ -132,6 +237,8 @@ def test_duplicate_pages_are_rejected():
     ('{"answer": 12, "cited_pages": ["4"]}', (12, [4], None)),
     ('{"answer": ["Circle", "Rectangle"], "cited_pages": [3, 7]}', (["Circle", "Rectangle"], [3, 7], None)),
     ('{"answer": 2.5}', (2.5, [], None)),
+    ('{"answer": 2.7, "cited_pages": [1, 100000]}', (2.7, [1, 100000], None)),  # only the pages must be whole
+    ('{"answer": 5, "cited_pages": [2.0, "07"]}', (5, [2, 7], None)),  # whole values lose nothing
 ])
 def test_parser_accepts_the_json_contract(raw, expected):
     assert parse_reply(raw) == expected
@@ -143,10 +250,31 @@ def test_parser_accepts_the_json_contract(raw, expected):
     '{"answer": "Europe IPO", "cited_pa',  # cut off
     '{"answer": 5, "cited_pages": ["page 4"]}',  # non-integer page
     '{"answer": 5, "cited_pages": 4}',  # not a list
+    '{"answer": 5, "cited_pages": "45"}',  # a string is not a list of pages (it was read as [4, 5])
+    '{"answer": 5, "cited_pages": null}',
+    '{"answer": 5, "cited_pages": [2.7]}',  # was truncated to 2
+    '{"answer": 5, "cited_pages": [-2.0]}',
+    '{"answer": 5, "cited_pages": [1e400]}',  # infinity
+    '{"answer": 5, "cited_pages": [true]}',  # was read as page 1
+    '{"answer": 5, "cited_pages": [false]}',
+    '{"answer": 5, "cited_pages": [-3]}',
+    '{"answer": 5, "cited_pages": [0]}',  # pages start at 1
+    '{"answer": 5, "cited_pages": ["2.7"]}',
+    '{"answer": 5, "cited_pages": ["-1"]}',
+    '{"answer": 5, "cited_pages": [" 4"]}',
+    '{"answer": 5, "cited_pages": ["\\u0664"]}',  # an Arabic-Indic digit 4: int() would accept it
+    '{"answer": 5, "cited_pages": [""]}',
+    '{"answer": 5, "cited_pages": [NaN]}',
+    '{"answer": 5, "cited_pages": [[4]]}',
+    '["answer", 5]',  # not an object
 ])
 def test_parser_rejects_malformed_replies(raw):
     answer, cited, error = parse_reply(raw)
     assert (answer, cited) == ("", []) and error.startswith("unparseable")
+
+
+def test_a_bad_page_is_named_in_the_error():
+    assert "2.7" in parse_reply('{"answer": 5, "cited_pages": [3, 2.7]}')[2]
 
 
 def test_ask_sends_the_request_unchanged_and_parses_the_reply():
