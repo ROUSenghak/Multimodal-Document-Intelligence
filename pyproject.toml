@@ -28,6 +28,14 @@ notebooks = [
     # E2 offline token expectation only (Qwen3-VL tokenizer and image-processor rules; no weights, no local inference)
     "transformers==5.23.0",
 ]
+# Notebook 04 (E5): local visual retrieval with ColQwen2 v1.0 on Apple MPS (no API). Versions pinned by the E5 spec.
+visual = [
+    "pillow",
+    "psutil",
+    "safetensors",
+    "torch==2.15.0",
+    "transformers==5.23.0",
+]
 # Live answering in the application (`python -m visualdoc.pipeline --live`). The core modules need only pymupdf.
 llm = [
     "openai>=1.0",
