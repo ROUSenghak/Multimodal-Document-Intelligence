@@ -54,6 +54,12 @@ cache, smoke gate, predictions per replicate and arm, `completion.json` or `stop
 (`20261123T000625940289Z_15119ec0_full`) completed on 2026-11-23 ($1.2006 in all, list price). Both are frozen, byte for
 byte, in [`frozen/e4/`](frozen/e4/README.md) with the evaluation summary, an independent audit (35/35) and the provenance.
 
+Experiment E6 (visual retrieval, end to end: GPT-4o-mini on OCR + BM25 pages versus ColQwen2 pages, E5's 118 held-out
+questions) runs go to `runs/e6/<UTC timestamp>_<unique id>_<mode>/`, with E4's audit files and no annotation in the logs. The
+protocol [`specs/e6_visual_retrieval_answering_v1.json`](specs/e6_visual_retrieval_answering_v1.json) was frozen on 2026-11-23
+with notebook 05 (cumulative ceiling USD 5.60, retries included; upper bound of all stages USD 3.80). No paid call has been
+made; the smoke and full stages each need separate authorization.
+
 ## How results are reproduced
 
 ```text
