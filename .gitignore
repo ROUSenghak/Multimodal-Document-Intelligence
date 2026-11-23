@@ -2,6 +2,9 @@
 .DS_Store
 __pycache__/
 .ipynb_checkpoints/
+# Temporary execution copies of notebooks (e.g. notebooks/.04_run_input.ipynb made to run nbconvert outside the
+# editor): hidden names only, so the numbered notebooks are never matched.
+notebooks/.*.ipynb
 .env
 archive/course_labs/layoutreader/
 
