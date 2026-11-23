@@ -1,0 +1,231 @@
+{
+  "audit": "independent E4 audit",
+  "run_ids": [
+    "20261123T000439244313Z_ea059977_smoke",
+    "20261123T000625940289Z_15119ec0_full"
+  ],
+  "audited_at": "2026-11-23T10:29:05+01:00",
+  "shared_with_notebook_03": "only the frozen scoring-rule cell f653d232 (eval_score, accuracy_and_f1 and helpers), executed verbatim; APP requests rebuilt through src/visualdoc (OfflineReader)",
+  "passed": 35,
+  "total": 35,
+  "checks": {
+    "spec snapshot = tracked spec = spec in 72791e9 = settings hash (both runs)": {
+      "passed": true,
+      "detail": "5c1bbbb8d5a41bf9355e8d206f73e2df1587e807a290aa507894ff7ab8b99b90"
+    },
+    "spec frozen with approved ceiling 1.50": {
+      "passed": true
+    },
+    "both runs record commit 72791e9 with spec, notebook-02 code and application committed": {
+      "passed": true,
+      "detail": "72791e9b5834713ce6ad334fafa2d2f46be40af8"
+    },
+    "spec and code committed before the first request": {
+      "passed": true,
+      "detail": "commit 2026-11-23T01:03:10+01:00, first request 2026-11-23T00:04:40.559000+00:00"
+    },
+    "notebook 02 code cells on disk = at 72791e9 (no code change after the run)": {
+      "passed": true
+    },
+    "application modules on disk = at 72791e9 = spec hashes = run records": {
+      "passed": true
+    },
+    "population: 57 questions (40 answerable, 17 unanswerable), 37 matched = E1": {
+      "passed": true
+    },
+    "plans re-derived from the spec seeds equal both run plans (2 smoke; 96 full = 2 + 37 adjacent pairs + 20 singles)": {
+      "passed": true
+    },
+    "pairs counterbalanced: 19 open with APP, 18 with ORACLE": {
+      "passed": true
+    },
+    "one live first-attempt ok record per planned item in plan order; cache and prediction files equal the log; run-scoped unique cache keys": {
+      "passed": true,
+      "detail": {
+        "smoke": 2,
+        "full": 96
+      }
+    },
+    "smoke gates recorded as passed": {
+      "passed": true
+    },
+    "57 APP requests rebuilt through answer_question: fingerprint, supplied pages and image SHA-256 equal every logged APP record (59 incl. smoke)": {
+      "passed": true
+    },
+    "every ORACLE record has the frozen E1_768 fingerprint, pages and image hashes (39 incl. smoke)": {
+      "passed": true
+    },
+    "the SDK received exactly the planned request on all 98 calls (sent fingerprint)": {
+      "passed": true
+    },
+    "no annotation field in any logged record": {
+      "passed": true
+    },
+    "APP retrieved top 5 = frozen condition B pages; supplied = a 3- or 4-page prefix": {
+      "passed": true
+    },
+    "strata re-derived = spec (20 / 9 / 3 / 8)": {
+      "passed": true
+    },
+    "every raw reply re-parses (application parser) to the logged answer and citations; finish 'stop'; none unparseable": {
+      "passed": true
+    },
+    "pinned snapshot served all 98 replies": {
+      "passed": true
+    },
+    "billed prompt tokens = expected + 1 on all 98 calls and <= the application bound": {
+      "passed": true
+    },
+    "list-price cost recomputed = completion.json for both runs; cumulative within the 1.50 ceiling": {
+      "passed": true,
+      "detail": {
+        "smoke": 0.022194,
+        "full": 1.178374,
+        "total": 1.200568
+      }
+    },
+    "no API error, rate limit or retry in either run": {
+      "passed": true
+    },
+    "rescored counts: APP 11/40 answerable, 11/37 matched; ORACLE 17/37; frozen E1_768 16/37; frozen B 7/40": {
+      "passed": true,
+      "detail": {
+        "APP40": 11,
+        "APP37": 11,
+        "ORACLE": 17,
+        "E1_768": 16
+      }
+    },
+    "primary: 8 fixed, 2 broken, gap 6/37; margin 5/37; verdict by the spec rule = summary": {
+      "passed": true,
+      "detail": {
+        "fixed": [
+          "mmlb-0037",
+          "mmlb-0096",
+          "mmlb-0315",
+          "mmlb-0359",
+          "mmlb-0727",
+          "mmlb-0740",
+          "mmlb-0765",
+          "mmlb-0766"
+        ],
+        "broken": [
+          "mmlb-0094",
+          "mmlb-0739"
+        ],
+        "gap": 0.16216216216216217,
+        "margin": 0.13513513513513514,
+        "criteria": [
+          true,
+          true,
+          true
+        ],
+        "verdict": "page_selection_costs_accuracy"
+      }
+    },
+    "exact McNemar p recomputed": {
+      "passed": true,
+      "detail": 0.109375
+    },
+    "document-cluster bootstrap intervals recomputed (seed 42, 10,000 draws)": {
+      "passed": true,
+      "detail": {
+        "gap": [
+          0.09090909090909091,
+          0.2564102564102564
+        ],
+        "APP accuracy": [
+          0.13157894736842105,
+          0.42857142857142855
+        ]
+      }
+    },
+    "leave-one-document-out recomputed": {
+      "passed": true
+    },
+    "APP accuracy and F1 on all 57 recomputed": {
+      "passed": true,
+      "detail": [
+        0.29323308270676696,
+        0.23547880690737838
+      ]
+    },
+    "sensitivity S1-S3 recomputed = summary": {
+      "passed": true,
+      "detail": {
+        "S1": [
+          8,
+          2,
+          35
+        ],
+        "S2": [
+          8,
+          2,
+          33
+        ],
+        "S3": [
+          8,
+          2,
+          37
+        ]
+      }
+    },
+    "behaviour recomputed: grounded abstention 0/11, correct abstention 6/17, unanswerable answered 11/17, citations valid 47/57, off-by-one 8/10": {
+      "passed": true
+    },
+    "diagnostic hypotheses recomputed: reader 15, retrieval 7, incomplete 4, guard 3": {
+      "passed": true,
+      "detail": {
+        "reader": 15,
+        "context_guard": 3,
+        "retrieval": 7,
+        "incomplete_evidence": 4
+      }
+    },
+    "per-question table: APP and ORACLE correctness equal the rescoring": {
+      "passed": true
+    },
+    "manual review covers exactly the spec's queue (27)": {
+      "passed": true,
+      "detail": 27
+    },
+    "serving backends: E4 fp_e7d4fdcd1d (one APP call fp_9400314673, unanswerable APP-only), frozen E1_768 fp_9483e83037": {
+      "passed": true,
+      "detail": {
+        "APP": {
+          "fp_9400314673": 1,
+          "fp_e7d4fdcd1d": 56
+        },
+        "ORACLE": {
+          "fp_e7d4fdcd1d": 37
+        }
+      }
+    },
+    "hygiene: no credential-like strings or Base64 payloads in the frozen files": {
+      "passed": true
+    }
+  },
+  "recomputed": {
+    "APP_answerable": "11/40",
+    "APP_matched": "11/37",
+    "ORACLE": "17/37",
+    "fixed": [
+      "mmlb-0037",
+      "mmlb-0096",
+      "mmlb-0315",
+      "mmlb-0359",
+      "mmlb-0727",
+      "mmlb-0740",
+      "mmlb-0765",
+      "mmlb-0766"
+    ],
+    "broken": [
+      "mmlb-0094",
+      "mmlb-0739"
+    ],
+    "gap": 0.16216216216216217,
+    "variability_margin": 0.13513513513513514,
+    "verdict": "page_selection_costs_accuracy",
+    "list_price_usd_total": 1.200568
+  }
+}

@@ -1,0 +1,32 @@
+{
+  "run_id": "20261123T000625940289Z_15119ec0_full",
+  "mode": "full",
+  "complete": true,
+  "stop_reason": null,
+  "smoke_gate_passed": true,
+  "smoke_checks": {
+    "one reply per arm for the smoke question": true,
+    "integrity: verified request, SDK arguments equal the plan, served snapshot": true,
+    "contract: the application parsed every reply, finish 'stop'": true,
+    "diagnostics: prompt tokens within tolerance, cached-token field recorded": true
+  },
+  "planned_calls": 96,
+  "api_calls_sent": 96,
+  "rate_limited_responses": 0,
+  "replied": 96,
+  "status_counts": {
+    "ok": 96
+  },
+  "integrity_valid": true,
+  "contract_failures": 0,
+  "prompt_token_differences": {
+    "1": 96
+  },
+  "diagnostic_flags": 0,
+  "calls_with_cached_prompt_tokens": 14,
+  "list_price_cost_usd": 1.178374,
+  "possibly_billed_failed_attempts_upper_usd": 0,
+  "cumulative_list_price_cost_usd": 1.200568,
+  "approved_cumulative_budget_usd": 1.5,
+  "completed_at": "2026-11-23T01:18:47.626+00:00"
+}

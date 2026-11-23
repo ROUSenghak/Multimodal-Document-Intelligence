@@ -46,11 +46,13 @@ to equal git HEAD, and record the commit in `settings.json`. The approved smoke,
 2026-11-22 ($0.91 in all, list price); the full run is frozen in [`frozen/e3/`](frozen/e3/README.md), and the
 smoke and pilot runs stay git-ignored in `runs/e3/` with their checksums in its `PROVENANCE.json`.
 
-Experiment E4 (the application end to end) runs would go to `runs/e4/<UTC timestamp>_<unique id>_<mode>/`, with E3's audit
+Experiment E4 (the application end to end) runs go to `runs/e4/<UTC timestamp>_<unique id>_<mode>/`, with E3's audit
 files (settings with the application's module hashes, spec snapshot, plans, session records, append-only log, run-scoped
 cache, smoke gate, predictions per replicate and arm, `completion.json` or `stop_*.json`). The protocol
-[`specs/e4_application_end_to_end_v1.json`](specs/e4_application_end_to_end_v1.json) is a **draft**: no E4 run exists, and paid
-modes refuse to run until it is frozen with an approved budget and committed with notebook 02 and `src/visualdoc/`.
+[`specs/e4_application_end_to_end_v1.json`](specs/e4_application_end_to_end_v1.json) was frozen in commit `72791e9`
+(ceiling $1.50). The approved smoke run (`20261123T000439244313Z_ea059977_smoke`) and full run
+(`20261123T000625940289Z_15119ec0_full`) completed on 2026-11-23 ($1.2006 in all, list price). Both are frozen, byte for
+byte, in [`frozen/e4/`](frozen/e4/README.md) with the evaluation summary, an independent audit (35/35) and the provenance.
 
 ## How results are reproduced
 

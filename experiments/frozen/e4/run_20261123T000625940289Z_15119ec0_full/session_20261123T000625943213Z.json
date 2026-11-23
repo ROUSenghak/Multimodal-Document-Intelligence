@@ -1,0 +1,38 @@
+{
+  "started_at": "2026-11-23T00:06:25.943+00:00",
+  "environment": {
+    "python": "3.12.6",
+    "platform": "macOS-26.5.2-arm64-arm-64bit",
+    "packages": {
+      "openai": "2.54.0",
+      "httpx": "0.28.1",
+      "transformers": "5.23.0",
+      "tokenizers": "0.23.3",
+      "pillow": "13.0.0",
+      "numpy": "2.3.5",
+      "pandas": "3.1.1",
+      "pymupdf": "2.1"
+    }
+  },
+  "code_provenance": {
+    "git_commit": "72791e9b5834713ce6ad334fafa2d2f46be40af8",
+    "branch": "refactor/simplify-structure",
+    "spec_sha256": "5c1bbbb8d5a41bf9355e8d206f73e2df1587e807a290aa507894ff7ab8b99b90",
+    "spec_committed": true,
+    "notebook02_code_sha256": "2395b5f4a3480c91cdf1b3b71642cc31826f391bcfdce81ab5ad2be9bc3e1b80",
+    "notebook02_code_committed": true,
+    "application_module_sha256": {
+      "src/visualdoc/__init__.py": "d91c5dc096bc8835c261c4deeefcf57a480226104310f58bff4adc1d97c84778",
+      "src/visualdoc/answering.py": "081b50d68a73a372e268fceefdcde0b160521b579f92e0eb6a984415fcebe55d",
+      "src/visualdoc/citations.py": "38ef03a8018b521e12810d46bb38ab21474ed2b93711e4cf4d03369777675c3c",
+      "src/visualdoc/documents.py": "52f0466a0eba57ac3822087b7f717e12e5328f647ae27c9ea9a337eba19f8bc9",
+      "src/visualdoc/parsing.py": "720cc2d3cf01b35473e19fcb876d69632ea0d9c3e47974546e50d3a7b0f70e69",
+      "src/visualdoc/pipeline.py": "b6124304ef9618c5240148114d1b5eb774ca18ed134b899695fddf8a0574dc0e",
+      "src/visualdoc/retrieval.py": "6b1f4d835f1753b279184c21fca8db1578ef023ee2bb8a105d72556f9ff0b43e"
+    },
+    "application_committed": true,
+    "git_status": [
+      "M notebooks/03_evaluation.ipynb"
+    ]
+  }
+}

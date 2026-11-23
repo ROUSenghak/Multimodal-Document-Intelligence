@@ -1,0 +1,770 @@
+[
+  {
+    "replicate_id": "technical_smoke",
+    "qid": "mmlb-0095",
+    "arm": "ORACLE",
+    "pair_index": 0,
+    "position_in_pair": 1,
+    "execution_index": 1
+  },
+  {
+    "replicate_id": "technical_smoke",
+    "qid": "mmlb-0095",
+    "arm": "APP",
+    "pair_index": 0,
+    "position_in_pair": 2,
+    "execution_index": 2
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0734",
+    "arm": "APP",
+    "pair_index": 1,
+    "position_in_pair": 1,
+    "execution_index": 3
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0733",
+    "arm": "APP",
+    "pair_index": 2,
+    "position_in_pair": 1,
+    "execution_index": 4
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0733",
+    "arm": "ORACLE",
+    "pair_index": 2,
+    "position_in_pair": 2,
+    "execution_index": 5
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0741",
+    "arm": "APP",
+    "pair_index": 3,
+    "position_in_pair": 1,
+    "execution_index": 6
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0741",
+    "arm": "ORACLE",
+    "pair_index": 3,
+    "position_in_pair": 2,
+    "execution_index": 7
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0035",
+    "arm": "APP",
+    "pair_index": 4,
+    "position_in_pair": 1,
+    "execution_index": 8
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0742",
+    "arm": "APP",
+    "pair_index": 5,
+    "position_in_pair": 1,
+    "execution_index": 9
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0361",
+    "arm": "APP",
+    "pair_index": 6,
+    "position_in_pair": 1,
+    "execution_index": 10
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0363",
+    "arm": "ORACLE",
+    "pair_index": 7,
+    "position_in_pair": 1,
+    "execution_index": 11
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0363",
+    "arm": "APP",
+    "pair_index": 7,
+    "position_in_pair": 2,
+    "execution_index": 12
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0731",
+    "arm": "ORACLE",
+    "pair_index": 8,
+    "position_in_pair": 1,
+    "execution_index": 13
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0731",
+    "arm": "APP",
+    "pair_index": 8,
+    "position_in_pair": 2,
+    "execution_index": 14
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0770",
+    "arm": "APP",
+    "pair_index": 9,
+    "position_in_pair": 1,
+    "execution_index": 15
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0318",
+    "arm": "APP",
+    "pair_index": 10,
+    "position_in_pair": 1,
+    "execution_index": 16
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0318",
+    "arm": "ORACLE",
+    "pair_index": 10,
+    "position_in_pair": 2,
+    "execution_index": 17
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0315",
+    "arm": "ORACLE",
+    "pair_index": 11,
+    "position_in_pair": 1,
+    "execution_index": 18
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0315",
+    "arm": "APP",
+    "pair_index": 11,
+    "position_in_pair": 2,
+    "execution_index": 19
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0041",
+    "arm": "APP",
+    "pair_index": 12,
+    "position_in_pair": 1,
+    "execution_index": 20
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0041",
+    "arm": "ORACLE",
+    "pair_index": 12,
+    "position_in_pair": 2,
+    "execution_index": 21
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0039",
+    "arm": "APP",
+    "pair_index": 13,
+    "position_in_pair": 1,
+    "execution_index": 22
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0762",
+    "arm": "ORACLE",
+    "pair_index": 14,
+    "position_in_pair": 1,
+    "execution_index": 23
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0762",
+    "arm": "APP",
+    "pair_index": 14,
+    "position_in_pair": 2,
+    "execution_index": 24
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0356",
+    "arm": "APP",
+    "pair_index": 15,
+    "position_in_pair": 1,
+    "execution_index": 25
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0740",
+    "arm": "APP",
+    "pair_index": 16,
+    "position_in_pair": 1,
+    "execution_index": 26
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0740",
+    "arm": "ORACLE",
+    "pair_index": 16,
+    "position_in_pair": 2,
+    "execution_index": 27
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0357",
+    "arm": "APP",
+    "pair_index": 17,
+    "position_in_pair": 1,
+    "execution_index": 28
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0357",
+    "arm": "ORACLE",
+    "pair_index": 17,
+    "position_in_pair": 2,
+    "execution_index": 29
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0038",
+    "arm": "APP",
+    "pair_index": 18,
+    "position_in_pair": 1,
+    "execution_index": 30
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0768",
+    "arm": "APP",
+    "pair_index": 19,
+    "position_in_pair": 1,
+    "execution_index": 31
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0736",
+    "arm": "APP",
+    "pair_index": 20,
+    "position_in_pair": 1,
+    "execution_index": 32
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0736",
+    "arm": "ORACLE",
+    "pair_index": 20,
+    "position_in_pair": 2,
+    "execution_index": 33
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0037",
+    "arm": "ORACLE",
+    "pair_index": 21,
+    "position_in_pair": 1,
+    "execution_index": 34
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0037",
+    "arm": "APP",
+    "pair_index": 21,
+    "position_in_pair": 2,
+    "execution_index": 35
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0319",
+    "arm": "ORACLE",
+    "pair_index": 22,
+    "position_in_pair": 1,
+    "execution_index": 36
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0319",
+    "arm": "APP",
+    "pair_index": 22,
+    "position_in_pair": 2,
+    "execution_index": 37
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0737",
+    "arm": "ORACLE",
+    "pair_index": 23,
+    "position_in_pair": 1,
+    "execution_index": 38
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0737",
+    "arm": "APP",
+    "pair_index": 23,
+    "position_in_pair": 2,
+    "execution_index": 39
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0732",
+    "arm": "ORACLE",
+    "pair_index": 24,
+    "position_in_pair": 1,
+    "execution_index": 40
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0732",
+    "arm": "APP",
+    "pair_index": 24,
+    "position_in_pair": 2,
+    "execution_index": 41
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0766",
+    "arm": "ORACLE",
+    "pair_index": 25,
+    "position_in_pair": 1,
+    "execution_index": 42
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0766",
+    "arm": "APP",
+    "pair_index": 25,
+    "position_in_pair": 2,
+    "execution_index": 43
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0362",
+    "arm": "APP",
+    "pair_index": 26,
+    "position_in_pair": 1,
+    "execution_index": 44
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0362",
+    "arm": "ORACLE",
+    "pair_index": 26,
+    "position_in_pair": 2,
+    "execution_index": 45
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0769",
+    "arm": "APP",
+    "pair_index": 27,
+    "position_in_pair": 1,
+    "execution_index": 46
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0769",
+    "arm": "ORACLE",
+    "pair_index": 27,
+    "position_in_pair": 2,
+    "execution_index": 47
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0739",
+    "arm": "ORACLE",
+    "pair_index": 28,
+    "position_in_pair": 1,
+    "execution_index": 48
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0739",
+    "arm": "APP",
+    "pair_index": 28,
+    "position_in_pair": 2,
+    "execution_index": 49
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0095",
+    "arm": "APP",
+    "pair_index": 29,
+    "position_in_pair": 1,
+    "execution_index": 50
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0095",
+    "arm": "ORACLE",
+    "pair_index": 29,
+    "position_in_pair": 2,
+    "execution_index": 51
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0096",
+    "arm": "ORACLE",
+    "pair_index": 30,
+    "position_in_pair": 1,
+    "execution_index": 52
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0096",
+    "arm": "APP",
+    "pair_index": 30,
+    "position_in_pair": 2,
+    "execution_index": 53
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0728",
+    "arm": "APP",
+    "pair_index": 31,
+    "position_in_pair": 1,
+    "execution_index": 54
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0765",
+    "arm": "APP",
+    "pair_index": 32,
+    "position_in_pair": 1,
+    "execution_index": 55
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0765",
+    "arm": "ORACLE",
+    "pair_index": 32,
+    "position_in_pair": 2,
+    "execution_index": 56
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0729",
+    "arm": "APP",
+    "pair_index": 33,
+    "position_in_pair": 1,
+    "execution_index": 57
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0729",
+    "arm": "ORACLE",
+    "pair_index": 33,
+    "position_in_pair": 2,
+    "execution_index": 58
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0360",
+    "arm": "ORACLE",
+    "pair_index": 34,
+    "position_in_pair": 1,
+    "execution_index": 59
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0360",
+    "arm": "APP",
+    "pair_index": 34,
+    "position_in_pair": 2,
+    "execution_index": 60
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0313",
+    "arm": "ORACLE",
+    "pair_index": 35,
+    "position_in_pair": 1,
+    "execution_index": 61
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0313",
+    "arm": "APP",
+    "pair_index": 35,
+    "position_in_pair": 2,
+    "execution_index": 62
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0763",
+    "arm": "APP",
+    "pair_index": 36,
+    "position_in_pair": 1,
+    "execution_index": 63
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0763",
+    "arm": "ORACLE",
+    "pair_index": 36,
+    "position_in_pair": 2,
+    "execution_index": 64
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0359",
+    "arm": "APP",
+    "pair_index": 37,
+    "position_in_pair": 1,
+    "execution_index": 65
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0359",
+    "arm": "ORACLE",
+    "pair_index": 37,
+    "position_in_pair": 2,
+    "execution_index": 66
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0727",
+    "arm": "ORACLE",
+    "pair_index": 38,
+    "position_in_pair": 1,
+    "execution_index": 67
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0727",
+    "arm": "APP",
+    "pair_index": 38,
+    "position_in_pair": 2,
+    "execution_index": 68
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0098",
+    "arm": "APP",
+    "pair_index": 39,
+    "position_in_pair": 1,
+    "execution_index": 69
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0094",
+    "arm": "APP",
+    "pair_index": 40,
+    "position_in_pair": 1,
+    "execution_index": 70
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0094",
+    "arm": "ORACLE",
+    "pair_index": 40,
+    "position_in_pair": 2,
+    "execution_index": 71
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0764",
+    "arm": "APP",
+    "pair_index": 41,
+    "position_in_pair": 1,
+    "execution_index": 72
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0353",
+    "arm": "ORACLE",
+    "pair_index": 42,
+    "position_in_pair": 1,
+    "execution_index": 73
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0353",
+    "arm": "APP",
+    "pair_index": 42,
+    "position_in_pair": 2,
+    "execution_index": 74
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0358",
+    "arm": "APP",
+    "pair_index": 43,
+    "position_in_pair": 1,
+    "execution_index": 75
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0314",
+    "arm": "APP",
+    "pair_index": 44,
+    "position_in_pair": 1,
+    "execution_index": 76
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0034",
+    "arm": "ORACLE",
+    "pair_index": 45,
+    "position_in_pair": 1,
+    "execution_index": 77
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0034",
+    "arm": "APP",
+    "pair_index": 45,
+    "position_in_pair": 2,
+    "execution_index": 78
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0767",
+    "arm": "APP",
+    "pair_index": 46,
+    "position_in_pair": 1,
+    "execution_index": 79
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0767",
+    "arm": "ORACLE",
+    "pair_index": 46,
+    "position_in_pair": 2,
+    "execution_index": 80
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0097",
+    "arm": "ORACLE",
+    "pair_index": 47,
+    "position_in_pair": 1,
+    "execution_index": 81
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0097",
+    "arm": "APP",
+    "pair_index": 47,
+    "position_in_pair": 2,
+    "execution_index": 82
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0316",
+    "arm": "APP",
+    "pair_index": 48,
+    "position_in_pair": 1,
+    "execution_index": 83
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0730",
+    "arm": "APP",
+    "pair_index": 49,
+    "position_in_pair": 1,
+    "execution_index": 84
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0317",
+    "arm": "APP",
+    "pair_index": 50,
+    "position_in_pair": 1,
+    "execution_index": 85
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0317",
+    "arm": "ORACLE",
+    "pair_index": 50,
+    "position_in_pair": 2,
+    "execution_index": 86
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0738",
+    "arm": "APP",
+    "pair_index": 51,
+    "position_in_pair": 1,
+    "execution_index": 87
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0040",
+    "arm": "APP",
+    "pair_index": 52,
+    "position_in_pair": 1,
+    "execution_index": 88
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0735",
+    "arm": "APP",
+    "pair_index": 53,
+    "position_in_pair": 1,
+    "execution_index": 89
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0735",
+    "arm": "ORACLE",
+    "pair_index": 53,
+    "position_in_pair": 2,
+    "execution_index": 90
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0036",
+    "arm": "APP",
+    "pair_index": 54,
+    "position_in_pair": 1,
+    "execution_index": 91
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0355",
+    "arm": "APP",
+    "pair_index": 55,
+    "position_in_pair": 1,
+    "execution_index": 92
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0355",
+    "arm": "ORACLE",
+    "pair_index": 55,
+    "position_in_pair": 2,
+    "execution_index": 93
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0354",
+    "arm": "APP",
+    "pair_index": 56,
+    "position_in_pair": 1,
+    "execution_index": 94
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0033",
+    "arm": "ORACLE",
+    "pair_index": 57,
+    "position_in_pair": 1,
+    "execution_index": 95
+  },
+  {
+    "replicate_id": "main_r1",
+    "qid": "mmlb-0033",
+    "arm": "APP",
+    "pair_index": 57,
+    "position_in_pair": 2,
+    "execution_index": 96
+  }
+]

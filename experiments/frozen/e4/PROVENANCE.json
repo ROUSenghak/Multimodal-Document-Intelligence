@@ -1,0 +1,135 @@
+{
+  "package": "E4 application end to end (APP: the application as shipped, BM25 top 5 after the context guard, 768-px images, GPT-4o-mini; ORACLE: the same reader on the annotated evidence pages), frozen result",
+  "frozen_at": "2026-11-23",
+  "spec": {
+    "path": "experiments/specs/e4_application_end_to_end_v1.json",
+    "sha256": "5c1bbbb8d5a41bf9355e8d206f73e2df1587e807a290aa507894ff7ab8b99b90",
+    "frozen_at": "2026-11-22T23:58:00Z",
+    "approved_ceiling_usd": 1.5
+  },
+  "code_revision": {
+    "commit": "72791e9b5834713ce6ad334fafa2d2f46be40af8",
+    "branch": "refactor/simplify-structure",
+    "note": "spec, notebook 02 code cells and src/visualdoc equal this commit in both runs (paid-mode gate, re-verified by AUDIT.json)"
+  },
+  "runs": {
+    "20261123T000439244313Z_ea059977_smoke": {
+      "mode": "smoke",
+      "original_location": "experiments/runs/e4/20261123T000439244313Z_ea059977_smoke/ (git-ignored)",
+      "frozen_location": "experiments/frozen/e4/run_20261123T000439244313Z_ea059977_smoke/",
+      "copy": "byte-identical copy of all 11 files (SHA-256 compared after copying)",
+      "first_request_started_utc": "2026-11-23T00:04:40.559+00:00",
+      "last_request_completed_utc": "2026-11-23T00:04:45.768+00:00",
+      "replies": 2,
+      "requests_sent": 2,
+      "rate_limited": 0,
+      "composition": {
+        "technical_smoke_ORACLE": 1,
+        "technical_smoke_APP": 1
+      },
+      "served_model": [
+        "gpt-4o-mini-2024-07-18"
+      ],
+      "system_fingerprints": {
+        "fp_9400314673": 2
+      },
+      "observed_tokens": {
+        "prompt": 147786,
+        "completion": 44,
+        "cached_prompt": 31360,
+        "calls_with_cached_tokens": 1
+      },
+      "prompt_tokens_minus_expected": {
+        "1": 2
+      },
+      "list_price_cost_usd": 0.022194,
+      "cumulative_list_price_cost_usd_at_completion": 0.022194,
+      "environment": {
+        "python": "3.12.6",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "packages": {
+          "openai": "2.54.0",
+          "httpx": "0.28.1",
+          "transformers": "5.23.0",
+          "tokenizers": "0.23.3",
+          "pillow": "13.0.0",
+          "numpy": "2.3.5",
+          "pandas": "3.1.1",
+          "pymupdf": "2.1"
+        }
+      },
+      "git_status_at_start": []
+    },
+    "20261123T000625940289Z_15119ec0_full": {
+      "mode": "full",
+      "original_location": "experiments/runs/e4/20261123T000625940289Z_15119ec0_full/ (git-ignored)",
+      "frozen_location": "experiments/frozen/e4/run_20261123T000625940289Z_15119ec0_full/",
+      "copy": "byte-identical copy of all 13 files (SHA-256 compared after copying)",
+      "first_request_started_utc": "2026-11-23T00:06:27.251+00:00",
+      "last_request_completed_utc": "2026-11-23T01:18:47.605+00:00",
+      "replies": 96,
+      "requests_sent": 96,
+      "rate_limited": 0,
+      "composition": {
+        "technical_smoke_ORACLE": 1,
+        "technical_smoke_APP": 1,
+        "main_r1_APP": 57,
+        "main_r1_ORACLE": 37
+      },
+      "served_model": [
+        "gpt-4o-mini-2024-07-18"
+      ],
+      "system_fingerprints": {
+        "fp_9400314673": 3,
+        "fp_e7d4fdcd1d": 93
+      },
+      "observed_tokens": {
+        "prompt": 7847478,
+        "completion": 2087,
+        "cached_prompt": 411392,
+        "calls_with_cached_tokens": 14
+      },
+      "prompt_tokens_minus_expected": {
+        "1": 96
+      },
+      "list_price_cost_usd": 1.178374,
+      "cumulative_list_price_cost_usd_at_completion": 1.200568,
+      "environment": {
+        "python": "3.12.6",
+        "platform": "macOS-26.5.2-arm64-arm-64bit",
+        "packages": {
+          "openai": "2.54.0",
+          "httpx": "0.28.1",
+          "transformers": "5.23.0",
+          "tokenizers": "0.23.3",
+          "pillow": "13.0.0",
+          "numpy": "2.3.5",
+          "pandas": "3.1.1",
+          "pymupdf": "2.1"
+        }
+      },
+      "git_status_at_start": [
+        "M notebooks/03_evaluation.ipynb"
+      ]
+    }
+  },
+  "spend": {
+    "list_price_usd_all_runs": 1.200568,
+    "cached_input_at_half_price_usd_estimate": 1.1673618000000001,
+    "ceiling_usd": 1.5,
+    "note": "list price on billed tokens (cached input counted at full price) is the budget basis; the invoice is not available here"
+  },
+  "evaluation": {
+    "notebook": "notebooks/03_evaluation.ipynb section 17",
+    "summary": "tables/evaluation_summary.json",
+    "per_question": "tables/per_question.csv",
+    "analysis_code": "cells e4-eval-setup and e4-eval-saved-run (evaluate_e4, apply_e4_decision, validate_e4_run) are identical to commit 72791e9",
+    "added_after_freeze": "e4-eval-report (spend, tokens, latency, by document, frozen context; written during the full run, before any reply was read), e4-eval-manual-review (post-run manual labels and a post-hoc robustness table), e4-eval-summary (summary and regression references); e4-eval-run now evaluates this frozen copy by default. None changes the verdict.",
+    "notebook03_modified_at_full_run_start": "the full run's session record lists notebooks/03_evaluation.ipynb as modified: the reporting cell e4-eval-report was being added while notebook 02 executed its offline cells. Notebook 03 is not part of the paid-mode gate and no analysis or decision code was changed."
+  },
+  "not_verifiable_here": [
+    "the OpenAI invoice (only list-price cost from billed token counts)",
+    "server-side behaviour behind system_fingerprint changes",
+    "manual labels: 14 of the 15 reader labels were carried over from the frozen review after checking each reply against its description; page images were not re-inspected"
+  ]
+}

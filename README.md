@@ -230,26 +230,27 @@ frozen and committed with the implementation before the first call.
 VISUALDOC_E3_RUN_DIR=experiments/runs/e3/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
 ```
 
-## Experiment E4 — the application end to end (designed, not run)
+## Experiment E4 — the application end to end (run 2026-11-23, audited and frozen)
 
-E4 measures the application in `src/visualdoc/` **as shipped**: BM25 top 5, the context guard, 768-px page images and GPT-4o-mini. It runs on all 57 questions and asks how much of the application's error on the 37 matched questions comes from **page selection** (retrieval, the guard, distractor pages) rather than from **reading**. No paid call has been made; the spec is a draft awaiting approval.
+E4 measures the application in `src/visualdoc/` **as shipped**: BM25 top 5, the context guard, 768-px page images and GPT-4o-mini. It runs on all 57 questions and asks how much of the application's error on the 37 matched questions comes from **page selection** (retrieval, the guard, distractor pages) rather than from **reading**.
 
-| arm | pages sent (same prompt, model, parameters and parser) | questions |
-|---|---|---:|
-| `APP` | the application's own request, built by `answer_question`: top 5 after the guard (3–4 pages) | 57 |
-| `ORACLE` | the annotated evidence pages: byte-identical to the frozen E1_768 requests | 37 |
+| arm | pages sent (same prompt, model, parameters and parser) | questions | correct |
+|---|---|---:|---:|
+| `APP` | the application's own request, built by `answer_question`: top 5 after the guard (3–4 pages) | 57 | **11/40** answerable (0.275, cluster 95 % 0.13–0.43); 11/37 matched |
+| `ORACLE` | the annotated evidence pages: byte-identical to the frozen E1_768 requests | 37 | **17/37** (0.459) |
 
-- **Known before any call** (recomputed independently): 29/40 answerable questions reach the model with an evidence page (32/40 before the guard). By stratum, 20 / 9 / 3 / 8 have all evidence, some evidence, evidence dropped by the guard, or none retrieved. The frozen anchor suggests a page-selection gap of about 4–6/37 against a reading loss of 21/37.
-- **Primary outcome.** $\Delta_{\text{sel}}$ = ORACLE − APP accuracy on the 37 questions, in one session. The pre-registered screening rule decides only whether page selection costs measurable accuracy; it does not rank page selection against the reader.
-- **Also reported.**
-  - APP accuracy on 40 and 57 questions, F1, and abstention on the 17 unanswerable questions.
-  - Grounded abstention when no evidence page was supplied, and unsupported answers.
-  - Citations, a mechanical error label per question, and ORACLE vs frozen E1_768 (a cross-day reproducibility check).
-  - APP vs frozen B (confounded; descriptive).
-- **Limits.** In-sample: E1–E3 chose the application's settings on these questions. One session, and no APP repeat. The model snapshot shuts down on 2027-01-14.
-- **Cost.** 2 + 96 calls (no pilot), list-price upper bound $1.22, proposed cumulative ceiling $1.50.
-- **Implementation.** Notebook 02 §13 builds every request through the application, verifies it against its own construction and the frozen E1 requests, and tests the executor with mocked SDK replies. Notebook 03 §17 holds the analysis and run validation, tested on synthetic replies.
-- **Spec.** [`experiments/specs/e4_application_end_to_end_v1.json`](experiments/specs/e4_application_end_to_end_v1.json). To freeze it, set `status`, `frozen_at` and `budget.approved_ceiling_usd`, then commit it with the notebooks and `src/visualdoc/`. Each paid stage still needs its own approval:
+- **Execution.** Spec frozen in commit `72791e9` (ceiling $1.50). Smoke (2 calls) and full (96 calls) runs completed with every integrity check valid. Spend: $1.2006 at list price. Both runs, the summary, an independent audit (35/35) and the provenance are frozen in [`experiments/frozen/e4/`](experiments/frozen/e4/README.md); notebook 03 §17 reproduces them by default.
+- **Verdict (pre-registered rule): `page_selection_costs_accuracy`.**
+  - Gap: ORACLE − APP = +6/37 = 0.162 (8 fixed, 2 broken; cluster 95 % 0.09–0.26; McNemar p = 0.11).
+  - Margin: 5/37, the ORACLE vs frozen E1_768 cross-day change rate. The gap clears it by one question.
+  - Stable core: five questions are fixed against both ORACLE sessions.
+- **Reading still loses more.** The reading loss is 20/37, against a page-selection loss of 6/37. The 29 answerable APP errors split into:
+  - 14 page selection: 7 retrieval, 3 context guard, 4 incomplete evidence;
+  - 15 reader: 8 reasoning or aggregation, 3 visual reading, 4 annotation or scoring issues.
+  - These are diagnostic hypotheses, not proven causes. Distractor pages showed no measurable cost: with all evidence supplied, APP scored 10/20 and ORACLE 8/20.
+- **Behaviour.** The application never abstained when no evidence page was sent (0/11). It answered 11 of 17 unanswerable questions with content. Citations are valid in 47/57 replies.
+- **Limits.** In-sample: E1–E3 chose the application's settings on these questions. Only 6 documents, and no APP repeat. The model snapshot shuts down on 2027-01-14.
+- **Details.** Notebook 02 §13 (execution), notebook 03 §17 (validation, results, manual review, audit), and the spec [`experiments/specs/e4_application_end_to_end_v1.json`](experiments/specs/e4_application_end_to_end_v1.json).
 
 ```bash
 VISUALDOC_E4_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb   # then full
@@ -418,7 +419,7 @@ works for the demo).
 │   ├── frozen/e1/             # frozen E1 full run, figures, per-question table, provenance, SHA256SUMS
 │   ├── frozen/e2/             # frozen E2 full run, figures, audit, provenance, SHA256SUMS
 │   ├── frozen/e3/             # frozen E3 full run, figures, audit, provenance, SHA256SUMS
-│   ├── specs/                 # experiment specifications (E1, E2, E3 frozen; E4 draft)
+│   ├── specs/                 # experiment specifications (E1–E4 frozen)
 │   └── runs/                  # git-ignored outputs of new live runs (e1/, e2/, e3/, ...)
 ├── data/
 │   ├── external/              # MMLongBench-Doc question table (tracked) and PDFs (git-ignored); other benchmarks
@@ -441,8 +442,8 @@ works for the demo).
 | Native text + OCR fallback, page records, rendering | Implemented (00); application module `documents.py` |
 | BM25 page retrieval and metrics | Implemented (01); application module `retrieval.py` |
 | Text and image QA with page citations, four conditions | Implemented and run (02) |
-| Experiments E1–E3 (resolution, stronger VLM, text–image fusion) | Run, audited and frozen (`experiments/frozen/`) |
-| End-to-end application baseline (image answering, citation check) | Implemented with offline tests (`src/visualdoc/`); accuracy on retrieved pages at 768 px not measured (E4 designed, not run) |
+| Experiments E1–E4 (resolution, stronger VLM, text–image fusion, application end to end) | Run, audited and frozen (`experiments/frozen/`) |
+| End-to-end application baseline (image answering, citation check) | Implemented with offline tests (`src/visualdoc/`); measured end to end in E4 (2026-11-23): 11/40 answerable, in-sample |
 | Evaluation, paired comparisons, error analysis | Implemented (03); manual review of the E0 queue done (29 cases); E3's 14-question queue not labelled |
 | Dense or visual retrieval (embeddings, ColPali) | Planned; no model chosen |
 | Project's own verified question set | Not started (needs annotation) |

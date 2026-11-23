@@ -1,0 +1,1022 @@
+{
+  "spec_id": "e4-application-end-to-end-v1",
+  "spec_sha256": "5c1bbbb8d5a41bf9355e8d206f73e2df1587e807a290aa507894ff7ab8b99b90",
+  "spec_status": "frozen-before-live-execution",
+  "generated_at": "2026-11-23T00:06:21.264+00:00",
+  "model": "gpt-4o-mini-2024-07-18",
+  "system_prompt_hash": "35ff2e8b91f9",
+  "application_module_sha256": {
+    "src/visualdoc/__init__.py": "d91c5dc096bc8835c261c4deeefcf57a480226104310f58bff4adc1d97c84778",
+    "src/visualdoc/answering.py": "081b50d68a73a372e268fceefdcde0b160521b579f92e0eb6a984415fcebe55d",
+    "src/visualdoc/citations.py": "38ef03a8018b521e12810d46bb38ab21474ed2b93711e4cf4d03369777675c3c",
+    "src/visualdoc/documents.py": "52f0466a0eba57ac3822087b7f717e12e5328f647ae27c9ea9a337eba19f8bc9",
+    "src/visualdoc/parsing.py": "720cc2d3cf01b35473e19fcb876d69632ea0d9c3e47974546e50d3a7b0f70e69",
+    "src/visualdoc/pipeline.py": "b6124304ef9618c5240148114d1b5eb774ca18ed134b899695fddf8a0574dc0e",
+    "src/visualdoc/retrieval.py": "6b1f4d835f1753b279184c21fca8db1578ef023ee2bb8a105d72556f9ff0b43e"
+  },
+  "qids": [
+    "mmlb-0033",
+    "mmlb-0034",
+    "mmlb-0035",
+    "mmlb-0036",
+    "mmlb-0037",
+    "mmlb-0038",
+    "mmlb-0039",
+    "mmlb-0040",
+    "mmlb-0041",
+    "mmlb-0094",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0097",
+    "mmlb-0098",
+    "mmlb-0313",
+    "mmlb-0314",
+    "mmlb-0315",
+    "mmlb-0316",
+    "mmlb-0317",
+    "mmlb-0318",
+    "mmlb-0319",
+    "mmlb-0353",
+    "mmlb-0354",
+    "mmlb-0355",
+    "mmlb-0356",
+    "mmlb-0357",
+    "mmlb-0358",
+    "mmlb-0359",
+    "mmlb-0360",
+    "mmlb-0361",
+    "mmlb-0362",
+    "mmlb-0363",
+    "mmlb-0727",
+    "mmlb-0728",
+    "mmlb-0729",
+    "mmlb-0730",
+    "mmlb-0731",
+    "mmlb-0732",
+    "mmlb-0733",
+    "mmlb-0734",
+    "mmlb-0735",
+    "mmlb-0736",
+    "mmlb-0737",
+    "mmlb-0738",
+    "mmlb-0739",
+    "mmlb-0740",
+    "mmlb-0741",
+    "mmlb-0742",
+    "mmlb-0762",
+    "mmlb-0763",
+    "mmlb-0764",
+    "mmlb-0765",
+    "mmlb-0766",
+    "mmlb-0767",
+    "mmlb-0768",
+    "mmlb-0769",
+    "mmlb-0770"
+  ],
+  "matched_qids": [
+    "mmlb-0033",
+    "mmlb-0034",
+    "mmlb-0037",
+    "mmlb-0041",
+    "mmlb-0094",
+    "mmlb-0095",
+    "mmlb-0096",
+    "mmlb-0097",
+    "mmlb-0313",
+    "mmlb-0315",
+    "mmlb-0317",
+    "mmlb-0318",
+    "mmlb-0319",
+    "mmlb-0353",
+    "mmlb-0355",
+    "mmlb-0357",
+    "mmlb-0359",
+    "mmlb-0360",
+    "mmlb-0362",
+    "mmlb-0363",
+    "mmlb-0727",
+    "mmlb-0729",
+    "mmlb-0731",
+    "mmlb-0732",
+    "mmlb-0733",
+    "mmlb-0735",
+    "mmlb-0736",
+    "mmlb-0737",
+    "mmlb-0739",
+    "mmlb-0740",
+    "mmlb-0741",
+    "mmlb-0762",
+    "mmlb-0763",
+    "mmlb-0765",
+    "mmlb-0766",
+    "mmlb-0767",
+    "mmlb-0769"
+  ],
+  "strata": {
+    "all_evidence_supplied": [
+      "mmlb-0033",
+      "mmlb-0034",
+      "mmlb-0041",
+      "mmlb-0094",
+      "mmlb-0095",
+      "mmlb-0097",
+      "mmlb-0318",
+      "mmlb-0353",
+      "mmlb-0355",
+      "mmlb-0357",
+      "mmlb-0360",
+      "mmlb-0363",
+      "mmlb-0729",
+      "mmlb-0731",
+      "mmlb-0733",
+      "mmlb-0736",
+      "mmlb-0737",
+      "mmlb-0739",
+      "mmlb-0741",
+      "mmlb-0769"
+    ],
+    "some_evidence_supplied": [
+      "mmlb-0096",
+      "mmlb-0317",
+      "mmlb-0359",
+      "mmlb-0362",
+      "mmlb-0732",
+      "mmlb-0735",
+      "mmlb-0762",
+      "mmlb-0765",
+      "mmlb-0766"
+    ],
+    "evidence_retrieved_but_dropped_by_guard": [
+      "mmlb-0035",
+      "mmlb-0315",
+      "mmlb-0763"
+    ],
+    "evidence_not_retrieved": [
+      "mmlb-0036",
+      "mmlb-0037",
+      "mmlb-0039",
+      "mmlb-0313",
+      "mmlb-0319",
+      "mmlb-0727",
+      "mmlb-0740",
+      "mmlb-0767"
+    ]
+  },
+  "documents": [
+    "2210.02442v1.pdf",
+    "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf",
+    "bdf54dxa.pdf",
+    "earlybird-110722143746-phpapp02_95.pdf",
+    "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf",
+    "watch_d.pdf"
+  ],
+  "token_tolerance": 16,
+  "planned_generations": {
+    "smoke": 2,
+    "full": 96
+  },
+  "plans": {
+    "smoke": [
+      {
+        "replicate_id": "technical_smoke",
+        "qid": "mmlb-0095",
+        "arm": "ORACLE",
+        "pair_index": 0,
+        "position_in_pair": 1,
+        "execution_index": 1
+      },
+      {
+        "replicate_id": "technical_smoke",
+        "qid": "mmlb-0095",
+        "arm": "APP",
+        "pair_index": 0,
+        "position_in_pair": 2,
+        "execution_index": 2
+      }
+    ],
+    "full": [
+      {
+        "replicate_id": "technical_smoke",
+        "qid": "mmlb-0095",
+        "arm": "ORACLE",
+        "pair_index": 0,
+        "position_in_pair": 1,
+        "execution_index": 1
+      },
+      {
+        "replicate_id": "technical_smoke",
+        "qid": "mmlb-0095",
+        "arm": "APP",
+        "pair_index": 0,
+        "position_in_pair": 2,
+        "execution_index": 2
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0734",
+        "arm": "APP",
+        "pair_index": 1,
+        "position_in_pair": 1,
+        "execution_index": 3
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0733",
+        "arm": "APP",
+        "pair_index": 2,
+        "position_in_pair": 1,
+        "execution_index": 4
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0733",
+        "arm": "ORACLE",
+        "pair_index": 2,
+        "position_in_pair": 2,
+        "execution_index": 5
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0741",
+        "arm": "APP",
+        "pair_index": 3,
+        "position_in_pair": 1,
+        "execution_index": 6
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0741",
+        "arm": "ORACLE",
+        "pair_index": 3,
+        "position_in_pair": 2,
+        "execution_index": 7
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0035",
+        "arm": "APP",
+        "pair_index": 4,
+        "position_in_pair": 1,
+        "execution_index": 8
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0742",
+        "arm": "APP",
+        "pair_index": 5,
+        "position_in_pair": 1,
+        "execution_index": 9
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0361",
+        "arm": "APP",
+        "pair_index": 6,
+        "position_in_pair": 1,
+        "execution_index": 10
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0363",
+        "arm": "ORACLE",
+        "pair_index": 7,
+        "position_in_pair": 1,
+        "execution_index": 11
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0363",
+        "arm": "APP",
+        "pair_index": 7,
+        "position_in_pair": 2,
+        "execution_index": 12
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0731",
+        "arm": "ORACLE",
+        "pair_index": 8,
+        "position_in_pair": 1,
+        "execution_index": 13
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0731",
+        "arm": "APP",
+        "pair_index": 8,
+        "position_in_pair": 2,
+        "execution_index": 14
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0770",
+        "arm": "APP",
+        "pair_index": 9,
+        "position_in_pair": 1,
+        "execution_index": 15
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0318",
+        "arm": "APP",
+        "pair_index": 10,
+        "position_in_pair": 1,
+        "execution_index": 16
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0318",
+        "arm": "ORACLE",
+        "pair_index": 10,
+        "position_in_pair": 2,
+        "execution_index": 17
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0315",
+        "arm": "ORACLE",
+        "pair_index": 11,
+        "position_in_pair": 1,
+        "execution_index": 18
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0315",
+        "arm": "APP",
+        "pair_index": 11,
+        "position_in_pair": 2,
+        "execution_index": 19
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0041",
+        "arm": "APP",
+        "pair_index": 12,
+        "position_in_pair": 1,
+        "execution_index": 20
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0041",
+        "arm": "ORACLE",
+        "pair_index": 12,
+        "position_in_pair": 2,
+        "execution_index": 21
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0039",
+        "arm": "APP",
+        "pair_index": 13,
+        "position_in_pair": 1,
+        "execution_index": 22
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0762",
+        "arm": "ORACLE",
+        "pair_index": 14,
+        "position_in_pair": 1,
+        "execution_index": 23
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0762",
+        "arm": "APP",
+        "pair_index": 14,
+        "position_in_pair": 2,
+        "execution_index": 24
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0356",
+        "arm": "APP",
+        "pair_index": 15,
+        "position_in_pair": 1,
+        "execution_index": 25
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0740",
+        "arm": "APP",
+        "pair_index": 16,
+        "position_in_pair": 1,
+        "execution_index": 26
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0740",
+        "arm": "ORACLE",
+        "pair_index": 16,
+        "position_in_pair": 2,
+        "execution_index": 27
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0357",
+        "arm": "APP",
+        "pair_index": 17,
+        "position_in_pair": 1,
+        "execution_index": 28
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0357",
+        "arm": "ORACLE",
+        "pair_index": 17,
+        "position_in_pair": 2,
+        "execution_index": 29
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0038",
+        "arm": "APP",
+        "pair_index": 18,
+        "position_in_pair": 1,
+        "execution_index": 30
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0768",
+        "arm": "APP",
+        "pair_index": 19,
+        "position_in_pair": 1,
+        "execution_index": 31
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0736",
+        "arm": "APP",
+        "pair_index": 20,
+        "position_in_pair": 1,
+        "execution_index": 32
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0736",
+        "arm": "ORACLE",
+        "pair_index": 20,
+        "position_in_pair": 2,
+        "execution_index": 33
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0037",
+        "arm": "ORACLE",
+        "pair_index": 21,
+        "position_in_pair": 1,
+        "execution_index": 34
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0037",
+        "arm": "APP",
+        "pair_index": 21,
+        "position_in_pair": 2,
+        "execution_index": 35
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0319",
+        "arm": "ORACLE",
+        "pair_index": 22,
+        "position_in_pair": 1,
+        "execution_index": 36
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0319",
+        "arm": "APP",
+        "pair_index": 22,
+        "position_in_pair": 2,
+        "execution_index": 37
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0737",
+        "arm": "ORACLE",
+        "pair_index": 23,
+        "position_in_pair": 1,
+        "execution_index": 38
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0737",
+        "arm": "APP",
+        "pair_index": 23,
+        "position_in_pair": 2,
+        "execution_index": 39
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0732",
+        "arm": "ORACLE",
+        "pair_index": 24,
+        "position_in_pair": 1,
+        "execution_index": 40
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0732",
+        "arm": "APP",
+        "pair_index": 24,
+        "position_in_pair": 2,
+        "execution_index": 41
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0766",
+        "arm": "ORACLE",
+        "pair_index": 25,
+        "position_in_pair": 1,
+        "execution_index": 42
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0766",
+        "arm": "APP",
+        "pair_index": 25,
+        "position_in_pair": 2,
+        "execution_index": 43
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0362",
+        "arm": "APP",
+        "pair_index": 26,
+        "position_in_pair": 1,
+        "execution_index": 44
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0362",
+        "arm": "ORACLE",
+        "pair_index": 26,
+        "position_in_pair": 2,
+        "execution_index": 45
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0769",
+        "arm": "APP",
+        "pair_index": 27,
+        "position_in_pair": 1,
+        "execution_index": 46
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0769",
+        "arm": "ORACLE",
+        "pair_index": 27,
+        "position_in_pair": 2,
+        "execution_index": 47
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0739",
+        "arm": "ORACLE",
+        "pair_index": 28,
+        "position_in_pair": 1,
+        "execution_index": 48
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0739",
+        "arm": "APP",
+        "pair_index": 28,
+        "position_in_pair": 2,
+        "execution_index": 49
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0095",
+        "arm": "APP",
+        "pair_index": 29,
+        "position_in_pair": 1,
+        "execution_index": 50
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0095",
+        "arm": "ORACLE",
+        "pair_index": 29,
+        "position_in_pair": 2,
+        "execution_index": 51
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0096",
+        "arm": "ORACLE",
+        "pair_index": 30,
+        "position_in_pair": 1,
+        "execution_index": 52
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0096",
+        "arm": "APP",
+        "pair_index": 30,
+        "position_in_pair": 2,
+        "execution_index": 53
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0728",
+        "arm": "APP",
+        "pair_index": 31,
+        "position_in_pair": 1,
+        "execution_index": 54
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0765",
+        "arm": "APP",
+        "pair_index": 32,
+        "position_in_pair": 1,
+        "execution_index": 55
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0765",
+        "arm": "ORACLE",
+        "pair_index": 32,
+        "position_in_pair": 2,
+        "execution_index": 56
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0729",
+        "arm": "APP",
+        "pair_index": 33,
+        "position_in_pair": 1,
+        "execution_index": 57
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0729",
+        "arm": "ORACLE",
+        "pair_index": 33,
+        "position_in_pair": 2,
+        "execution_index": 58
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0360",
+        "arm": "ORACLE",
+        "pair_index": 34,
+        "position_in_pair": 1,
+        "execution_index": 59
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0360",
+        "arm": "APP",
+        "pair_index": 34,
+        "position_in_pair": 2,
+        "execution_index": 60
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0313",
+        "arm": "ORACLE",
+        "pair_index": 35,
+        "position_in_pair": 1,
+        "execution_index": 61
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0313",
+        "arm": "APP",
+        "pair_index": 35,
+        "position_in_pair": 2,
+        "execution_index": 62
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0763",
+        "arm": "APP",
+        "pair_index": 36,
+        "position_in_pair": 1,
+        "execution_index": 63
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0763",
+        "arm": "ORACLE",
+        "pair_index": 36,
+        "position_in_pair": 2,
+        "execution_index": 64
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0359",
+        "arm": "APP",
+        "pair_index": 37,
+        "position_in_pair": 1,
+        "execution_index": 65
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0359",
+        "arm": "ORACLE",
+        "pair_index": 37,
+        "position_in_pair": 2,
+        "execution_index": 66
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0727",
+        "arm": "ORACLE",
+        "pair_index": 38,
+        "position_in_pair": 1,
+        "execution_index": 67
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0727",
+        "arm": "APP",
+        "pair_index": 38,
+        "position_in_pair": 2,
+        "execution_index": 68
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0098",
+        "arm": "APP",
+        "pair_index": 39,
+        "position_in_pair": 1,
+        "execution_index": 69
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0094",
+        "arm": "APP",
+        "pair_index": 40,
+        "position_in_pair": 1,
+        "execution_index": 70
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0094",
+        "arm": "ORACLE",
+        "pair_index": 40,
+        "position_in_pair": 2,
+        "execution_index": 71
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0764",
+        "arm": "APP",
+        "pair_index": 41,
+        "position_in_pair": 1,
+        "execution_index": 72
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0353",
+        "arm": "ORACLE",
+        "pair_index": 42,
+        "position_in_pair": 1,
+        "execution_index": 73
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0353",
+        "arm": "APP",
+        "pair_index": 42,
+        "position_in_pair": 2,
+        "execution_index": 74
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0358",
+        "arm": "APP",
+        "pair_index": 43,
+        "position_in_pair": 1,
+        "execution_index": 75
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0314",
+        "arm": "APP",
+        "pair_index": 44,
+        "position_in_pair": 1,
+        "execution_index": 76
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0034",
+        "arm": "ORACLE",
+        "pair_index": 45,
+        "position_in_pair": 1,
+        "execution_index": 77
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0034",
+        "arm": "APP",
+        "pair_index": 45,
+        "position_in_pair": 2,
+        "execution_index": 78
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0767",
+        "arm": "APP",
+        "pair_index": 46,
+        "position_in_pair": 1,
+        "execution_index": 79
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0767",
+        "arm": "ORACLE",
+        "pair_index": 46,
+        "position_in_pair": 2,
+        "execution_index": 80
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0097",
+        "arm": "ORACLE",
+        "pair_index": 47,
+        "position_in_pair": 1,
+        "execution_index": 81
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0097",
+        "arm": "APP",
+        "pair_index": 47,
+        "position_in_pair": 2,
+        "execution_index": 82
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0316",
+        "arm": "APP",
+        "pair_index": 48,
+        "position_in_pair": 1,
+        "execution_index": 83
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0730",
+        "arm": "APP",
+        "pair_index": 49,
+        "position_in_pair": 1,
+        "execution_index": 84
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0317",
+        "arm": "APP",
+        "pair_index": 50,
+        "position_in_pair": 1,
+        "execution_index": 85
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0317",
+        "arm": "ORACLE",
+        "pair_index": 50,
+        "position_in_pair": 2,
+        "execution_index": 86
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0738",
+        "arm": "APP",
+        "pair_index": 51,
+        "position_in_pair": 1,
+        "execution_index": 87
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0040",
+        "arm": "APP",
+        "pair_index": 52,
+        "position_in_pair": 1,
+        "execution_index": 88
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0735",
+        "arm": "APP",
+        "pair_index": 53,
+        "position_in_pair": 1,
+        "execution_index": 89
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0735",
+        "arm": "ORACLE",
+        "pair_index": 53,
+        "position_in_pair": 2,
+        "execution_index": 90
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0036",
+        "arm": "APP",
+        "pair_index": 54,
+        "position_in_pair": 1,
+        "execution_index": 91
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0355",
+        "arm": "APP",
+        "pair_index": 55,
+        "position_in_pair": 1,
+        "execution_index": 92
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0355",
+        "arm": "ORACLE",
+        "pair_index": 55,
+        "position_in_pair": 2,
+        "execution_index": 93
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0354",
+        "arm": "APP",
+        "pair_index": 56,
+        "position_in_pair": 1,
+        "execution_index": 94
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0033",
+        "arm": "ORACLE",
+        "pair_index": 57,
+        "position_in_pair": 1,
+        "execution_index": 95
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0033",
+        "arm": "APP",
+        "pair_index": 57,
+        "position_in_pair": 2,
+        "execution_index": 96
+      }
+    ]
+  },
+  "decision_rule": {
+    "status": "engineering screening rule for this application and these 37 questions, fixed before any E4 reply. It decides only whether page selection (retrieval, the context guard, distractor pages) costs the application measurable accuracy. It does not rank page selection against the reader: on the frozen anchor the reader misses 21 of 37 questions even with the evidence pages. Both losses are reported side by side (page-selection loss = the primary gap; reading loss = 1 - ORACLE accuracy on the 37) and the next step is chosen from both. Not a significance test and not a claim about other documents",
+    "minimum_primary_gap": 0.05,
+    "variability_margin": "max(frozen GPT-4o-mini 512-px repeat correctness-change rate 1/37, correctness-change rate between ORACLE and frozen E1_768 on the 37 identical requests)",
+    "variability_rule": "the primary gap must be strictly greater than the variability margin",
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "broken_rule": "broken <= fixed / 2 on the primary comparison",
+    "page_selection_costs": "page_selection_costs_accuracy when all three criteria pass",
+    "no_cost": "no_measurable_page_selection_cost when the primary gap is <= 0",
+    "otherwise": "inconclusive",
+    "never_change_the_verdict": [
+      "APP accuracy and its interval",
+      "abstention and citation metrics",
+      "strata breakdown",
+      "APP vs B",
+      "sensitivity analyses S1-S3",
+      "cost",
+      "latency",
+      "manual labels"
+    ],
+    "fixed_before_results": "the rule, its thresholds, the metrics, the strata, the sensitivity sets and the error taxonomy are frozen in this spec and are not changed after any E4 reply is seen; a change requires a new spec version, and the v1 result under the v1 rule is still reported"
+  },
+  "notebook02_code_sha256": "2395b5f4a3480c91cdf1b3b71642cc31826f391bcfdce81ab5ad2be9bc3e1b80",
+  "run_id": "20261123T000625940289Z_15119ec0_full",
+  "mode": "full",
+  "system_prompt": "You answer questions about a single PDF document using only the page images provided.\nEach page image is preceded by a tag [Page N], where N is the 1-based page number in the PDF.\n\nReturn a JSON object with exactly these keys:\n  \"answer\": the shortest complete answer. Use a number (integer or decimal) when the answer is a number,\n            and a JSON list when several items are asked for. If the page images do not contain the answer,\n            use exactly the string \"Not answerable\".\n  \"cited_pages\": a list of the page numbers N whose images support the answer ([] if \"Not answerable\").\n\nDo not use knowledge outside the page images. Do not guess.",
+  "planned_calls": 96,
+  "max_attempts_per_request": 2,
+  "approved_budget_usd": 1.5,
+  "budget_scope": "cumulative over every E4 run under this spec version (smoke, full, and any interrupted or resumed run), at list price",
+  "prior_spent_usd_at_creation": 0.0221943,
+  "planned_cost_upper_usd": 1.21056105,
+  "cache_policy": "cache entries are keyed SHA-256(run_id:replicate_id:request_fingerprint); no reply of another run or replicate can be reused",
+  "code_provenance": {
+    "git_commit": "72791e9b5834713ce6ad334fafa2d2f46be40af8",
+    "branch": "refactor/simplify-structure",
+    "spec_sha256": "5c1bbbb8d5a41bf9355e8d206f73e2df1587e807a290aa507894ff7ab8b99b90",
+    "spec_committed": true,
+    "notebook02_code_sha256": "2395b5f4a3480c91cdf1b3b71642cc31826f391bcfdce81ab5ad2be9bc3e1b80",
+    "notebook02_code_committed": true,
+    "application_module_sha256": {
+      "src/visualdoc/__init__.py": "d91c5dc096bc8835c261c4deeefcf57a480226104310f58bff4adc1d97c84778",
+      "src/visualdoc/answering.py": "081b50d68a73a372e268fceefdcde0b160521b579f92e0eb6a984415fcebe55d",
+      "src/visualdoc/citations.py": "38ef03a8018b521e12810d46bb38ab21474ed2b93711e4cf4d03369777675c3c",
+      "src/visualdoc/documents.py": "52f0466a0eba57ac3822087b7f717e12e5328f647ae27c9ea9a337eba19f8bc9",
+      "src/visualdoc/parsing.py": "720cc2d3cf01b35473e19fcb876d69632ea0d9c3e47974546e50d3a7b0f70e69",
+      "src/visualdoc/pipeline.py": "b6124304ef9618c5240148114d1b5eb774ca18ed134b899695fddf8a0574dc0e",
+      "src/visualdoc/retrieval.py": "6b1f4d835f1753b279184c21fca8db1578ef023ee2bb8a105d72556f9ff0b43e"
+    },
+    "application_committed": true,
+    "git_status": [
+      "M notebooks/03_evaluation.ipynb"
+    ]
+  }
+}

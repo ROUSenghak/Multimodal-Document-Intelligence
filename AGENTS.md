@@ -6,7 +6,7 @@ During the learning and experimentation phase, project features are implemented 
 
 - `notebooks/00_document_processing.ipynb` → `01_retrieval.ipynb` → `02_question_answering.ipynb` → `03_evaluation.ipynb`. Each notebook has one responsibility.
 - Notebooks communicate **only through saved files** (`data/processed/`, `data/cache/`, `experiments/`). Each notebook states its inputs and outputs at the top and fails with a clear message when an input is missing. Never depend on variables created by another notebook.
-- `experiments/frozen/` holds the committed canonical predictions and the frozen E1–E3 runs. Never edit those files; new live runs go to the git-ignored `experiments/runs/`.
+- `experiments/frozen/` holds the committed canonical predictions and the frozen E1–E4 runs. Never edit those files; new live runs go to the git-ignored `experiments/runs/`.
 - `archive/` is read-only history. Do not import from it or extend it.
 
 ## Required workflow
@@ -29,7 +29,7 @@ Show the underlying operation once before wrapping it in a helper when that impr
 
 - Do not change the dataset revision, subset, seeds, OCR or BM25 parameters, prompts, model snapshot, page lists or scoring rules without recording it as a new condition.
 - Paid API calls are opt-in (`VISUALDOC_QA_MODE`, default `replay`). Never run `smoke`, `pilot` or `full` without the user's explicit approval. Never print or commit credentials.
-- Regression references (Recall@5 0.689, Hit@5 0.800, A 7/40, B 7/40, C 9/40, D 11/38; E1 10/37 → 16/37 with 6 fixed / 0 broken, repeat 11/37, verdict adopt_768; E2 Qwen 11/37 → 15/37 vs GPT-4o-mini 16/37 with 4 fixed / 5 broken, repeat 15/37, verdict retain_gpt4o_mini_768; E3 T 13/37, I 17/37, IT 16/37 with IT − I 1 fixed / 2 broken, repeat 16/37, verdict retain_image_only_768) are asserted in the notebooks; a change that breaks them must be explained, not silenced.
+- Regression references (Recall@5 0.689, Hit@5 0.800, A 7/40, B 7/40, C 9/40, D 11/38; E1 10/37 → 16/37 with 6 fixed / 0 broken, repeat 11/37, verdict adopt_768; E2 Qwen 11/37 → 15/37 vs GPT-4o-mini 16/37 with 4 fixed / 5 broken, repeat 15/37, verdict retain_gpt4o_mini_768; E3 T 13/37, I 17/37, IT 16/37 with IT − I 1 fixed / 2 broken, repeat 16/37, verdict retain_image_only_768; E4 APP 11/40 answerable, ORACLE 17/37, ORACLE − APP 8 fixed / 2 broken, cross-session margin 5/37, verdict page_selection_costs_accuracy, spend $1.2006) are asserted in the notebooks; a change that breaks them must be explained, not silenced.
 
 ## Completion standard
 

@@ -1,0 +1,412 @@
+{
+  "spec_id": "e4-application-end-to-end-v1",
+  "spec_sha256": "5c1bbbb8d5a41bf9355e8d206f73e2df1587e807a290aa507894ff7ab8b99b90",
+  "run_id": "20261123T000625940289Z_15119ec0_full",
+  "results": {
+    "application": {
+      "answerable accuracy (40)": 0.275,
+      "answerable correct": "11 / 40",
+      "answerable accuracy, document-cluster bootstrap 95%": [
+        0.13157894736842105,
+        0.42857142857142855
+      ],
+      "matched accuracy (37)": 0.2972972972972973,
+      "accuracy, all 57": 0.29323308270676696,
+      "F1, all 57": 0.23547880690737838,
+      "unparseable replies": 0
+    },
+    "primary": {
+      "questions": 37,
+      "accuracy_before": 0.2972972972972973,
+      "accuracy_after": 0.4594594594594595,
+      "paired_difference": 0.16216216216216217,
+      "fixed": 8,
+      "broken": 2,
+      "both_correct": 9,
+      "both_wrong": 18,
+      "exact_mcnemar_p_ignores_clustering": 0.109375,
+      "reading_loss_1_minus_ORACLE_accuracy": 0.5405405405405406,
+      "document_cluster_bootstrap_95": [
+        0.09090909090909091,
+        0.2564102564102564
+      ],
+      "leave_one_document_out": {
+        "2210.02442v1.pdf": 0.12903225806451613,
+        "PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf": 0.16666666666666666,
+        "bdf54dxa.pdf": 0.15625,
+        "earlybird-110722143746-phpapp02_95.pdf": 0.15151515151515152,
+        "germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf": 0.19230769230769232,
+        "watch_d.pdf": 0.18181818181818182
+      }
+    },
+    "cross_session": {
+      "identical_raw_replies": 27,
+      "identical_parsed_answers": 29,
+      "correctness_changes": 5,
+      "correctness_change_rate": 0.13513513513513514,
+      "ORACLE correct": 17,
+      "frozen E1_768 correct": 16
+    },
+    "decision": {
+      "verdict": "page_selection_costs_accuracy",
+      "criteria": {
+        "gap >= 0.05": true,
+        "gap > variability margin": true,
+        "broken <= fixed / 2": true
+      },
+      "variability_margin": 0.13513513513513514
+    },
+    "strata": {
+      "all_evidence_supplied": {
+        "questions": 20,
+        "APP correct": 10,
+        "APP abstained": 0,
+        "matched": 20,
+        "APP correct (matched)": 10,
+        "ORACLE correct (matched)": 8,
+        "fixed (ORACLE right, APP wrong)": 0,
+        "broken (APP right, ORACLE wrong)": 2
+      },
+      "some_evidence_supplied": {
+        "questions": 9,
+        "APP correct": 0,
+        "APP abstained": 0,
+        "matched": 9,
+        "APP correct (matched)": 0,
+        "ORACLE correct (matched)": 4,
+        "fixed (ORACLE right, APP wrong)": 4,
+        "broken (APP right, ORACLE wrong)": 0
+      },
+      "evidence_retrieved_but_dropped_by_guard": {
+        "questions": 3,
+        "APP correct": 0,
+        "APP abstained": 0,
+        "matched": 2,
+        "APP correct (matched)": 0,
+        "ORACLE correct (matched)": 1,
+        "fixed (ORACLE right, APP wrong)": 1,
+        "broken (APP right, ORACLE wrong)": 0
+      },
+      "evidence_not_retrieved": {
+        "questions": 8,
+        "APP correct": 1,
+        "APP abstained": 0,
+        "matched": 6,
+        "APP correct (matched)": 1,
+        "ORACLE correct (matched)": 4,
+        "fixed (ORACLE right, APP wrong)": 3,
+        "broken (APP right, ORACLE wrong)": 0
+      },
+      "unanswerable": {
+        "questions": 17,
+        "APP correct": 6,
+        "APP abstained": 6,
+        "matched": 0,
+        "APP correct (matched)": null,
+        "ORACLE correct (matched)": null,
+        "fixed (ORACLE right, APP wrong)": null,
+        "broken (APP right, ORACLE wrong)": null
+      }
+    },
+    "behaviour": {
+      "grounded abstention: 'Not answerable' when no evidence page was supplied (answerable)": "0 / 11",
+      "unsupported answer: an answer when no evidence page was supplied (answerable)": "11 / 11",
+      "correct without any supplied evidence page (queued for review)": "1 / 11",
+      "false abstention with evidence supplied (answerable)": "0 / 29",
+      "correct abstention (unanswerable)": "6 / 17",
+      "unanswerable answered with content": "11 / 17",
+      "citation valid (all cited pages supplied)": "47 / 57",
+      "invalid citation that is off by one (printed page number)": "8 / 10",
+      "answer without a citation": "2 / 57",
+      "correct and evidence supplied, but cites no evidence page": "2 / 10"
+    },
+    "error_hypotheses": {
+      "reader": 15,
+      "retrieval": 7,
+      "incomplete_evidence": 4,
+      "context_guard": 3
+    },
+    "app_vs_frozen_B": {
+      "all 57": {
+        "questions": 57,
+        "accuracy_before": 0.22807017543859648,
+        "accuracy_after": 0.2982456140350877,
+        "paired_difference": 0.07017543859649122,
+        "fixed": 6,
+        "broken": 2,
+        "both_correct": 11,
+        "both_wrong": 38,
+        "exact_mcnemar_p_ignores_clustering": 0.2890625
+      },
+      "answerable 40": {
+        "questions": 40,
+        "accuracy_before": 0.175,
+        "accuracy_after": 0.275,
+        "paired_difference": 0.10000000000000003,
+        "fixed": 5,
+        "broken": 1,
+        "both_correct": 6,
+        "both_wrong": 28,
+        "exact_mcnemar_p_ignores_clustering": 0.21875
+      }
+    },
+    "sensitivity": {
+      "S1: without unscorable references": {
+        "questions": 35,
+        "accuracy_before": 0.3142857142857143,
+        "accuracy_after": 0.4857142857142857,
+        "paired_difference": 0.17142857142857143,
+        "fixed": 8,
+        "broken": 2,
+        "both_correct": 9,
+        "both_wrong": 16,
+        "exact_mcnemar_p_ignores_clustering": 0.109375
+      },
+      "S2: without annotation or scoring issues": {
+        "questions": 33,
+        "accuracy_before": 0.3333333333333333,
+        "accuracy_after": 0.5151515151515151,
+        "paired_difference": 0.18181818181818182,
+        "fixed": 8,
+        "broken": 2,
+        "both_correct": 9,
+        "both_wrong": 14,
+        "exact_mcnemar_p_ignores_clustering": 0.109375
+      },
+      "S3: strict accuracy (score = 1)": {
+        "questions": 37,
+        "accuracy_before": 0.2702702702702703,
+        "accuracy_after": 0.43243243243243246,
+        "paired_difference": 0.16216216216216217,
+        "fixed": 8,
+        "broken": 2,
+        "both_correct": 8,
+        "both_wrong": 19,
+        "exact_mcnemar_p_ignores_clustering": 0.109375
+      }
+    },
+    "cost": {
+      "APP": {
+        "calls": 57,
+        "prompt tokens (mean)": 105333.1052631579,
+        "calls with cached prompt tokens": 3,
+        "list-price USD": 0.90135285,
+        "API latency s (median)": 2.961
+      },
+      "ORACLE": {
+        "calls": 37,
+        "prompt tokens (mean)": 45829.86486486487,
+        "calls with cached prompt tokens": 9,
+        "list-price USD": 0.25482675,
+        "API latency s (median)": 1.869
+      }
+    },
+    "manual_review_queue": [
+      "mmlb-0034",
+      "mmlb-0038",
+      "mmlb-0041",
+      "mmlb-0098",
+      "mmlb-0313",
+      "mmlb-0314",
+      "mmlb-0316",
+      "mmlb-0317",
+      "mmlb-0318",
+      "mmlb-0355",
+      "mmlb-0356",
+      "mmlb-0360",
+      "mmlb-0362",
+      "mmlb-0363",
+      "mmlb-0728",
+      "mmlb-0731",
+      "mmlb-0732",
+      "mmlb-0733",
+      "mmlb-0735",
+      "mmlb-0736",
+      "mmlb-0738",
+      "mmlb-0742",
+      "mmlb-0762",
+      "mmlb-0764",
+      "mmlb-0768",
+      "mmlb-0769",
+      "mmlb-0770"
+    ]
+  },
+  "manual_review": {
+    "mmlb-0034": {
+      "label": "annotation or scoring issue",
+      "origin": "carried",
+      "note": "'Europe IPO index value' is right in substance; the Str rule scores the extra words 0."
+    },
+    "mmlb-0038": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "'Deutsche Bank Private Equity' for Spain; twin of mmlb-0037 (Germany)."
+    },
+    "mmlb-0041": {
+      "label": "reasoning or aggregation",
+      "origin": "carried",
+      "note": "350, the slide-title value; the chart lines meet near 300 (and a bare 300 would still fail '300 million')."
+    },
+    "mmlb-0098": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "Describes a down-button behaviour where the reference is 'Not answerable' (cites p.15)."
+    },
+    "mmlb-0313": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "Correct (2) without its evidence page; its unanswerable twin mmlb-0314 got the same 2 from the same supplied page, so this is most likely an ungrounded guess."
+    },
+    "mmlb-0314": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "2, the same answer as its twin mmlb-0313 (dishwasher instead of microwave)."
+    },
+    "mmlb-0316": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "'1.00' up arrows on p.13; twin of mmlb-0315."
+    },
+    "mmlb-0317": {
+      "label": "visual reading",
+      "origin": "carried",
+      "note": "Arrow count in the figures: APP 2.0 (frozen image replies 4); ORACLE with both evidence pages also 2.0."
+    },
+    "mmlb-0318": {
+      "label": "reasoning or aggregation",
+      "origin": "carried",
+      "note": "[600, 450]: cabinet widths instead of the 100 mm floor clearance (frozen note: verify the reference on the PDF)."
+    },
+    "mmlb-0355": {
+      "label": "reasoning or aggregation",
+      "origin": "carried",
+      "note": "'Democrats': the chart headline instead of comparing the bars (Liberal 56 %)."
+    },
+    "mmlb-0356": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "'Democrats' for Russia; the answer given to its twin mmlb-0355 (U.S.)."
+    },
+    "mmlb-0360": {
+      "label": "reasoning or aggregation",
+      "origin": "carried",
+      "note": "44 = the U.S. partisan gap alone; the U.K. gap (9) is never subtracted."
+    },
+    "mmlb-0362": {
+      "label": "reasoning or aggregation",
+      "origin": "carried",
+      "note": "6 instead of a 1-point difference; ORACLE with both pages also wrong (5)."
+    },
+    "mmlb-0363": {
+      "label": "reasoning or aggregation",
+      "origin": "carried",
+      "note": "12 instead of 29: the two distrust categories are not combined and compared."
+    },
+    "mmlb-0728": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "60 for Boeing; the same number APP gave for its twin mmlb-0727 (Lufthansa)."
+    },
+    "mmlb-0731": {
+      "label": "visual reading",
+      "origin": "carried",
+      "note": "The small yellow early logo is missed; only the later black-and-white logo is reported."
+    },
+    "mmlb-0732": {
+      "label": "reasoning or aggregation",
+      "origin": "new",
+      "note": "Cross-page count of Airbus figures: APP 2 (some pages), ORACLE 3 (all three pages), reference 5. Low confidence between visual reading and aggregation; not re-inspected on images."
+    },
+    "mmlb-0733": {
+      "label": "annotation or scoring issue",
+      "origin": "carried",
+      "note": "APP '14:04 CET' equals the reference; the Int scorer cannot score a time string."
+    },
+    "mmlb-0735": {
+      "label": "annotation or scoring issue",
+      "origin": "carried",
+      "note": "'No' agrees with page 8 per the frozen review; the reference is 'yes' in Int format."
+    },
+    "mmlb-0736": {
+      "label": "annotation or scoring issue",
+      "origin": "carried",
+      "note": "4 matches the slide text 'Within the first 4 hours'; the reference 3 comes from a caption."
+    },
+    "mmlb-0738": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "18 blogs for Airbus where the reference is 'Not answerable' (cites p.18)."
+    },
+    "mmlb-0742": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "100 % of Airbus tweets in English where the reference is 'Not answerable' (cites p.16)."
+    },
+    "mmlb-0762": {
+      "label": "reasoning or aggregation",
+      "origin": "carried",
+      "note": "5 instead of 2: semantic comparison of figures across pages (frozen note flags the reference for checking)."
+    },
+    "mmlb-0764": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "6 for a uniform-sampling baseline the paper does not use; twin of mmlb-0763."
+    },
+    "mmlb-0768": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "Lists K-means clustering and contrastive learning as large language models."
+    },
+    "mmlb-0769": {
+      "label": "visual reading",
+      "origin": "carried",
+      "note": "'pseudo-labels': the wider spread of the ground-truth map is misread."
+    },
+    "mmlb-0770": {
+      "label": "abstention",
+      "origin": "new",
+      "note": "'pseudo-labels' for DermaMNIST: the answer of its twin mmlb-0769 (PathMNIST)."
+    }
+  },
+  "answerable_error_decomposition": {
+    "page selection: context_guard": 3,
+    "page selection: incomplete_evidence": 4,
+    "page selection: retrieval": 7,
+    "reader: annotation or scoring issue": 4,
+    "reader: reasoning or aggregation": 8,
+    "reader: visual reading": 3
+  },
+  "robustness_post_hoc": {
+    "ORACLE, this session (primary)": {
+      "reference_correct": 17,
+      "fixed": 8,
+      "broken": 2
+    },
+    "frozen E1_768 in place of ORACLE": {
+      "reference_correct": 16,
+      "fixed": 5,
+      "broken": 0
+    },
+    "correct in both ORACLE sessions": {
+      "reference_correct": 14,
+      "fixed": 5,
+      "broken": 2
+    }
+  },
+  "system_fingerprints": {
+    "APP": {
+      "fp_9400314673": 1,
+      "fp_e7d4fdcd1d": 56
+    },
+    "ORACLE": {
+      "fp_e7d4fdcd1d": 37
+    },
+    "frozen E1_768": {
+      "fp_9483e83037": 37
+    }
+  },
+  "spend_usd_all_runs": {
+    "list_price": 1.2005682,
+    "cached_input_at_half_price": 1.1673618000000001
+  }
+}
