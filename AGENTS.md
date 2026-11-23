@@ -15,7 +15,7 @@ During the learning and experimentation phase, project features are implemented 
 - Do not develop a `.py` implementation and convert or generate a notebook from it.
 - Do not use `src/visualdoc/` as a hidden implementation layer for the notebooks. Rebuild important operations visibly in notebook cells.
 - Preserve `src/visualdoc/parsing.py`, `tests/` and `archive/` as historical, regression or reference material unless the user explicitly requests a change.
-- `src/visualdoc/` also holds the application baseline approved on 2026-11-22 (`documents`, `retrieval`, `answering`, `citations`, `pipeline`). The notebooks never import it. Its constants are pinned to the frozen runs by parity tests; a change that breaks one is a new condition, not a fix.
+- `src/visualdoc/` also holds the application baseline approved on 2026-11-22 (`documents`, `retrieval`, `answering`, `citations`, `pipeline`). Notebooks import it only where the application itself is the object measured: `02_question_answering` section 13 (E4) and `03_evaluation` sections 16–17. Those sections import it explicitly, check its module hashes or outputs against the notebooks' own construction, and never use it to replace a step the notebooks rebuild visibly. No other section imports it. Its constants are pinned to the frozen runs by parity tests; a change that breaks one is a new condition, not a fix.
 - Keep each notebook executable from top to bottom on a fresh kernel (`visualdoc-venv`), given the outputs of the notebooks before it.
 - Prefer extending an existing stage over adding a notebook. A new stage gets the next number.
 

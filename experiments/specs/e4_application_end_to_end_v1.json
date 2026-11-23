@@ -1,9 +1,14 @@
 {
   "spec_id": "e4-application-end-to-end-v1",
-  "status": "draft-awaiting-approval",
+  "status": "frozen-before-live-execution",
   "status_rule": "Paid modes (smoke, full) refuse to run unless status is 'frozen-before-live-execution', frozen_at is set and budget.approved_ceiling_usd is a number, and unless this file, notebook 02's code cells and every module of src/visualdoc/ on disk equal git HEAD. Setting those three fields and committing this file with the implementation is the approval act. After that commit the file is never edited; any change is a new spec version (e4-application-end-to-end-v2).",
   "drafted_at": "2026-11-22",
-  "frozen_at": null,
+  "frozen_at": "2026-11-22T23:58:00Z",
+  "revisions_before_freeze_2026_11_23": [
+    "Budget guard made conservative: the per-call bound uses the application's own prompt-token upper bound (estimate_prompt_tokens) instead of the exact expectation, and an attempt that failed after it may have been processed (network, server or unexpected error) is charged its full bound in the current and the cumulative spend. Upper bounds rise from 0.0226 / 1.2001 / 1.2228 to 0.0229 / 1.2106 / 1.2335 USD.",
+    "Error taxonomy reworded: the mechanical labels are diagnostic hypotheses, not demonstrated causes.",
+    "No change to arms, population, strata, requests, scoring, metrics, thresholds or the decision rule."
+  ],
   "research_question": "On the 57 questions of the 6-document MMLongBench-Doc subset, how accurate is the application in src/visualdoc/ end to end, as shipped (BM25 top 5, context guard, 768-px page images, GPT-4o-mini, mmlb-image-v1), and on the 37 matched answerable questions, how much of its error is caused by page selection (retrieval, the context guard and distractor pages) rather than by reading the pages it is given?",
   "why_this_experiment": {
     "gap": "The application's default configuration has never been measured. E0 condition B measured BM25 top 5 at 512 px (7/40); E1-E3 measured 768-px images on annotated evidence pages only (16-17/37). The shipped combination, retrieved pages at 768 px truncated by the context guard to 3-4 pages, has no measured accuracy, abstention or citation behaviour.",
@@ -152,6 +157,7 @@
   },
   "error_taxonomy": {
     "rule": "one mechanical label per answerable APP error, assigned in this order; descriptive, never part of the verdict",
+    "status_of_labels": "each label is a diagnostic hypothesis about where the error arises, derived from the stratum and the ORACLE reply; it is not a demonstrated cause. 'retrieval' and 'context_guard' mean no evidence page was sent, not that sending one would have fixed the answer (the reader may have failed on it too); 'incomplete_evidence' and 'selection_interference' can also be run-to-run variability of the reader (see the cross-session margin); 'reader' merges visual reading, reasoning and annotation or scoring problems until a manual label separates them",
     "contract": "APP reply unparseable or truncated",
     "retrieval": "stratum evidence_not_retrieved",
     "context_guard": "stratum evidence_retrieved_but_dropped_by_guard",
@@ -198,7 +204,7 @@
   },
   "token_accounting": {
     "expected_prompt_tokens": "o200k_base tokens of the system prompt and every text part + 9, plus 2,833 + 5,667 x tiles per image (the rule of notebook 02 section 12: billed minus expected was +1 on every frozen E1 image call, and +1 or 0 on the 151 frozen E3 calls)",
-    "application_bound": "the application's own upper bound (estimate_prompt_tokens), recorded beside it; it exceeded the billed prompt by 637-867 tokens on the frozen image-only requests",
+    "application_bound": "the application's own upper bound (estimate_prompt_tokens), recorded beside it; it exceeded the billed prompt by 637-867 tokens on the frozen image-only requests. It is the prompt-token bound of the budget guard",
     "tolerance_tokens": 16,
     "role": "diagnostic: gates the smoke stage; in full mode a deviation is flagged and reported, never a stop. Request bytes are verified by image hashes and fingerprints, not by token counts"
   },
@@ -225,7 +231,7 @@
       "integrity_failure": "stop in every mode, not resumable: the request about to be sent differs from the plan (image hashes or fingerprint), the arguments the SDK received differ from the plan, or the served model differs from the snapshot",
       "application_refusal": "check_request raising ValueError inside ask stops the run before any call (asserted impossible offline for every planned request)",
       "api_failure": "stop on any API error other than a waitable 429 rate limit",
-      "budget": "stop before a call whose list-price upper bound would take the cumulative E4 spend plus the upper bound of every remaining call of the run above the approved ceiling",
+      "budget": "stop before a call whose list-price upper bound would take the cumulative E4 spend (replies received plus possibly billed failed attempts) plus the upper bound of every remaining call of the run above the approved ceiling",
       "smoke": "an unparseable or truncated reply, or a prompt-token difference outside the tolerance, fails the smoke gate and stops the stage",
       "full_mode": "contract failures are recorded and scored 0 and token deviations flagged; neither stops the run, so the population is not truncated by outcome"
     },
@@ -254,14 +260,14 @@
     "full": ["smoke gate passed in the same run", "explicit approval of the full stage", "all 96 planned calls logged with a reply"]
   },
   "budget": {
-    "approved_ceiling_usd": null,
+    "approved_ceiling_usd": 1.5,
     "proposed_ceiling_usd": 1.5,
     "scope": "cumulative over every E4 run under this spec version (smoke, full, and any interrupted or resumed run), at list price",
-    "enforcement": "before each call: list-price cost of every reply already received by any E4 run under this spec hash, plus the upper bound of this and every remaining call of the current run, must stay within the ceiling",
-    "estimate_upper_bound_usd": {"smoke": 0.0226, "full": 1.2001, "all_stages": 1.2228},
-    "estimate_typical_usd": {"note": "with GPT-4o-mini's mean E1 reply length (21 output tokens), no cache discount", "all_stages": 1.2005},
+    "enforcement": "before each call: list-price cost of every reply already received by any E4 run under this spec hash, plus the full upper bound of every attempt that failed after it may have been processed (network, server or unexpected error; never a 4xx), plus the upper bound of this and every remaining call of the current run, must stay within the ceiling. The per-call upper bound is the application's prompt-token bound (estimate_prompt_tokens), uncached, plus the full 400-token output allowance",
+    "estimate_upper_bound_usd": {"smoke": 0.0229, "full": 1.2106, "all_stages": 1.2335},
+    "estimate_typical_usd": {"note": "with GPT-4o-mini's mean E1 reply length (21 output tokens), the exact token expectation, no cache discount", "all_stages": 1.2005},
     "price_basis": "OpenAI list price, USD 0.15 / 0.60 per 1M input / output tokens; cached input is billed lower, so the bound is conservative",
-    "headroom": "1.50 - 1.2228 = 0.2772 USD, enough to resume about 20 % of the full run"
+    "headroom": "1.50 - 1.2335 = 0.2665 USD, enough to resume about 20 % of the full run"
   },
   "code_provenance": {
     "rule": "the E4 implementation (notebooks 02 and 03), this spec and the application modules are committed before the first paid call",
@@ -279,5 +285,5 @@
     "Annotated evidence pages are single annotations: an answer may also sit on another page, so 'no evidence supplied' can be pessimistic.",
     "The model snapshot shuts down on 2027-01-14."
   ],
-  "approval": "drafted 2026-11-22 for the project owner's review; nothing approved. Freezing requires the owner to set status, frozen_at and approved_ceiling_usd and to commit; each paid stage (smoke, full) then needs its own explicit approval"
+  "approval": "drafted 2026-11-22; approved by the project owner on 2026-11-23 with a cumulative ceiling of USD 1.50. The same written instruction authorizes the smoke stage (2 calls) and, only if its gate passes, the full stage (96 calls); no pilot, repeat, other model or other arm. Frozen by committing this file with the implementation"
 }
