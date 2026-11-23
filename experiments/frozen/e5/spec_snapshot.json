@@ -1,0 +1,132 @@
+{
+  "spec_id": "e5-visual-retrieval-v1",
+  "status": "frozen-before-evaluation",
+  "status_rule": "Frozen and committed before any visual-retrieval score was computed for an annotated question (development or held-out). After that commit this file is never edited; any change to the model, preprocessing, populations, metrics, statistics or decision rule is a new spec version (e5-visual-retrieval-v2). Notebook 04 refuses to evaluate unless this file equals its committed version.",
+  "drafted_at": "2026-11-23",
+  "frozen_at": "2026-11-23T11:38:00Z",
+  "paid_api_calls": "none: E5 is offline. No LLM or VLM API is called; the visual retriever runs locally.",
+
+  "research_question": "Does visual document retrieval improve the availability of annotated evidence among the pages that would actually reach GPT-4o-mini, under the application's context guard, compared with the application's OCR + BM25 retriever?",
+
+  "why_this_experiment": {
+    "starting_evidence_verified_2026_11_23": [
+      "Frozen E4: APP 11/40 answerable correct; ORACLE 17/37 on the matched questions; ORACLE - APP 8 fixed / 2 broken (experiments/frozen/e4).",
+      "BM25 top 5 contains an evidence page for 32/40 answerable development questions; the pages E4 actually sent (after the context guard) contain one for 29/40: 8 not retrieved, 3 retrieved at rank 5 and dropped by the guard (recomputed from the frozen E4 execution log and rankings.parquet).",
+      "The reader also fails with oracle evidence (ORACLE 17/37), so evidence availability bounds accuracy but does not determine it."
+    ],
+    "what_e5_is_not": "Not an accuracy experiment: no answer is generated. Not an integration of the visual retriever into src/visualdoc/. Not a model comparison across visual retrievers. Not a tuning study: no parameter of either arm is chosen on these data."
+  },
+
+  "hypotheses": {
+    "primary_null": "On the held-out answerable questions, mean over questions of (Recall_after_V - Recall_after_A) <= 0.",
+    "primary_directional": "mean(Recall_after_V - Recall_after_A) > 0.",
+    "minimum_meaningful_difference": 0.05,
+    "why_0_05": "0.05 of mean evidence recall is about 5 of the ~100 held-out answerable questions gaining one full evidence page. Below that, a 4.4 GB model and ~13 s per page of local indexing on this machine are not worth an end-to-end experiment. It is a judgement fixed before seeing results, not a statistical quantity. It is NOT derived from E4's 5/37 VLM variability margin, which measures reader variability, not retrieval: retrieval here is deterministic (checked), so run-to-run variability is zero and the uncertainty is sampling of documents and questions."
+  },
+
+  "arms": {
+    "A_bm25": {
+      "label": "application baseline: OCR + BM25",
+      "text": "native PyMuPDF text layer (get_text('text', sort=True)); full-page Tesseract OCR at 150 dpi (resources/tessdata/eng) when the page has fewer than 30 native words (notebook 00's policy = visualdoc.documents)",
+      "ranking": "BM25 per document over every page, k1 1.5, b 0.75, lower-cased [a-z0-9]+ tokens, no stemming or stop words, ties by page number (notebook 01 = visualdoc.retrieval)",
+      "changes": "none"
+    },
+    "V_colqwen2": {
+      "label": "visual retriever: ColQwen2 v1.0 (ColPali-style late interaction on a Qwen2-VL-2B backbone). It is NOT the original ColPali (PaliGemma-3B).",
+      "checkpoint": {"repo": "vidore/colqwen2-v1.0-hf", "revision": "ddc07d2317c80f75fc742b7362ee9ad1912908f9", "licence": "apache-2.0", "weights_file": "model.safetensors", "weights_bytes": 4418454832, "weights_sha256": "2f6dbf32fc2db5b045d74ae73b148425d6e03cc1106a047cdcc7e72b6dc53aba", "parameters": 2209182336},
+      "implementation": "transformers 5.23.0 native ColQwen2ForRetrieval and ColQwen2Processor (no colpali-engine); torch 2.15.0",
+      "device_and_precision": "Apple M1 GPU (MPS), torch.bfloat16 (the checkpoint's dtype), attn_implementation sdpa (default), torch.inference_mode, batch size 1 for pages and for queries (no padding inside a batch)",
+      "page_input": "the application's answering image of the page: whole page fitted in a 768 x 1536-px box, opaque RGB PNG (E1 profile, = visualdoc.documents.render_page_png), then the processor's defaults from the pinned preprocessor_config.json: Qwen2VLImageProcessor, min_pixels 3136, max_pixels 602112 (at most 768 merged visual tokens), patch 14, merge 2, bicubic resampling, CLIP mean/std",
+      "visual_prompt": "processor default: '<|im_start|>user\\n<|vision_start|><|image_pad|><|vision_end|>Describe the image.<|im_end|><|endoftext|>'",
+      "query_input": "processor default: 'Query: ' + question + 10 x '<|endoftext|>' augmentation tokens + newline; the question string is exactly the benchmark question, identical to what BM25 receives",
+      "embeddings": "model output .embeddings (128-d, L2-normalised); rows where attention_mask = 0 removed; every remaining token kept (prompt tokens included), as in the library",
+      "scoring": "MaxSim late interaction s(q, d) = sum_i max_j <q_i, d_j> over all query and page vectors, computed in float32 from the bf16 embeddings; every page of the question's PDF is scored; ties by page number",
+      "execution": "two passes with identical arithmetic: pass 1 runs only the vision tower (model.vlm.visual) on each page and caches its pooler_output; pass 2 runs the library's unmodified ColQwen2ForRetrieval.forward with vlm.visual replaced by a stub returning the cached features. Reason: the full model needs 5.5 GB of GPU memory on an 8 GB machine and runs at 35-45 s per page; two passes run at about 13 s per page. Checked on 3 development pages before freezing: final embeddings bitwise equal to the single-pass forward.",
+      "fallback": "none pre-authorised. If MPS fails, the blocker is reported; another device, dtype or model is a new spec version.",
+      "cache": "data/cache/e5/<repo>@<revision>/<config hash>/, one file per page keyed by the PNG's SHA-256, and per question keyed by SHA-256 of the question text; the config hash covers repo, revision, transformers and torch versions, dtype, device, processor settings, prompts and the embedding rule"
+    },
+    "H_rrf_exploratory": {
+      "label": "exploratory only, never part of the decision: reciprocal rank fusion of A and V",
+      "ranking": "score(d) = 1/(60 + rank_A(d)) + 1/(60 + rank_V(d)), ranks 1-based over the full rankings, k = 60 (the standard constant, not tuned); ties by page number"
+    }
+  },
+
+  "context_selection": {
+    "rule": "the application's question-aware context guard, applied identically to the top 5 of each ranking: keep the longest ranked prefix such that 100 framing tokens + UTF-8 bytes of the mmlb-image-v1 system prompt + UTF-8 bytes of 'Question: {q}\\n\\nPage images:' + sum over kept pages of (UTF-8 bytes of '[Page N]' + billed image tokens of its 768-px image) <= 128,000 - 400",
+    "image_tokens": "GPT-4o-mini high-detail rule: fit in 2048 x 2048, reduce short side to 768 if larger, 2,833 + 5,667 per 512-px tile",
+    "top_k": 5,
+    "implementation": "rebuilt visibly in notebook 04; checked equal to the supplied pages in the frozen E4 APP execution log (57/57) and to visualdoc.answering.select_pages_within_context on every held-out question",
+    "consequence": "with all pages of a document the same size, the guard keeps 4 pages on US-letter and 4:3 pages and 3 on 16:9 pages; documents with mixed page sizes can keep a different number per question and per arm"
+  },
+
+  "populations": {
+    "development": {
+      "role": "regression and diagnostics, in-sample for E1-E4; exploratory only, no decision",
+      "documents": 6, "questions": 57,
+      "evidence_population": "notebook 01's 40 answerable questions with at least one evidence page and no page 0",
+      "regression": "BM25 full rankings = frozen E0 rankings (57/57); Recall@5 0.689, Hit@5 0.800; after guard Hit 29/40 = E4"
+    },
+    "held_out": {
+      "role": "primary evaluation; selected by the rule below before any visual score existed",
+      "source": "yubo2333/MMLongBench-Doc at revision 2ff6aa9237fc777b6627dc57a486e9225ac5fb86 (same benchmark, same annotation protocol, same 1-based physical page convention; data CC BY-NC 4.0, research use)",
+      "exclusions": ["the 6 development documents", "every other MMLongBench-Doc document whose name appears anywhere in this repository (archived notebooks): 05-03-18-political-release.pdf, 2312.04350v3.pdf, PH_2016.06.08_Economy-Final.pdf, RAR.pdf"],
+      "selection_rule": "for each of the 7 doc_type values in sorted order: the eligible documents of that type (not excluded, Hub size <= 15 MB), sorted by name, are permuted with one numpy.random.default_rng(20261123) shared across types in that order; documents are taken in permuted order and accepted if their page count is 1-100, until 2 are accepted. Every question about an accepted document is kept. Page counts are not outcomes; the 100-page cap bounds local compute (~13 s per page).",
+      "selected_documents": [
+        "2312.10997v5.pdf", "2310.05634v2.pdf",
+        "e639029d16094ea71d964e2fb953952b.pdf", "3276a5b991c49cf5f9a4af0f7d6fce67.pdf",
+        "2021-Apple-Catalog.pdf", "NUS-Business-School-BBA-Brochure-2024.pdf",
+        "COSTCO_2021_10K.pdf", "AMAZON_2017_10K.pdf",
+        "SAO-StudentSupport_Guidebook-Content.pdf", "Macbook_air.pdf",
+        "11-21-16-Updated-Post-Election-Release.pdf", "efd88e41c5f2606c57929cac6c1c0605.pdf",
+        "ddoseattle-150627210357-lva1-app6891_95.pdf", "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf"
+      ],
+      "rejected_by_page_cap": {"3M_2018_10K.pdf": 160, "mmdetection-readthedocs-io-en-v2.18.0.pdf": 468, "dr-vorapptchapter1emissionsources-121120210508-phpapp02_95.pdf": 196},
+      "size_at_selection": {"documents": 14, "pages": 647, "questions": 118, "answerable": 102},
+      "evidence_population": "answerable questions with at least one evidence page, no page 0, and every evidence page within the PDF; excluded rows are counted and reported",
+      "annotation_spot_check": "before any comparative result: 8 answerable held-out questions drawn with numpy.random.default_rng(20261123) are checked by viewing their evidence pages against the reference answer and labelled supported / partly / not supported; the labels are reported, never used to filter",
+      "known_limits": "documents may overlap the retriever's training sources (arXivQA, DocVQA, InfoVQA, TAT-DQA and web PDFs); this cannot be verified here and would favour V. The 100-page cap under-represents long documents, where retrieval is hardest for both arms."
+    }
+  },
+
+  "leakage_controls": [
+    "Both retrievers receive only the question string and the document's pages (text for A, page images for V). Evidence pages, reference answers, answer formats and evidence sources are never passed to a ranking function; the notebook ranks from a question table with those columns removed and checks that rankings are unchanged when the annotations are permuted.",
+    "No parameter of A, V, H, the guard or the metrics is chosen on development or held-out results."
+  ],
+
+  "metrics": {
+    "primary_endpoint": "held-out Recall_after: |E intersect S| / |E| averaged over the held-out evidence population, where E = annotated evidence pages and S = pages supplied after the context guard",
+    "key_secondary": {
+      "Hit_after": "1[|E intersect S| > 0], averaged",
+      "Complete_after": "1[E subset of S], averaged"
+    },
+    "secondary": ["raw Recall@k and Hit@k for k = 1, 3, 4, 5 (before the guard)", "MRR = mean of 1 / rank of the best-ranked evidence page in the full ranking", "nDCG@5 with binary relevance (ideal DCG over min(|E|, 5) relevant pages)", "per-document values", "evidence lost to the guard: |E intersect (R5 minus S)|", "pages supplied per question"],
+    "operational": ["model load time", "page encoding seconds (vision pass, language pass), query encoding seconds", "scoring seconds", "process peak RSS and MPS driver memory", "embedding storage bytes per page", "BM25 indexing and query time for comparison"],
+    "descriptive_breakdowns": "by evidence source (Pure-text, Layout, Table, Chart, Figure), by document type and by OCR'd versus born-digital pages; groups under 10 questions are reported as counts only"
+  },
+
+  "statistics": {
+    "unit": "question, paired across arms; questions cluster within documents",
+    "difference": "Delta = mean over questions of (metric_V - metric_A), each metric computed per question",
+    "interval": "95 % percentile interval from a document-cluster bootstrap: resample the documents with replacement, recompute Delta over all questions of the drawn documents; 10,000 resamples, numpy.random.default_rng(20261123)",
+    "tests": ["exact document-level sign-flip permutation test on per-document mean differences (2^14 assignments, two-sided)", "exact McNemar test on Hit_after discordant questions (ignores clustering; descriptive)"],
+    "paired_counts": "questions where V supplies more / fewer / the same evidence pages than A",
+    "robustness": "leave-one-document-out range of Delta"
+  },
+
+  "decision_rule": {
+    "applies_to": "held-out primary endpoint only",
+    "outcomes": {
+      "visual_improves_evidence": "Delta >= 0.05 AND bootstrap lower bound > 0 AND Delta_Hit_after >= 0 AND questions with less evidence under V <= half of the questions with more",
+      "visual_worse": "Delta <= -0.05 AND bootstrap upper bound < 0",
+      "no_meaningful_difference": "bootstrap interval entirely inside (-0.05, +0.05)",
+      "inconclusive": "any other result"
+    },
+    "recommendation_map": {
+      "visual_improves_evidence": "investigate further through a controlled end-to-end answering experiment (E6: same GPT-4o-mini request format, same 768-px images and guard, A versus V pages, paid, separate spec). Do not integrate before E6.",
+      "visual_worse": "reject for this application",
+      "no_meaningful_difference": "reject: the gain does not justify the model and indexing cost",
+      "inconclusive": "investigate further; the report states what sample would be needed"
+    },
+    "costs": "operational costs are reported beside the verdict and may argue against adoption even when the verdict is visual_improves_evidence; they never turn another verdict into adoption"
+  }
+}

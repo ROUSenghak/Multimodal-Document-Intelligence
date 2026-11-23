@@ -1,0 +1,207 @@
+{
+ "audited": "experiments/frozen/e5",
+ "spec_commit": "073d0a4d9a2fb9681f12ea3c7a635901bf4329ff",
+ "script_sha256": "d77f42b68b979192d8f20c6889c2c55c7d1cbc4a1818886730a86c4794484291",
+ "checks": [
+  {
+   "check": "SHA256SUMS of every frozen file",
+   "ok": true,
+   "detail": "8 files"
+  },
+  {
+   "check": "spec on disk = its freeze commit",
+   "ok": true,
+   "detail": "073d0a4"
+  },
+  {
+   "check": "frozen spec snapshot = spec",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "spec committed before the first encoding session",
+   "ok": true,
+   "detail": "2026-11-23 11:38:46+00:00 < 2026-11-23 11:53:11+00:00"
+  },
+  {
+   "check": "held-out documents disjoint from development and other touched documents",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "evidence populations: 40 development, held-out as frozen",
+   "ok": true,
+   "detail": "held-out 101"
+  },
+  {
+   "check": "175 questions ranked by each arm",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "held-out text = application extract_pages (native + OCR policy)",
+   "ok": true,
+   "detail": "647/647 pages"
+  },
+  {
+   "check": "held-out images = application render_pages bytes",
+   "ok": true,
+   "detail": "647/647 pages"
+  },
+  {
+   "check": "arm A = application BM25Index rankings",
+   "ok": true,
+   "detail": "175/175"
+  },
+  {
+   "check": "development A = frozen E0 full rankings",
+   "ok": true,
+   "detail": "57 questions"
+  },
+  {
+   "check": "cache directory name = hash of its configuration",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "configuration pins the spec revision and dtype",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "every page image matches its manifest hash",
+   "ok": true,
+   "detail": "842 pages"
+  },
+  {
+   "check": "page embeddings: 128-d unit vectors",
+   "ok": true,
+   "detail": "837 images"
+  },
+  {
+   "check": "arm V = NumPy MaxSim rankings",
+   "ok": true,
+   "detail": "175/175, max score gap 7.7e-06"
+  },
+  {
+   "check": "arm H = RRF(A, V), k 60",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "every ranking is a permutation of 1..n",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "supplied pages = application guard on real PNGs (3 arms, every evidence question)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "development A supplied = frozen E4 APP pages (57)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "every per-question metric recomputed",
+   "ok": true,
+   "detail": "0 mismatches over 141 questions"
+  },
+  {
+   "check": "summary means recomputed (development)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "summary means recomputed (held-out)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "regression: development A Recall@5 0.689, Hit@5 32/40, after guard 29/40",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "primary delta and bootstrap interval (same seed and method)",
+   "ok": true,
+   "detail": "delta +0.1950 [+0.1101, +0.3094]"
+  },
+  {
+   "check": "bootstrap interval robust to the implementation (within 0.02)",
+   "ok": true,
+   "detail": "[+0.1095, +0.3070]"
+  },
+  {
+   "check": "sign-flip p recomputed",
+   "ok": true,
+   "detail": "p = 0.0005"
+  },
+  {
+   "check": "McNemar on Hit_after recomputed",
+   "ok": true,
+   "detail": "23 vs 3, p = 0.0001"
+  },
+  {
+   "check": "decision rule re-applied from the spec text",
+   "ok": true,
+   "detail": "visual_improves_evidence"
+  },
+  {
+   "check": "ranking and encoding code never reads annotation columns",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "notebook 04 does not import src/visualdoc (AGENTS.md)",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "no credential-like strings or Base64 image payloads in frozen files",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "no question text in frozen files",
+   "ok": true,
+   "detail": ""
+  },
+  {
+   "check": "two-pass = single-pass bitwise (recorded by the notebook)",
+   "ok": true,
+   "detail": "4 items"
+  }
+ ],
+ "passed": 34,
+ "total": 34,
+ "recomputed": {
+  "primary_delta": 0.19505,
+  "ci": [
+   0.110058,
+   0.30939
+  ],
+  "alternative_ci": [
+   0.109522,
+   0.307018
+  ],
+  "sign_flip_p": 0.000488,
+  "hit_discordant_V_A": [
+   23,
+   3
+  ],
+  "mcnemar_p": 8.8e-05,
+  "more_less_evidence_V": [
+   31,
+   6
+  ],
+  "verdict": "visual_improves_evidence"
+ },
+ "revisions": [
+  "First audit run: 31/34. Two failures came from the audit itself: the sign-flip and McNemar p-values were compared at 1e-9 with values that summary.json stores rounded to 6 decimals (exact 8/16384 = 0.00048828 stored 0.000488; McNemar 8.7976e-05 stored 8.8e-05). The tolerance is now 5e-7, half the last stored digit.",
+  "The third failure was real: run_context.json contained the first 40 characters of question mmlb-0033 (a label in the single-pass check). The notebook now labels queries by id; run_context.json was regenerated and re-frozen. No result file changed.",
+  "Second audit run (this file): 34/34."
+ ],
+ "scope_note": "Software and arithmetic checks. They do not show that the annotations are correct, that the 14 documents represent other documents, or that more supplied evidence yields more correct answers."
+}

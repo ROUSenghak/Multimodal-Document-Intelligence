@@ -1,0 +1,95 @@
+{
+ "spec_id": "e5-visual-retrieval-v1",
+ "spec_freeze_commit": "073d0a4d9a2fb9681f12ea3c7a635901bf4329ff",
+ "spec_committed_at": "2026-11-23T11:38:46Z",
+ "repository_head_at_freeze_of_results": "f98983ba2f6a8fcec49e7834835055d853e56f66",
+ "paid_api_calls": 0,
+ "spend_usd": 0.0,
+ "model": {
+  "repo": "vidore/colqwen2-v1.0-hf",
+  "revision": "ddc07d2317c80f75fc742b7362ee9ad1912908f9",
+  "licence": "apache-2.0",
+  "weights_file": "model.safetensors",
+  "weights_bytes": 4418454832,
+  "weights_sha256": "2f6dbf32fc2db5b045d74ae73b148425d6e03cc1106a047cdcc7e72b6dc53aba",
+  "parameters": 2209182336,
+  "implementation": "transformers 5.23.0 ColQwen2ForRetrieval / ColQwen2Processor, torch 2.15.0",
+  "device": "Apple M1 GPU (MPS)",
+  "dtype": "bfloat16",
+  "encoder_config_hash": "af02fac2cb9b"
+ },
+ "environment": {
+  "platform": "Darwin 26.5.2 arm64",
+  "cpu": "Apple M1",
+  "cpu_cores": 8,
+  "ram_gb": 8.6,
+  "ram_available_gb_now": 3.1,
+  "disk_free_gb_now": 10.9,
+  "python": "3.12.6",
+  "torch": "2.15.0",
+  "transformers": "5.23.0",
+  "pymupdf": "2.1",
+  "mps_available": true,
+  "cuda_available": false
+ },
+ "before_the_freeze": [
+  "Feasibility probes (2026-11-23, before commit 073d0a4) encoded 3 development pages and one invented query ('What is the median exit valuation in USD million?') to time the model and check determinism and the two-pass equivalence. No annotated question was scored.",
+  "The held-out selection rule was executed before the freeze to record its output in the spec; it reads only document type, size and page count."
+ ],
+ "encoding_sessions": [
+  {
+   "session": "20261123T115311Z",
+   "pass": "vision (pass 1)",
+   "pages": 837,
+   "median_s_per_page": 9.81,
+   "compute_hours": 2.31,
+   "events": [
+    "Started 11:53Z. The Mac slept with the lid closed from about 12:19Z to 13:24Z; the process paused and resumed.",
+    "About 15:15Z the Claude Code session that launched the run ended and the run was killed. Pass 1 was complete: 837/837 feature files, none corrupt (newest 25 reloaded), no partial files."
+   ]
+  },
+  {
+   "session": "20261123T152234Z",
+   "pass": "language (pass 2) + queries",
+   "pages": 837,
+   "queries": 175,
+   "median_s_per_page": 2.68,
+   "compute_hours": 0.64,
+   "events": [
+    "Resumed from the pass-1 checkpoints as a detached process; no completed page was recomputed.",
+    "The first analysis execution stopped in the save cell (NumPy int64 not JSON serialisable); fixed in serialisation only and re-run."
+   ]
+  }
+ ],
+ "changes_after_the_spec_freeze": {
+  "rule": "None changes the model, preprocessing, rankings, guard, metrics, statistics or decision rule. Verified: a fresh execution regenerates summary.json, per_question.csv and all 525 rankings byte for byte (notebook 04 section 10), and two-pass embeddings equal the single-pass forward bit for bit.",
+  "notebook_04": [
+   "Parity checks against src/visualdoc moved from the notebook to the independent audit (an AGENTS.md amendment to allow the import was not made).",
+   "Atomic cache writes (temporary file, fsync, rename) and removal of stale temporaries and of pass-1 features whose embedding exists; added while pass 1 was running, used from pass 2 on. Pass-1 files were written with safetensors.save_file directly and all reload.",
+   "Cost table reads model-load times from the encoding log; JSON serialisation converts NumPy numbers; NaN saved as null; display fixes in the breakdown and examples cells.",
+   "Single-pass check labels queries by question id instead of their first 40 characters (found by the audit)."
+  ],
+  "pyproject": "Added a 'visual' extra (pillow, psutil, safetensors, torch==2.15.0, transformers==5.23.0)."
+ },
+ "not_verifiable_here": [
+  "Whether held-out pages overlap ColQwen2's training data (DocVQA, InfoVQA, TAT-DQA, arXivQA, web PDFs).",
+  "Peak memory of the vision pass: held only by the killed kernel. The pre-freeze probe measured 2.19 GB of MPS driver memory for the vision tower alone.",
+  "Timings are for this fanless M1 and vary with power source (on battery about twice slower) and thermal state."
+ ],
+ "cost": {
+  "pages encoded (distinct images)": 837,
+  "vision pass, s per page (median / total h)": "9.8 / 2.31",
+  "language pass, s per page (median / total h)": "2.7 / 0.63",
+  "indexing, s per page (two passes, median)": "12.5",
+  "query encoding, s per query (median)": "0.16",
+  "MaxSim scoring, ms per question (all pages of its PDF)": "4.4",
+  "model load, s (vision pass / language pass)": "5 / 13",
+  "peak process RSS, GB (vision / language)": "nan / 0.24",
+  "peak MPS driver memory, GB (vision / language)": "nan / 3.33",
+  "vectors per page (mean, min-max)": "755 (731-779)",
+  "embedding storage (bf16 safetensors)": "162 MB, 193 KB per page",
+  "model weights on disk": "4.42 GB",
+  "BM25: index, ms per page / query, ms": "0.08 / 0.13",
+  "baseline text: held-out extraction incl. OCR, s per page": "0.10 (OCR on 193 of 647 pages)"
+ }
+}

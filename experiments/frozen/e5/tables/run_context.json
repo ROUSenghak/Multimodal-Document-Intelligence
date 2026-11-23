@@ -1,0 +1,83 @@
+{
+ "environment": {
+  "platform": "Darwin 26.5.2 arm64",
+  "cpu": "Apple M1",
+  "cpu_cores": 8,
+  "ram_gb": 8.6,
+  "ram_available_gb_now": 3.1,
+  "disk_free_gb_now": 10.9,
+  "python": "3.12.6",
+  "torch": "2.15.0",
+  "transformers": "5.23.0",
+  "pymupdf": "2.1",
+  "mps_available": true,
+  "cuda_available": false
+ },
+ "encoder_config": {
+  "repo": "vidore/colqwen2-v1.0-hf",
+  "revision": "ddc07d2317c80f75fc742b7362ee9ad1912908f9",
+  "weights_sha256": "2f6dbf32fc2db5b045d74ae73b148425d6e03cc1106a047cdcc7e72b6dc53aba",
+  "transformers": "5.23.0",
+  "torch": "2.15.0",
+  "device": "mps",
+  "dtype": "bfloat16",
+  "attn_implementation": "sdpa",
+  "batch_size": 1,
+  "page_image": "E1 profile: 768 x 1536 box, RGB PNG",
+  "preprocessor_config_sha256": "be69973e9e1f8404b6fb70f246ad8307086d614b31464e3048c387945ac66bf0",
+  "tokenizer_sha256": "091aa7594dc2fcfbfa06b9e3c22a5f0562ac14f30375c13af7309407a0e67b8a",
+  "visual_prompt": "<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>Describe the image.<|im_end|><|endoftext|>",
+  "query_prefix": "Query: ",
+  "query_augmentation": "10 x <|endoftext|>",
+  "embedding_rule": "model(**batch).embeddings; rows with attention_mask 0 removed; stored bf16"
+ },
+ "cost": {
+  "pages encoded (distinct images)": 837,
+  "vision pass, s per page (median / total h)": "9.8 / 2.31",
+  "language pass, s per page (median / total h)": "2.7 / 0.63",
+  "indexing, s per page (two passes, median)": "12.5",
+  "query encoding, s per query (median)": "0.16",
+  "MaxSim scoring, ms per question (all pages of its PDF)": "4.4",
+  "model load, s (vision pass / language pass)": "5 / 13",
+  "peak process RSS, GB (vision / language)": "nan / 0.24",
+  "peak MPS driver memory, GB (vision / language)": "nan / 3.33",
+  "vectors per page (mean, min-max)": "755 (731-779)",
+  "embedding storage (bf16 safetensors)": "162 MB, 193 KB per page",
+  "model weights on disk": "4.42 GB",
+  "BM25: index, ms per page / query, ms": "0.08 / 0.13",
+  "baseline text: held-out extraction incl. OCR, s per page": "0.10 (OCR on 193 of 647 pages)"
+ },
+ "peaks": {
+  "language": {
+   "rss_gb": 0.244498,
+   "mps_driver_gb": 3.330933,
+   "load_seconds": 13.160155,
+   "session": "20261123T152234Z"
+  }
+ },
+ "single_pass_check": {
+  "run": true,
+  "results": [
+   {
+    "item": "page 2210.02442v1.pdf p.1",
+    "seconds (single pass)": 39.5,
+    "bitwise equal to cache": true
+   },
+   {
+    "item": "page 2312.10997v5.pdf p.1",
+    "seconds (single pass)": 27.0,
+    "bitwise equal to cache": true
+   },
+   {
+    "item": "query mmlb-0033",
+    "seconds (single pass)": null,
+    "bitwise equal to cache": true
+   },
+   {
+    "item": "query mmlb-0042",
+    "seconds (single pass)": null,
+    "bitwise equal to cache": true
+   }
+  ]
+ }
+}
