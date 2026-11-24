@@ -257,6 +257,38 @@ VISUALDOC_E4_MODE=smoke jupyter nbconvert --execute --to notebook --inplace note
 VISUALDOC_E4_RUN_DIR=experiments/runs/e4/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
 ```
 
+## Experiments E5–E6 — visual retrieval with ColQwen2 (held-out documents, frozen)
+
+E5 and E6 use 14 held-out MMLongBench-Doc documents (118 questions) that no earlier experiment touched.
+
+- **E5 (notebook 04, [`experiments/frozen/e5/`](experiments/frozen/e5/README.md)) measured evidence.**
+  - After the context guard, ColQwen2 v1.0's pages hold an annotated evidence page for 86 of 101 questions; BM25's hold one for 66.
+  - Evidence recall rises from 0.526 to 0.721. Verdict: `visual_improves_evidence`.
+- **E6 (notebook 05, [`experiments/frozen/e6/`](experiments/frozen/e6/README.md)) measured answers.** It used the same GPT-4o-mini reader, prompt, 768-px images and guard; only the page list differs.
+
+| arm | pages | correct, 102 answerable | correct abstention, 16 unanswerable | valid citations, 118 |
+|---|---|---:|---:|---:|
+| `A` | OCR + BM25 top 5 (the application as shipped) | 25 (0.245) | 9 | 108 |
+| `V` | ColQwen2 top 5 (E5's frozen rankings) | **38 (0.373)** | 7 | 107 |
+
+- **Verdict (pre-registered rule): `adopt_visual_retrieval`.**
+  - Δ = +0.127: 13 fixed, 0 broken.
+  - Document-cluster 95 % interval [0.074, 0.193]; exact document sign-flip p = 2⁻¹⁰.
+  - The abstention guardrail held at its limit (7 vs 9 of 16).
+  - V is at least as accurate in all 14 documents.
+- **Deployment action.** ColQwen2 becomes the default retriever in the application phase, with OCR + BM25 as the fallback; this needs the owner's separate approval.
+  - API cost is the same in both arms.
+  - Indexing costs about 12 s and 193 KB per page on a fanless M1, against milliseconds for BM25. Pages must be indexed once at upload.
+- **Execution.**
+  - The spec was frozen in `c2ac6e6` (ceiling $5.60). Smoke (2 calls) and full (238 calls) runs completed.
+  - The full run was interrupted once when the OpenAI credit ran out (unbilled refusal) and resumed in place; every pair stayed adjacent.
+  - Spend: $3.7213 at list price.
+  - An independent audit passed 43/43. Notebook 05 reproduces the frozen result by default.
+- **Limits.**
+  - One replicate; 14 documents.
+  - The difference mixes evidence availability with distractors and page order.
+  - ColQwen2's training data may overlap the held-out documents.
+
 ## Application baseline (`src/visualdoc/`)
 
 Small reusable modules that answer a question about **any** PDF with the

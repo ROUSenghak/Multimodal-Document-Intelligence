@@ -1,0 +1,2148 @@
+{
+  "spec_id": "e6-visual-retrieval-answering-v1",
+  "spec_sha256": "23e02872535f1be4f08858781bdd9aaebfdd0ca2b6cc8c7a7ccd21258430bdac",
+  "spec_status": "frozen-before-live-execution",
+  "generated_at": "2026-11-23T20:01:23.632+00:00",
+  "model": "gpt-4o-mini-2024-07-18",
+  "system_prompt_hash": "35ff2e8b91f9",
+  "qids": [
+    "mmlb-0042",
+    "mmlb-0043",
+    "mmlb-0044",
+    "mmlb-0045",
+    "mmlb-0046",
+    "mmlb-0047",
+    "mmlb-0048",
+    "mmlb-0049",
+    "mmlb-0050",
+    "mmlb-0051",
+    "mmlb-0062",
+    "mmlb-0063",
+    "mmlb-0064",
+    "mmlb-0065",
+    "mmlb-0066",
+    "mmlb-0067",
+    "mmlb-0068",
+    "mmlb-0076",
+    "mmlb-0077",
+    "mmlb-0078",
+    "mmlb-0079",
+    "mmlb-0080",
+    "mmlb-0081",
+    "mmlb-0082",
+    "mmlb-0137",
+    "mmlb-0138",
+    "mmlb-0139",
+    "mmlb-0140",
+    "mmlb-0141",
+    "mmlb-0142",
+    "mmlb-0143",
+    "mmlb-0199",
+    "mmlb-0200",
+    "mmlb-0201",
+    "mmlb-0202",
+    "mmlb-0203",
+    "mmlb-0204",
+    "mmlb-0205",
+    "mmlb-0401",
+    "mmlb-0402",
+    "mmlb-0403",
+    "mmlb-0404",
+    "mmlb-0405",
+    "mmlb-0406",
+    "mmlb-0407",
+    "mmlb-0408",
+    "mmlb-0409",
+    "mmlb-0410",
+    "mmlb-0411",
+    "mmlb-0576",
+    "mmlb-0577",
+    "mmlb-0578",
+    "mmlb-0579",
+    "mmlb-0580",
+    "mmlb-0581",
+    "mmlb-0582",
+    "mmlb-0593",
+    "mmlb-0594",
+    "mmlb-0595",
+    "mmlb-0596",
+    "mmlb-0597",
+    "mmlb-0598",
+    "mmlb-0599",
+    "mmlb-0600",
+    "mmlb-0683",
+    "mmlb-0684",
+    "mmlb-0685",
+    "mmlb-0686",
+    "mmlb-0687",
+    "mmlb-0688",
+    "mmlb-0689",
+    "mmlb-0690",
+    "mmlb-0987",
+    "mmlb-0988",
+    "mmlb-0989",
+    "mmlb-0990",
+    "mmlb-0991",
+    "mmlb-0998",
+    "mmlb-0999",
+    "mmlb-1000",
+    "mmlb-1001",
+    "mmlb-1002",
+    "mmlb-1003",
+    "mmlb-1004",
+    "mmlb-1005",
+    "mmlb-1006",
+    "mmlb-1007",
+    "mmlb-1013",
+    "mmlb-1014",
+    "mmlb-1015",
+    "mmlb-1016",
+    "mmlb-1017",
+    "mmlb-1018",
+    "mmlb-1019",
+    "mmlb-1020",
+    "mmlb-1021",
+    "mmlb-1022",
+    "mmlb-1023",
+    "mmlb-1024",
+    "mmlb-1025",
+    "mmlb-1026",
+    "mmlb-1027",
+    "mmlb-1028",
+    "mmlb-1051",
+    "mmlb-1052",
+    "mmlb-1053",
+    "mmlb-1054",
+    "mmlb-1055",
+    "mmlb-1056",
+    "mmlb-1057",
+    "mmlb-1058",
+    "mmlb-1059",
+    "mmlb-1060",
+    "mmlb-1061",
+    "mmlb-1062",
+    "mmlb-1063",
+    "mmlb-1064",
+    "mmlb-1065"
+  ],
+  "documents": [
+    "2312.10997v5.pdf",
+    "2310.05634v2.pdf",
+    "e639029d16094ea71d964e2fb953952b.pdf",
+    "3276a5b991c49cf5f9a4af0f7d6fce67.pdf",
+    "2021-Apple-Catalog.pdf",
+    "NUS-Business-School-BBA-Brochure-2024.pdf",
+    "COSTCO_2021_10K.pdf",
+    "AMAZON_2017_10K.pdf",
+    "SAO-StudentSupport_Guidebook-Content.pdf",
+    "Macbook_air.pdf",
+    "11-21-16-Updated-Post-Election-Release.pdf",
+    "efd88e41c5f2606c57929cac6c1c0605.pdf",
+    "ddoseattle-150627210357-lva1-app6891_95.pdf",
+    "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf"
+  ],
+  "smoke_qid": "mmlb-0068",
+  "token_tolerance": 16,
+  "plans": {
+    "smoke": [
+      {
+        "replicate_id": "technical_smoke",
+        "qid": "mmlb-0068",
+        "arm": "A",
+        "pair_index": 0,
+        "position_in_pair": 1,
+        "execution_index": 1
+      },
+      {
+        "replicate_id": "technical_smoke",
+        "qid": "mmlb-0068",
+        "arm": "V",
+        "pair_index": 0,
+        "position_in_pair": 2,
+        "execution_index": 2
+      }
+    ],
+    "full": [
+      {
+        "replicate_id": "technical_smoke",
+        "qid": "mmlb-0068",
+        "arm": "A",
+        "pair_index": 0,
+        "position_in_pair": 1,
+        "execution_index": 1
+      },
+      {
+        "replicate_id": "technical_smoke",
+        "qid": "mmlb-0068",
+        "arm": "V",
+        "pair_index": 0,
+        "position_in_pair": 2,
+        "execution_index": 2
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0140",
+        "arm": "V",
+        "pair_index": 1,
+        "position_in_pair": 1,
+        "execution_index": 3
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0140",
+        "arm": "A",
+        "pair_index": 1,
+        "position_in_pair": 2,
+        "execution_index": 4
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1001",
+        "arm": "A",
+        "pair_index": 2,
+        "position_in_pair": 1,
+        "execution_index": 5
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1001",
+        "arm": "V",
+        "pair_index": 2,
+        "position_in_pair": 2,
+        "execution_index": 6
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1063",
+        "arm": "V",
+        "pair_index": 3,
+        "position_in_pair": 1,
+        "execution_index": 7
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1063",
+        "arm": "A",
+        "pair_index": 3,
+        "position_in_pair": 2,
+        "execution_index": 8
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0141",
+        "arm": "V",
+        "pair_index": 4,
+        "position_in_pair": 1,
+        "execution_index": 9
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0141",
+        "arm": "A",
+        "pair_index": 4,
+        "position_in_pair": 2,
+        "execution_index": 10
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0593",
+        "arm": "A",
+        "pair_index": 5,
+        "position_in_pair": 1,
+        "execution_index": 11
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0593",
+        "arm": "V",
+        "pair_index": 5,
+        "position_in_pair": 2,
+        "execution_index": 12
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0989",
+        "arm": "V",
+        "pair_index": 6,
+        "position_in_pair": 1,
+        "execution_index": 13
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0989",
+        "arm": "A",
+        "pair_index": 6,
+        "position_in_pair": 2,
+        "execution_index": 14
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0203",
+        "arm": "V",
+        "pair_index": 7,
+        "position_in_pair": 1,
+        "execution_index": 15
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0203",
+        "arm": "A",
+        "pair_index": 7,
+        "position_in_pair": 2,
+        "execution_index": 16
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1002",
+        "arm": "V",
+        "pair_index": 8,
+        "position_in_pair": 1,
+        "execution_index": 17
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1002",
+        "arm": "A",
+        "pair_index": 8,
+        "position_in_pair": 2,
+        "execution_index": 18
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1051",
+        "arm": "V",
+        "pair_index": 9,
+        "position_in_pair": 1,
+        "execution_index": 19
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1051",
+        "arm": "A",
+        "pair_index": 9,
+        "position_in_pair": 2,
+        "execution_index": 20
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1064",
+        "arm": "A",
+        "pair_index": 10,
+        "position_in_pair": 1,
+        "execution_index": 21
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1064",
+        "arm": "V",
+        "pair_index": 10,
+        "position_in_pair": 2,
+        "execution_index": 22
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1058",
+        "arm": "V",
+        "pair_index": 11,
+        "position_in_pair": 1,
+        "execution_index": 23
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1058",
+        "arm": "A",
+        "pair_index": 11,
+        "position_in_pair": 2,
+        "execution_index": 24
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0991",
+        "arm": "A",
+        "pair_index": 12,
+        "position_in_pair": 1,
+        "execution_index": 25
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0991",
+        "arm": "V",
+        "pair_index": 12,
+        "position_in_pair": 2,
+        "execution_index": 26
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1028",
+        "arm": "V",
+        "pair_index": 13,
+        "position_in_pair": 1,
+        "execution_index": 27
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1028",
+        "arm": "A",
+        "pair_index": 13,
+        "position_in_pair": 2,
+        "execution_index": 28
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0081",
+        "arm": "A",
+        "pair_index": 14,
+        "position_in_pair": 1,
+        "execution_index": 29
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0081",
+        "arm": "V",
+        "pair_index": 14,
+        "position_in_pair": 2,
+        "execution_index": 30
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0688",
+        "arm": "A",
+        "pair_index": 15,
+        "position_in_pair": 1,
+        "execution_index": 31
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0688",
+        "arm": "V",
+        "pair_index": 15,
+        "position_in_pair": 2,
+        "execution_index": 32
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0411",
+        "arm": "V",
+        "pair_index": 16,
+        "position_in_pair": 1,
+        "execution_index": 33
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0411",
+        "arm": "A",
+        "pair_index": 16,
+        "position_in_pair": 2,
+        "execution_index": 34
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0044",
+        "arm": "A",
+        "pair_index": 17,
+        "position_in_pair": 1,
+        "execution_index": 35
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0044",
+        "arm": "V",
+        "pair_index": 17,
+        "position_in_pair": 2,
+        "execution_index": 36
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0687",
+        "arm": "V",
+        "pair_index": 18,
+        "position_in_pair": 1,
+        "execution_index": 37
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0687",
+        "arm": "A",
+        "pair_index": 18,
+        "position_in_pair": 2,
+        "execution_index": 38
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1018",
+        "arm": "V",
+        "pair_index": 19,
+        "position_in_pair": 1,
+        "execution_index": 39
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1018",
+        "arm": "A",
+        "pair_index": 19,
+        "position_in_pair": 2,
+        "execution_index": 40
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0988",
+        "arm": "A",
+        "pair_index": 20,
+        "position_in_pair": 1,
+        "execution_index": 41
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0988",
+        "arm": "V",
+        "pair_index": 20,
+        "position_in_pair": 2,
+        "execution_index": 42
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0410",
+        "arm": "A",
+        "pair_index": 21,
+        "position_in_pair": 1,
+        "execution_index": 43
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0410",
+        "arm": "V",
+        "pair_index": 21,
+        "position_in_pair": 2,
+        "execution_index": 44
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1027",
+        "arm": "A",
+        "pair_index": 22,
+        "position_in_pair": 1,
+        "execution_index": 45
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1027",
+        "arm": "V",
+        "pair_index": 22,
+        "position_in_pair": 2,
+        "execution_index": 46
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0577",
+        "arm": "A",
+        "pair_index": 23,
+        "position_in_pair": 1,
+        "execution_index": 47
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0577",
+        "arm": "V",
+        "pair_index": 23,
+        "position_in_pair": 2,
+        "execution_index": 48
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0139",
+        "arm": "A",
+        "pair_index": 24,
+        "position_in_pair": 1,
+        "execution_index": 49
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0139",
+        "arm": "V",
+        "pair_index": 24,
+        "position_in_pair": 2,
+        "execution_index": 50
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1025",
+        "arm": "A",
+        "pair_index": 25,
+        "position_in_pair": 1,
+        "execution_index": 51
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1025",
+        "arm": "V",
+        "pair_index": 25,
+        "position_in_pair": 2,
+        "execution_index": 52
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0408",
+        "arm": "V",
+        "pair_index": 26,
+        "position_in_pair": 1,
+        "execution_index": 53
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0408",
+        "arm": "A",
+        "pair_index": 26,
+        "position_in_pair": 2,
+        "execution_index": 54
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1013",
+        "arm": "V",
+        "pair_index": 27,
+        "position_in_pair": 1,
+        "execution_index": 55
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1013",
+        "arm": "A",
+        "pair_index": 27,
+        "position_in_pair": 2,
+        "execution_index": 56
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0048",
+        "arm": "A",
+        "pair_index": 28,
+        "position_in_pair": 1,
+        "execution_index": 57
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0048",
+        "arm": "V",
+        "pair_index": 28,
+        "position_in_pair": 2,
+        "execution_index": 58
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0581",
+        "arm": "V",
+        "pair_index": 29,
+        "position_in_pair": 1,
+        "execution_index": 59
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0581",
+        "arm": "A",
+        "pair_index": 29,
+        "position_in_pair": 2,
+        "execution_index": 60
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0066",
+        "arm": "A",
+        "pair_index": 30,
+        "position_in_pair": 1,
+        "execution_index": 61
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0066",
+        "arm": "V",
+        "pair_index": 30,
+        "position_in_pair": 2,
+        "execution_index": 62
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1016",
+        "arm": "V",
+        "pair_index": 31,
+        "position_in_pair": 1,
+        "execution_index": 63
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1016",
+        "arm": "A",
+        "pair_index": 31,
+        "position_in_pair": 2,
+        "execution_index": 64
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0077",
+        "arm": "A",
+        "pair_index": 32,
+        "position_in_pair": 1,
+        "execution_index": 65
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0077",
+        "arm": "V",
+        "pair_index": 32,
+        "position_in_pair": 2,
+        "execution_index": 66
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0200",
+        "arm": "V",
+        "pair_index": 33,
+        "position_in_pair": 1,
+        "execution_index": 67
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0200",
+        "arm": "A",
+        "pair_index": 33,
+        "position_in_pair": 2,
+        "execution_index": 68
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1019",
+        "arm": "A",
+        "pair_index": 34,
+        "position_in_pair": 1,
+        "execution_index": 69
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1019",
+        "arm": "V",
+        "pair_index": 34,
+        "position_in_pair": 2,
+        "execution_index": 70
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0199",
+        "arm": "V",
+        "pair_index": 35,
+        "position_in_pair": 1,
+        "execution_index": 71
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0199",
+        "arm": "A",
+        "pair_index": 35,
+        "position_in_pair": 2,
+        "execution_index": 72
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0409",
+        "arm": "V",
+        "pair_index": 36,
+        "position_in_pair": 1,
+        "execution_index": 73
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0409",
+        "arm": "A",
+        "pair_index": 36,
+        "position_in_pair": 2,
+        "execution_index": 74
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0684",
+        "arm": "A",
+        "pair_index": 37,
+        "position_in_pair": 1,
+        "execution_index": 75
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0684",
+        "arm": "V",
+        "pair_index": 37,
+        "position_in_pair": 2,
+        "execution_index": 76
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0080",
+        "arm": "V",
+        "pair_index": 38,
+        "position_in_pair": 1,
+        "execution_index": 77
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0080",
+        "arm": "A",
+        "pair_index": 38,
+        "position_in_pair": 2,
+        "execution_index": 78
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1003",
+        "arm": "A",
+        "pair_index": 39,
+        "position_in_pair": 1,
+        "execution_index": 79
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1003",
+        "arm": "V",
+        "pair_index": 39,
+        "position_in_pair": 2,
+        "execution_index": 80
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0407",
+        "arm": "A",
+        "pair_index": 40,
+        "position_in_pair": 1,
+        "execution_index": 81
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0407",
+        "arm": "V",
+        "pair_index": 40,
+        "position_in_pair": 2,
+        "execution_index": 82
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0579",
+        "arm": "V",
+        "pair_index": 41,
+        "position_in_pair": 1,
+        "execution_index": 83
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0579",
+        "arm": "A",
+        "pair_index": 41,
+        "position_in_pair": 2,
+        "execution_index": 84
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0689",
+        "arm": "A",
+        "pair_index": 42,
+        "position_in_pair": 1,
+        "execution_index": 85
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0689",
+        "arm": "V",
+        "pair_index": 42,
+        "position_in_pair": 2,
+        "execution_index": 86
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1055",
+        "arm": "V",
+        "pair_index": 43,
+        "position_in_pair": 1,
+        "execution_index": 87
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1055",
+        "arm": "A",
+        "pair_index": 43,
+        "position_in_pair": 2,
+        "execution_index": 88
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0137",
+        "arm": "V",
+        "pair_index": 44,
+        "position_in_pair": 1,
+        "execution_index": 89
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0137",
+        "arm": "A",
+        "pair_index": 44,
+        "position_in_pair": 2,
+        "execution_index": 90
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0600",
+        "arm": "V",
+        "pair_index": 45,
+        "position_in_pair": 1,
+        "execution_index": 91
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0600",
+        "arm": "A",
+        "pair_index": 45,
+        "position_in_pair": 2,
+        "execution_index": 92
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0405",
+        "arm": "A",
+        "pair_index": 46,
+        "position_in_pair": 1,
+        "execution_index": 93
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0405",
+        "arm": "V",
+        "pair_index": 46,
+        "position_in_pair": 2,
+        "execution_index": 94
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1022",
+        "arm": "A",
+        "pair_index": 47,
+        "position_in_pair": 1,
+        "execution_index": 95
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1022",
+        "arm": "V",
+        "pair_index": 47,
+        "position_in_pair": 2,
+        "execution_index": 96
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0403",
+        "arm": "V",
+        "pair_index": 48,
+        "position_in_pair": 1,
+        "execution_index": 97
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0403",
+        "arm": "A",
+        "pair_index": 48,
+        "position_in_pair": 2,
+        "execution_index": 98
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0142",
+        "arm": "V",
+        "pair_index": 49,
+        "position_in_pair": 1,
+        "execution_index": 99
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0142",
+        "arm": "A",
+        "pair_index": 49,
+        "position_in_pair": 2,
+        "execution_index": 100
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0578",
+        "arm": "V",
+        "pair_index": 50,
+        "position_in_pair": 1,
+        "execution_index": 101
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0578",
+        "arm": "A",
+        "pair_index": 50,
+        "position_in_pair": 2,
+        "execution_index": 102
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1017",
+        "arm": "A",
+        "pair_index": 51,
+        "position_in_pair": 1,
+        "execution_index": 103
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1017",
+        "arm": "V",
+        "pair_index": 51,
+        "position_in_pair": 2,
+        "execution_index": 104
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0065",
+        "arm": "V",
+        "pair_index": 52,
+        "position_in_pair": 1,
+        "execution_index": 105
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0065",
+        "arm": "A",
+        "pair_index": 52,
+        "position_in_pair": 2,
+        "execution_index": 106
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0582",
+        "arm": "A",
+        "pair_index": 53,
+        "position_in_pair": 1,
+        "execution_index": 107
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0582",
+        "arm": "V",
+        "pair_index": 53,
+        "position_in_pair": 2,
+        "execution_index": 108
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1057",
+        "arm": "A",
+        "pair_index": 54,
+        "position_in_pair": 1,
+        "execution_index": 109
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1057",
+        "arm": "V",
+        "pair_index": 54,
+        "position_in_pair": 2,
+        "execution_index": 110
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1026",
+        "arm": "V",
+        "pair_index": 55,
+        "position_in_pair": 1,
+        "execution_index": 111
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1026",
+        "arm": "A",
+        "pair_index": 55,
+        "position_in_pair": 2,
+        "execution_index": 112
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0404",
+        "arm": "V",
+        "pair_index": 56,
+        "position_in_pair": 1,
+        "execution_index": 113
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0404",
+        "arm": "A",
+        "pair_index": 56,
+        "position_in_pair": 2,
+        "execution_index": 114
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1052",
+        "arm": "A",
+        "pair_index": 57,
+        "position_in_pair": 1,
+        "execution_index": 115
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1052",
+        "arm": "V",
+        "pair_index": 57,
+        "position_in_pair": 2,
+        "execution_index": 116
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0064",
+        "arm": "A",
+        "pair_index": 58,
+        "position_in_pair": 1,
+        "execution_index": 117
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0064",
+        "arm": "V",
+        "pair_index": 58,
+        "position_in_pair": 2,
+        "execution_index": 118
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0401",
+        "arm": "A",
+        "pair_index": 59,
+        "position_in_pair": 1,
+        "execution_index": 119
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0401",
+        "arm": "V",
+        "pair_index": 59,
+        "position_in_pair": 2,
+        "execution_index": 120
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0685",
+        "arm": "V",
+        "pair_index": 60,
+        "position_in_pair": 1,
+        "execution_index": 121
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0685",
+        "arm": "A",
+        "pair_index": 60,
+        "position_in_pair": 2,
+        "execution_index": 122
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0402",
+        "arm": "A",
+        "pair_index": 61,
+        "position_in_pair": 1,
+        "execution_index": 123
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0402",
+        "arm": "V",
+        "pair_index": 61,
+        "position_in_pair": 2,
+        "execution_index": 124
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1059",
+        "arm": "V",
+        "pair_index": 62,
+        "position_in_pair": 1,
+        "execution_index": 125
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1059",
+        "arm": "A",
+        "pair_index": 62,
+        "position_in_pair": 2,
+        "execution_index": 126
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0046",
+        "arm": "V",
+        "pair_index": 63,
+        "position_in_pair": 1,
+        "execution_index": 127
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0046",
+        "arm": "A",
+        "pair_index": 63,
+        "position_in_pair": 2,
+        "execution_index": 128
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0050",
+        "arm": "V",
+        "pair_index": 64,
+        "position_in_pair": 1,
+        "execution_index": 129
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0050",
+        "arm": "A",
+        "pair_index": 64,
+        "position_in_pair": 2,
+        "execution_index": 130
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0580",
+        "arm": "V",
+        "pair_index": 65,
+        "position_in_pair": 1,
+        "execution_index": 131
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0580",
+        "arm": "A",
+        "pair_index": 65,
+        "position_in_pair": 2,
+        "execution_index": 132
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0201",
+        "arm": "V",
+        "pair_index": 66,
+        "position_in_pair": 1,
+        "execution_index": 133
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0201",
+        "arm": "A",
+        "pair_index": 66,
+        "position_in_pair": 2,
+        "execution_index": 134
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0596",
+        "arm": "A",
+        "pair_index": 67,
+        "position_in_pair": 1,
+        "execution_index": 135
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0596",
+        "arm": "V",
+        "pair_index": 67,
+        "position_in_pair": 2,
+        "execution_index": 136
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1021",
+        "arm": "A",
+        "pair_index": 68,
+        "position_in_pair": 1,
+        "execution_index": 137
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1021",
+        "arm": "V",
+        "pair_index": 68,
+        "position_in_pair": 2,
+        "execution_index": 138
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0686",
+        "arm": "V",
+        "pair_index": 69,
+        "position_in_pair": 1,
+        "execution_index": 139
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0686",
+        "arm": "A",
+        "pair_index": 69,
+        "position_in_pair": 2,
+        "execution_index": 140
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0047",
+        "arm": "A",
+        "pair_index": 70,
+        "position_in_pair": 1,
+        "execution_index": 141
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0047",
+        "arm": "V",
+        "pair_index": 70,
+        "position_in_pair": 2,
+        "execution_index": 142
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0138",
+        "arm": "V",
+        "pair_index": 71,
+        "position_in_pair": 1,
+        "execution_index": 143
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0138",
+        "arm": "A",
+        "pair_index": 71,
+        "position_in_pair": 2,
+        "execution_index": 144
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0597",
+        "arm": "A",
+        "pair_index": 72,
+        "position_in_pair": 1,
+        "execution_index": 145
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0597",
+        "arm": "V",
+        "pair_index": 72,
+        "position_in_pair": 2,
+        "execution_index": 146
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0078",
+        "arm": "V",
+        "pair_index": 73,
+        "position_in_pair": 1,
+        "execution_index": 147
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0078",
+        "arm": "A",
+        "pair_index": 73,
+        "position_in_pair": 2,
+        "execution_index": 148
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0205",
+        "arm": "V",
+        "pair_index": 74,
+        "position_in_pair": 1,
+        "execution_index": 149
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0205",
+        "arm": "A",
+        "pair_index": 74,
+        "position_in_pair": 2,
+        "execution_index": 150
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0406",
+        "arm": "A",
+        "pair_index": 75,
+        "position_in_pair": 1,
+        "execution_index": 151
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0406",
+        "arm": "V",
+        "pair_index": 75,
+        "position_in_pair": 2,
+        "execution_index": 152
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0990",
+        "arm": "V",
+        "pair_index": 76,
+        "position_in_pair": 1,
+        "execution_index": 153
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0990",
+        "arm": "A",
+        "pair_index": 76,
+        "position_in_pair": 2,
+        "execution_index": 154
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1006",
+        "arm": "V",
+        "pair_index": 77,
+        "position_in_pair": 1,
+        "execution_index": 155
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1006",
+        "arm": "A",
+        "pair_index": 77,
+        "position_in_pair": 2,
+        "execution_index": 156
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0998",
+        "arm": "V",
+        "pair_index": 78,
+        "position_in_pair": 1,
+        "execution_index": 157
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0998",
+        "arm": "A",
+        "pair_index": 78,
+        "position_in_pair": 2,
+        "execution_index": 158
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1004",
+        "arm": "A",
+        "pair_index": 79,
+        "position_in_pair": 1,
+        "execution_index": 159
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1004",
+        "arm": "V",
+        "pair_index": 79,
+        "position_in_pair": 2,
+        "execution_index": 160
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0076",
+        "arm": "V",
+        "pair_index": 80,
+        "position_in_pair": 1,
+        "execution_index": 161
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0076",
+        "arm": "A",
+        "pair_index": 80,
+        "position_in_pair": 2,
+        "execution_index": 162
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1065",
+        "arm": "V",
+        "pair_index": 81,
+        "position_in_pair": 1,
+        "execution_index": 163
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1065",
+        "arm": "A",
+        "pair_index": 81,
+        "position_in_pair": 2,
+        "execution_index": 164
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0049",
+        "arm": "A",
+        "pair_index": 82,
+        "position_in_pair": 1,
+        "execution_index": 165
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0049",
+        "arm": "V",
+        "pair_index": 82,
+        "position_in_pair": 2,
+        "execution_index": 166
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1056",
+        "arm": "A",
+        "pair_index": 83,
+        "position_in_pair": 1,
+        "execution_index": 167
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1056",
+        "arm": "V",
+        "pair_index": 83,
+        "position_in_pair": 2,
+        "execution_index": 168
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1054",
+        "arm": "A",
+        "pair_index": 84,
+        "position_in_pair": 1,
+        "execution_index": 169
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1054",
+        "arm": "V",
+        "pair_index": 84,
+        "position_in_pair": 2,
+        "execution_index": 170
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0683",
+        "arm": "A",
+        "pair_index": 85,
+        "position_in_pair": 1,
+        "execution_index": 171
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0683",
+        "arm": "V",
+        "pair_index": 85,
+        "position_in_pair": 2,
+        "execution_index": 172
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0204",
+        "arm": "V",
+        "pair_index": 86,
+        "position_in_pair": 1,
+        "execution_index": 173
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0204",
+        "arm": "A",
+        "pair_index": 86,
+        "position_in_pair": 2,
+        "execution_index": 174
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1007",
+        "arm": "A",
+        "pair_index": 87,
+        "position_in_pair": 1,
+        "execution_index": 175
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1007",
+        "arm": "V",
+        "pair_index": 87,
+        "position_in_pair": 2,
+        "execution_index": 176
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1015",
+        "arm": "A",
+        "pair_index": 88,
+        "position_in_pair": 1,
+        "execution_index": 177
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1015",
+        "arm": "V",
+        "pair_index": 88,
+        "position_in_pair": 2,
+        "execution_index": 178
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1053",
+        "arm": "A",
+        "pair_index": 89,
+        "position_in_pair": 1,
+        "execution_index": 179
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1053",
+        "arm": "V",
+        "pair_index": 89,
+        "position_in_pair": 2,
+        "execution_index": 180
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0082",
+        "arm": "V",
+        "pair_index": 90,
+        "position_in_pair": 1,
+        "execution_index": 181
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0082",
+        "arm": "A",
+        "pair_index": 90,
+        "position_in_pair": 2,
+        "execution_index": 182
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0042",
+        "arm": "A",
+        "pair_index": 91,
+        "position_in_pair": 1,
+        "execution_index": 183
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0042",
+        "arm": "V",
+        "pair_index": 91,
+        "position_in_pair": 2,
+        "execution_index": 184
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1061",
+        "arm": "A",
+        "pair_index": 92,
+        "position_in_pair": 1,
+        "execution_index": 185
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1061",
+        "arm": "V",
+        "pair_index": 92,
+        "position_in_pair": 2,
+        "execution_index": 186
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1060",
+        "arm": "V",
+        "pair_index": 93,
+        "position_in_pair": 1,
+        "execution_index": 187
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1060",
+        "arm": "A",
+        "pair_index": 93,
+        "position_in_pair": 2,
+        "execution_index": 188
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0079",
+        "arm": "A",
+        "pair_index": 94,
+        "position_in_pair": 1,
+        "execution_index": 189
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0079",
+        "arm": "V",
+        "pair_index": 94,
+        "position_in_pair": 2,
+        "execution_index": 190
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0999",
+        "arm": "A",
+        "pair_index": 95,
+        "position_in_pair": 1,
+        "execution_index": 191
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0999",
+        "arm": "V",
+        "pair_index": 95,
+        "position_in_pair": 2,
+        "execution_index": 192
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0067",
+        "arm": "A",
+        "pair_index": 96,
+        "position_in_pair": 1,
+        "execution_index": 193
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0067",
+        "arm": "V",
+        "pair_index": 96,
+        "position_in_pair": 2,
+        "execution_index": 194
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0068",
+        "arm": "V",
+        "pair_index": 97,
+        "position_in_pair": 1,
+        "execution_index": 195
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0068",
+        "arm": "A",
+        "pair_index": 97,
+        "position_in_pair": 2,
+        "execution_index": 196
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0043",
+        "arm": "V",
+        "pair_index": 98,
+        "position_in_pair": 1,
+        "execution_index": 197
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0043",
+        "arm": "A",
+        "pair_index": 98,
+        "position_in_pair": 2,
+        "execution_index": 198
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0143",
+        "arm": "A",
+        "pair_index": 99,
+        "position_in_pair": 1,
+        "execution_index": 199
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0143",
+        "arm": "V",
+        "pair_index": 99,
+        "position_in_pair": 2,
+        "execution_index": 200
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0576",
+        "arm": "A",
+        "pair_index": 100,
+        "position_in_pair": 1,
+        "execution_index": 201
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0576",
+        "arm": "V",
+        "pair_index": 100,
+        "position_in_pair": 2,
+        "execution_index": 202
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0202",
+        "arm": "A",
+        "pair_index": 101,
+        "position_in_pair": 1,
+        "execution_index": 203
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0202",
+        "arm": "V",
+        "pair_index": 101,
+        "position_in_pair": 2,
+        "execution_index": 204
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0599",
+        "arm": "V",
+        "pair_index": 102,
+        "position_in_pair": 1,
+        "execution_index": 205
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0599",
+        "arm": "A",
+        "pair_index": 102,
+        "position_in_pair": 2,
+        "execution_index": 206
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0594",
+        "arm": "V",
+        "pair_index": 103,
+        "position_in_pair": 1,
+        "execution_index": 207
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0594",
+        "arm": "A",
+        "pair_index": 103,
+        "position_in_pair": 2,
+        "execution_index": 208
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0595",
+        "arm": "V",
+        "pair_index": 104,
+        "position_in_pair": 1,
+        "execution_index": 209
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0595",
+        "arm": "A",
+        "pair_index": 104,
+        "position_in_pair": 2,
+        "execution_index": 210
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0063",
+        "arm": "A",
+        "pair_index": 105,
+        "position_in_pair": 1,
+        "execution_index": 211
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0063",
+        "arm": "V",
+        "pair_index": 105,
+        "position_in_pair": 2,
+        "execution_index": 212
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0598",
+        "arm": "V",
+        "pair_index": 106,
+        "position_in_pair": 1,
+        "execution_index": 213
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0598",
+        "arm": "A",
+        "pair_index": 106,
+        "position_in_pair": 2,
+        "execution_index": 214
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1023",
+        "arm": "A",
+        "pair_index": 107,
+        "position_in_pair": 1,
+        "execution_index": 215
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1023",
+        "arm": "V",
+        "pair_index": 107,
+        "position_in_pair": 2,
+        "execution_index": 216
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1000",
+        "arm": "V",
+        "pair_index": 108,
+        "position_in_pair": 1,
+        "execution_index": 217
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1000",
+        "arm": "A",
+        "pair_index": 108,
+        "position_in_pair": 2,
+        "execution_index": 218
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0051",
+        "arm": "V",
+        "pair_index": 109,
+        "position_in_pair": 1,
+        "execution_index": 219
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0051",
+        "arm": "A",
+        "pair_index": 109,
+        "position_in_pair": 2,
+        "execution_index": 220
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0987",
+        "arm": "A",
+        "pair_index": 110,
+        "position_in_pair": 1,
+        "execution_index": 221
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0987",
+        "arm": "V",
+        "pair_index": 110,
+        "position_in_pair": 2,
+        "execution_index": 222
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0062",
+        "arm": "A",
+        "pair_index": 111,
+        "position_in_pair": 1,
+        "execution_index": 223
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0062",
+        "arm": "V",
+        "pair_index": 111,
+        "position_in_pair": 2,
+        "execution_index": 224
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1024",
+        "arm": "V",
+        "pair_index": 112,
+        "position_in_pair": 1,
+        "execution_index": 225
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1024",
+        "arm": "A",
+        "pair_index": 112,
+        "position_in_pair": 2,
+        "execution_index": 226
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0690",
+        "arm": "A",
+        "pair_index": 113,
+        "position_in_pair": 1,
+        "execution_index": 227
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0690",
+        "arm": "V",
+        "pair_index": 113,
+        "position_in_pair": 2,
+        "execution_index": 228
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0045",
+        "arm": "A",
+        "pair_index": 114,
+        "position_in_pair": 1,
+        "execution_index": 229
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-0045",
+        "arm": "V",
+        "pair_index": 114,
+        "position_in_pair": 2,
+        "execution_index": 230
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1020",
+        "arm": "A",
+        "pair_index": 115,
+        "position_in_pair": 1,
+        "execution_index": 231
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1020",
+        "arm": "V",
+        "pair_index": 115,
+        "position_in_pair": 2,
+        "execution_index": 232
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1062",
+        "arm": "V",
+        "pair_index": 116,
+        "position_in_pair": 1,
+        "execution_index": 233
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1062",
+        "arm": "A",
+        "pair_index": 116,
+        "position_in_pair": 2,
+        "execution_index": 234
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1005",
+        "arm": "V",
+        "pair_index": 117,
+        "position_in_pair": 1,
+        "execution_index": 235
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1005",
+        "arm": "A",
+        "pair_index": 117,
+        "position_in_pair": 2,
+        "execution_index": 236
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1014",
+        "arm": "A",
+        "pair_index": 118,
+        "position_in_pair": 1,
+        "execution_index": 237
+      },
+      {
+        "replicate_id": "main_r1",
+        "qid": "mmlb-1014",
+        "arm": "V",
+        "pair_index": 118,
+        "position_in_pair": 2,
+        "execution_index": 238
+      }
+    ]
+  },
+  "decision_rule": {
+    "applies_to": "the primary endpoint of the main replicate of a complete, validated full run",
+    "minimum_meaningful_difference": 0.05,
+    "alpha_one_sided": 0.05,
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "accuracy_criteria": {
+      "C1": "Delta >= 0.05",
+      "C2": "one-sided 95 % bootstrap lower bound (5th percentile) > 0",
+      "C3": "one-sided document sign-flip p <= 0.05",
+      "C4": "broken <= fixed / 2"
+    },
+    "guardrails": {
+      "G1": "correct abstentions on the 16 unanswerable questions: V >= A - 2",
+      "G2": "citation validity on the 118 replies: V - A >= -0.05"
+    },
+    "outcomes": {
+      "adopt_visual_retrieval": "C1, C2, C3 and C4 hold, and G1 and G2 hold",
+      "visual_gain_with_regression": "C1-C4 hold but G1 or G2 fails",
+      "visual_worse": "Delta <= -0.05 and the two-sided 95 % bootstrap upper bound < 0",
+      "no_meaningful_difference": "the two-sided 95 % bootstrap interval lies inside (-0.05, +0.05)",
+      "inconclusive": "any other result"
+    },
+    "statistical_reading": {
+      "adopt_visual_retrieval": "Evidence, at one-sided alpha 0.05 with documents as the unit of inference, that V answers more held-out questions correctly than A, by an estimated margin of at least 0.05; guardrails met. A claim about this population of questions and documents, not about every document type.",
+      "visual_gain_with_regression": "The same accuracy evidence, but a pre-registered safety guardrail failed.",
+      "visual_worse": "Evidence that V answers meaningfully fewer questions correctly (estimate <= -0.05, two-sided 95 % upper bound < 0).",
+      "no_meaningful_difference": "The two-sided 95 % interval excludes differences of 0.05 or more in either direction: any difference is smaller than the meaningful margin.",
+      "inconclusive": "The data neither establish a meaningful gain nor exclude one. This is not evidence that ColQwen2 is ineffective; the point estimate and interval are reported as they are."
+    },
+    "evidence_versus_deployment": "The verdict is a statistical reading of E6; the recommendation is a deployment decision. For every verdict except adopt_visual_retrieval the deployment action is the same: keep OCR + BM25 as the application's default, because it is the status quo, needs no model and indexes in milliseconds. Keeping BM25 after an inconclusive result is a product default under uncertainty, not a finding that visual retrieval does not help; E5's evidence-level result stands.",
+    "recommendation_map": {
+      "adopt_visual_retrieval": "Make ColQwen2 the application's default retriever in the application-building phase (a change to src/visualdoc that needs the owner's separate approval, per AGENTS.md), keeping OCR + BM25 as the fallback where the model cannot run. The integration must index pages once at upload (about 12.5 s per page on the development machine) and cache the embeddings.",
+      "visual_gain_with_regression": "Keep OCR + BM25 as the default; the owner decides on the reported trade-off before any integration.",
+      "visual_worse": "Keep OCR + BM25; reject visual retrieval for this application.",
+      "no_meaningful_difference": "Keep OCR + BM25: the gain does not justify the model and the indexing cost.",
+      "inconclusive": "Keep OCR + BM25 as the default and build the application; report the interval and state that ColQwen2's benefit is unresolved, not refuted. No further retrieval experiment is planned before the application exists."
+    },
+    "never_change_the_verdict": [
+      "secondary metrics other than G1 and G2",
+      "sensitivity analyses",
+      "strata decomposition",
+      "latency",
+      "cost",
+      "per-document results",
+      "the smoke replies"
+    ],
+    "fixed_before_results": "the rule, its thresholds, the metrics, the strata, the sensitivity sets, seeds and the simulation are frozen in this spec before any E6 reply; a change requires a new spec version, and the v1 result under the v1 rule is still reported"
+  },
+  "run_id": "20261123T200131832026Z_cbe3025f_smoke",
+  "mode": "smoke",
+  "system_prompt": "You answer questions about a single PDF document using only the page images provided.\nEach page image is preceded by a tag [Page N], where N is the 1-based page number in the PDF.\n\nReturn a JSON object with exactly these keys:\n  \"answer\": the shortest complete answer. Use a number (integer or decimal) when the answer is a number,\n            and a JSON list when several items are asked for. If the page images do not contain the answer,\n            use exactly the string \"Not answerable\".\n  \"cited_pages\": a list of the page numbers N whose images support the answer ([] if \"Not answerable\").\n\nDo not use knowledge outside the page images. Do not guess.",
+  "planned_calls": 2,
+  "max_attempts_per_request": 2,
+  "approved_budget_usd": 5.6,
+  "budget_scope": "cumulative over every E6 run under this spec version (smoke, full, retries, and any interrupted or resumed run), at list price",
+  "prior_spent_usd_at_creation": 0.0,
+  "planned_cost_upper_usd": 0.0339126,
+  "cache_policy": "cache entries keyed SHA-256(run_id:replicate_id:request_fingerprint); no reply of another run or replicate can be reused",
+  "code_provenance": {
+    "git_commit": "9b2438116cc66c7f4b279201e86dc298bd0619e0",
+    "branch": "refactor/simplify-structure",
+    "spec_sha256": "23e02872535f1be4f08858781bdd9aaebfdd0ca2b6cc8c7a7ccd21258430bdac",
+    "spec_committed": true,
+    "notebook05_code_sha256": "19e85f444b08f6ec579e124c3d73b24e506816851e33335da071d7bd8becc2e9",
+    "notebook05_code_committed": true,
+    "application_module_sha256_informative": {
+      "src/visualdoc/__init__.py": "d91c5dc096bc8835c261c4deeefcf57a480226104310f58bff4adc1d97c84778",
+      "src/visualdoc/answering.py": "081b50d68a73a372e268fceefdcde0b160521b579f92e0eb6a984415fcebe55d",
+      "src/visualdoc/citations.py": "38ef03a8018b521e12810d46bb38ab21474ed2b93711e4cf4d03369777675c3c",
+      "src/visualdoc/documents.py": "52f0466a0eba57ac3822087b7f717e12e5328f647ae27c9ea9a337eba19f8bc9",
+      "src/visualdoc/parsing.py": "720cc2d3cf01b35473e19fcb876d69632ea0d9c3e47974546e50d3a7b0f70e69",
+      "src/visualdoc/pipeline.py": "b6124304ef9618c5240148114d1b5eb774ca18ed134b899695fddf8a0574dc0e",
+      "src/visualdoc/retrieval.py": "6b1f4d835f1753b279184c21fca8db1578ef023ee2bb8a105d72556f9ff0b43e"
+    },
+    "git_status": []
+  }
+}

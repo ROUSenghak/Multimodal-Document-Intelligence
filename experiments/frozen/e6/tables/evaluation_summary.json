@@ -1,0 +1,560 @@
+{
+ "spec_id": "e6-visual-retrieval-answering-v1",
+ "spec_sha256": "23e02872535f1be4f08858781bdd9aaebfdd0ca2b6cc8c7a7ccd21258430bdac",
+ "run_id": "20261123T200722253880Z_d94e85f1_full",
+ "primary": {
+  "questions": 102,
+  "documents": 14,
+  "A": 0.24509803921568626,
+  "V": 0.37254901960784315,
+  "delta": 0.12745098039215685,
+  "fixed": 13,
+  "broken": 0,
+  "both_correct": 25,
+  "both_wrong": 64,
+  "bootstrap_p05": 0.08181818181818182,
+  "ci95": [
+   0.07446588711095481,
+   0.19319098240469193
+  ],
+  "sign_flip_p_one_sided": 0.0009765625,
+  "sign_flip_p_two_sided": 0.001953125,
+  "mcnemar_p_ignores_clustering": 0.000244140625,
+  "document_weighted_delta": 0.15382653061224488,
+  "document_weighted_sign_flip_p_one_sided": 0.0009765625,
+  "leave_one_document_out": {
+   "11-21-16-Updated-Post-Election-Release.pdf": 0.12631578947368421,
+   "2021-Apple-Catalog.pdf": 0.12121212121212122,
+   "2310.05634v2.pdf": 0.125,
+   "2312.10997v5.pdf": 0.13541666666666666,
+   "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": 0.1368421052631579,
+   "AMAZON_2017_10K.pdf": 0.14942528735632185,
+   "COSTCO_2021_10K.pdf": 0.12790697674418605,
+   "Macbook_air.pdf": 0.125,
+   "NUS-Business-School-BBA-Brochure-2024.pdf": 0.12371134020618557,
+   "SAO-StudentSupport_Guidebook-Content.pdf": 0.1134020618556701,
+   "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": 0.11578947368421053,
+   "ddoseattle-150627210357-lva1-app6891_95.pdf": 0.1368421052631579,
+   "e639029d16094ea71d964e2fb953952b.pdf": 0.125,
+   "efd88e41c5f2606c57929cac6c1c0605.pdf": 0.125
+  }
+ },
+ "decision": {
+  "verdict": "adopt_visual_retrieval",
+  "criteria": {
+   "C1 delta >= 0.05": true,
+   "C2 bootstrap 5th percentile > 0": true,
+   "C3 one-sided sign-flip p <= 0.05": true,
+   "C4 broken <= fixed / 2": true
+  },
+  "guardrails": {
+   "G1 correct abstentions on the unanswerable: V >= A - 2": true,
+   "G2 citation validity: V - A >= -0.05": true
+  },
+  "statistical_reading": "Evidence, at one-sided alpha 0.05 with documents as the unit of inference, that V answers more held-out questions correctly than A, by an estimated margin of at least 0.05; guardrails met. A claim about this population of questions and documents, not about every document type.",
+  "deployment_action": "Make ColQwen2 the application's default retriever in the application-building phase (a change to src/visualdoc that needs the owner's separate approval, per AGENTS.md), keeping OCR + BM25 as the fallback where the model cannot run. The integration must index pages once at upload (about 12.5 s per page on the development machine) and cache the embeddings."
+ },
+ "efficiency": {
+  "ColQwen2 indexing, held-out documents (measured)": "2.19 h for 642 distinct page images (5 of 647 pages repeat an image); median 12.2 s per image",
+  "ColQwen2 indexing, per document (measured)": "3.0-19.4 min for 16-85 pages",
+  "ColQwen2 embedding storage, held-out documents": "124.2 MB (median 193 KB per page, bf16)",
+  "ColQwen2 query encoding + scoring, per question": "0.16 s + 4.4 ms",
+  "ColQwen2 model": "weights 4.42 GB on disk; peak GPU memory 3.33 GB",
+  "BM25 (application)": "index 0.08 ms per page, query 0.13 ms; text extraction 0.10 (OCR on 193 of 647 pages) s per page; no model",
+  "measurement conditions": "E5, 2026-11-23, one fanless Apple M1 (8 GB), two sessions; a faster GPU would index far faster; not re-measured in E6"
+ },
+ "secondary": {
+  "citations": {
+   "A": {
+    "valid and present (all 118)": "108 / 118",
+    "all cited pages supplied (all 118)": "111 / 118",
+    "invalid citations that are off by one": "0 / 7",
+    "answer without a citation (all 118)": "3 / 118",
+    "grounded: an answer citing an evidence page (101)": "49 / 101",
+    "correct and grounded (101)": "16 / 101"
+   },
+   "V": {
+    "valid and present (all 118)": "107 / 118",
+    "all cited pages supplied (all 118)": "110 / 118",
+    "invalid citations that are off by one": "1 / 8",
+    "answer without a citation (all 118)": "3 / 118",
+    "grounded: an answer citing an evidence page (101)": "67 / 101",
+    "correct and grounded (101)": "28 / 101"
+   }
+  },
+  "abstention": {
+   "A": {
+    "correct abstention (16 unanswerable)": "9 / 16",
+    "unanswerable answered with content": "7 / 16",
+    "false abstention with evidence supplied (answerable)": "6 / 66",
+    "grounded abstention: no evidence supplied (answerable)": "16 / 35",
+    "unsupported answer: no evidence supplied (answerable)": "19 / 35"
+   },
+   "V": {
+    "correct abstention (16 unanswerable)": "7 / 16",
+    "unanswerable answered with content": "9 / 16",
+    "false abstention with evidence supplied (answerable)": "4 / 86",
+    "grounded abstention: no evidence supplied (answerable)": "6 / 15",
+    "unsupported answer: no evidence supplied (answerable)": "9 / 15"
+   }
+  },
+  "latency": {
+   "A": {
+    "API latency s, median / 90th percentile": "2.54 / 3.48",
+    "retrieval per question (E5, development machine)": "BM25 query 0.13 ms",
+    "indexing per page (E5)": "BM25 0.08 ms + text extraction 0.10 (OCR on 193 of 647 pages)"
+   },
+   "V": {
+    "API latency s, median / 90th percentile": "2.45 / 4.55",
+    "retrieval per question (E5, development machine)": "query encoding 0.16 s + MaxSim 4.4 ms",
+    "indexing per page (E5)": "ColQwen2 12.5 s (two passes)"
+   }
+  },
+  "cost": {
+   "A": {
+    "prompt tokens, mean": 103135.98305084746,
+    "completion tokens, mean": 25.694915254237287,
+    "calls with cached prompt tokens": 23,
+    "list-price USD": 1.8273260999999996,
+    "list-price USD per question": 0.015485814406779657
+   },
+   "V": {
+    "prompt tokens, mean": 103135.98305084746,
+    "completion tokens, mean": 26.66949152542373,
+    "calls with cached prompt tokens": 25,
+    "list-price USD": 1.8273950999999997,
+    "list-price USD per question": 0.01548639915254237
+   },
+   "V / A list-price ratio": 1.000037760091097
+  },
+  "paired_descriptive": {
+   "grounded citation (101)": {
+    "questions": 101,
+    "documents": 14,
+    "A": 0.48514851485148514,
+    "V": 0.6633663366336634,
+    "delta": 0.1782178217821782,
+    "fixed": 22,
+    "broken": 4,
+    "both_correct": 45,
+    "both_wrong": 30,
+    "bootstrap_p05": 0.08771929824561403,
+    "ci95": [
+     0.07142857142857142,
+     0.3116883116883117
+    ],
+    "sign_flip_p_one_sided": 0.0048828125,
+    "sign_flip_p_two_sided": 0.009765625,
+    "mcnemar_p_ignores_clustering": 0.0005335211753845215,
+    "document_weighted_delta": 0.2050595238095238,
+    "document_weighted_sign_flip_p_one_sided": 0.001953125,
+    "leave_one_document_out": {
+     "11-21-16-Updated-Post-Election-Release.pdf": 0.19148936170212766,
+     "2021-Apple-Catalog.pdf": 0.1836734693877551,
+     "2310.05634v2.pdf": 0.18947368421052632,
+     "2312.10997v5.pdf": 0.16842105263157894,
+     "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": 0.16842105263157894,
+     "AMAZON_2017_10K.pdf": 0.19767441860465115,
+     "COSTCO_2021_10K.pdf": 0.2235294117647059,
+     "Macbook_air.pdf": 0.16842105263157894,
+     "NUS-Business-School-BBA-Brochure-2024.pdf": 0.17708333333333334,
+     "SAO-StudentSupport_Guidebook-Content.pdf": 0.1875,
+     "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": 0.14893617021276595,
+     "ddoseattle-150627210357-lva1-app6891_95.pdf": 0.1595744680851064,
+     "e639029d16094ea71d964e2fb953952b.pdf": 0.17894736842105263,
+     "efd88e41c5f2606c57929cac6c1c0605.pdf": 0.15789473684210525
+    }
+   },
+   "citation valid and present (118)": {
+    "questions": 118,
+    "documents": 14,
+    "A": 0.9152542372881356,
+    "V": 0.9067796610169492,
+    "delta": -0.00847457627118644,
+    "fixed": 4,
+    "broken": 5,
+    "both_correct": 103,
+    "both_wrong": 6,
+    "bootstrap_p05": -0.05434782608695652,
+    "ci95": [
+     -0.06542056074766354,
+     0.037037037037037035
+    ],
+    "sign_flip_p_one_sided": 0.734375,
+    "sign_flip_p_two_sided": 1.0,
+    "mcnemar_p_ignores_clustering": 1.0,
+    "document_weighted_delta": -0.023809523809523808,
+    "document_weighted_sign_flip_p_one_sided": 0.765625,
+    "leave_one_document_out": {
+     "11-21-16-Updated-Post-Election-Release.pdf": -0.01818181818181818,
+     "2021-Apple-Catalog.pdf": 0.0,
+     "2310.05634v2.pdf": 0.0,
+     "2312.10997v5.pdf": -0.009009009009009009,
+     "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": -0.01818181818181818,
+     "AMAZON_2017_10K.pdf": -0.009708737864077669,
+     "COSTCO_2021_10K.pdf": -0.00980392156862745,
+     "Macbook_air.pdf": -0.009009009009009009,
+     "NUS-Business-School-BBA-Brochure-2024.pdf": 0.008928571428571428,
+     "SAO-StudentSupport_Guidebook-Content.pdf": -0.008849557522123894,
+     "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": -0.009345794392523364,
+     "ddoseattle-150627210357-lva1-app6891_95.pdf": -0.009259259259259259,
+     "e639029d16094ea71d964e2fb953952b.pdf": -0.018018018018018018,
+     "efd88e41c5f2606c57929cac6c1c0605.pdf": -0.009009009009009009
+    }
+   }
+  }
+ },
+ "sensitivity": {
+  "strict accuracy (score = 1)": {
+   "questions": 102,
+   "documents": 14,
+   "A": 0.24509803921568626,
+   "V": 0.3431372549019608,
+   "delta": 0.09803921568627451,
+   "fixed": 10,
+   "broken": 0,
+   "both_correct": 25,
+   "both_wrong": 67,
+   "bootstrap_p05": 0.06153171390013496,
+   "ci95": [
+    0.05434782608695652,
+    0.14285714285714285
+   ],
+   "sign_flip_p_one_sided": 0.001953125,
+   "sign_flip_p_two_sided": 0.00390625,
+   "mcnemar_p_ignores_clustering": 0.001953125,
+   "document_weighted_delta": 0.11505102040816327,
+   "document_weighted_sign_flip_p_one_sided": 0.001953125,
+   "leave_one_document_out": {
+    "11-21-16-Updated-Post-Election-Release.pdf": 0.09473684210526316,
+    "2021-Apple-Catalog.pdf": 0.09090909090909091,
+    "2310.05634v2.pdf": 0.09375,
+    "2312.10997v5.pdf": 0.10416666666666667,
+    "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": 0.10526315789473684,
+    "AMAZON_2017_10K.pdf": 0.11494252873563218,
+    "COSTCO_2021_10K.pdf": 0.09302325581395349,
+    "Macbook_air.pdf": 0.09375,
+    "NUS-Business-School-BBA-Brochure-2024.pdf": 0.10309278350515463,
+    "SAO-StudentSupport_Guidebook-Content.pdf": 0.09278350515463918,
+    "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": 0.09473684210526316,
+    "ddoseattle-150627210357-lva1-app6891_95.pdf": 0.10526315789473684,
+    "e639029d16094ea71d964e2fb953952b.pdf": 0.09375,
+    "efd88e41c5f2606c57929cac6c1c0605.pdf": 0.09375
+   }
+  },
+  "mean score (ANLS partial credit)": {
+   "questions": 102,
+   "documents": 14,
+   "A": 0.24509803921568626,
+   "V": 0.3701304200542006,
+   "delta": 0.12503238083851428,
+   "fixed": 13,
+   "broken": 0,
+   "both_correct": 25,
+   "both_wrong": 64,
+   "bootstrap_p05": 0.08064295787061519,
+   "ci95": [
+    0.07367125235291763,
+    0.18812098605889724
+   ],
+   "sign_flip_p_one_sided": 0.0009765625,
+   "sign_flip_p_two_sided": 0.001953125,
+   "mcnemar_p_ignores_clustering": 0.000244140625,
+   "document_weighted_delta": 0.15042983656877387,
+   "document_weighted_sign_flip_p_one_sided": 0.0009765625,
+   "leave_one_document_out": {
+    "11-21-16-Updated-Post-Election-Release.pdf": 0.12371897732135216,
+    "2021-Apple-Catalog.pdf": 0.1187202307629137,
+    "2310.05634v2.pdf": 0.12243023797425474,
+    "2312.10997v5.pdf": 0.13284690464092141,
+    "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": 0.13424529311082586,
+    "AMAZON_2017_10K.pdf": 0.14658968787963741,
+    "COSTCO_2021_10K.pdf": 0.12503840518056344,
+    "Macbook_air.pdf": 0.12243023797425474,
+    "NUS-Business-School-BBA-Brochure-2024.pdf": 0.12167096219931273,
+    "SAO-StudentSupport_Guidebook-Content.pdf": 0.11257700528036207,
+    "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": 0.11352160890029954,
+    "ddoseattle-150627210357-lva1-app6891_95.pdf": 0.13424529311082586,
+    "e639029d16094ea71d964e2fb953952b.pdf": 0.12243023797425474,
+    "efd88e41c5f2606c57929cac6c1c0605.pdf": 0.12243023797425474
+   }
+  },
+  "without S1 (unscorable references)": {
+   "questions": 102,
+   "documents": 14,
+   "A": 0.24509803921568626,
+   "V": 0.37254901960784315,
+   "delta": 0.12745098039215685,
+   "fixed": 13,
+   "broken": 0,
+   "both_correct": 25,
+   "both_wrong": 64,
+   "bootstrap_p05": 0.08181818181818182,
+   "ci95": [
+    0.07446588711095481,
+    0.19319098240469193
+   ],
+   "sign_flip_p_one_sided": 0.0009765625,
+   "sign_flip_p_two_sided": 0.001953125,
+   "mcnemar_p_ignores_clustering": 0.000244140625,
+   "document_weighted_delta": 0.15382653061224488,
+   "document_weighted_sign_flip_p_one_sided": 0.0009765625,
+   "leave_one_document_out": {
+    "11-21-16-Updated-Post-Election-Release.pdf": 0.12631578947368421,
+    "2021-Apple-Catalog.pdf": 0.12121212121212122,
+    "2310.05634v2.pdf": 0.125,
+    "2312.10997v5.pdf": 0.13541666666666666,
+    "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": 0.1368421052631579,
+    "AMAZON_2017_10K.pdf": 0.14942528735632185,
+    "COSTCO_2021_10K.pdf": 0.12790697674418605,
+    "Macbook_air.pdf": 0.125,
+    "NUS-Business-School-BBA-Brochure-2024.pdf": 0.12371134020618557,
+    "SAO-StudentSupport_Guidebook-Content.pdf": 0.1134020618556701,
+    "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": 0.11578947368421053,
+    "ddoseattle-150627210357-lva1-app6891_95.pdf": 0.1368421052631579,
+    "e639029d16094ea71d964e2fb953952b.pdf": 0.125,
+    "efd88e41c5f2606c57929cac6c1c0605.pdf": 0.125
+   }
+  },
+  "the 101 evidence questions": {
+   "questions": 101,
+   "documents": 14,
+   "A": 0.2376237623762376,
+   "V": 0.36633663366336633,
+   "delta": 0.12871287128712872,
+   "fixed": 13,
+   "broken": 0,
+   "both_correct": 24,
+   "both_wrong": 64,
+   "bootstrap_p05": 0.08333333333333333,
+   "ci95": [
+    0.07547169811320754,
+    0.19480519480519481
+   ],
+   "sign_flip_p_one_sided": 0.0009765625,
+   "sign_flip_p_two_sided": 0.001953125,
+   "mcnemar_p_ignores_clustering": 0.000244140625,
+   "document_weighted_delta": 0.15382653061224488,
+   "document_weighted_sign_flip_p_one_sided": 0.0009765625,
+   "leave_one_document_out": {
+    "11-21-16-Updated-Post-Election-Release.pdf": 0.1276595744680851,
+    "2021-Apple-Catalog.pdf": 0.12244897959183673,
+    "2310.05634v2.pdf": 0.12631578947368421,
+    "2312.10997v5.pdf": 0.1368421052631579,
+    "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": 0.1368421052631579,
+    "AMAZON_2017_10K.pdf": 0.1511627906976744,
+    "COSTCO_2021_10K.pdf": 0.12941176470588237,
+    "Macbook_air.pdf": 0.12631578947368421,
+    "NUS-Business-School-BBA-Brochure-2024.pdf": 0.125,
+    "SAO-StudentSupport_Guidebook-Content.pdf": 0.11458333333333333,
+    "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": 0.11702127659574468,
+    "ddoseattle-150627210357-lva1-app6891_95.pdf": 0.13829787234042554,
+    "e639029d16094ea71d964e2fb953952b.pdf": 0.12631578947368421,
+    "efd88e41c5f2606c57929cac6c1c0605.pdf": 0.12631578947368421
+   }
+  },
+  "without the two 10-K filings": {
+   "questions": 71,
+   "documents": 12,
+   "A": 0.22535211267605634,
+   "V": 0.38028169014084506,
+   "delta": 0.15492957746478872,
+   "fixed": 11,
+   "broken": 0,
+   "both_correct": 16,
+   "both_wrong": 44,
+   "bootstrap_p05": 0.1,
+   "ci95": [
+    0.08974358974358974,
+    0.22535211267605634
+   ],
+   "sign_flip_p_one_sided": 0.001953125,
+   "sign_flip_p_two_sided": 0.00390625,
+   "mcnemar_p_ignores_clustering": 0.0009765625,
+   "document_weighted_delta": 0.16904761904761903,
+   "document_weighted_sign_flip_p_one_sided": 0.001953125,
+   "leave_one_document_out": {
+    "11-21-16-Updated-Post-Election-Release.pdf": 0.15625,
+    "2021-Apple-Catalog.pdf": 0.14705882352941177,
+    "2310.05634v2.pdf": 0.15384615384615385,
+    "2312.10997v5.pdf": 0.16923076923076924,
+    "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": 0.171875,
+    "Macbook_air.pdf": 0.15384615384615385,
+    "NUS-Business-School-BBA-Brochure-2024.pdf": 0.15151515151515152,
+    "SAO-StudentSupport_Guidebook-Content.pdf": 0.13636363636363635,
+    "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": 0.140625,
+    "ddoseattle-150627210357-lva1-app6891_95.pdf": 0.171875,
+    "e639029d16094ea71d964e2fb953952b.pdf": 0.15384615384615385,
+    "efd88e41c5f2606c57929cac6c1c0605.pdf": 0.15384615384615385
+   }
+  },
+  "all 118 questions (benchmark accuracy, F1)": {
+   "A": {
+    "accuracy": 0.288135593220339,
+    "F1": 0.26455026455026454
+   },
+   "V": {
+    "accuracy": 0.379265278351936,
+    "F1": 0.371953722616044
+   }
+  }
+ },
+ "mechanism": {
+  "V supplies more evidence (higher stratum)": {
+   "questions": 28,
+   "A correct": 3,
+   "V correct": 9,
+   "fixed": 6,
+   "broken": 0
+  },
+  "same stratum": {
+   "questions": 68,
+   "A correct": 19,
+   "V correct": 26,
+   "fixed": 7,
+   "broken": 0
+  },
+  "V supplies less evidence (lower stratum)": {
+   "questions": 5,
+   "A correct": 2,
+   "V correct": 2,
+   "fixed": 0,
+   "broken": 0
+  },
+  "no annotated evidence": {
+   "questions": 1,
+   "A correct": 1,
+   "V correct": 1,
+   "fixed": 0,
+   "broken": 0
+  }
+ },
+ "per_document": [
+  {
+   "doc_id": "11-21-16-Updated-Post-Election-Release.pdf",
+   "questions": 7,
+   "A correct": 3,
+   "V correct": 4,
+   "V - A": 1,
+   "ColQwen2 indexing, min (measured)": 7.905280445799815,
+   "ColQwen2 embeddings, MB": 8.70156
+  },
+  {
+   "doc_id": "2021-Apple-Catalog.pdf",
+   "questions": 3,
+   "A correct": 0,
+   "V correct": 1,
+   "V - A": 1,
+   "ColQwen2 indexing, min (measured)": 12.999835281967053,
+   "ColQwen2 embeddings, MB": 10.63524
+  },
+  {
+   "doc_id": "2310.05634v2.pdf",
+   "questions": 6,
+   "A correct": 0,
+   "V correct": 1,
+   "V - A": 1,
+   "ColQwen2 indexing, min (measured)": 4.709323927766111,
+   "ColQwen2 embeddings, MB": 4.59168
+  },
+  {
+   "doc_id": "2312.10997v5.pdf",
+   "questions": 6,
+   "A correct": 0,
+   "V correct": 0,
+   "V - A": 0,
+   "ColQwen2 indexing, min (measured)": 4.512558565950451,
+   "ColQwen2 embeddings, MB": 4.060728
+  },
+  {
+   "doc_id": "3276a5b991c49cf5f9a4af0f7d6fce67.pdf",
+   "questions": 7,
+   "A correct": 3,
+   "V correct": 3,
+   "V - A": 0,
+   "ColQwen2 indexing, min (measured)": 3.8674771236348344,
+   "ColQwen2 embeddings, MB": 3.093888
+  },
+  {
+   "doc_id": "AMAZON_2017_10K.pdf",
+   "questions": 15,
+   "A correct": 4,
+   "V correct": 4,
+   "V - A": 0,
+   "ColQwen2 indexing, min (measured)": 19.41136154440245,
+   "ColQwen2 embeddings, MB": 16.43628
+  },
+  {
+   "doc_id": "COSTCO_2021_10K.pdf",
+   "questions": 16,
+   "A correct": 5,
+   "V correct": 7,
+   "V - A": 2,
+   "ColQwen2 indexing, min (measured)": 16.646836639581732,
+   "ColQwen2 embeddings, MB": 14.695968
+  },
+  {
+   "doc_id": "Macbook_air.pdf",
+   "questions": 6,
+   "A correct": 0,
+   "V correct": 1,
+   "V - A": 1,
+   "ColQwen2 indexing, min (measured)": 15.89045030895096,
+   "ColQwen2 embeddings, MB": 13.646016
+  },
+  {
+   "doc_id": "NUS-Business-School-BBA-Brochure-2024.pdf",
+   "questions": 5,
+   "A correct": 0,
+   "V correct": 1,
+   "V - A": 1,
+   "ColQwen2 indexing, min (measured)": 6.155522821435113,
+   "ColQwen2 embeddings, MB": 4.59168
+  },
+  {
+   "doc_id": "SAO-StudentSupport_Guidebook-Content.pdf",
+   "questions": 5,
+   "A correct": 2,
+   "V correct": 4,
+   "V - A": 2,
+   "ColQwen2 indexing, min (measured)": 9.579920481867726,
+   "ColQwen2 embeddings, MB": 8.508192
+  },
+  {
+   "doc_id": "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf",
+   "questions": 7,
+   "A correct": 3,
+   "V correct": 5,
+   "V - A": 2,
+   "ColQwen2 indexing, min (measured)": 12.369086452795266,
+   "ColQwen2 embeddings, MB": 15.082704
+  },
+  {
+   "doc_id": "ddoseattle-150627210357-lva1-app6891_95.pdf",
+   "questions": 7,
+   "A correct": 1,
+   "V correct": 1,
+   "V - A": 0,
+   "ColQwen2 indexing, min (measured)": 9.797743653450114,
+   "ColQwen2 embeddings, MB": 12.569256
+  },
+  {
+   "doc_id": "e639029d16094ea71d964e2fb953952b.pdf",
+   "questions": 6,
+   "A correct": 3,
+   "V correct": 4,
+   "V - A": 1,
+   "ColQwen2 indexing, min (measured)": 4.527521396530377,
+   "ColQwen2 embeddings, MB": 3.86736
+  },
+  {
+   "doc_id": "efd88e41c5f2606c57929cac6c1c0605.pdf",
+   "questions": 6,
+   "A correct": 1,
+   "V correct": 2,
+   "V - A": 1,
+   "ColQwen2 indexing, min (measured)": 3.048396795850249,
+   "ColQwen2 embeddings, MB": 3.86736
+  }
+ ]
+}

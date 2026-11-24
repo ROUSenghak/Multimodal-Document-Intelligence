@@ -1,0 +1,18 @@
+[
+  {
+    "replicate_id": "technical_smoke",
+    "qid": "mmlb-0068",
+    "arm": "A",
+    "pair_index": 0,
+    "position_in_pair": 1,
+    "execution_index": 1
+  },
+  {
+    "replicate_id": "technical_smoke",
+    "qid": "mmlb-0068",
+    "arm": "V",
+    "pair_index": 0,
+    "position_in_pair": 2,
+    "execution_index": 2
+  }
+]

@@ -57,8 +57,11 @@ byte, in [`frozen/e4/`](frozen/e4/README.md) with the evaluation summary, an ind
 Experiment E6 (visual retrieval, end to end: GPT-4o-mini on OCR + BM25 pages versus ColQwen2 pages, E5's 118 held-out
 questions) runs go to `runs/e6/<UTC timestamp>_<unique id>_<mode>/`, with E4's audit files and no annotation in the logs. The
 protocol [`specs/e6_visual_retrieval_answering_v1.json`](specs/e6_visual_retrieval_answering_v1.json) was frozen on 2026-11-23
-with notebook 05 (cumulative ceiling USD 5.60, retries included; upper bound of all stages USD 3.80). No paid call has been
-made; the smoke and full stages each need separate authorization.
+with notebook 05 (cumulative ceiling USD 5.60, retries included; upper bound of all stages USD 3.80). The approved smoke run
+(`20261123T200131832026Z_cbe3025f_smoke`) and full run (`20261123T200722253880Z_d94e85f1_full`) completed on 2026-11-24
+($3.7213 in all, list price). The full run stopped once when the OpenAI credit ran out (an unbilled 429) and was resumed in place.
+Both runs are frozen, byte for byte, in [`frozen/e6/`](frozen/e6/README.md) with the evaluation tables, an independent audit (43/43)
+and the provenance. Verdict: `adopt_visual_retrieval` (A 25/102, V 38/102, 13 fixed / 0 broken).
 
 ## How results are reproduced
 

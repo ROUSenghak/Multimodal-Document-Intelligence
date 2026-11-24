@@ -1,0 +1,174 @@
+{
+ "package": "E6 visual retrieval end to end (arm A: OCR + BM25 top 5 after the context guard; arm V: ColQwen2 v1.0 top 5 from E5's frozen rankings after the same guard; one GPT-4o-mini reader, 768-px images), frozen result",
+ "frozen_at": "2026-11-24",
+ "spec": {
+  "path": "experiments/specs/e6_visual_retrieval_answering_v1.json",
+  "sha256": "23e02872535f1be4f08858781bdd9aaebfdd0ca2b6cc8c7a7ccd21258430bdac",
+  "frozen_at": "2026-11-23T19:54:00Z",
+  "approved_ceiling_usd": 5.6,
+  "freeze_commit": "c2ac6e6444330a8185edc6ff138ed80faa59d92c"
+ },
+ "code_revision": {
+  "commit": "9b2438116cc66c7f4b279201e86dc298bd0619e0",
+  "branch": "refactor/simplify-structure",
+  "note": "spec and notebook 05's code cells equal this commit in every session of both runs (paid-mode gate); c2ac6e6 froze the spec and code, 9b24381 added only recorded outputs. Re-verified by AUDIT.json"
+ },
+ "approvals": {
+  "design_and_ceiling": "2026-11-23 (one-sided test, notebook 05, USD 5.60)",
+  "smoke": "2026-11-23",
+  "full": "2026-11-23",
+  "resume_after_credit_exhaustion": "2026-11-23",
+  "freeze_and_local_commit": "2026-11-24"
+ },
+ "runs": {
+  "20261123T200131832026Z_cbe3025f_smoke": {
+   "mode": "smoke",
+   "original_location": "experiments/runs/e6/20261123T200131832026Z_cbe3025f_smoke/ (git-ignored)",
+   "frozen_location": "experiments/frozen/e6/run_20261123T200131832026Z_cbe3025f_smoke/",
+   "copy": "byte-identical copy of all 11 files (SHA-256 compared after copying; re-checked by AUDIT.json)",
+   "sessions": [
+    {
+     "started_at": "2026-11-23T20:01:31.838+00:00",
+     "openai": "2.54.0",
+     "git_commit": "9b2438116cc66c7f4b279201e86dc298bd0619e0"
+    }
+   ],
+   "first_request_started_utc": "2026-11-23T20:01:33.318+00:00",
+   "last_request_completed_utc": "2026-11-23T20:02:37.414+00:00",
+   "replies": 2,
+   "requests_sent": 2,
+   "rate_limited": 0,
+   "composition": {
+    "technical_smoke_A": 1,
+    "technical_smoke_V": 1
+   },
+   "served_model": [
+    "gpt-4o-mini-2024-07-18"
+   ],
+   "system_fingerprints": {
+    "fp_8b385e4fac": 2
+   },
+   "observed_tokens": {
+    "prompt": 221412,
+    "completion": 110,
+    "cached_prompt": 25728,
+    "calls_with_cached_tokens": 1
+   },
+   "prompt_tokens_minus_expected": {
+    "1": 2
+   },
+   "api_latency_s_median": 4.071,
+   "list_price_cost_usd": 0.033278,
+   "cumulative_list_price_cost_usd_at_completion": 0.033278
+  },
+  "20261123T200722253880Z_d94e85f1_full": {
+   "mode": "full",
+   "original_location": "experiments/runs/e6/20261123T200722253880Z_d94e85f1_full/ (git-ignored)",
+   "frozen_location": "experiments/frozen/e6/run_20261123T200722253880Z_d94e85f1_full/",
+   "copy": "byte-identical copy of all 15 files (SHA-256 compared after copying; re-checked by AUDIT.json)",
+   "sessions": [
+    {
+     "started_at": "2026-11-23T20:07:22.280+00:00",
+     "openai": "2.54.0",
+     "git_commit": "9b2438116cc66c7f4b279201e86dc298bd0619e0"
+    },
+    {
+     "started_at": "2026-11-23T22:39:05.533+00:00",
+     "openai": "2.54.0",
+     "git_commit": "9b2438116cc66c7f4b279201e86dc298bd0619e0"
+    }
+   ],
+   "first_request_started_utc": "2026-11-23T20:07:23.793+00:00",
+   "last_request_completed_utc": "2026-11-24T00:48:10.085+00:00",
+   "replies": 238,
+   "requests_sent": 239,
+   "rate_limited": 0,
+   "composition": {
+    "technical_smoke_A": 1,
+    "technical_smoke_V": 1,
+    "main_r1_V": 118,
+    "main_r1_A": 118
+   },
+   "served_model": [
+    "gpt-4o-mini-2024-07-18"
+   ],
+   "system_fingerprints": {
+    "fp_8b385e4fac": 221,
+    "fp_b4fe8e4fe2": 17
+   },
+   "observed_tokens": {
+    "prompt": 24561504,
+    "completion": 6289,
+    "cached_prompt": 1442048,
+    "calls_with_cached_tokens": 50
+   },
+   "prompt_tokens_minus_expected": {
+    "1": 238
+   },
+   "api_latency_s_median": 2.514,
+   "list_price_cost_usd": 3.687999,
+   "cumulative_list_price_cost_usd_at_completion": 3.721277,
+   "interruption": {
+    "what": "the OpenAI account ran out of credit; the API refused the next request with HTTP 429 insufficient_quota (credit_balance_exhausted)",
+    "refused_request": {
+     "qid": "mmlb-1057",
+     "arm": "A",
+     "execution_index": 109,
+     "pair_index": 54,
+     "position_in_pair": 1,
+     "at": "2026-11-23T21:55:24.432+00:00",
+     "request_id": "req_a7def9b8238249bcb41991f23b594187",
+     "billed": false
+    },
+    "executor_response": "quota errors are not retried; the run stopped and wrote stop_20261123T215525348816Z.json (108 replies, integrity valid)",
+    "resume": "after the owner added credit and authorised it, the same run was resumed in place with VISUALDOC_E6_RESUME_DIR from the same commit and notebook code (second session record); only the 130 missing items were sent; mmlb-1057 A was sent as its second attempt (the refused one counts as the first), every other reply is a first attempt",
+    "effect_on_the_design": "the pause fell between pairs 53 and 54 (the refused call was the first of pair 54), so every A/V pair stayed adjacent; the plan, order, requests, budget guard and cumulative ceiling were unchanged",
+    "pause_minutes": 44
+   },
+   "backends": "fp_8b385e4fac served 221 replies; fp_b4fe8e4fe2 served the first 17 after the resume (execution 109-125, 22:39-22:55 UTC): 8 complete pairs and the first call of pair 62, 8 in A and 9 in V. Both arms met both backends in near-equal numbers; adjacent pairing keeps any backend effect within pairs. The smoke run used fp_8b385e4fac."
+  }
+ },
+ "spend": {
+  "smoke_usd": 0.033278,
+  "full_usd": 3.687999,
+  "cumulative_list_price_usd": 3.721277,
+  "approved_ceiling_usd": 5.6,
+  "planned_upper_bound_usd": 3.8003,
+  "possibly_billed_failed_attempts_usd": 0.0,
+  "price_basis": "OpenAI list price, USD 0.15 / 0.60 per 1M input / output tokens; cached input is billed lower, so the bound is conservative"
+ },
+ "evaluation": {
+  "by": "notebook 05 section 7 (cell e6-evaluate) on the frozen full run; validation 16/16; outputs equal tables/evaluation_summary.json and tables/per_question.csv byte for byte",
+  "verdict": "adopt_visual_retrieval",
+  "primary": "A 25/102, V 38/102, delta +0.127, 13 fixed / 0 broken, cluster 95 % [0.074, 0.193], one-sided sign-flip p 2^-10",
+  "environment": {
+   "python": "3.12.6",
+   "platform": "macOS-26.5.2-arm64-arm-64bit",
+   "packages": {
+    "openai": "2.54.0",
+    "httpx": "0.28.1",
+    "tiktoken": "0.14.0",
+    "numpy": "2.3.5",
+    "pandas": "3.1.1",
+    "pymupdf": "2.1",
+    "pillow": "13.0.0"
+   }
+  }
+ },
+ "added_after_the_runs": {
+  "notebook 05": "markdown cells e6-title, e6-eval-md, e6-interpretation (status and results), and code cell e6-evaluate (defaults to this frozen run, verifies SHA256SUMS, re-derives the tables, asserts the regression references). No cell that builds, sends, parses, scores or analyses requests changed (AUDIT.json).",
+  "this folder": "AUDIT.json, PROVENANCE.json, README.md, SHA256SUMS, tables/"
+ },
+ "audit": {
+  "script": "standalone, kept outside the repository (AGENTS.md: no new modules for experimental work)",
+  "script_sha256": "6672ac354666838c21287922fd37cca5fcec849667edbf4a83456a70986a5f46",
+  "result": "43/43",
+  "limitation": "9 of the 14 held-out PDFs were offloaded to iCloud and unreadable at audit time; for them the page images were checked against the frozen E5 render manifest (SHA-256), not re-rendered. The application re-rendered the other 169 pages byte for byte."
+ },
+ "not_verifiable_here": [
+  "whether the model would give the same replies today (one replicate at temperature 0; run-to-run variation not measured in E6)",
+  "OpenAI's billed amounts: costs are list price from the returned token counts, with no cached-input discount",
+  "whether ColQwen2 saw held-out documents in training",
+  "the indexing latencies, which come from E5 on one machine and were not re-measured"
+ ]
+}

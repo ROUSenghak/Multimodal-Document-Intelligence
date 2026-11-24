@@ -1,0 +1,335 @@
+{
+  "spec_id": "e6-visual-retrieval-answering-v1",
+  "status": "frozen-before-live-execution",
+  "status_rule": "Paid modes (smoke, full) refuse to run unless status is 'frozen-before-live-execution', frozen_at is set and budget.approved_ceiling_usd is a number, and unless this file and notebook 05's code cells on disk equal git HEAD. Setting those three fields and committing this file with notebook 05 is the approval act; it must happen before any paid call. After that commit the file is never edited; any change is a new spec version (e6-visual-retrieval-answering-v2).",
+  "drafted_at": "2026-11-23",
+  "frozen_at": "2026-11-23T19:54:00Z",
+  "revisions_before_freeze_2026_11_23": [
+    "population.reconciliation_101_vs_102 added: E6's 102 answerable questions = E5's 101 evidence questions + mmlb-0599 (answerable, empty evidence_pages), with its role in every metric.",
+    "decision_rule.statistical_reading and decision_rule.evidence_versus_deployment added: each verdict carries a statistical reading separate from its deployment action; inconclusive is stated as unresolved, not as evidence that ColQwen2 is ineffective (wording added to the inconclusive deployment action).",
+    "metrics.secondary.efficiency_beside_answer_quality added: ColQwen2 indexing time and storage per held-out document (E5 measurements) reported in the evaluation beside the primary result.",
+    "No change to the population, arms, requests, primary metric, statistical tests, seeds, thresholds, guardrails, planning simulation or budget."
+  ],
+  "paid_api_calls": "smoke 2 and full 238 GPT-4o-mini calls, only after the freeze and the owner's explicit approval of each stage; offline mode (the default) makes none",
+
+  "research_question": "On E5's held-out MMLongBench-Doc questions, does supplying GPT-4o-mini with the pages ColQwen2 v1.0 ranks first, instead of the pages the application's OCR + BM25 ranks first, change answer accuracy, when the reader, prompt, 768-px images, context guard, parser and scorer are identical?",
+
+  "why_this_experiment": {
+    "starting_evidence_verified_2026_11_23": [
+      "Frozen E5 (experiments/frozen/e5, verdict visual_improves_evidence): on 101 held-out evidence questions in 14 documents, the pages supplied after the context guard hold an evidence page for 66/101 under OCR + BM25 and 86/101 under ColQwen2; mean evidence recall 0.526 -> 0.721, delta +0.195 [+0.110, +0.309] (document-cluster bootstrap), sign-flip p 0.0005.",
+      "Frozen E4 (experiments/frozen/e4): the same reader answers 17/37 development questions even when given exactly the annotated evidence pages, and the shipped application 11/40. More evidence is necessary for better answers, not sufficient.",
+      "E5's pre-registered recommendation: a controlled end-to-end answering experiment, same GPT-4o-mini request format, same 768-px images and guard, A versus V pages, paid, separate spec; no integration before it."
+    ],
+    "what_e6_decides": "Which retriever the application ships as its default in the application-building phase that follows E6. Both 'visual retrieval does not help' and 'cannot tell' lead to the same action (keep OCR + BM25), so the confirmatory question is one-directional: is V better than A by a meaningful margin?",
+    "what_e6_is_not": "Not an integration of ColQwen2 into src/visualdoc/ and not a run of the visual model: V's pages are E5's frozen rankings, re-derived offline from E5's cached embeddings. Not a retriever comparison beyond A and V (no fusion arm, no other model, no tuning). Not a measurement of the application's indexing latency on new documents (taken from E5)."
+  },
+
+  "hypotheses": {
+    "primary_null": "On the 102 held-out answerable questions, mean over questions of (correct_V - correct_A) <= 0.",
+    "primary_directional": "mean(correct_V - correct_A) > 0 (direction fixed by E5's evidence result before any E6 reply).",
+    "minimum_meaningful_difference": 0.05,
+    "why_0_05": "About 5 of 102 answerable questions. It equals the threshold of E4 and E5. Below it, switching the application's default retriever to a 4.4 GB model that needs about 12.5 s per page to index on the development machine (E5) is not worth its cost. A judgement fixed before any reply, not a statistical quantity.",
+    "pre_run_expectation": "Planning only (notebook 05 section 5, planning_simulation below): if E5's evidence gain turns into answers at E4's reader rates (10/20 correct with all evidence supplied, 1/11 with none), the true difference is about +0.08 and the rule adopts V in 32-47 % of simulated experiments, ending inconclusive otherwise; at twice that effect (+0.15) it adopts V in 94-98 %; with no effect it adopts V in 1.2-2.5 %. An inconclusive result is therefore likely even if visual retrieval helps as E5 suggests."
+  },
+
+  "reader": {
+    "identity": "the application's reader as frozen in E4 (src/visualdoc/answering.py at the module hashes pinned in experiments/specs/e4_application_end_to_end_v1.json): rebuilt visibly in notebook 05, which does not import src/visualdoc (AGENTS.md). Equivalence is checked offline: the notebook's builder reproduces the fingerprint, expected prompt tokens and prompt-token bound of all 96 frozen E4 requests, its guard reproduces E4's 57 supplied page lists, and its parser reproduces the application's parsed answer, cited pages and error on all 96 frozen E4 replies",
+    "system_prompt_version": "mmlb-image-v1",
+    "system_prompt_hash": "35ff2e8b91f9",
+    "user_content": "'Question: {q}\\n\\nPage images:' then, for each supplied page in rank order, the text '[Page N]' and the page's 768-px PNG as a base64 data URL with detail high",
+    "image": "whole page fitted in a 768 x 1536-px box, opaque RGB PNG (E1 profile); held-out images are E5's renders, verified by SHA-256 against experiments/frozen/e5/tables/render_manifest_heldout.csv",
+    "temperature": 0.0,
+    "max_completion_tokens": 400,
+    "response_format": "json_object",
+    "image_detail": "high",
+    "top_k": 5,
+    "context_guard": "keep the longest ranked prefix of the top 5 such that 100 framing tokens + UTF-8 bytes of the system prompt + UTF-8 bytes of the question header + sum over kept pages of (UTF-8 bytes of '[Page N]' + billed image tokens) <= 128,000 - 400; never reorders",
+    "image_tokens": "GPT-4o-mini high detail: fit in 2048 x 2048, reduce the short side to 768 if larger, 2,833 + 5,667 per 512-px tile",
+    "framing_token_allowance": 100,
+    "pre_call_check": "known model, positive bounded output, prompt-token bound + 400 <= 128,000, cost bound <= USD 0.02 per request; a failing request raises before any call",
+    "max_request_cost_usd": 0.02,
+    "parser": "strict JSON: 'answer' required; 'cited_pages' a list of whole page numbers >= 1 (an integer, a whole float such as 2.0, or ASCII digits); anything else makes the reply unparseable; 'not answerable' in any case normalised to 'Not answerable'; a reply whose finish_reason is not 'stop' is an error",
+    "citations": "valid = every cited page was supplied; off_by_one = every invalid page equals a supplied page minus 1; missing = an answer other than 'Not answerable' with no citation; cites_evidence = at least one cited page is an annotated evidence page (evaluation only)"
+  },
+
+  "design": {
+    "type": "one session; two arms of the same reader that differ only in the list of pages supplied; every question sent once per arm as an adjacent, counterbalanced pair",
+    "arms": {
+      "A": {"label": "application retriever: OCR + BM25", "pages": "E5 arm A's full ranking (frozen rankings.parquet), top 5, then the context guard", "role": "control: the application as shipped"},
+      "V": {"label": "visual retriever: ColQwen2 v1.0", "pages": "E5 arm V's full ranking (frozen rankings.parquet; vidore/colqwen2-v1.0-hf @ ddc07d23, MaxSim over every page), top 5, then the same context guard", "role": "treatment"}
+    },
+    "control_by_construction": [
+      "A and V share the system prompt, question header, page-tag format, 768-px images, model snapshot, parameters, guard, parser and scorer; only which pages are supplied, how many, and in which order differs",
+      "the guard keeps 4 pages for 105 questions and 3 for 13 questions in both arms, so request length is matched",
+      "no A request equals its V request (0 of 118 byte-identical; 6 supply the same page set in a different order)"
+    ],
+    "reuse_of_e5": {
+      "questions": "E5's held-out set: every question about the 14 documents E5 selected (selection rule and list in experiments/specs/e5_visual_retrieval_v1.json)",
+      "rankings": "experiments/frozen/e5/tables/rankings.parquet, held-out rows of arms A and V; the copy is verified against experiments/frozen/e5/SHA256SUMS",
+      "verification_of_A": "BM25 rebuilt in notebook 05 from E5's held-out page text (data/processed/mmlongbench_doc/e5/heldout_pages.parquet) gives the identical full ranking for all 118 questions",
+      "verification_of_V": "MaxSim recomputed in NumPy from E5's cached bf16 embeddings (data/cache/e5/colqwen2-v1.0-hf@ddc07d2317c8/<config hash>/) gives the identical full ranking for all 118 questions; no model is loaded and nothing is encoded",
+      "supplied_pages": "the pages each arm supplies after the guard equal E5's frozen supplied_A and supplied_V on the 101 evidence questions"
+    },
+    "why_no_variability_margin": "E4 needed a cross-session margin because its control was a frozen run from another day. Here both arms run in the same session, interleaved as adjacent pairs with balanced order, so drift and cross-day changes affect both arms alike; the reader's per-request randomness is part of each observed difference and therefore of the document bootstrap and the sign-flip test. A second replicate of both arms (about USD 3.7) does not fit the USD 5.60 ceiling.",
+    "no_pilot": "The request format is E4's (98 calls without a format failure). E6's largest request is no larger than E4's largest (checked offline), and the smoke pair tests it."
+  },
+
+  "population": {
+    "documents": [
+      "2312.10997v5.pdf", "2310.05634v2.pdf",
+      "e639029d16094ea71d964e2fb953952b.pdf", "3276a5b991c49cf5f9a4af0f7d6fce67.pdf",
+      "2021-Apple-Catalog.pdf", "NUS-Business-School-BBA-Brochure-2024.pdf",
+      "COSTCO_2021_10K.pdf", "AMAZON_2017_10K.pdf",
+      "SAO-StudentSupport_Guidebook-Content.pdf", "Macbook_air.pdf",
+      "11-21-16-Updated-Post-Election-Release.pdf", "efd88e41c5f2606c57929cac6c1c0605.pdf",
+      "ddoseattle-150627210357-lva1-app6891_95.pdf", "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf"
+    ],
+    "questions": 118,
+    "answerable": 102,
+    "unanswerable": 16,
+    "evidence_population": 101,
+    "answerable_without_evidence_pages": ["mmlb-0599"],
+    "reconciliation_101_vs_102": {
+      "identity": "102 answerable = 101 evidence questions (E5's evidence population) + 1 answerable question without annotated evidence pages; 118 = 102 + 16 unanswerable",
+      "mmlb-0599": "document 3276a5b991c49cf5f9a4af0f7d6fce67.pdf; answerable, answer format List; evidence_sources Generalized-text (Layout) and Figure, but evidence_pages is empty in the benchmark at the pinned revision. E5's rule required at least one evidence page, so E5 excluded it; E5 still ranked it in both arms (frozen rankings.parquet), so E6 has both requests",
+      "why_included_in_the_primary": "accuracy is scored against the reference answer only and needs no evidence annotation; dropping an answerable question because of a missing page annotation would change the population for a reason unrelated to the outcome",
+      "where_it_counts": {"primary accuracy (102)": true, "abstention and false-abstention splits": false, "evidence strata and mechanism groups": "own group 'no annotated evidence'", "grounded citation and correct-and-grounded (101)": false, "citation validity (118)": true, "sensitivity 'the 101 evidence questions'": false, "planning simulation": "treated as supplying no evidence in both arms"},
+      "effect_bound": "it can move the primary difference by at most 1/102 = 0.0098; the sensitivity analysis on the 101 evidence questions reports the result without it"
+    },
+    "roles": {
+      "primary": "the 102 answerable questions (accuracy does not need evidence annotations, so mmlb-0599 is included)",
+      "abstention": "the 16 unanswerable questions",
+      "citation_grounding_and_strata": "the 101 evidence questions (E5's evidence population)",
+      "all_questions": "118, for the benchmark's overall accuracy and F1 and for citation validity"
+    },
+    "questions_per_document": "4 to 16 (AMAZON_2017_10K 15, COSTCO_2021_10K 16); the two 10-K filings hold 31 of 102 answerable questions",
+    "known_limits": "Held-out for the retrievers and for E1-E5 choices, but E5 already looked at these questions' evidence availability (not at answers). Documents of at most 100 pages. ColQwen2's training data may overlap these documents (unverifiable; would favour V)."
+  },
+
+  "strata_preregistered": {
+    "definition": "computed from the annotated evidence pages E and each arm's supplied pages S before any E6 reply; per arm: all (E subset of S), some (E and S intersect, E not a subset of S), none (E and S disjoint); descriptive, never part of the verdict",
+    "transition_counts_101": {
+      "A all -> V all": 38, "A all -> V some": 2, "A all -> V none": 2,
+      "A some -> V all": 5, "A some -> V some": 18, "A some -> V none": 1,
+      "A none -> V all": 18, "A none -> V some": 5, "A none -> V none": 12
+    },
+    "groups_101": {"V supplies more evidence (higher stratum)": 28, "same stratum": 68, "V supplies less evidence (lower stratum)": 5},
+    "use": "the decomposition of the primary difference by group shows whether any accuracy change sits where V changed the evidence (the mechanism E5 measured) or where it did not (distractor pages, page order)"
+  },
+
+  "scoring": {
+    "scorer": "the frozen MMLongBench-Doc rule-based scorer of notebook 03 section 1, rebuilt visibly in notebook 05 and checked on its 17 hand-traced cases and by re-scoring every frozen E4 reply to the frozen E4 scores",
+    "correct": "score > 0 (the project's definition since E1; ANLS partial credit above 0.5 counts)",
+    "strict_correct": "score == 1",
+    "parse_failures": "scored 0 and reported separately",
+    "unanswerable": "correct when the parsed answer is exactly 'Not answerable'",
+    "S1_reference_unscorable": "held-out questions whose reference answer scores below 1 against itself; computed offline before any reply and listed in sensitivity.S1_qids"
+  },
+
+  "metrics": {
+    "primary": {
+      "name": "answer accuracy on the 102 held-out answerable questions",
+      "estimand": "Delta = (1/102) * sum over questions of (correct_V - correct_A), question-weighted",
+      "reported_with": "A and V accuracy, fixed (A wrong, V right), broken (A right, V wrong), both correct, both wrong"
+    },
+    "secondary": {
+      "citation_correctness": [
+        "citation validity on all 118 replies per arm: every cited page supplied and no answer without a citation",
+        "grounded citation on the 101 evidence questions: an answer (not 'Not answerable') whose citations are valid, non-empty and include at least one annotated evidence page",
+        "correct and grounded on the 101 evidence questions",
+        "off-by-one printed page numbers among invalid citations; answers without a citation"
+      ],
+      "abstention": [
+        "correct abstention on the 16 unanswerable questions",
+        "false abstention on the 102 answerable questions, split by whether the arm supplied an evidence page (abstaining when none was supplied is grounded behaviour, reported as such although it scores 0)",
+        "unsupported answers: an answer when no evidence page was supplied (answerable) or on an unanswerable question"
+      ],
+      "latency": [
+        "API latency per call (median and 90th percentile) per arm, measured in the same session",
+        "retrieval latency per question from E5's frozen measurements on the development machine: BM25 query 0.13 ms vs ColQwen2 query encoding 0.16 s + MaxSim 4.4 ms; indexing per page: BM25 0.08 ms (+0.10 s text extraction incl. OCR) vs ColQwen2 12.5 s",
+        "end-to-end latency per question excluding indexing = retrieval + API, per arm"
+      ],
+      "efficiency_beside_answer_quality": [
+        "reported in the same evaluation output as the primary result, per arm and per held-out document, from E5's frozen measurements on the development machine (fanless Apple M1, MPS, bf16): measured ColQwen2 indexing seconds per page image (vision + language pass) and per document, embedding storage per page and per document (cached bf16 safetensors), model weights 4.42 GB, peak GPU memory about 3.3 GB, query encoding about 0.16 s; against BM25: index about 0.1 ms per page and text extraction (with OCR where needed) about 0.1 s per page, no model",
+        "descriptive only: efficiency never changes the verdict, but the deployment action for adopt_visual_retrieval must state how indexing time and storage are handled"
+      ],
+      "cost": [
+        "billed prompt, completion and cached prompt tokens per arm",
+        "list-price USD per question and in total per arm; V / A cost ratio",
+        "ColQwen2's local resources from E5: 4.42 GB weights, 193 KB of embeddings per page, about 3.3 GB peak GPU memory"
+      ]
+    },
+    "sensitivity": {
+      "rule": "reported beside the primary; never change the verdict",
+      "S1_qids": [],
+      "analyses": ["strict accuracy (score == 1)", "mean score (ANLS partial credit)", "without S1 questions", "the 101 evidence questions only", "document-weighted mean difference (each document weighs 1/14) with its own sign-flip test", "leave-one-document-out range", "the two 10-K filings removed", "all 118 questions (benchmark accuracy and F1)"]
+    },
+    "mechanism_descriptive": "Delta, fixed and broken within the three stratum groups above; per document"
+  },
+
+  "statistics": {
+    "unit": "question, paired across arms; questions cluster within 14 documents (4-16 questions each), so every interval and test resamples or permutes whole documents",
+    "point_estimate": "Delta as defined in metrics.primary",
+    "interval": "document-cluster percentile bootstrap: draw 14 documents with replacement, Delta* = (sum of the drawn documents' summed differences) / (sum of their question counts); 10,000 resamples from numpy.random.default_rng(20261127) as one integers(0, 14, size=(10000, 14)) call over documents sorted by name; reported: one-sided 95 % lower bound (5th percentile) for the decision and the two-sided 95 % interval (2.5th, 97.5th)",
+    "test": "exact document-level sign-flip permutation test of T = sum over documents of D_d, D_d = sum over the document's questions of (correct_V - correct_A); under H0 the arm labels are exchangeable within each document, so each of the 2^14 = 16,384 sign vectors is equally likely; one-sided p = share of sign vectors with T* >= T_observed (primary), two-sided p = share with |T*| >= |T_observed| (reported)",
+    "why_these": "Both respect the clustering and match the question-weighted estimand. The bootstrap with 14 clusters can under-cover; the exact permutation test needs no large-sample approximation, and the rule requires both. The same implementation reproduces E5's frozen interval and p-value exactly on E5's data (checked offline).",
+    "descriptive_only": ["exact McNemar test on fixed and broken (ignores clustering)", "leave-one-document-out range of Delta"],
+    "multiplicity": "one primary endpoint and one test decide; every secondary and sensitivity result is descriptive"
+  },
+
+  "decision_rule": {
+    "applies_to": "the primary endpoint of the main replicate of a complete, validated full run",
+    "minimum_meaningful_difference": 0.05,
+    "alpha_one_sided": 0.05,
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "accuracy_criteria": {
+      "C1": "Delta >= 0.05",
+      "C2": "one-sided 95 % bootstrap lower bound (5th percentile) > 0",
+      "C3": "one-sided document sign-flip p <= 0.05",
+      "C4": "broken <= fixed / 2"
+    },
+    "guardrails": {
+      "G1": "correct abstentions on the 16 unanswerable questions: V >= A - 2",
+      "G2": "citation validity on the 118 replies: V - A >= -0.05"
+    },
+    "outcomes": {
+      "adopt_visual_retrieval": "C1, C2, C3 and C4 hold, and G1 and G2 hold",
+      "visual_gain_with_regression": "C1-C4 hold but G1 or G2 fails",
+      "visual_worse": "Delta <= -0.05 and the two-sided 95 % bootstrap upper bound < 0",
+      "no_meaningful_difference": "the two-sided 95 % bootstrap interval lies inside (-0.05, +0.05)",
+      "inconclusive": "any other result"
+    },
+    "statistical_reading": {
+      "adopt_visual_retrieval": "Evidence, at one-sided alpha 0.05 with documents as the unit of inference, that V answers more held-out questions correctly than A, by an estimated margin of at least 0.05; guardrails met. A claim about this population of questions and documents, not about every document type.",
+      "visual_gain_with_regression": "The same accuracy evidence, but a pre-registered safety guardrail failed.",
+      "visual_worse": "Evidence that V answers meaningfully fewer questions correctly (estimate <= -0.05, two-sided 95 % upper bound < 0).",
+      "no_meaningful_difference": "The two-sided 95 % interval excludes differences of 0.05 or more in either direction: any difference is smaller than the meaningful margin.",
+      "inconclusive": "The data neither establish a meaningful gain nor exclude one. This is not evidence that ColQwen2 is ineffective; the point estimate and interval are reported as they are."
+    },
+    "evidence_versus_deployment": "The verdict is a statistical reading of E6; the recommendation is a deployment decision. For every verdict except adopt_visual_retrieval the deployment action is the same: keep OCR + BM25 as the application's default, because it is the status quo, needs no model and indexes in milliseconds. Keeping BM25 after an inconclusive result is a product default under uncertainty, not a finding that visual retrieval does not help; E5's evidence-level result stands.",
+    "recommendation_map": {
+      "adopt_visual_retrieval": "Make ColQwen2 the application's default retriever in the application-building phase (a change to src/visualdoc that needs the owner's separate approval, per AGENTS.md), keeping OCR + BM25 as the fallback where the model cannot run. The integration must index pages once at upload (about 12.5 s per page on the development machine) and cache the embeddings.",
+      "visual_gain_with_regression": "Keep OCR + BM25 as the default; the owner decides on the reported trade-off before any integration.",
+      "visual_worse": "Keep OCR + BM25; reject visual retrieval for this application.",
+      "no_meaningful_difference": "Keep OCR + BM25: the gain does not justify the model and the indexing cost.",
+      "inconclusive": "Keep OCR + BM25 as the default and build the application; report the interval and state that ColQwen2's benefit is unresolved, not refuted. No further retrieval experiment is planned before the application exists."
+    },
+    "never_change_the_verdict": ["secondary metrics other than G1 and G2", "sensitivity analyses", "strata decomposition", "latency", "cost", "per-document results", "the smoke replies"],
+    "fixed_before_results": "the rule, its thresholds, the metrics, the strata, the sensitivity sets, seeds and the simulation are frozen in this spec before any E6 reply; a change requires a new spec version, and the v1 result under the v1 rule is still reported"
+  },
+
+  "planning_simulation": {
+    "status": "planning only, computed in notebook 05 section 5 before any reply; never a result and never part of the decision",
+    "assumptions": "per question, the probability of a correct answer depends only on the evidence its arm supplies (all / some / none), at rates from frozen E4's application replies: all 10/20 = 0.5, none 1/11; some = none or = all (two scenarios), or the all-none gap doubled; mmlb-0599 counts as none in both arms; the two arms of a question share their latent uniform draw with probability rho (0.73 makes identical-input arms at p = 0.5 disagree at E4's cross-session rate of 5/37; 0.5 is a less dependent case); guardrails assumed met",
+    "method": "2,000 simulated experiments per row on the 102 answerable questions and their real documents, each analysed with the frozen functions (2,000 bootstrap draws instead of 10,000 for speed; exact sign-flip test); seed 20261128",
+    "values": [
+      {"scenario": "no effect (V answers as A would)", "rho": 0.73, "true delta": 0.0, "mean simulated delta": 0.0, "adopt_visual_retrieval": 0.012, "inconclusive": 0.858, "no_meaningful_difference": 0.112, "visual_worse": 0.02, "median 95 % interval width": 0.102},
+      {"scenario": "no effect (V answers as A would)", "rho": 0.5, "true delta": 0.0, "mean simulated delta": 0.0, "adopt_visual_retrieval": 0.025, "inconclusive": 0.934, "no_meaningful_difference": 0.01, "visual_worse": 0.032, "median 95 % interval width": 0.14},
+      {"scenario": "E4 reader; partial evidence no better than none", "rho": 0.73, "true delta": 0.076, "mean simulated delta": 0.077, "adopt_visual_retrieval": 0.469, "inconclusive": 0.53, "no_meaningful_difference": 0.0, "visual_worse": 0.0, "median 95 % interval width": 0.16},
+      {"scenario": "E4 reader; partial evidence no better than none", "rho": 0.5, "true delta": 0.076, "mean simulated delta": 0.077, "adopt_visual_retrieval": 0.366, "inconclusive": 0.634, "no_meaningful_difference": 0.0, "visual_worse": 0.0, "median 95 % interval width": 0.183},
+      {"scenario": "E4 reader; partial evidence as good as full", "rho": 0.73, "true delta": 0.08, "mean simulated delta": 0.081, "adopt_visual_retrieval": 0.452, "inconclusive": 0.548, "no_meaningful_difference": 0.0, "visual_worse": 0.0, "median 95 % interval width": 0.169},
+      {"scenario": "E4 reader; partial evidence as good as full", "rho": 0.5, "true delta": 0.08, "mean simulated delta": 0.08, "adopt_visual_retrieval": 0.318, "inconclusive": 0.682, "no_meaningful_difference": 0.0, "visual_worse": 0.0, "median 95 % interval width": 0.199},
+      {"scenario": "twice E4's evidence effect", "rho": 0.73, "true delta": 0.152, "mean simulated delta": 0.152, "adopt_visual_retrieval": 0.98, "inconclusive": 0.02, "no_meaningful_difference": 0.0, "visual_worse": 0.0, "median 95 % interval width": 0.195},
+      {"scenario": "twice E4's evidence effect", "rho": 0.5, "true delta": 0.152, "mean simulated delta": 0.152, "adopt_visual_retrieval": 0.938, "inconclusive": 0.062, "no_meaningful_difference": 0.0, "visual_worse": 0.0, "median 95 % interval width": 0.204}
+    ]
+  },
+
+  "model": {
+    "provider": "openai",
+    "api": "Chat Completions",
+    "requested_snapshot": "gpt-4o-mini-2024-07-18",
+    "deprecation": "deprecated; shutdown 2027-01-14 (as recorded for E3 and E4). The paid gate refuses to run on or after that date",
+    "context_window_tokens": 128000,
+    "input_usd_per_1m_tokens": 0.15,
+    "output_usd_per_1m_tokens": 0.6,
+    "documentation_checked": "not re-read for E6; prices and limits as recorded in the E3 and E4 specs (2026-11-22). The paid gate does not fetch documentation"
+  },
+
+  "token_accounting": {
+    "expected_prompt_tokens": "o200k_base tokens of the system prompt and every text part + 9, plus 2,833 + 5,667 x tiles per image (billed minus expected was +1 on every frozen E4 call)",
+    "prompt_token_bound": "the application's upper bound: 100 framing tokens + UTF-8 bytes of every text + billed image tokens; the budget guard's per-call bound",
+    "tolerance_tokens": 16,
+    "role": "diagnostic: gates the smoke stage; in full mode a deviation is flagged, never a stop"
+  },
+
+  "execution": {
+    "modes": {
+      "offline": {"generations": 0, "purpose": "verify the inputs, rebuild and verify every request, plan, cost, simulate, and test the executor and the evaluation code with mocked replies and frozen data; no client is created"},
+      "smoke": {"generations": 2, "purpose": "technical only: the A and V requests of the question with the largest request; served snapshot, JSON contract, prompt-token accounting; never scored"},
+      "full": {"generations": 238, "purpose": "the smoke pair again (never scored), then the 118 questions as adjacent A/V pairs in one seeded order"}
+    },
+    "technical_smoke_qid": "mmlb-0068",
+    "technical_smoke_reason": "largest request (expected 110,705 prompt tokens in its larger arm; prompt-token bound at most 111,442, below the 111,562 E4 already sent)",
+    "seeds": {"smoke_order": 20261124, "question_order": 20261125, "pair_order": 20261126, "bootstrap": 20261127, "planning_simulation": 20261128},
+    "ordering": "the 118 questions in a seeded random order; each question an adjacent A/V pair; exactly 59 pairs open with A and 59 with V, assigned by a seeded permutation, so prefix-cache state and drift are balanced across arms",
+    "pacer_tokens_per_minute": 150000,
+    "expected_duration": "about 240 x 104,000 tokens / 150,000 per minute = 2.8 hours; an interrupted run resumes",
+    "pause_between_calls_s": 1.0,
+    "timeout_s": 120,
+    "max_attempts_per_request": 2,
+    "rate_limit": {"applies_to": "HTTP 429 classified as rate_limit; a 429 with a quota or billing code stops the run and is never retried", "backoff_s": [30, 60, 120, 240, 480], "counts_as_attempt": false},
+    "cache_policy": "cache entries keyed SHA-256(run_id:replicate_id:request_fingerprint); no reply of another run or replicate can be reused",
+    "persistence": "each reply is appended (and fsynced) to the run's response cache before its log record; logs and caches are append-only; every output file is created exclusively and never overwritten",
+    "resume": "VISUALDOC_E6_RESUME_DIR resumes an interrupted run: settings, spec hash and plan must be identical; answered items are never re-sent; a reply cached but not logged is reused; a failed request is retried at most once; a logged integrity failure blocks resumption",
+    "stop_rules": {
+      "integrity_failure": "stop in every mode, not resumable: the request about to be sent differs from the plan (image hashes or fingerprint), the arguments the SDK received differ from the plan, or the served model differs from the snapshot",
+      "pre_call_refusal": "the pre-call check raising stops the run before any call (asserted impossible offline for every planned request)",
+      "api_failure": "stop on any API error other than a waitable 429 rate limit",
+      "budget": "stop before a call whose upper bound would take the cumulative E6 spend (replies received plus possibly billed failed attempts) plus the upper bound of every remaining call of the run above the approved ceiling",
+      "smoke": "an unparseable or truncated reply, or a prompt-token difference outside the tolerance, fails the smoke gate and stops the stage",
+      "full_mode": "contract failures are recorded and scored 0 and token deviations flagged; neither stops the run, so the population is not truncated by outcome"
+    },
+    "log_contents": "no annotation (evidence pages, reference answer, answer format, answerability) is written to a run's logs; evaluation joins them afterwards",
+    "plan_composition": {
+      "smoke": {"calls": 2, "replicate": "technical_smoke"},
+      "full": {"calls": 238, "technical_smoke": 2, "main_r1_A": 118, "main_r1_V": 118, "pairs": 118},
+      "all_stages_calls": 240
+    }
+  },
+
+  "gates": {
+    "offline": [
+      "frozen E4 and E5 copies equal their SHA256SUMS; the E5 spec equals its freeze commit",
+      "held-out population equals E5's (118 / 102 / 16 / 101) and the spec",
+      "BM25 rebuilt here reproduces arm A's frozen ranking on 118/118; MaxSim from the cached embeddings reproduces arm V's on 118/118",
+      "the rebuilt reader reproduces all 96 frozen E4 request fingerprints, expected tokens and bounds, and the application's parse of all 96 frozen E4 replies; the guard reproduces E4's 57 supplied page lists",
+      "supplied pages equal E5's frozen supplied_A / supplied_V on 101/101; every image equals E5's render (SHA-256)",
+      "every request passes the pre-call check and fits the context by the exact token rule; no A request equals its V request; no annotation in any request",
+      "strata, plan composition, cost estimates and the planning simulation equal this spec",
+      "mocked executor tests and evaluation tests pass; the evaluation code reproduces frozen E4 counts and frozen E5 statistics"
+    ],
+    "smoke": ["spec frozen with an approved budget", "spec and notebook-05 code equal git HEAD", "OPENAI_API_KEY present", "before 2027-01-14", "planned upper bound within the remaining cumulative budget", "two replies: verified request and sent fingerprints, served snapshot, parsed, finish 'stop', prompt tokens within tolerance"],
+    "full": ["smoke gate passed in the same run", "explicit owner approval of the full stage", "all 238 planned calls logged with a reply"]
+  },
+
+  "budget": {
+    "approved_ceiling_usd": 5.6,
+    "proposed_ceiling_usd": 5.6,
+    "scope": "cumulative over every E6 run under this spec version (smoke, full, retries, and any interrupted or resumed run), at list price",
+    "enforcement": "before each call: list-price cost of every reply already received by any E6 run under this spec hash, plus the full upper bound of every attempt that failed after it may have been processed (network, server or unexpected error; never a 4xx), plus the upper bound of this and every remaining call of the current run, must stay within the ceiling. The per-call upper bound is the prompt-token bound, uncached, plus the full 400-token output allowance",
+    "estimate_upper_bound_usd": {"smoke": 0.0339, "full": 3.7664, "all_stages": 3.8003},
+    "estimate_typical_usd": {"note": "exact expected prompt tokens, the mean E4 reply length (21.7 output tokens), no cache discount", "all_stages": 3.7205},
+    "headroom": "5.60 - 3.8003 = 1.7997 USD (48 % of a full run) for retries, possibly billed failed attempts and a resumed run",
+    "price_basis": "OpenAI list price, USD 0.15 / 0.60 per 1M input / output tokens; cached input is billed lower, so the bound is conservative"
+  },
+
+  "code_provenance": {
+    "rule": "notebook 05 and this spec are committed before the first paid call",
+    "live_run_gate": "paid modes refuse to run unless the spec bytes and notebook 05's code-cell sources on disk equal git HEAD",
+    "recorded_per_run": "commit, branch, SHA-256 of the spec and of notebook 05's code cells, git status, and the SHA-256 of each src/visualdoc module (informative: notebook 05 does not import them)",
+    "evaluation_check": "notebook 05 accepts a run only if its recorded commit holds the spec snapshot and the recorded notebook-05 code hash",
+    "limits": "the binding holds only when notebook 05 is executed from disk (nbconvert); edits in an interactive kernel are not detectable"
+  },
+
+  "limitations": [
+    "102 answerable questions in 14 documents: at the effect E5's evidence gain implies (about +0.08) the rule adopts V in only 32-47 % of simulated experiments; 'inconclusive' is a likely outcome and means 'not shown', not 'no effect'.",
+    "One replicate: per-request reader randomness is inside the observed differences but not separately measured.",
+    "The primary difference mixes evidence availability with distractor pages and page order; the strata separate the first only.",
+    "Possible overlap between ColQwen2's training data and held-out documents (would favour V); documents of at most 100 pages.",
+    "Single annotations: an answer on an unannotated page counts as unsupported by evidence in the strata, though it can still be scored correct.",
+    "Latency of visual indexing is taken from E5 on one fanless M1, not measured in an application.",
+    "The model snapshot shuts down on 2027-01-14."
+  ],
+
+  "approval": "drafted 2026-11-23; design approved by the project owner on 2026-11-23 (one-sided test, notebook 05, cumulative ceiling USD 5.60 including retries) and frozen by committing this file with notebook 05. The freeze does not authorize any paid call: the smoke stage (2 calls) and the full stage (238 calls) each need the owner's separate, explicit authorization"
+}

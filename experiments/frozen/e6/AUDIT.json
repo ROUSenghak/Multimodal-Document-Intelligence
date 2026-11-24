@@ -1,0 +1,295 @@
+{
+ "audit": "independent E6 audit",
+ "run_ids": [
+  "20261123T200131832026Z_cbe3025f_smoke",
+  "20261123T200722253880Z_d94e85f1_full"
+ ],
+ "audited_at": "2026-11-24T05:38:43+00:00",
+ "method": "standalone script outside the notebooks; it neither imports nor executes notebook 05. Requests were rebuilt through the application (src/visualdoc: render_pages, select_pages_within_context, build_request, request_fingerprint, estimate_prompt_tokens, parse_reply, check_citations) from the frozen E5 rankings and the held-out PDFs; the plan from the spec seeds; statistics, decision rule, strata and secondary metrics re-implemented from the spec text.",
+ "shared_with_notebooks": "only the frozen scoring-rule cell f653d232 of notebook 03 (eval_score, accuracy_and_f1 and helpers), executed verbatim",
+ "run_commit": "9b2438116cc66c7f4b279201e86dc298bd0619e0",
+ "passed": 43,
+ "total": 43,
+ "checks": {
+  "frozen copy of 20261123T200131832026Z_cbe3025f_smoke is byte-identical to experiments/runs/e6 (11 files)": {
+   "passed": true
+  },
+  "frozen copy of 20261123T200722253880Z_d94e85f1_full is byte-identical to experiments/runs/e6 (15 files)": {
+   "passed": true
+  },
+  "spec snapshot (both runs) = tracked spec = spec at the freeze commit and at the run commit = settings hash": {
+   "passed": true,
+   "detail": "23e02872535f1be4f08858781bdd9aaebfdd0ca2b6cc8c7a7ccd21258430bdac"
+  },
+  "spec frozen (status, frozen_at) with approved ceiling 5.60": {
+   "passed": true
+  },
+  "both runs and all three sessions record one commit, with spec and notebook-05 code committed and clean": {
+   "passed": true,
+   "detail": {
+    "commit": "9b2438116cc66c7f4b279201e86dc298bd0619e0",
+    "sessions": 3
+   }
+  },
+  "recorded notebook-05 code hash = code cells of the notebook at that commit (recomputed)": {
+   "passed": true
+  },
+  "spec frozen and committed, and the run commit made, before the first request": {
+   "passed": true,
+   "detail": {
+    "frozen_at": "2026-11-23T19:54:00Z",
+    "freeze commit": "2026-11-23T20:56:20+01:00",
+    "run commit": "2026-11-23T20:57:11+01:00",
+    "first request": "2026-11-23T20:01:33.318000+00:00"
+   }
+  },
+  "notebook-05 code cells on disk = at the run commit, except the declared evaluation-only cells": {
+   "passed": true,
+   "detail": {
+    "changed since the run": [
+     "e6-evaluate"
+    ]
+   }
+  },
+  "application modules on disk = at the run commit = recorded hashes (src/visualdoc unchanged)": {
+   "passed": true
+  },
+  "held-out population: 14 documents, 118 questions, 102 answerable, 16 unanswerable, 101 evidence + mmlb-0599": {
+   "passed": true
+  },
+  "plans re-derived from the spec seeds equal both run plans (smoke 2; full 2 + 118 adjacent pairs)": {
+   "passed": true
+  },
+  "pairs counterbalanced: 59 open with A, 59 with V; every question once per arm": {
+   "passed": true
+  },
+  "page images = frozen E5 render manifest (SHA-256); the application re-renders them byte for byte where the PDF is on disk": {
+   "passed": true,
+   "detail": {
+    "pages": 393,
+    "re-rendered by the application": 169,
+    "documents not re-rendered (PDF offloaded to iCloud, unreadable here)": 9
+   }
+  },
+  "frozen E5 rankings cover the 118 questions in both arms (full permutations)": {
+   "passed": true
+  },
+  "supplied pages = the application's context guard on the frozen E5 top 5, on all 240 replies": {
+   "passed": true,
+   "detail": 240
+  },
+  "request fingerprint rebuilt by the application = logged fingerprint, on all 240 replies": {
+   "passed": true
+  },
+  "image SHA-256 and dimensions rendered by the application = logged, on all 240 replies": {
+   "passed": true
+  },
+  "the SDK received exactly the planned request (sent fingerprint = fingerprint) on all 240 replies": {
+   "passed": true
+  },
+  "A and V differ for every question (0 identical requests) and supply the same number of pages (4 x 105, 3 x 13)": {
+   "passed": true,
+   "detail": {
+    "4": 105,
+    "3": 13
+   }
+  },
+  "logged prompt-token bound = the application's estimate for the rebuilt request": {
+   "passed": true
+  },
+  "smoke run: 2 live first-attempt ok records in plan order": {
+   "passed": true
+  },
+  "full run: 239 records = 238 ok (one per planned item, in plan order, all live) + 1 refused attempt": {
+   "passed": true
+  },
+  "the one failed attempt: HTTP 429 insufficient_quota (credit exhausted), not retried in-session, not billed, 'mmlb-1057' A": {
+   "passed": true,
+   "detail": {
+    "request_id": "req_a7def9b8238249bcb41991f23b594187",
+    "at": "2026-11-23T21:55:24.432+00:00"
+   }
+  },
+  "only that item used a second attempt (after the resume); every other reply is a first attempt": {
+   "passed": true
+  },
+  "stop record (quota at mmlb-1057, 108 replies) then completion (238/238, complete, integrity valid)": {
+   "passed": true
+  },
+  "cache keys = SHA-256(run:replicate:fingerprint), unique, one per reply, equal to the logged replies (both runs)": {
+   "passed": true
+  },
+  "prediction files = the final log records, per replicate and arm": {
+   "passed": true
+  },
+  "the pinned snapshot served all 240 replies": {
+   "passed": true
+  },
+  "every raw reply re-parses (application parser) to the logged answer and citations; finish 'stop'; none unparseable": {
+   "passed": true
+  },
+  "billed prompt tokens = expected + 1 on all 240 replies, and <= the application bound": {
+   "passed": true
+  },
+  "request_plan.csv (236 rows) = the rebuilt requests": {
+   "passed": true
+  },
+  "recomputed list prices = completion records; cumulative 3.721277 <= 5.60; failed attempt charged 0": {
+   "passed": true,
+   "detail": {
+    "smoke": 0.033278,
+    "full": 3.687999,
+    "cumulative": 3.721277
+   }
+  },
+  "rescored primary: A 25/102, V 38/102, 13 fixed, 0 broken, 25 both correct, 64 both wrong = summary": {
+   "passed": true,
+   "detail": {
+    "delta": 0.12745098039215685
+   }
+  },
+  "document-cluster bootstrap re-implemented: 5th percentile and two-sided 95 % interval = summary": {
+   "passed": true,
+   "detail": [
+    0.08181818181818182,
+    0.07446588711095481,
+    0.19319098240469193
+   ]
+  },
+  "exact sign-flip test re-implemented (2^14 vectors): one- and two-sided p = summary": {
+   "passed": true,
+   "detail": [
+    0.0009765625,
+    0.001953125
+   ]
+  },
+  "exact McNemar, document-weighted difference and its sign-flip p, leave-one-document-out = summary": {
+   "passed": true,
+   "detail": {
+    "mcnemar": 0.000244140625,
+    "doc-weighted": 0.15382653061224488,
+    "lodo range": [
+     0.1134020618556701,
+     0.14942528735632185
+    ]
+   }
+  },
+  "decision rule applied independently from the spec text: C1-C4 and G1-G2 hold, verdict adopt_visual_retrieval = summary": {
+   "passed": true,
+   "detail": {
+    "G1 correct abstentions A, V": [
+     9,
+     7
+    ],
+    "G2 valid and present A, V of 118": [
+     108,
+     107
+    ]
+   }
+  },
+  "secondary citation and abstention counts recomputed (application citation checker) = summary": {
+   "passed": true,
+   "detail": {
+    "A": {
+     "grounded": "49 / 101",
+     "valid and present": "108 / 118"
+    },
+    "V": {
+     "grounded": "67 / 101",
+     "valid and present": "107 / 118"
+    }
+   }
+  },
+  "sensitivity analyses recomputed (strict, mean score, 101 evidence, without the 10-K filings, all-118 accuracy and F1) = summary": {
+   "passed": true,
+   "detail": {
+    "strict": 0.09803921568627451,
+    "mean score": 0.12503238083851428
+   }
+  },
+  "evidence strata re-derived from the rebuilt pages: transitions = the spec's pre-registered counts; mechanism table = summary (13 fixed: 6 more evidence, 7 same)": {
+   "passed": true,
+   "detail": {
+    "transitions": {
+     "all->all": 38,
+     "all->some": 2,
+     "some->some": 18,
+     "none->all": 18,
+     "none->some": 5,
+     "none->none": 12,
+     "some->all": 5,
+     "all->none": 2,
+     "some->none": 1
+    }
+   }
+  },
+  "per_question.csv: 118 rows, scores, correctness, citation validity, supplied pages and groups = recomputed": {
+   "passed": true
+  },
+  "per-document table: question counts and correct answers per arm = recomputed; V >= A in all 14 documents": {
+   "passed": true,
+   "detail": {
+    "documents with V > A": 10
+   }
+  },
+  "hygiene: no credential-like string, no Base64 image payload, no annotation field in the logs, no question text in any frozen file": {
+   "passed": true,
+   "detail": {
+    "question texts found": []
+   }
+  }
+ },
+ "recomputed": {
+  "A correct": 25,
+  "V correct": 38,
+  "answerable": 102,
+  "delta": 0.12745098039215685,
+  "fixed": 13,
+  "broken": 0,
+  "bootstrap_p05": 0.08181818181818182,
+  "ci95": [
+   0.07446588711095481,
+   0.19319098240469193
+  ],
+  "sign_flip_p_one_sided": 0.0009765625,
+  "sign_flip_p_two_sided": 0.001953125,
+  "mcnemar_p": 0.000244140625,
+  "document_weighted_delta": 0.15382653061224488,
+  "lodo_range": [
+   0.1134020618556701,
+   0.14942528735632185
+  ],
+  "G1 correct abstentions (A, V) of 16": [
+   9,
+   7
+  ],
+  "G2 valid and present (A, V) of 118": [
+   108,
+   107
+  ],
+  "verdict": "adopt_visual_retrieval",
+  "cost_usd": {
+   "smoke": 0.033278,
+   "full": 3.687999,
+   "cumulative": 3.721277
+  },
+  "documents whose PDF could not be re-rendered": [
+   "11-21-16-Updated-Post-Election-Release.pdf",
+   "2021-Apple-Catalog.pdf",
+   "2310.05634v2.pdf",
+   "2312.10997v5.pdf",
+   "3276a5b991c49cf5f9a4af0f7d6fce67.pdf",
+   "Macbook_air.pdf",
+   "NUS-Business-School-BBA-Brochure-2024.pdf",
+   "SAO-StudentSupport_Guidebook-Content.pdf",
+   "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf"
+  ],
+  "same page set in both arms (different order)": 6,
+  "smoke cache entries": 2,
+  "full cache entries": 238,
+  "system fingerprints": {
+   "fp_8b385e4fac": 223,
+   "fp_b4fe8e4fe2": 17
+  }
+ }
+}

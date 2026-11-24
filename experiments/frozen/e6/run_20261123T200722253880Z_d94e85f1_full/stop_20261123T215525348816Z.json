@@ -1,0 +1,32 @@
+{
+  "run_id": "20261123T200722253880Z_d94e85f1_full",
+  "mode": "full",
+  "complete": false,
+  "stop_reason": "quota_or_billing at mmlb-1057",
+  "smoke_gate_passed": true,
+  "smoke_checks": {
+    "one reply per arm for the smoke question": true,
+    "integrity: verified request, SDK arguments equal the plan, served snapshot": true,
+    "contract: every reply parsed, finish 'stop'": true,
+    "diagnostics: prompt tokens within tolerance, cached-token field recorded": true
+  },
+  "planned_calls": 238,
+  "api_calls_sent": 109,
+  "rate_limited_responses": 0,
+  "replied": 108,
+  "status_counts": {
+    "ok": 108,
+    "api_error": 1
+  },
+  "integrity_valid": true,
+  "contract_failures": 0,
+  "prompt_token_differences": {
+    "1": 108
+  },
+  "diagnostic_flags": 0,
+  "list_price_cost_usd": 1.672499,
+  "possibly_billed_failed_attempts_upper_usd": 0,
+  "cumulative_list_price_cost_usd": 1.705777,
+  "approved_cumulative_budget_usd": 5.6,
+  "completed_at": "2026-11-23T21:55:25.348+00:00"
+}

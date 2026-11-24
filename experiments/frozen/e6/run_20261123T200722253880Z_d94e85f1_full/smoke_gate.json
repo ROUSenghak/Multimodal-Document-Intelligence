@@ -1,0 +1,10 @@
+{
+  "passed": true,
+  "checks": {
+    "one reply per arm for the smoke question": true,
+    "integrity: verified request, SDK arguments equal the plan, served snapshot": true,
+    "contract: every reply parsed, finish 'stop'": true,
+    "diagnostics: prompt tokens within tolerance, cached-token field recorded": true
+  },
+  "stop_reason": null
+}
