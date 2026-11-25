@@ -1,0 +1,17 @@
+item_id,label,note,identity_sha256
+E8-ADJ-001,wrong,Names the BBA honours degree rather than BBA.,523677eb594de67209d6c777fc4f318971886b373fa7790c2371c2e1ca129d58
+E8-ADJ-002,wrong,States women while its own percentages show men higher.,11fb92c4ad4e5da27ea5e842f54e92e5f05ee6ef03825cb068d71de7224a63a1
+E8-ADJ-003,wrong,"Second value is not excited and is a respondent count, not a percentage.",301fd1ffc72520cf9eed49ff40bee3eebfb03f2142155d3d434bd6f93b052a8b
+E8-ADJ-004,wrong,Gives one of the three subsections.,a6216ae790f56fb05d7c1473a715758b943aa79bc8f0dd42f89740fb23a468a2
+E8-ADJ-005,correct,Same named officer; added affiliation does not change the entity.,4f9d4f7b4fad572ccde142eb7c0fffc1ecea9fc81dc87ea7035f05de8a750bed
+E8-ADJ-006,wrong,Leads with Student Support rather than Campus Security.,9b0e1ad65beeb68f9968c7b4d64174cff9af12f7c2cde2e71ac1e4c20866d2d9
+E8-ADJ-007,correct,Directly answers men with consistent supporting percentages.,8b141fc8103b7649ad8c0ac08c0993ab4c15a5f3dd98e9447f29b3d7442eb31d
+E8-ADJ-008,correct,Same number with its label.,bc08236d0ce5f51b843a55cadb9f7b522da5750dfaeb65f85fdde2be5bbe4edc
+E8-ADJ-009,correct,Same four chapters; chapter numbering is supporting detail.,3eabceba1ced1c7ef7ab40ab284727ac94ecac95b307277dffe03d214c891a1d
+E8-ADJ-010,correct,Same three subsections.,9b3799243cf7bd20bc48e4d44ac18dd42ee6c14c9902e2c97c1488e873397e50
+E8-ADJ-011,wrong,"Missing Interphase, which slide 12 shows.",d91f6fb39c2fa05a19bbfcd4e44cc28a9e37073c59786b281dd7f0dc795eb2e5
+E8-ADJ-012,correct,Same answer in a complete sentence.,1de51ecc57efabc85eb6a4fff5ab6ef3cf687f1429e9d0efce0ea49e48ef71a6
+E8-ADJ-013,wrong,States women while its own percentages show men higher.,b4856ff0b87174ed7f870fbf0a2e993b0396e219da36f11a1274c96f187187c7
+E8-ADJ-014,correct,Same four activities; order and spelling differ.,03158092622006bafa7637648fcba987ce7858bbd170d447f752ce47a06fe044
+E8-ADJ-015,correct,Same animal with an article.,d45b81af0781637873ba125f0d1fb9bee651fc0944e1f8dbf1610771d7aed5b6
+E8-ADJ-016,correct,Same component in a complete sentence.,fcb19a79f813a643467d631187b0b65a3ba30ffbc6415e42155042a322985827

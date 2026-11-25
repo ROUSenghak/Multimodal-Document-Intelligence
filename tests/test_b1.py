@@ -3,6 +3,7 @@
 import csv
 import hashlib
 import json
+import re
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -52,6 +53,35 @@ def test_frozen_s_v2_labels_are_complete_and_checksum_protected():
     assert len(labels) == labels["item_id"].nunique() == 29
     assert labels["label"].value_counts().to_dict() == {"wrong": 21, "correct": 7, "unsure": 1}
     assert labels["identity_sha256"].str.fullmatch(r"[0-9a-f]{64}").all()
+
+
+def test_frozen_e8_s_v2_labels_match_the_sealed_blind_queue():
+    folder = REPO_ROOT / "experiments" / "frozen" / "e8_scoring_v2"
+    entries = [line.split(maxsplit=1) for line in (folder / "SHA256SUMS").read_text().splitlines()]
+    assert len(entries) == 4
+    for expected, name in entries:
+        assert hashlib.sha256((folder / name).read_bytes()).hexdigest() == expected
+
+    labels = list(csv.DictReader((folder / "adjudication_labels.csv").open()))
+    assert len(labels) == len({row["item_id"] for row in labels}) == 16
+    tally = {label: sum(row["label"] == label for row in labels) for label in ("correct", "wrong", "unsure")}
+    assert tally == {"correct": 9, "wrong": 7, "unsure": 0}
+    assert all(re.fullmatch(r"[0-9a-f]{64}", row["identity_sha256"]) for row in labels)
+    assert all(row["note"].strip() for row in labels)
+
+    # Each label is bound to the exact blind item text frozen inside the E8 package.
+    queue = {row["item_id"]: row for row in csv.DictReader(
+        (REPO_ROOT / "experiments" / "frozen" / "e8" / "adjudication" / "blind_queue_unlabelled.csv").open())}
+    assert set(queue) == {row["item_id"] for row in labels}
+    fields = ["document", "evidence_pages", "question", "answer_format", "reference", "reply"]
+    for row in labels:
+        payload = {field: str(queue[row["item_id"]][field]) for field in fields}
+        digest = hashlib.sha256(json.dumps(payload, sort_keys=True, ensure_ascii=False).encode()).hexdigest()
+        assert digest == row["identity_sha256"], row["item_id"]
+
+    # The unblinding key is the sealed key, copied without edits.
+    sealed = REPO_ROOT / "experiments" / "frozen" / "e8" / "adjudication" / "sealed_key.csv"
+    assert (folder / "adjudication_key.csv").read_bytes() == sealed.read_bytes()
 
 
 def test_e8_full_spec_pins_the_application_and_fail_closed_executor():

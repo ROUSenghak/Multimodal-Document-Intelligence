@@ -1,0 +1,17 @@
+item_id,qid,arms,reason,s1_score
+E8-ADJ-001,mmlb-0998,L-v1,partial ANLS credit (0.5 < ANLS < 1),0.8536585365853658
+E8-ADJ-002,mmlb-0684,L-B1r,partial ANLS credit (0.5 < ANLS < 1),0.6
+E8-ADJ-003,mmlb-0689,L-v1,reference flagged as debatable by the frozen E6 audit,0.0
+E8-ADJ-004,mmlb-0081,L-B1r | L-v1,every reference item matched up to formatting,0.0
+E8-ADJ-005,mmlb-0593,L-v1,the reference is a phrase inside a longer reply,0.0
+E8-ADJ-006,mmlb-0990,L-v1,the reference is a phrase inside a longer reply,0.0
+E8-ADJ-007,mmlb-0684,L-B1,partial ANLS credit (0.5 < ANLS < 1),0.75
+E8-ADJ-008,mmlb-0595,L-v1,the reference is a phrase inside a longer reply,0.0
+E8-ADJ-009,mmlb-0140,L-v1,every reference item matched up to formatting,0.6363636363636364
+E8-ADJ-010,mmlb-0081,L-B1,every reference item matched up to formatting,0.0
+E8-ADJ-011,mmlb-0409,L-B1 | L-B1r | L-v1,every reference item matched up to formatting,0.0
+E8-ADJ-012,mmlb-0050,L-B1 | L-B1r | L-v1,partial ANLS credit (0.5 < ANLS < 1),0.7941176470588236
+E8-ADJ-013,mmlb-0684,L-v1,the reference is a phrase inside a longer reply,0.0
+E8-ADJ-014,mmlb-0042,L-B1 | L-B1r | L-v1,every reference item matched up to formatting,0.95
+E8-ADJ-015,mmlb-0404,L-B1 | L-B1r | L-v1,partial ANLS credit (0.5 < ANLS < 1),0.7777777777777778
+E8-ADJ-016,mmlb-0204,L-B1r | L-v1,partial ANLS credit (0.5 < ANLS < 1),0.8

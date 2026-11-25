@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-25",
+  "kind": "blind human adjudication for scoring protocol S-v2, E8 items",
+  "source_notebook": "notebooks/07_baseline_consolidation.ipynb",
+  "source_runs": [
+    "experiments/frozen/e8/run_20261125T140433934010Z_4edb90e7_full"
+  ],
+  "blind_queue": "experiments/frozen/e8/adjudication/blind_queue_unlabelled.csv",
+  "blind_queue_sha256": "7e0cf0ad7effddc342482bd70f4ce368b329ddb72239efc610e7d7651682fd0f",
+  "items": 16,
+  "labels": {
+    "correct": 9,
+    "wrong": 7,
+    "unsure": 0
+  },
+  "adjudicator": "project owner",
+  "blind_to_arm": true,
+  "paid_calls": 0,
+  "identity_fields": [
+    "document",
+    "evidence_pages",
+    "question",
+    "answer_format",
+    "reference",
+    "reply"
+  ],
+  "identity_serialisation": "json.dumps(mapping, sort_keys=True, ensure_ascii=False).encode()",
+  "unsure_policy": "exclude from the S-v2 point estimate and paired contrasts; report wrong/correct sensitivity bounds",
+  "evidence_shown": "cached 768 px page renders in data/cache/mmlongbench_doc/page_images/short768-long1536, the same images supplied to the reader; shown for items 1, 3, 6 and 11",
+  "unblinding": "adjudication_key.csv is a byte-for-byte copy of experiments/frozen/e8/adjudication/sealed_key.csv, opened only after every label was recorded",
+  "e8_package_commit": "0d68a930fbaf6f10898b16ef29cc6d8e3ce38887",
+  "note": "E8's execution package experiments/frozen/e8 is unchanged by this freeze."
+}
