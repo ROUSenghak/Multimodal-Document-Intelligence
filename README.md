@@ -404,7 +404,7 @@ OCR uses the Tesseract engine built into PyMuPDF with the model in
 6 PDFs (≈ 22 MB) from Hugging Face and OCRs 120 pages (≈ 1 minute).
 
 ```bash
-pytest                                   # 125 tests: application modules, parsing module, annotation schema
+pytest                                   # application modules, frozen protocols, parsing module and annotation schema
 jupyter lab notebooks/                   # then run 00 → 01 → 02 → 03 with the visualdoc-venv kernel
 ```
 

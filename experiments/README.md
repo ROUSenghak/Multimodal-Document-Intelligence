@@ -10,6 +10,8 @@
 | `frozen/e5/` | yes | E5 (offline visual retrieval, ColQwen2 v1.0 vs OCR + BM25): frozen rankings, per-question table, render manifest, encoding log, summary, `AUDIT.json` (34/34), `PROVENANCE.json`, `SHA256SUMS`, [README](frozen/e5/README.md). Never edited. |
 | `frozen/e6/` | yes | Byte-identical copies of the E6 smoke and full runs (OCR + BM25 vs ColQwen2 pages, end to end), tables, `AUDIT.json` (43/43), `PROVENANCE.json`, `SHA256SUMS`, [README](frozen/e6/README.md). Notebook 05 evaluates it by default. Never edited. |
 | `frozen/e7/` | yes | Byte-identical copies of the E7 smoke and full runs (extract-then-answer vs one-shot; development), tables, post-run report and literature review, the E6 error labels it was designed from, `AUDIT.json` (38/38) with its script, `PROVENANCE.json`, `SHA256SUMS`, [README](frozen/e7/README.md). Notebook 06 evaluates it by default. Never edited. |
+| `frozen/e8_smoke/` | yes | The six-call E8 technical diagnostic: measured `gpt-6-luna` token profile, served-model observation, schema/temperature acceptance, cost, checksums and [README](frozen/e8_smoke/README.md). It is not a scored experiment. Never edited. |
+| `frozen/scoring_v2/` | yes | The owner's 29 blind S-v2 judgments (7 correct, 21 wrong, 1 unsure), item-identity hashes, the post-judgment unblinding key, provenance, checksums and [README](frozen/scoring_v2/README.md). Never edited. |
 | `runs/` | no (git-ignored) | Raw outputs of live runs. New runs from `notebooks/02_question_answering.ipynb` go to `runs/qa/<UTC timestamp>_<mode>/`; the historical runs of the archived notebooks 14 and 15 stay in `runs/mmlongbench_doc/` and `runs/mmlongbench_doc_multimodal/` where they exist. |
 
 Experiment E1 resolution runs are isolated under
@@ -78,6 +80,12 @@ Experiment E7 (extract-then-answer against E6's one-shot reader, on E6's 118 que
 and full run (`20261124T160111456175Z_b3d0b5c0_full`, 1,309 calls) completed on 2026-11-24 ($5.911057 in all, list price).
 Both are frozen, byte for byte, in [`frozen/e7/`](frozen/e7/README.md) with the evaluation tables, the post-run report, an
 independent audit (38/38) and the provenance. Verdict: `regression` (V0 38, X4 31, X8 29 of 102): keep the one-shot reader.
+
+Experiment E8 migrates the reader and stabilises B1. Its frozen protocol is
+[`specs/e8_reader_migration_v1.json`](specs/e8_reader_migration_v1.json). Notebook 07 defaults to replay, rebuilds all 354
+requests through the five-module B1 application, and mock-tests every execution index plus interruption/resume, API failure,
+budget refusal, malformed output and served-model change. The offline upper bound is $0.255901 under a frozen $0.50 ceiling.
+No full E8 call is approved or frozen yet; any live output goes to `runs/e8/<run_id>/`.
 
 ## How results are reproduced
 

@@ -1,0 +1,30 @@
+item_id,qid,arms,reason,s1_score
+B1-ADJ-001,mmlb-0409,E7 X4 | E7 X8,every reference item matched up to formatting,0.0
+B1-ADJ-002,mmlb-0404,E7 X4,the reference is a phrase inside a longer reply,0.0
+B1-ADJ-003,mmlb-0998,E6 V (ColQwen2 pages) | E7 V0 (E6 V again),partial ANLS credit (0.5 < ANLS < 1),0.9512195121951219
+B1-ADJ-004,mmlb-0201,E7 X8,"every reference item present, with extra items",0.0
+B1-ADJ-005,mmlb-0404,E7 X8,the reference is a phrase inside a longer reply,0.0
+B1-ADJ-006,mmlb-0143,E6 A (BM25 pages) | E6 V (ColQwen2 pages) | E7 V0 (E6 V again) | E7 X4 | E7 X8,"every reference item present, with extra items",0.0
+B1-ADJ-007,mmlb-0594,E6 A (BM25 pages),"every reference item present, with extra items",0.0
+B1-ADJ-008,mmlb-0066,E6 A (BM25 pages),the reference is a phrase inside a longer reply,0.0
+B1-ADJ-009,mmlb-0689,E6 A (BM25 pages) | E6 V (ColQwen2 pages) | E7 V0 (E6 V again),reference flagged as debatable by the frozen E6 audit,0.0
+B1-ADJ-010,mmlb-0987,E6 V (ColQwen2 pages) | E7 V0 (E6 V again) | E7 X4,partial ANLS credit (0.5 < ANLS < 1),0.8333333333333334
+B1-ADJ-011,mmlb-0684,E6 A (BM25 pages),the reference is a phrase inside a longer reply,0.0
+B1-ADJ-012,mmlb-0689,E7 X4,reference flagged as debatable by the frozen E6 audit,0.0
+B1-ADJ-013,mmlb-0409,E6 A (BM25 pages) | E7 V0 (E6 V again),every reference item matched up to formatting,0.0
+B1-ADJ-014,mmlb-0402,E6 V (ColQwen2 pages) | E7 V0 (E6 V again) | E7 X4 | E7 X8,every reference item matched up to formatting,0.96875
+B1-ADJ-015,mmlb-0684,E7 X4 | E7 X8,the reference is a phrase inside a longer reply,0.0
+B1-ADJ-016,mmlb-0594,E6 V (ColQwen2 pages),"every reference item present, with extra items",0.0
+B1-ADJ-017,mmlb-0137,E7 X4 | E7 X8,the reference is a phrase inside a longer reply,0.0
+B1-ADJ-018,mmlb-0199,E6 A (BM25 pages),every reference item matched up to formatting,0.0
+B1-ADJ-019,mmlb-0199,E6 V (ColQwen2 pages) | E7 V0 (E6 V again) | E7 X4,every reference item matched up to formatting,0.0
+B1-ADJ-020,mmlb-1013,E6 A (BM25 pages) | E6 V (ColQwen2 pages) | E7 V0 (E6 V again) | E7 X4 | E7 X8,reference flagged as debatable by the frozen E6 audit,0.0
+B1-ADJ-021,mmlb-0684,E6 V (ColQwen2 pages) | E7 V0 (E6 V again),the reference is a phrase inside a longer reply,0.0
+B1-ADJ-022,mmlb-1025,E6 A (BM25 pages),"same number up to a factor of 1,000^n (unit scale ambiguous)",0.0
+B1-ADJ-023,mmlb-1006,E6 A (BM25 pages),the reference value is one of several numbers in the reply,0.0
+B1-ADJ-024,mmlb-0593,E6 A (BM25 pages) | E6 V (ColQwen2 pages) | E7 V0 (E6 V again) | E7 X4 | E7 X8,the reply is a phrase inside the reference,0.0
+B1-ADJ-025,mmlb-1006,E6 V (ColQwen2 pages) | E7 V0 (E6 V again),the reference value is one of several numbers in the reply,0.0
+B1-ADJ-026,mmlb-0199,E7 X8,every reference item matched up to formatting,0.0
+B1-ADJ-027,mmlb-0582,E6 A (BM25 pages) | E6 V (ColQwen2 pages),"same number up to a factor of 1,000^n (unit scale ambiguous)",0.0
+B1-ADJ-028,mmlb-1065,E7 V0 (E6 V again),"same number up to a factor of 1,000^n (unit scale ambiguous)",0.0
+B1-ADJ-029,mmlb-0689,E7 X8,reference flagged as debatable by the frozen E6 audit,0.0

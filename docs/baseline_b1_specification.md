@@ -302,7 +302,7 @@ The committed smoke implementation is notebook 07 at commit `e6b0bf6`. Run `2026
 
 **Behavioural warning, not a failed technical gate.** S5 was the known-unanswerable `mmlb-0068`. Its reply satisfied the strict schema but answered with page 2 instead of abstaining. The old-contract S4 reply also answered. One diagnostic item cannot estimate an abstention rate; the preregistered full-run guardrail on all 16 unanswerable questions therefore remains essential.
 
-The smoke authorizes no further paid call. Notebook 07 now rebuilds and fingerprints all 354 proposed requests offline with the measured profile: 1,379,010 prompt tokens and at most 236,000 output tokens, for a list-price upper bound of **$0.255901**. The earlier $0.20–$3.70 range is superseded. A **$0.50 cumulative ceiling** would leave substantial retry headroom; it is a proposal, not an approval. Mocked application-interface tests remain part of the separately authorized application phase before any full call.
+The smoke authorizes no further paid call. Notebook 07 rebuilds and fingerprints all 354 proposed requests offline with the measured profile: 1,379,010 prompt tokens and at most 236,000 output tokens, for a list-price upper bound of **$0.255901**. The earlier $0.20–$3.70 range is superseded. The full protocol is frozen in `experiments/specs/e8_reader_migration_v1.json` with a **$0.50 cumulative ceiling**, 360-attempt maximum and at most two attempts per execution index. A failed attempt with no returned usage is conservatively charged at its precomputed upper bound for budget gating, while observed token cost remains separate. Its mocked executor has passed all 354 indices, interruption/resume, API-error, budget, malformed-contract and model-identity failure tests. This implementation is not approval for a paid run.
 
 ---
 
@@ -310,7 +310,7 @@ The smoke authorizes no further paid call. Notebook 07 now rebuilds and fingerpr
 
 | Item | Assessment |
 |---|---|
-| E8 cost | $0.2–3.7 (see §5); ceiling $5. Total project spend so far ≈ $13 |
+| E8 cost | measured offline upper bound $0.255901; frozen full-stage ceiling $0.50. Total project spend so far ≈ $13 |
 | E8 duration | 354 + ≤ 8 calls; at an estimated 3–5 s each, sequential, about 25 minutes |
 | Laptop (M1, 8 GB RAM, **5.9 GB free disk**, repository in iCloud) | Fine for notebooks 00–07, BM25, NumPy MaxSim over cached embeddings, E8 and the app's BM25 path. **Not** fine for ColQwen2 (4.4 GB of weights not cached) or for indexing the final pool. Move the repository out of iCloud: the `.pth` hidden flag recurs, and held-out PDFs became dataless. |
 | SSP Cloud | The intended place for ColQwen2 indexing (pool for E9) and for running the visual path live. **The GPU type and quota are not verified;** please check your datalab account. Indexing about 5,000 pages at E5's 12 s per page would take about 17 h on the laptop; on a GPU it should be far less. Embeddings take about 193 KB per page (about 1 GB for the pool). |
@@ -331,15 +331,17 @@ The smoke authorizes no further paid call. Notebook 07 now rebuilds and fingerpr
 | Consolidation notebook, ledger and documents | committed `d387e05` |
 | Experiment governance through E8 | committed `c97d8f6` |
 | E8 smoke stage and frozen measured profile | committed `e6b0bf6`, `de3a126` |
-| B1 application extension | implemented locally; 133/133 tests pass |
+| B1 application extension | committed `4bf6b19`; full test count is asserted at the current gate |
 | Notebook 07 application parity | 118/118 frozen E6 V requests; six smoke prompt totals; 236/236 unique E8 app requests; 354-call offline plan |
+| S-v2 owner adjudication | frozen with checksums: 7 correct, 21 wrong, 1 unsure; E6 V − A = 39/101 − 28/101, 12 fixed / 1 broken |
+| E8 full protocol and executor | frozen spec; replay mock covers all 354 indices and fail-closed resume, budget, contract and model-identity paths; live mode not approved |
 
 ### 8.2 Remaining work
 
-1. Commit this B1 application increment locally.
-2. Human blind adjudication of the 29 queued replies, before E8 results are interpreted.
-3. Add the gated E8 full executor and evaluation cells to notebook 07. Replay remains the default; `full` requires separate explicit approval.
-4. Run E8 once through the application, freeze its replies and decision, then freeze B1.
+1. Commit the frozen adjudication, E8 full specification and replay-tested executor locally.
+2. Obtain separate explicit approval for `VISUALDOC_QA_MODE=full` under the frozen $0.50 ceiling.
+3. Run E8 once through the application, add its evaluation cells, audit and freeze its replies and decision, then freeze B1.
+4. Begin notebook 08 only after B1 is frozen: the verification-triggered adaptive evidence-acquisition experiment described in the approved roadmap.
 5. Rewrite the README around the frozen B1 outcome. Until E8 decides the reader/contract, presenting B1 as final would be premature.
 
 **Ordering reason.** Implementing B1 in `src` *before* the E8 full run means E8 measures the application that ships. It also avoids writing a fourth notebook executor that the app would then have to duplicate. The smoke test can run before the app changes: it needs only hand-built requests.
@@ -396,10 +398,10 @@ with
 |---|---|---|
 | G1 | Commit the ledger, notebook 07 and these documents (local) | $0 |
 | G2 | Apply the `AGENTS.md` amendments (§8.3, possibly edited) | $0 |
-| G3 | **Human adjudication** of the 29 queued replies (you) | $0, ~30 min |
+| G3 | **Human adjudication** of the 29 queued replies (you) | **done and checksum-frozen**; $0 |
 | G4 | E8 smoke (§6): at most 8 calls | ≤ $0.10 |
 | G5 | Freeze the E8 spec with the measured reader profile; implement and validate the `src` B1 extension | **done**; $0 |
-| G6 | Add the gated executor, then separately approve E8 full: 354 calls through the B1 application | not approved; offline upper bound $0.255901, proposed cumulative ceiling $0.50 |
+| G6 | Separately approve E8 full: 354 calls through the B1 application | executor ready; **live run not approved**; offline upper bound $0.255901, frozen cumulative ceiling $0.50 |
 | G7 | Freeze B1 (E8 result, frozen replies, tests) | $0 |
 | later | Pool indexing on SSP Cloud and the final evaluation E9; improvement phase | separate specs |
 

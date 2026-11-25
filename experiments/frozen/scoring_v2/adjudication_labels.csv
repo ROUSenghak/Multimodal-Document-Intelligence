@@ -1,0 +1,30 @@
+item_id,label,note,identity_sha256
+B1-ADJ-001,wrong,Missing Interphase and Prometaphase.,c2f75cbbf4e16e1b64a8dd504c28f814b11c004751758b2984c4e9ab5cdb244a
+B1-ADJ-002,wrong,Several alternatives without one committed answer.,8f54d025df3ca3d070b0df0ab5327a6a099f2095e25494a3415bfa21e74c172c
+B1-ADJ-003,wrong,Names the Accountancy honours degree rather than BBA.,ac97c8643c4671c8fafb2187f7ed02b642b4609bda0de0600ae17f99af491a52
+B1-ADJ-004,wrong,Adds the MagSafe power port beyond the requested right-side set.,a4448f23dfedf916b09320a0b6c01bd5ff110ca2d53dca287aa090696fe8f727
+B1-ADJ-005,wrong,Several alternatives without one committed answer.,70fb37d82454cba3cddbc9580a22d11fff9d7f6e1552bceb583c77d13402a2de
+B1-ADJ-006,wrong,Includes five chapters that do not contain research highlights.,d2f8df28bc625ca0f917f936cf34b02933f865b874fb02ff35eed829187aa943
+B1-ADJ-007,wrong,Includes three unrelated amounts.,f2b2afc25edd78790ca1e49f09c68e302e9739db73ee6a81701d05c24f91f0ce
+B1-ADJ-008,correct,Same answer in a complete sentence.,6928f5ca8f623b8d0d119997a333c714b56d9877afda50ae150c884c71361230
+B1-ADJ-009,wrong,The second value is for hopeful rather than excited.,c1b9853396def10a4a672f6364ae8ba19ac98c6f2714020b47b7385bd46cc7a5
+B1-ADJ-010,correct,Equivalent time formatting.,9b18db5f81f49f3ce1234af188a2223d0ab519b6fa7608e1f319373b5eac18cc
+B1-ADJ-011,correct,Correct entity with consistent supporting percentages.,96d727a42acb84dd9f024da5f6f483ae67aace191f73478df4a76a9e5abe0eb3
+B1-ADJ-012,wrong,Does not provide either requested pair of percentages.,816c647e0e5739d91fb98678cf761b7eb554199a56311ea6535ec2a8653c1ffd
+B1-ADJ-013,wrong,Missing four stages and omits cytokinesis.,8bbdc9b790133c99b42cee0497aaca4f36732fe174fdbdc1acb8a1a2e8b6a872
+B1-ADJ-014,correct,Same three steps; only a grammatical plural differs.,a1535ef66730b0744e9ce4354222163a50b4ad0659e04c258150b21f4428c660
+B1-ADJ-015,correct,Directly answers men.,05d7d94c1152e5e598c8586071bb67bad5e17bd92e9593d6bc395ff9d129c0b6
+B1-ADJ-016,wrong,Includes two unrelated amounts.,467f4e32648f186c48e6d955239cb875fb36a4260c7cc5d6fbf25d5ba5bea640
+B1-ADJ-017,wrong,Lists many contributors instead of committing to the lead coordinator.,20d356121506eb634902fb59f2e1106368f5954ef883ff63fdca49a7692728d6
+B1-ADJ-018,wrong,Two page numbers differ from the requested introduction pages.,0ae5fe269b71d6b991f59c214ffd2d62aa91b15f407bf5ea394e0b1d81049024
+B1-ADJ-019,wrong,Missing pages 49 and 50 and adds page 47.,dcd1dc826c7b41233d0bb968c0d52429989919f9fc9b0324f87b607b37c99155
+B1-ADJ-020,unsure,"The reference is total equity including 514 of noncontrolling interests; the reply is Costco stockholders' equity, which may better match common equity.",7695e838e516d4040b22ab988ac1115614946c9102453fcc288a6f6c8ef7acb6
+B1-ADJ-021,correct,Correct entity with consistent supporting percentages.,7be630a422d7fa6d23875b48e454ccbf39fb0e148ece2da7e3e6df6211ebbf6c
+B1-ADJ-022,wrong,"Question asks for shares; 1,358 without a stated thousands unit is not 1,358,000 shares.",7ab0d88fed4e57c4c8e29c5defd9942271946481064b45fcb25106f7d24e98d0
+B1-ADJ-023,wrong,Offers three alternatives instead of the single missing feature number.,6fa22faa3872776e2b386f0a82e98066206d99fb1dd3a2ecced76e0191c3d525
+B1-ADJ-024,correct,Same named officer; title omission does not change the entity.,a7d9185bdf2e9d3c6904af6aeb849a828a0204db3bef87a7f492f7fe0f1c5ee9
+B1-ADJ-025,wrong,Offers two alternatives instead of the single missing feature number.,c7f79beeb80b8c07190b7a663b90c59aab5ddaf997f7c0b7bf520b6d8ad3641c
+B1-ADJ-026,wrong,Neither answer page matches the reference set.,a5179bc244a203db845a22ea5233c770b1993a19135621a3df4e832a4f731947
+B1-ADJ-027,wrong,One Texas committee member is listed as present.,9dff52051faff5e00d099e4cb7c5c2973a8bf20490bdeb52c1912309d51c098c
+B1-ADJ-028,wrong,"The requested unit is millions; 8.438 million is not 8,438 million.",8abc302f65a21b15275c496d2fdd58495bb196d409154499379affbe1ce1591c
+B1-ADJ-029,wrong,Provides only the uneasy percentage and omits excited.,b9bfbd0475cf44614d7c2999044f02db7f32cc6f257e625a418f7767fa81badb

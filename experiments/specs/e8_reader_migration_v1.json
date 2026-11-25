@@ -1,0 +1,105 @@
+{
+  "experiment": "E8 reader migration and B1 stabilisation",
+  "version": 1,
+  "date_frozen": "2026-11-25",
+  "status": "frozen before the full run; full run not approved",
+  "population": {
+    "source": "the 118 development questions used by E6",
+    "questions": 118,
+    "answerable": 102,
+    "unanswerable": 16,
+    "documents": 14,
+    "test_pool_used": false
+  },
+  "reader": {
+    "requested_model": "gpt-6-luna",
+    "dated_snapshot_available": false,
+    "reasoning_effort": "none",
+    "temperature": 0,
+    "image_detail": "high",
+    "served_model_policy": "record every call; stop if more than one served-model string appears",
+    "system_fingerprint_policy": "record when supplied; frozen replies rather than the alias define the result"
+  },
+  "arms": {
+    "L-v1": {
+      "calls": 118,
+      "pages": "the exact pages supplied by frozen E6 V: four for 105 questions and three for 13",
+      "contract": "mmlb-image-v1, json_object, 400 maximum completion tokens",
+      "purpose": "matched reader migration"
+    },
+    "L-B1": {
+      "calls": 118,
+      "pages": "frozen ColQwen2 top four",
+      "contract": "b1-image-v2, strict JSON schema, 800 maximum completion tokens",
+      "purpose": "shipping B1 candidate"
+    },
+    "L-B1r": {
+      "calls": 118,
+      "pages": "identical to L-B1",
+      "contract": "identical to L-B1",
+      "purpose": "fresh repeat calls after all matched pairs; never served from the L-B1 cache"
+    }
+  },
+  "order": {
+    "question_seed": 20261125,
+    "pair_order_seed": 20261126,
+    "matched_pairs": 118,
+    "L-v1_first": 59,
+    "L-B1_first": 59,
+    "repeat_block": "after all pairs"
+  },
+  "measured_profile": {
+    "source": "experiments/frozen/e8_smoke",
+    "text_encoding": "o200k_base",
+    "text_only_framing_tokens": 10,
+    "multimodal_framing_tokens": 9,
+    "image_tokens": "floor(1.2 * ceil(width / 32) * ceil(height / 32))",
+    "strict_schema_tokens": 100,
+    "input_usd_per_1m_tokens": 0.10,
+    "cached_input_usd_per_1m_tokens": 0.01,
+    "output_usd_per_1m_tokens": 0.50
+  },
+  "offline_plan_regression": {
+    "planned_calls": 354,
+    "unique_conditions": 236,
+    "prompt_tokens": 1379010,
+    "maximum_output_tokens": 236000,
+    "list_price_upper_usd": 0.255901
+  },
+  "execution": {
+    "mode_variable": "VISUALDOC_QA_MODE",
+    "default_mode": "replay",
+    "paid_mode": "full",
+    "maximum_attempts": 360,
+    "maximum_attempts_per_execution_index": 2,
+    "cumulative_ceiling_usd": 0.50,
+    "unknown_usage_charge": "For budget gating, an attempt without returned usage is charged at its precomputed request upper bound; observed token cost is reported separately.",
+    "sdk_retries": 0,
+    "on_api_error": "append the failure and stop; a later explicit resume may retry that execution index",
+    "resume_key": "execution_index plus request fingerprint",
+    "repeat_cache_rule": "L-B1r has a distinct execution index and must make a fresh call",
+    "outputs": "git-ignored experiments/runs/e8/<run_id>"
+  },
+  "scoring": {
+    "S-v1": "historical primary; score > 0 on the 102 answerable questions",
+    "S-v2": "automatic protocol plus experiments/frozen/scoring_v2 blind adjudication",
+    "unsure": "exclude from S-v2 point estimates and paired contrasts; report wrong/correct sensitivity",
+    "cluster_unit": "document",
+    "bootstrap_draws": 10000
+  },
+  "decision_rules": {
+    "technical": "354 validated replies, one served model, finish_reason stop throughout, and at least 117 of 118 schema-valid L-B1 replies per replicate",
+    "migration_harm": "L-v1 delta <= -0.05 and the cluster 95% upper bound < 0 against both frozen GPT-4o-mini anchors",
+    "adopt_contract_v2": "schema validity >= 0.99, citation validity no more than 0.03 below L-v1, and answerable accuracy delta >= -0.05",
+    "unstable": "more than 10 correctness flips between L-B1 and L-B1r on 102 answerable questions",
+    "abstention_guardrail": "at least 5 correct abstentions among the 16 unanswerable questions"
+  },
+  "application_module_sha256": {
+    "visualdoc.documents": "1a8d4957d3ec9a7c101a90081f1175425b229a4ee355a21027e0ea7a6b451739",
+    "visualdoc.retrieval": "f40af90d578d4b9981807e491d7215367074bac87b0a2ed231044c80c9a3d4b9",
+    "visualdoc.answering": "7a7404f83ecf9fd15a2315d340f05ee7e3952de83d9d2f7066b1588900755c22",
+    "visualdoc.citations": "db2ce7188dfd14e6f68b27d7ad507a31b0955c3e5ee5805665c2b168bd980190",
+    "visualdoc.pipeline": "491aadd22c90015cde212200f4742c483c33d40b5615008111d348564ad5318a"
+  },
+  "approval": "This specification and executor do not authorize a paid call. VISUALDOC_QA_MODE=full requires separate explicit owner approval."
+}

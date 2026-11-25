@@ -1,6 +1,8 @@
 """B1 reader profile, grounding and bounded retrieve-read-verify policy."""
 
+import hashlib
 import json
+from pathlib import Path
 from types import SimpleNamespace
 
 import pymupdf
@@ -36,6 +38,33 @@ def completion(payload, *, model="gpt-6-luna", fingerprint=None, prompt=123, com
         system_fingerprint=fingerprint,
         usage=SimpleNamespace(prompt_tokens=prompt, completion_tokens=completion_tokens),
     )
+
+
+def test_frozen_s_v2_labels_are_complete_and_checksum_protected():
+    folder = REPO_ROOT / "experiments" / "frozen" / "scoring_v2"
+    entries = [line.split(maxsplit=1) for line in (folder / "SHA256SUMS").read_text().splitlines()]
+    assert len(entries) == 4
+    for expected, name in entries:
+        assert hashlib.sha256((folder / name).read_bytes()).hexdigest() == expected
+    pd = pytest.importorskip("pandas")
+    labels = pd.read_csv(folder / "adjudication_labels.csv", dtype=str).fillna("")
+    assert len(labels) == labels["item_id"].nunique() == 29
+    assert labels["label"].value_counts().to_dict() == {"wrong": 21, "correct": 7, "unsure": 1}
+    assert labels["identity_sha256"].str.fullmatch(r"[0-9a-f]{64}").all()
+
+
+def test_e8_full_spec_pins_the_application_and_fail_closed_executor():
+    spec = json.loads((REPO_ROOT / "experiments" / "specs" / "e8_reader_migration_v1.json").read_text())
+    assert spec["offline_plan_regression"] == {
+        "planned_calls": 354, "unique_conditions": 236, "prompt_tokens": 1_379_010,
+        "maximum_output_tokens": 236_000, "list_price_upper_usd": 0.255901,
+    }
+    assert spec["execution"]["maximum_attempts"] == 360
+    assert spec["execution"]["maximum_attempts_per_execution_index"] == 2
+    assert spec["execution"]["cumulative_ceiling_usd"] == 0.50
+    for module, expected in spec["application_module_sha256"].items():
+        path = REPO_ROOT / "src" / Path(*module.split(".")).with_suffix(".py")
+        assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
 
 
 def test_measured_luna_profile_reproduces_all_six_smoke_prompt_totals():

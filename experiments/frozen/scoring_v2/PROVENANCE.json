@@ -1,0 +1,17 @@
+{
+  "date": "2026-11-25",
+  "kind": "blind human adjudication for scoring protocol S-v2",
+  "source_notebook": "notebooks/07_baseline_consolidation.ipynb",
+  "source_runs": [
+    "experiments/frozen/e6/run_20261123T200722253880Z_d94e85f1_full",
+    "experiments/frozen/e7/run_20261124T160111456175Z_b3d0b5c0_full"
+  ],
+  "items": 29,
+  "labels": {"correct": 7, "wrong": 21, "unsure": 1},
+  "adjudicator": "project owner",
+  "blind_to_arm": true,
+  "paid_calls": 0,
+  "identity_fields": ["document", "evidence_pages", "question", "answer_format", "reference", "reply"],
+  "identity_serialisation": "json.dumps(mapping, sort_keys=True, ensure_ascii=False).encode()",
+  "unsure_policy": "exclude from the S-v2 point estimate and paired contrasts; report wrong/correct sensitivity bounds"
+}
