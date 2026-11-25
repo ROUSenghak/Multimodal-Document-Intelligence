@@ -11,11 +11,23 @@ The single place that records what is done, what is running, what each decision 
 | E9 Stage 0 (offline trigger selection, $0) | **passed**; independently audited (reproduced ≤ 5e-7) | `experiments/frozen/e9_stage0/` (commit `a30bb29`) |
 | E9 Stage 1 smoke (6 calls) | **passed** all 7 gates, $0.004592 | `experiments/frozen/e9/smoke_*` |
 | E9 Stage 2 (354 calls) | **done: `no_meaningful_gain`** (S-v1). B1 unchanged. Independent audit 47/47. 13 S-v2 items await owner labels; no labelling can change the verdict | `experiments/frozen/e9/`, notebook 08 |
-| Application (B1 with live ColQwen2, cache, CLI, UI) | **built and reviewed.** All review defects fixed; 199 tests pass. The live encoder and live reader are not yet verified (need the weights and a paid call) | `src/visualdoc/{visual_index,app,web}.py`, `docs/application.md` |
-| Final held-out evaluation | not started; needs a frozen spec, owner approval, a budget and indexing compute | `experiments/test_pool_ledger.md` |
-| Documentation (README, architecture, report, reproducibility, demo) | not started | — |
+| Application (B1 with live ColQwen2, cache, CLI, UI) | **built, reviewed, verified live.** 200 tests pass. Three live calls reproduced frozen E8 L-B1 requests, tokens and answers exactly. The live *encoder* is checked by notebook 09's parity gate | `src/visualdoc/{visual_index,app,web}.py`, commit `041827f` |
+| Final held-out evaluation | **approved and frozen before access.** Indexing is running (notebook 09, `index` mode) | spec `1c54a3e`; notebook 09 `32b714d`, `1fc0f71`, `f0122c9` |
+| Documentation (README, architecture, report, reproducibility, demo) | written; final-evaluation results are still to be added | `README.md`, `docs/{research_report,architecture,reproducibility}.md` |
 
 ## Decisions and their reasons
+
+### 2026-11-25 — Final evaluation: approval, environment and two engineering decisions
+
+- **Owner decisions.**
+  - Run B1, T1 and the secondary A1, under a $2.50 ceiling.
+  - Index on the laptop. The re-downloadable caches `~/.cache/uv` (2.6 GB) and `~/.cache/puppeteer` (0.5 GB) were cleared with authorisation.
+  - Amend AGENTS.md with the wording shown.
+  - Authorise ≤ $0.01 for a live application check.
+- **Weights from Hugging Face, outside iCloud.** The repository's copy of the ColQwen2 weights is an evicted iCloud placeholder. iCloud sync for this account is blocked ("Quota exceeded"), so it cannot be restored. The pinned revision `ddc07d23…` was downloaded into `~/.cache/huggingface` instead. Weights, preprocessor and tokenizer hashes equal E5's (`2f6dbf32…`, `be69973e…`, `091aa759…`).
+- **Chunked two-pass encoding.** Pass-1 features take about 1.8 MB per page. Running pass 1 over all pool pages first would need about 9.5 GB of transient disk, so the passes alternate over 200-page chunks. The operations per page are unchanged, and the spec's parity gate requires bitwise equality with E5 before any pool page is encoded.
+- **Evicted placeholders are re-downloaded.** Three pool PDFs fetched during E5's selection had become unreadable placeholders, and the first indexing launch stopped on one of them. The download cell now forces a fresh copy for such files; nothing else had run.
+- **Live application check.** 3 calls, observed about $0.0013. They match frozen E8 L-B1 in fingerprints, billed tokens and answers.
 
 ### 2026-11-25 — E9 Stage 2 result: `no_meaningful_gain` (development data)
 
@@ -80,6 +92,7 @@ The single place that records what is done, what is running, what each decision 
 | ≤ 2026-11-25 | E0–E2 | — | recorded in their frozen packages (not re-added here) | — |
 | 2026-11-25 | E9 Stage 0 | 0 | 0.00 | — |
 | 2026-11-25 | E9 smoke + Stage 2 | 6 + 354 | 0.004592 + 0.147055 = **0.151647** | 0.50 |
+| 2026-11-25 | Application live check | 3 | ≈ 0.0013 observed (≤ 0.0024 charged at the upper bound) | 0.01 |
 
 E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Planned upper bound: smoke $0.006847 + full $0.368866.
 
@@ -91,8 +104,8 @@ E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Pl
 
 ## Open dependencies and blockers
 
-1. **Final evaluation compute.** The ColQwen2 index of the test pool needs about 10 GB of free disk and many CPU hours, or the SSP Cloud GPU. This is an owner decision (see below).
-2. **Final evaluation budget.** No budget is authorised beyond E9's $0.50. The final evaluation needs the owner's authorisation.
+1. **Final-evaluation indexing time.** About 5,000 pages at about 12.5 s per page on the fanless M1, so the job runs for many hours under `caffeinate`. It is resumable: re-running `index` mode skips every page already encoded.
+2. **No off-machine backup of today's work.** iCloud sync is blocked by the account's storage quota, and commits since `7da078f` are local only, because pushing needs the owner's authorisation.
 3. **S-v2 blind labels.** 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
 
 ## Known limitations (running list)
