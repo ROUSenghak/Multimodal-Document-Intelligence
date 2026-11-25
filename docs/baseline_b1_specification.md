@@ -302,7 +302,9 @@ The committed smoke implementation is notebook 07 at commit `e6b0bf6`. Run `2026
 
 **Behavioural warning, not a failed technical gate.** S5 was the known-unanswerable `mmlb-0068`. Its reply satisfied the strict schema but answered with page 2 instead of abstaining. The old-contract S4 reply also answered. One diagnostic item cannot estimate an abstention rate; the preregistered full-run guardrail on all 16 unanswerable questions therefore remains essential.
 
-The smoke authorizes no further paid call. Notebook 07 rebuilds and fingerprints all 354 proposed requests offline with the measured profile: 1,379,010 prompt tokens and at most 236,000 output tokens, for a list-price upper bound of **$0.255901**. The earlier $0.20–$3.70 range is superseded. The full protocol is frozen in `experiments/specs/e8_reader_migration_v1.json` with a **$0.50 cumulative ceiling**, 360-attempt maximum and at most two attempts per execution index. A failed attempt with no returned usage is conservatively charged at its precomputed upper bound for budget gating, while observed token cost remains separate. Its mocked executor has passed all 354 indices, interruption/resume, API-error, budget, malformed-contract and served-model/system-fingerprint failure tests. This implementation is not approval for a paid run.
+The smoke authorized no further call by itself. After separate owner approval, E8 full ran on 2026-11-25 under the protocol frozen in `experiments/specs/e8_reader_migration_v1.json`: **354/354 successful first attempts**, one served model string, no system fingerprint supplied, and **$0.144765** observed list-price cost under the $0.50 ceiling. L-v1 scored 42/102; L-B1 and its independent repeat each scored 46/102. L-B1 − L-v1 was +0.039 (document-cluster 95% interval −0.019 to +0.098), with 8 fixed and 4 broken. Citation form validity was 1.000, correct abstention was 9/16, and the repeat produced four correctness flips. The preregistered S-v1 gates therefore promote B1. S-v2 is not final: 16 new arm-blind items still require owner adjudication.
+
+The stricter grounding diagnostic is deliberately reported separately from citation form: L-B1 passed 70/118 replies (0.593), with quote support on 88/118 and numeric support on 25/53 applicable replies; no reply cited an invalid evidence page or omitted an evidence object for a cited page. This exposes the main target for the next verification-triggered agent rather than changing E8's frozen decision rule after seeing the result.
 
 ---
 
@@ -310,8 +312,8 @@ The smoke authorizes no further paid call. Notebook 07 rebuilds and fingerprints
 
 | Item | Assessment |
 |---|---|
-| E8 cost | measured offline upper bound $0.255901; frozen full-stage ceiling $0.50. Total project spend so far ≈ $13 |
-| E8 duration | 354 + ≤ 8 calls; at an estimated 3–5 s each, sequential, about 25 minutes |
+| E8 cost | $0.144765 observed for 354 successful first attempts; frozen full-stage ceiling $0.50. Total project spend so far ≈ $13 |
+| E8 duration | 14 min 42 s for the 354-call sequential full run |
 | Laptop (M1, 8 GB RAM, **5.9 GB free disk**, repository in iCloud) | Fine for notebooks 00–07, BM25, NumPy MaxSim over cached embeddings, E8 and the app's BM25 path. **Not** fine for ColQwen2 (4.4 GB of weights not cached) or for indexing the final pool. Move the repository out of iCloud: the `.pth` hidden flag recurs, and held-out PDFs became dataless. |
 | SSP Cloud | The intended place for ColQwen2 indexing (pool for E9) and for running the visual path live. **The GPU type and quota are not verified;** please check your datalab account. Indexing about 5,000 pages at E5's 12 s per page would take about 17 h on the laptop; on a GPU it should be far less. Embeddings take about 193 KB per page (about 1 GB for the pool). |
 | Final evaluation (E9, later) | 111 pool documents, no page cap (GPU indexing), B1 frozen, one session. Somewhat fewer than the pool's 705 answerable questions: the four excluded documents' counts are computed only when that spec is frozen. Accuracy interval about ±0.03–0.04 (cluster); paired differences of about 0.05 detectable (planning simulation) |
@@ -334,15 +336,14 @@ The smoke authorizes no further paid call. Notebook 07 rebuilds and fingerprints
 | B1 application extension | committed `4bf6b19`; full test count is asserted at the current gate |
 | Notebook 07 application parity | 118/118 frozen E6 V requests; six smoke prompt totals; 236/236 unique E8 app requests; 354-call offline plan |
 | S-v2 owner adjudication | frozen with checksums: 7 correct, 21 wrong, 1 unsure; E6 V − A = 39/101 − 28/101, 12 fixed / 1 broken |
-| E8 full protocol and executor | frozen spec; replay mock covers all 354 indices and fail-closed resume, budget, contract and served-model/system-fingerprint paths; live mode not approved |
+| E8 full protocol and executor | completed 2026-11-25: 354/354 first-attempt successes, $0.144765; notebook 07 reproduces the evaluation in replay |
 
 ### 8.2 Remaining work
 
-1. Commit the frozen adjudication, E8 full specification and replay-tested executor locally.
-2. Obtain separate explicit approval for `VISUALDOC_QA_MODE=full` under the frozen $0.50 ceiling.
-3. Run E8 once through the application, add its evaluation cells, audit and freeze its replies and decision, then freeze B1.
-4. Begin notebook 08 only after B1 is frozen: the verification-triggered adaptive evidence-acquisition experiment described in the approved roadmap.
-5. Rewrite the README around the frozen B1 outcome. Until E8 decides the reader/contract, presenting B1 as final would be premature.
+1. Blindly adjudicate the 16 new E8 S-v2 items and freeze those labels separately from the primary S-v1 verdict.
+2. Audit and freeze the E8 execution and B1 decision.
+3. Begin notebook 08 only after B1 is frozen: the verification-triggered adaptive evidence-acquisition experiment described in the approved roadmap.
+4. Rewrite the README around the frozen B1 outcome.
 
 **Ordering reason.** Implementing B1 in `src` *before* the E8 full run means E8 measures the application that ships. It also avoids writing a fourth notebook executor that the app would then have to duplicate. The smoke test can run before the app changes: it needs only hand-built requests.
 
@@ -401,8 +402,8 @@ with
 | G3 | **Human adjudication** of the 29 queued replies (you) | **done and checksum-frozen**; $0 |
 | G4 | E8 smoke (§6): at most 8 calls | ≤ $0.10 |
 | G5 | Freeze the E8 spec with the measured reader profile; implement and validate the `src` B1 extension | **done**; $0 |
-| G6 | Separately approve E8 full: 354 calls through the B1 application | executor ready; **live run not approved**; offline upper bound $0.255901, frozen cumulative ceiling $0.50 |
-| G7 | Freeze B1 (E8 result, frozen replies, tests) | $0 |
+| G6 | Separately approve E8 full: 354 calls through the B1 application | **done 2026-11-25**; 354/354, $0.144765 |
+| G7 | Freeze B1 (E8 result, frozen replies, tests) | S-v1 verdict complete; 16 blind S-v2 labels remain; $0 |
 | later | Pool indexing on SSP Cloud and the final evaluation E9; improvement phase | separate specs |
 
 `gpt-4o-mini-2024-07-18` shuts down on 2027-01-14. Nothing above depends on it, except that the current application's `--live` mode stops working then.
