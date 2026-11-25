@@ -1,0 +1,140 @@
+{
+ "package": "E7 extract-then-answer (V0: E6's one-shot GPT-4o-mini reader on ColQwen2 pages, byte for byte; X4: the same pages read one page per call into an Evidence Memory, then text-only reasoning with a restricted arithmetic tool; X8: the same on ColQwen2 top 8), frozen development result",
+ "frozen_at": "2026-11-25",
+ "status_of_the_population": "development: E6's 118 held-out questions were inspected answer by answer to design E7 (notebook 06 section 1); every number here is a development result",
+ "spec": {
+  "path": "experiments/specs/e7_extract_then_answer_v1.json",
+  "sha256": "7d124b81cbdfc569eae937efebcac66cd09cbea4915f62bcbd486fa486f5c0f9",
+  "frozen_at": "2026-11-24T13:35:17Z",
+  "approved_ceiling_usd": 9.0,
+  "freeze_commit": "f19ac27a9b5c1d8664c1e2ae0aabc7e657d6b122"
+ },
+ "code_revision": {
+  "commit": "469aff55117349ead458eba6be1f9290edb99463",
+  "branch": "refactor/simplify-structure",
+  "notebook06_code_sha256": "4d06f48d69f7c83d615f3b8881266e51069dc43f21bbfc6aa7eec2c7c3cae3bb",
+  "note": "spec and notebook 06's code cells equal this commit in both sessions (paid-mode gate); f19ac27 froze the spec and code, 469aff5 added only recorded offline outputs. Re-verified by AUDIT.json"
+ },
+ "approvals": {
+  "design_rule_and_ceiling": "2026-11-24 (USD 9.00 cumulative hard ceiling)",
+  "smoke": "2026-11-24",
+  "full": "2026-11-24",
+  "freeze_and_local_commit": "2026-11-25 (no push)"
+ },
+ "runs": {
+  "20261124T143927981959Z_9b46fcad_smoke": {
+   "mode": "smoke",
+   "original_location": "experiments/runs/e7/20261124T143927981959Z_9b46fcad_smoke/ (git-ignored)",
+   "frozen_location": "experiments/frozen/e7/run_20261124T143927981959Z_9b46fcad_smoke/",
+   "copy": "byte-identical copy of all 12 files (re-checked by AUDIT.json)",
+   "first_request_started_utc": "2026-11-24T14:39:29.425+00:00",
+   "last_request_completed_utc": "2026-11-24T14:41:50.231+00:00",
+   "calls": 11,
+   "composition": {
+    "v0": 1,
+    "extract": 8,
+    "reason": 2
+   },
+   "question": "mmlb-0068",
+   "smoke_gate": "12/12 technical checks passed",
+   "served_model": [
+    "gpt-4o-mini-2024-07-18"
+   ],
+   "system_fingerprints": {
+    "fp_022a442bda": 9,
+    "fp_9400314673": 2
+   },
+   "observed_tokens": {
+    "prompt": 412467,
+    "completion": 1915,
+    "cached_prompt": 0
+   },
+   "list_price_usd": 0.063019,
+   "openai_sdk": "2.54.0"
+  },
+  "20261124T160111456175Z_b3d0b5c0_full": {
+   "mode": "full",
+   "original_location": "experiments/runs/e7/20261124T160111456175Z_b3d0b5c0_full/ (git-ignored)",
+   "frozen_location": "experiments/frozen/e7/run_20261124T160111456175Z_b3d0b5c0_full/",
+   "copy": "byte-identical copy of all 16 files (re-checked by AUDIT.json)",
+   "first_request_started_utc": "2026-11-24T16:01:12.791+00:00",
+   "last_request_completed_utc": "2026-11-24T21:47:10.993+00:00",
+   "calls": 1309,
+   "composition": {
+    "technical_smoke block (never scored)": 11,
+    "main_r1 v0": 118,
+    "main_r1 extract": 944,
+    "main_r1 reason": 236
+   },
+   "attempts": "every call answered on its first attempt; 0 rate limits, 0 API errors, no stop record",
+   "statuses": {
+    "ok": 1299,
+    "parse_error (unreadable extraction pages: 7 reply-limit, 3 without a facts list)": 10
+   },
+   "served_model": [
+    "gpt-4o-mini-2024-07-18"
+   ],
+   "system_fingerprints": {
+    "fp_022a442bda (every image call: V0 and extractions)": 1071,
+    "fp_9400314673 (every text-only reasoning call)": 238
+   },
+   "observed_tokens": {
+    "prompt": 38522397,
+    "completion": 116130,
+    "cached_prompt": 0
+   },
+   "prompt_tokens_minus_expected": {
+    "1": 1071,
+    "2": 238
+   },
+   "api_latency_s_median": 1.87,
+   "list_price_usd": 5.848038,
+   "list_price_usd_main_replicate": 5.7849201,
+   "openai_sdk": "2.54.0",
+   "launcher": "data/processed/mmlongbench_doc/e7/run_logs/launch_full.py (git-ignored; sha256 below): nbconvert of notebook 06 from disk in VISUALDOC_E7_MODE=full under caffeinate, the API key read from .env into the child process only"
+  }
+ },
+ "spend": {
+  "cumulative_list_price_usd": 5.911057,
+  "approved_ceiling_usd": 9.0,
+  "planned_upper_bound_usd": 7.1201,
+  "price_basis": "USD 0.15 / 0.60 per 1M input / output tokens, cached input at full price (conservative)"
+ },
+ "evaluation": {
+  "by": "notebook 06 cell e7-evaluate (functions in e7-analysis and e7-stats), executed on 2026-11-24 with VISUALDOC_E7_RUN_DIR set to the full run",
+  "outputs": "tables/evaluation_summary.json and tables/per_question.csv, copied byte for byte from data/processed/mmlongbench_doc/e7/evaluation_20261124T160111456175Z_b3d0b5c0_full/",
+  "after_the_freeze": "notebook 06 evaluates this frozen copy by default, re-derives both tables byte for byte and asserts the regression references"
+ },
+ "added_after_the_runs": {
+  "analysis/E7_report_and_next_stage.md": "results, error analysis and recommendation, written 2026-11-24 after the full run (development interpretation, not part of the pre-registered analysis)",
+  "analysis/literature_review.md": "written 2026-11-24 during the full run, independent of its results",
+  "design/e6_error_audit.csv, design/e6_unanswerable_audit.csv": "the manual E6 error labels (2026-11-24) E7 was designed from; the same labels are written out as data in notebook 06 cell e7-audit-labels; they contain short quotations of model replies and reference answers",
+  "AUDIT.json, audit_e7.py": "the independent audit (2026-11-25) and the script that produced it",
+  "README.md, PROVENANCE.json, SHA256SUMS": "2026-11-25"
+ },
+ "kept_outside_the_package_sha256": {
+  "data/processed/mmlongbench_doc/e7/run_logs/launch_smoke.py": "f7c92b461e4a4a1d8826a63b01ee3a7a97d7d7ee3e30ef85e8f6275cca8a4bde",
+  "data/processed/mmlongbench_doc/e7/run_logs/launch_full.py": "7b0695b084fc0188d69005820318bc9f0dc14375156f03eab8523867820dd81b",
+  "data/processed/mmlongbench_doc/e7/run_logs/nb06_smoke_executed.ipynb": "14d45e59c91482c065e7a2d6af08a96abe1c21acd668c25810c6f7b93941d902",
+  "data/processed/mmlongbench_doc/e7/run_logs/nb06_full_executed.ipynb": "b2d6b594ee67fe7a4de83167ebde994a5ca6d7c1e3a678e6211c0e822fb98e1c",
+  "data/processed/mmlongbench_doc/e7/run_logs/nb06_evaluation_executed.ipynb": "c783580c9843108c0d898edd59472d084c8b480dfd2fa96e6aac1daf8133e490"
+ },
+ "audit": {
+  "file": "AUDIT.json",
+  "passed": 38,
+  "total": 38,
+  "method": "standalone script (audit_e7.py), neither importing nor executing notebook 06; shares only notebook 03's frozen scorer cell f653d232"
+ },
+ "environment": {
+  "python": "3.12.6",
+  "numpy": "2.3.5",
+  "pandas": "3.1.1",
+  "openai_sdk": "2.54.0",
+  "machine": "Apple M1 (macOS)"
+ },
+ "not_verifiable_here": [
+  "whether the model would give the same replies today (one replicate per arm; session noise measured only as frozen E6 V vs V0: 2 fixed / 2 broken)",
+  "the effect of the backend split: image calls and text-only reasoning calls ran on different backends (fp_022a442bda vs fp_9400314673), inseparable from the architecture",
+  "server-side image preprocessing beyond the billed token counts"
+ ]
+}

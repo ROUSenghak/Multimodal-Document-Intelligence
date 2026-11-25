@@ -1,0 +1,531 @@
+{
+  "spec_id": "e7-extract-then-answer-v1",
+  "status": "frozen-before-live-execution",
+  "status_rule": "Paid modes (smoke, full) refuse to run unless status is 'frozen-before-live-execution', frozen_at is set, budget.approved_ceiling_usd is a number, the spec and notebook 06's code equal git HEAD, and no protected path has an uncommitted change. Freezing = setting status and frozen_at and committing this file with notebook 06, with the owner's approval; any later change is a new version (v2).",
+  "drafted_at": "2026-11-24",
+  "frozen_at": "2026-11-24T13:35:17Z",
+  "paid_api_calls": "smoke 11 and full 1,309 GPT-4o-mini calls; each stage only with the owner's separate explicit approval; offline mode (the default) makes none",
+  "development_set_statement": "E6's 118 held-out questions were inspected answer by answer (notebook 06 section 1) to design E7. They are a DEVELOPMENT set from now on: every E7 number on them is a development result. The frozen E6 result is not altered and remains the reference.",
+  "research_question": "On E6's 102 answerable questions, does reading each supplied page separately into a structured Evidence Memory and answering from that memory in a text-only step (with deterministic arithmetic) answer more questions correctly than E6's one-shot reader on the same pages, and does the gain come from the error types the architecture targets?",
+  "starting_evidence_verified_2026_11_24": [
+    "Frozen E6 (experiments/frozen/e6, adopt_visual_retrieval): ColQwen2 pages, one-shot GPT-4o-mini reader, 38/102 answerable correct (A 25/102), 13 fixed / 0 broken.",
+    "E6 V accuracy by annotated evidence span: single-page 30/55, multi-page 7/46, no annotated evidence pages 1/1 (mmlb-0599; an earlier quotation of 31/56 counted it as single-page); by evidence after the guard: complete 32/61, partial 3/25, none 2/15, no annotated evidence 1/1; multi-page with complete evidence 4/12.",
+    "Manual audit of the 64 E6 V errors: A insufficient evidence 33 (partial 19, retrieval miss 10, context guard 3, unsupported 1); B sufficient evidence but reader failure 27 (counting/spatial 6, perception 5, semantic/distractor 4, list 3, calculation 3, table cell 2, multi-page aggregation 2, false abstention 2); C evaluation/annotation 4.",
+    "Group A evidence would be complete within ColQwen2's top 8 / 10 / 15 for 6 / 9 / 16 of 33 questions."
+  ],
+  "hypotheses": {
+    "primary_null": "On the 102 answerable questions, mean(correct_X4 - correct_V0) <= 0.",
+    "primary_directional": "mean(correct_X4 - correct_V0) > 0, especially on multi-page questions; whether the gain sits in the targeted error categories is a diagnostic, not part of the hypothesis test",
+    "secondary": "X8 - X4 > 0: 4-5 more ColQwen2 pages help under extract-then-answer, without loss of abstention or citation validity.",
+    "minimum_meaningful_difference": 0.05,
+    "why_0_05": "About 5 of 102 questions; the threshold of E4-E6. Below it, k+1 calls per question instead of one are not worth their latency."
+  },
+  "design": {
+    "type": "one session; three arms; every question is one block (V0 call, 8 extraction calls, then the X4 and X8 reasoning calls); blocks in a seeded order; V0 first in a seeded half of the blocks; X4's reasoning call before X8's in an independently seeded half",
+    "arms": {
+      "V0": {
+        "label": "one-shot control: E6's ColQwen2 pages and E6's exact request",
+        "pages": "ColQwen2 v1.0 frozen ranking (E5 arm V), top 5, then E6's context guard (4 pages for 105 questions, 3 for 13)",
+        "reader": "E6's one-shot request, byte for byte: its fingerprint equals the frozen E6 V request's for all 118 questions",
+        "role": "same-session reference"
+      },
+      "X4": {
+        "label": "extract-then-answer on V0's pages",
+        "pages": "exactly V0's pages",
+        "reader": "one extraction call per page, the Evidence Memory, one text-only reasoning call with deterministic arithmetic",
+        "role": "primary: X4 - V0 is the architecture effect"
+      },
+      "X8": {
+        "label": "extract-then-answer on ColQwen2's top 8",
+        "pages": "ColQwen2's frozen top 8 (X4's pages are its first 3-4)",
+        "pages_k": 8,
+        "reader": "as X4",
+        "role": "secondary: X8 - X4 is the effect of more pages; X8 - V0 the total change, never causal"
+      }
+    },
+    "identification": {
+      "X4_minus_V0": "the extract-then-answer ARCHITECTURE effect: page-wise reading, structured evidence (the Evidence Memory), text-only reasoning and optional deterministic arithmetic together, on the same pages, model, images, temperature and answer contract. It is not a pure Evidence Memory effect; only the arithmetic tool's share is separable (computed vs the model's own answer)",
+      "X8_minus_X4": "4-5 additional pages under the same architecture",
+      "X8_minus_V0": "two factors at once: reported as the total practical change only"
+    },
+    "same_session_control": "V0 is re-run live because the same request can change its answer between sessions (5 of 37 image replies did in E3). The frozen E6 V answers are compared with V0 as a direct measure of session noise; they never replace V0.",
+    "answer_contract": "The reasoning step's 'answer' instruction is V0's sentence verbatim, with 'page images' replaced by 'evidence memory'; asserted in notebook 06.",
+    "known_confounds": [
+      "X4 bundles the page-wise reading, the text-only step and the arithmetic tool: the tool's share is measured within each X arm (computed answer vs the model's own answer); the rest is not separable here.",
+      "X4 makes k + 1 calls instead of one at about the same image tokens: latency is reported.",
+      "The extraction and reasoning prompts were written after the E6 audit (generic, but not blind): hence 'development' and the final test on untouched documents.",
+      "X8 supplies 8 pages, so citation validity is easier for it; its guardrails are read against X4."
+    ]
+  },
+  "population": {
+    "documents": [
+      "2312.10997v5.pdf",
+      "2310.05634v2.pdf",
+      "e639029d16094ea71d964e2fb953952b.pdf",
+      "3276a5b991c49cf5f9a4af0f7d6fce67.pdf",
+      "2021-Apple-Catalog.pdf",
+      "NUS-Business-School-BBA-Brochure-2024.pdf",
+      "COSTCO_2021_10K.pdf",
+      "AMAZON_2017_10K.pdf",
+      "SAO-StudentSupport_Guidebook-Content.pdf",
+      "Macbook_air.pdf",
+      "11-21-16-Updated-Post-Election-Release.pdf",
+      "efd88e41c5f2606c57929cac6c1c0605.pdf",
+      "ddoseattle-150627210357-lva1-app6891_95.pdf",
+      "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf"
+    ],
+    "questions": 118,
+    "answerable": 102,
+    "unanswerable": 16,
+    "evidence_population": 101,
+    "answerable_without_evidence_pages": [
+      "mmlb-0599"
+    ],
+    "roles": {
+      "primary": "102 answerable",
+      "abstention": "16 unanswerable",
+      "citations_and_strata": "101 evidence questions",
+      "all": "118 for citation validity"
+    }
+  },
+  "model": {
+    "provider": "openai",
+    "api": "Chat Completions",
+    "requested_snapshot": "gpt-4o-mini-2024-07-18",
+    "why_same_model": "same retriever + same model + new architecture isolates extract-then-answer; no reader migration in E7",
+    "deprecation": "shutdown 2027-01-14; the paid gate refuses to run on or after that date",
+    "context_window_tokens": 128000,
+    "input_usd_per_1m_tokens": 0.15,
+    "output_usd_per_1m_tokens": 0.6,
+    "max_request_cost_usd": 0.02,
+    "documentation_checked": "not re-read for E7; prices and limits as recorded for E3-E6 (2026-11-22)"
+  },
+  "v0_reader": {
+    "identity": "the application's reader as frozen in E4 (src/visualdoc/answering.py at the module hashes pinned in experiments/specs/e4_application_end_to_end_v1.json): rebuilt visibly in notebook 05, which does not import src/visualdoc (AGENTS.md). Equivalence is checked offline: the notebook's builder reproduces the fingerprint, expected prompt tokens and prompt-token bound of all 96 frozen E4 requests, its guard reproduces E4's 57 supplied page lists, and its parser reproduces the application's parsed answer, cited pages and error on all 96 frozen E4 replies",
+    "system_prompt_version": "mmlb-image-v1",
+    "system_prompt_hash": "35ff2e8b91f9",
+    "user_content": "'Question: {q}\\n\\nPage images:' then, for each supplied page in rank order, the text '[Page N]' and the page's 768-px PNG as a base64 data URL with detail high",
+    "image": "whole page fitted in a 768 x 1536-px box, opaque RGB PNG (E1 profile); held-out images are E5's renders, verified by SHA-256 against experiments/frozen/e5/tables/render_manifest_heldout.csv",
+    "temperature": 0.0,
+    "max_completion_tokens": 400,
+    "response_format": "json_object",
+    "image_detail": "high",
+    "top_k": 5,
+    "context_guard": "keep the longest ranked prefix of the top 5 such that 100 framing tokens + UTF-8 bytes of the system prompt + UTF-8 bytes of the question header + sum over kept pages of (UTF-8 bytes of '[Page N]' + billed image tokens) <= 128,000 - 400; never reorders",
+    "image_tokens": "GPT-4o-mini high detail: fit in 2048 x 2048, reduce the short side to 768 if larger, 2,833 + 5,667 per 512-px tile",
+    "framing_token_allowance": 100,
+    "pre_call_check": "known model, positive bounded output, prompt-token bound + 400 <= 128,000, cost bound <= USD 0.02 per request; a failing request raises before any call",
+    "max_request_cost_usd": 0.02,
+    "parser": "strict JSON: 'answer' required; 'cited_pages' a list of whole page numbers >= 1 (an integer, a whole float such as 2.0, or ASCII digits); anything else makes the reply unparseable; 'not answerable' in any case normalised to 'Not answerable'; a reply whose finish_reason is not 'stop' is an error",
+    "citations": "valid = every cited page was supplied; off_by_one = every invalid page equals a supplied page minus 1; missing = an answer other than 'Not answerable' with no citation; cites_evidence = at least one cited page is an annotated evidence page (evaluation only)"
+  },
+  "extraction": {
+    "prompt_version": "e7-extract-v1",
+    "system_prompt_hash": "b30616381e85",
+    "user_content": "'Question: {q}\\n\\nPage image:', then '[Page N]' and the page's 768-px PNG (E5's render, detail high)",
+    "output_schema": {
+      "page": "integer (checked against the request; provenance always comes from the request)",
+      "relevant": "boolean, diagnostic only, never filters",
+      "facts": "list of {label, value, unit, period, supporting_text}",
+      "notes": "string or null"
+    },
+    "parser": "not a JSON object, no 'facts' list, or finish_reason != 'stop' -> the page is 'unreadable' (contract failure); a malformed fact is dropped and counted; a list of scalar values becomes one fact per value; at most max_facts_per_page facts kept",
+    "temperature": 0.0,
+    "max_completion_tokens": 800,
+    "max_facts_per_page": 60,
+    "response_format": "json_object",
+    "image_detail": "high",
+    "cache": "one extraction per (question, page) per replicate; cache key SHA-256(run_id:replicate_id:request fingerprint), the fingerprint encoding question, page tag, page image, extraction prompt and model; X4 and X8 read the same cached reply for a shared page; the plan holds each (question, page) once"
+  },
+  "evidence_memory": {
+    "construction": "deterministic: for the arm's pages in ColQwen2 rank order, one entry per page {page, status: 'facts recorded' | 'nothing relevant recorded' | 'unreadable', notes} and one entry per fact {id 'p<page>.f<i>', page, label, value, unit, period, supporting_text}, in reply order",
+    "rules": [
+      "nothing merged, deduplicated or filtered",
+      "'relevant' is not passed on",
+      "page provenance from the request",
+      "the memory and the question are the reasoning step's only inputs"
+    ],
+    "serialization": "valid JSON, one page or fact per line"
+  },
+  "reasoning": {
+    "prompt_version": "e7-reason-v1",
+    "system_prompt_hash": "54cd7a60a931",
+    "user_content": "'Question: {q}\\n\\nEvidence memory:\\n{memory JSON}' (text only; no image is sent again)",
+    "output_schema": {
+      "answer": "V0's contract: the shortest complete answer; a number when the answer is a number; a JSON list when several items are asked for; exactly 'Not answerable' when the memory does not contain the answer",
+      "cited_pages": "page numbers, V0's parser rules",
+      "calculation": "null or {expression, round}"
+    },
+    "temperature": 0.0,
+    "max_completion_tokens": 600,
+    "response_format": "json_object",
+    "planning_prompt_token_bound": 14000,
+    "final_answer": "a calculation that evaluates replaces the model's answer and its operand pages are added to the cited pages; a failed calculation leaves the model's answer (failure recorded); a calculation attached to 'Not answerable' is ignored"
+  },
+  "arithmetic": {
+    "operations": {
+      "add": [
+        2,
+        null
+      ],
+      "subtract": [
+        2,
+        2
+      ],
+      "multiply": [
+        2,
+        null
+      ],
+      "divide": [
+        2,
+        2
+      ],
+      "sum": [
+        1,
+        null
+      ],
+      "mean": [
+        1,
+        null
+      ],
+      "min": [
+        1,
+        null
+      ],
+      "max": [
+        1,
+        null
+      ],
+      "percent_change": [
+        2,
+        2
+      ],
+      "greater": [
+        2,
+        2
+      ],
+      "less": [
+        2,
+        2
+      ],
+      "equal": [
+        2,
+        2
+      ],
+      "count": [
+        1,
+        null
+      ],
+      "argmax": [
+        1,
+        null
+      ],
+      "argmin": [
+        1,
+        null
+      ]
+    },
+    "leaves": "fact ids from the memory only; no free constants, so every operand carries page provenance",
+    "semantics": "percent_change [old, new] = (new - old) / |old| x 100; greater/less/equal -> Yes/No; count = number of fact arguments; argmax/argmin = label of the extreme fact (a tie is an error)",
+    "number_parsing": "numbers, or strings with optional sign, currency sign (US$, USD, $, EUR, GBP, JPY symbols), thousands commas, spaces, one trailing %, or parentheses for negatives; anything else is refused",
+    "rounding": "half-up to 'round' decimals (0-10) when given, after normalizing to 12 significant digits (so 69.94999999999999 rounds as 69.95); otherwise integers stay integers and other results keep 10 significant digits",
+    "max_depth": 6,
+    "max_nodes": 64,
+    "max_round_decimals": 10,
+    "execution": "a tree interpreter; no code is executed"
+  },
+  "scoring": {
+    "scorer": "the frozen MMLongBench-Doc rule-based scorer of notebook 03 section 1 (cell f653d232), unchanged; reproduces every frozen E6 score",
+    "correct": "score > 0",
+    "strict_correct": "score == 1",
+    "parse_failures": "scored 0",
+    "unanswerable": "correct when the final answer is exactly 'Not answerable'"
+  },
+  "metrics": {
+    "primary": {
+      "name": "answer accuracy on the 102 answerable questions",
+      "estimand": "Delta = (1/102) sum (correct_X4 - correct_V0)"
+    },
+    "comparisons": [
+      "X4 - V0 (primary)",
+      "X8 - X4 (secondary)",
+      "X8 - V0 (total, descriptive)",
+      "V0 - frozen E6 V (session noise, descriptive)"
+    ],
+    "mechanism": {
+      "status": "diagnostic only; never a decision gate",
+      "targeted_categories": [
+        "table-cell alignment",
+        "exhaustive list extraction",
+        "numerical calculation",
+        "multi-page aggregation",
+        "semantic/distractor error"
+      ],
+      "reported": [
+        "E6 audit categories of the fixed questions and of the broken questions (a question E6 V answered correctly carries no label), per comparison",
+        "share of fixes in the targeted categories",
+        "single-page vs multi-page change",
+        "change within the complete / partial / no-evidence strata (E6 V's supplied pages); X8 also by its own stratum",
+        "arithmetic-tool contribution: correct with the computed answer vs with the model's own answer"
+      ],
+      "labels_use": "evaluation only; never read by a cell that builds, plans or sends a request (code scan in notebook 06)"
+    },
+    "secondary": [
+      "fixed and broken questions with their E6 labels",
+      "accuracy by evidence span (single / multi-page) and by E6 evidence stratum (complete / partial / none); X8 also by its own stratum",
+      "correct per E6 failure category per arm",
+      "citation validity (118), grounded answers (101)",
+      "correct abstention (16), false abstention (102), unsupported answers (answered unanswerable; answer without valid citation; X answer from an empty memory)",
+      "extraction diagnostics: 'relevant' and facts on annotated evidence vs other pages, unreadable pages, page mismatches, dropped facts",
+      "arithmetic: calculations requested / evaluated / failed; correct with the tool vs with the model's own answer",
+      "prompt and completion tokens, list-price cost and latency per question and arm (X: sequential as run, and the parallel critical path)",
+      "experiment spend, extraction cache hit rate"
+    ]
+  },
+  "statistics": {
+    "unit": "question, paired across arms; 14 document clusters",
+    "interval": "document-cluster percentile bootstrap, 10,000 draws, numpy default_rng(seeds.bootstrap)",
+    "test": "exact document-level sign-flip permutation test (one-sided, 2^14 assignments), notebook 05's function",
+    "descriptive_only": [
+      "McNemar (ignores clustering)",
+      "leave-one-document-out",
+      "document-weighted delta"
+    ],
+    "multiplicity": "one primary comparison decides; everything else is descriptive",
+    "status": "development evidence: these questions were used to design E7"
+  },
+  "decision_rule": {
+    "applies_to": "the main replicate of a complete, validated full run",
+    "minimum_meaningful_difference": 0.05,
+    "alpha_one_sided": 0.05,
+    "maximum_broken_to_fixed_ratio": 0.5,
+    "engineering_criteria": {
+      "E1": "Delta(X4 - V0) >= +0.05 on the 102 answerable questions",
+      "E2": "broken <= fixed / 2",
+      "G1": "correct abstentions on the 16 unanswerable: X4 >= V0 - 2",
+      "G2": "citation validity on the 118 replies: X4 - V0 >= -0.05"
+    },
+    "statistical_evidence": {
+      "S1": "one-sided 95 % document-cluster bootstrap lower bound (5th percentile, 10,000 draws) > 0; the two-sided 95 % interval is reported beside it",
+      "S2": "exact one-sided document-level sign-flip p <= 0.05"
+    },
+    "guardrails": {
+      "G1_tolerance": 2,
+      "G2_tolerance": 0.05
+    },
+    "order": [
+      "G1 or G2 fails -> regression",
+      "Delta <= -0.05 -> regression",
+      "Delta < +0.05 -> no_meaningful_gain",
+      "E2 fails (broken > fixed / 2 despite the gain) -> regression",
+      "S1 and S2 hold -> strong_support",
+      "otherwise -> promising_but_uncertain"
+    ],
+    "readings": {
+      "strong_support": "The engineering criteria hold and the statistical evidence is conclusive at one-sided alpha 0.05 with documents as the unit: on the development questions, extract-then-answer answers meaningfully more questions correctly than the one-shot reader on the same pages, without loss of abstention or citation validity. Development evidence only.",
+      "promising_but_uncertain": "The engineering criteria hold, but the bootstrap lower bound or the sign-flip test is not conclusive. This is not evidence that the architecture failed; it is not a confirmation either (session noise alone passes the engineering criteria in some runs).",
+      "no_meaningful_gain": "The accuracy gain is below +0.05 (between -0.05 and +0.05): no gain worth k+1 calls per question was observed.",
+      "regression": "A guardrail failed (abstention or citation validity), accuracy fell by 0.05 or more, or the questions broken exceed half of those fixed."
+    },
+    "next_steps": {
+      "strong_support": "Make extract-then-answer the candidate for one final evaluation on untouched documents (X8 if X8 - X4 also meets the engineering criteria, else X4); a separate spec and the owner's approval. No src/visualdoc change without approval.",
+      "promising_but_uncertain": "Same candidate status as strong_support, stated as uncertain; the owner decides whether the final evaluation on untouched documents is worth running. No src/visualdoc change.",
+      "no_meaningful_gain": "Keep E6's one-shot reader.",
+      "regression": "Keep E6's one-shot reader; report which guardrail or which questions regressed."
+    },
+    "secondary": {
+      "X8_minus_X4": "additional page access: the same function, guardrails read against X4 (G1: X8 >= X4 - 2; G2: X8 - X4 >= -0.05)",
+      "X8_minus_V0": "total practical change (two factors): the same function, descriptive only"
+    },
+    "mechanism": "diagnostic only (metrics.mechanism); no longer a gate (the earlier M1 was removed before the freeze)",
+    "never_change_the_verdict": [
+      "mechanism diagnostics",
+      "X8 comparisons",
+      "session noise",
+      "latency",
+      "cost",
+      "per-category and per-stratum tables",
+      "smoke replies"
+    ],
+    "fixed_before_results": "the rule, thresholds, prompts, seeds and metrics are frozen in this spec before any E7 reply; a change requires v2"
+  },
+  "leakage_controls": [
+    "every planned image request's text parts are exactly its system prompt, the question header and page tags",
+    "reasoning requests: the reasoning prompt and 'Question + Evidence memory' only, checked at run time before sending",
+    "no question id, reference answer, answer format, evidence-page list, answerability or scoring field in any request",
+    "no reference answer (>= 4 characters; 'Not answerable' excepted), question id or format name in any prompt or template",
+    "request builders take only question text, page numbers, page images or the memory",
+    "the notebook's request cells contain no question id, audit label, annotation, answer-format or reference-answer identifier (scanned from disk)",
+    "E6 audit labels used only for evaluation (M1 and the category tables)",
+    "no question-specific rule; test fixtures use invented values"
+  ],
+  "execution": {
+    "modes": {
+      "offline": "build and verify everything; send nothing",
+      "smoke": "11 calls: the block of the question with the largest V0 request; technical gate only; never scored",
+      "full": "the smoke block again, then 118 blocks of 11 calls"
+    },
+    "technical_smoke_qid": "mmlb-0068",
+    "plan_composition": {
+      "per_replicate": {
+        "v0": 118,
+        "extract": 944,
+        "reason": 236
+      },
+      "smoke_calls": 11,
+      "full_calls": 1309,
+      "all_stages_calls": 1320
+    },
+    "seeds": {
+      "question_order": 20261201,
+      "v0_position": 20261202,
+      "bootstrap": 20261203,
+      "planning_simulation": 20261204,
+      "reasoning_order": 20261205
+    },
+    "ordering": "blocks in a seeded order (seeds.question_order); V0 first in a seeded 59 of 118 blocks (seeds.v0_position), after the extractions in the other 59; the two reasoning calls after the question's 8 extractions, X4 first in a seeded 59 of 118 blocks (seeds.reasoning_order), X8 first in the other 59; the smoke block is V0, extractions, X4, X8",
+    "typical_assumptions": {
+      "note": "planning only",
+      "v0_output_tokens": 27,
+      "extraction_output_tokens": 250,
+      "reasoning_output_tokens": 120,
+      "memory_tokens_per_page": 320
+    },
+    "pacer_tokens_per_minute": 150000,
+    "pause_between_calls_s": 1.0,
+    "expected_duration_hours": 4.7,
+    "timeout_s": 120,
+    "max_attempts_per_request": 2,
+    "rate_limit": {
+      "applies_to": "HTTP 429 classified as rate_limit; a 429 with a quota or billing code stops the run and is never retried",
+      "backoff_s": [
+        30,
+        60,
+        120,
+        240,
+        480
+      ],
+      "counts_as_attempt": false
+    },
+    "token_tolerance": 16,
+    "persistence": "each reply appended (fsynced) to the run's cache before its log record; append-only logs; outputs created exclusively, never overwritten",
+    "resume": "VISUALDOC_E7_RESUME_DIR: settings, spec hash and plan must be identical; answered items are never re-sent",
+    "stop_rules": {
+      "integrity": "stop, not resumable",
+      "api": "stop on any API error other than a waitable 429",
+      "quota": "a 429 with a quota or billing code stops at once",
+      "budget": "stop before a call whose upper bound would exceed the cumulative ceiling",
+      "smoke": "any contract or token-diagnostic failure fails the smoke gate",
+      "full": "contract failures recorded (scored 0, or the page enters the memory as unreadable); the run continues"
+    },
+    "log_contents": "no annotation is written to a run's logs; the Evidence Memory is logged with each reasoning call",
+    "expected_duration_note": "about 39.2M prompt tokens at 150,000 tokens per minute plus 1 s between calls; an interrupted run resumes"
+  },
+  "budget": {
+    "approved_ceiling_usd": 9.0,
+    "proposed_ceiling_usd": 9.0,
+    "scope": "cumulative over every E7 run under this spec version (smoke, full, retries, interrupted or resumed runs), at list price",
+    "estimate_upper_bound_usd": {
+      "smoke": 0.0724,
+      "full": 7.0477,
+      "all_stages": 7.1201
+    },
+    "estimate_typical_usd": {
+      "note": "exact image-call prompts; typical reply lengths and memory sizes from execution.typical_assumptions; no cache discount",
+      "all_stages": 6.0487
+    },
+    "price_basis": "OpenAI list price USD 0.15 / 0.60 per 1M input / output tokens; cached input is billed lower, so the bound is conservative",
+    "headroom": "9.00 - 7.1201 = 1.8799 USD (27 % of a full run) for retries, possibly billed failed attempts and a resumed run",
+    "approval": "cumulative hard ceiling USD 9.00 set by the owner on 2026-11-24"
+  },
+  "code_provenance": {
+    "rule": "notebook 06 and this spec are committed before the first paid call",
+    "live_run_gate": "paid modes refuse unless the spec bytes and notebook 06's code cells equal git HEAD and no protected path has an uncommitted change",
+    "protected_paths": [
+      "experiments/frozen",
+      "src/visualdoc",
+      "AGENTS.md",
+      "tests",
+      "archive",
+      "experiments/specs/e5_visual_retrieval_v1.json",
+      "experiments/specs/e6_visual_retrieval_answering_v1.json"
+    ]
+  },
+  "final_test_proposal": {
+    "status": "proposal only; not run until the architecture is frozen; needs its own spec and approval",
+    "population": "documents never used in E0-E7: 115 MMLongBench-Doc documents (916 questions, 705 answerable) remain; sample about 30 documents stratified by the 7 document types with a fixed seed, at most 100 pages each, before looking at any question",
+    "arms": "E6's one-shot reader on ColQwen2 pages vs the frozen extract-then-answer configuration, same session",
+    "requirements": [
+      "ColQwen2 indexing of the new documents (~12 s per page on the M1; cached once)",
+      "PDFs at the pinned dataset revision",
+      "run before 2027-01-14 or after a deliberate reader migration"
+    ]
+  },
+  "limitations": [
+    "Development set: the prompts and targeted categories were designed with these questions in view.",
+    "102 answerable questions in 14 documents (two 10-Ks hold 31): small and clustered; the interval will be wide.",
+    "One replicate per arm; session noise is measured only as frozen E6 V vs V0.",
+    "No free constants in calculations: a metric that needs one (for example x 365) must be answered by the model itself.",
+    "GPT-4o-mini snapshot shuts down on 2027-01-14.",
+    "X4 - V0 bundles page-wise reading, structured evidence, text-only reasoning and the arithmetic tool; only the tool's share is separable.",
+    "The live smoke question (mmlb-0068, unanswerable) may not request a calculation; the arithmetic path is then validated live only for 'none' and offline (mocked) for 'ok', 'error' and 'ignored'."
+  ],
+  "approval": "drafted 2026-11-24 offline; design, revised decision rule and the USD 9.00 cumulative hard ceiling approved by the project owner on 2026-11-24; frozen after every offline check passed (notebook 06 top to bottom, pytest, frozen E0-E6 checksums, V0 parity, leakage, cache, arithmetic, cost). The smoke stage (11 calls) and the full stage (1,309 calls) each still need the owner's separate explicit approval.",
+  "planning_simulation": {
+    "status": "planning only, computed in notebook 06 before any reply; never a result and never part of the decision",
+    "assumptions": "E6 V's correctness stands in for V0's truth; X4's truth fixes round(gain x 102) of V's wrong answers at random; each arm's observed correctness flips independently with the given probability (E3: 5 of 37 image replies changed between sessions, about 7 % per arm); engineering criteria E1-E2 (guardrails assumed to pass) and strong_support (E1, E2, S1, S2) as frozen (2,000 bootstrap draws per simulated experiment instead of 10,000)",
+    "simulations": 1000,
+    "bootstrap_draws": 2000,
+    "true_gains": [
+      0.0,
+      0.05,
+      0.08,
+      0.12,
+      0.16
+    ],
+    "flip_rates": [
+      0.035,
+      0.07
+    ],
+    "reading": "engineering criteria: 2-5 % at no true effect, 34-38 % at +0.05, 61-78 % at +0.08, 82-97 % at +0.12; strong_support: 1-2 %, 14-22 %, 31-48 %, 58-82 %. A modest real gain will most often read promising_but_uncertain; strong_support needs about +0.12 or more",
+    "rates": {
+      "engineering criteria (flip 0.035 per arm)": {
+        "true gain +0.00": 0.015,
+        "true gain +0.05": 0.383,
+        "true gain +0.08": 0.775,
+        "true gain +0.12": 0.967,
+        "true gain +0.16": 0.997
+      },
+      "strong_support (flip 0.035 per arm)": {
+        "true gain +0.00": 0.008,
+        "true gain +0.05": 0.219,
+        "true gain +0.08": 0.482,
+        "true gain +0.12": 0.821,
+        "true gain +0.16": 0.955
+      },
+      "engineering criteria (flip 0.070 per arm)": {
+        "true gain +0.00": 0.053,
+        "true gain +0.05": 0.337,
+        "true gain +0.08": 0.61,
+        "true gain +0.12": 0.817,
+        "true gain +0.16": 0.946
+      },
+      "strong_support (flip 0.070 per arm)": {
+        "true gain +0.00": 0.019,
+        "true gain +0.05": 0.142,
+        "true gain +0.08": 0.311,
+        "true gain +0.12": 0.582,
+        "true gain +0.16": 0.83
+      }
+    }
+  },
+  "revisions_before_freeze_2026_11_24": [
+    "decision rule: engineering usefulness (E1, E2, G1, G2) separated from statistical evidence (S1, S2); verdicts strong_support / promising_but_uncertain / no_meaningful_gain / regression",
+    "mechanism criterion M1 removed as a gate; kept as a diagnostic",
+    "X4/X8 reasoning-call order counterbalanced with seeds.reasoning_order",
+    "X4 - V0 described as the architecture effect, not a pure Evidence Memory effect",
+    "smoke gate extended (schema, memory provenance, cache reuse, arithmetic path, citation provenance, cost bound) with non-gating observations",
+    "budget: approved cumulative hard ceiling USD 9.00",
+    "population kept at E6's 118 questions (the E5 development questions are not added); GPT-4o-mini unchanged"
+  ]
+}

@@ -1,0 +1,272 @@
+{
+  "spec_id": "e7-extract-then-answer-v1",
+  "spec_sha256": "7d124b81cbdfc569eae937efebcac66cd09cbea4915f62bcbd486fa486f5c0f9",
+  "population": "development (E6's 118 held-out questions, inspected for E7's design)",
+  "accuracy": {
+    "V0": "38/102",
+    "X4": "31/102",
+    "X8": "29/102"
+  },
+  "primary_X4_minus_V0": {
+    "questions": 102,
+    "documents": 14,
+    "before": 0.37254901960784315,
+    "after": 0.30392156862745096,
+    "delta": -0.06862745098039216,
+    "fixed": 3,
+    "broken": 10,
+    "both_correct": 28,
+    "both_wrong": 61,
+    "bootstrap_p05": -0.12380952380952381,
+    "ci95": [
+      -0.1346207865168539,
+      -0.008128442171518514
+    ],
+    "sign_flip_p_one_sided": 0.990234375,
+    "sign_flip_p_two_sided": 0.091796875,
+    "mcnemar_p_ignores_clustering": 0.09228515625,
+    "document_weighted_delta": -0.07750850340136053,
+    "leave_one_document_out": {
+      "11-21-16-Updated-Post-Election-Release.pdf": -0.06315789473684211,
+      "2021-Apple-Catalog.pdf": -0.0707070707070707,
+      "2310.05634v2.pdf": -0.07291666666666667,
+      "2312.10997v5.pdf": -0.08333333333333333,
+      "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": -0.05263157894736842,
+      "AMAZON_2017_10K.pdf": -0.06896551724137931,
+      "COSTCO_2021_10K.pdf": -0.09302325581395349,
+      "Macbook_air.pdf": -0.07291666666666667,
+      "NUS-Business-School-BBA-Brochure-2024.pdf": -0.07216494845360824,
+      "SAO-StudentSupport_Guidebook-Content.pdf": -0.061855670103092786,
+      "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": -0.06315789473684211,
+      "ddoseattle-150627210357-lva1-app6891_95.pdf": -0.06315789473684211,
+      "e639029d16094ea71d964e2fb953952b.pdf": -0.0625,
+      "efd88e41c5f2606c57929cac6c1c0605.pdf": -0.0625
+    }
+  },
+  "decision": {
+    "verdict": "regression",
+    "reason": "accuracy fell by 0.05 or more",
+    "engineering": {
+      "E1 gain >= +0.05": false,
+      "E2 broken <= fixed / 2": false,
+      "G1 correct abstentions X4 >= V0 - 2": true,
+      "G2 citation validity X4 - V0 >= -0.05": true
+    },
+    "statistics": {
+      "S1 one-sided 95 % bootstrap lower bound (5th percentile) > 0": false,
+      "S2 one-sided document sign-flip p <= 0.05": false
+    },
+    "ci95_two_sided": [
+      -0.1346207865168539,
+      -0.008128442171518514
+    ],
+    "reading": "A guardrail failed (abstention or citation validity), accuracy fell by 0.05 or more, or the questions broken exceed half of those fixed.",
+    "next_step": "Keep E6's one-shot reader; report which guardrail or which questions regressed."
+  },
+  "mechanism_diagnostic": {
+    "X4 vs V0": {
+      "fixed": 3,
+      "fixed_in_targeted_categories": 2,
+      "share_of_fixes_targeted": 0.6666666666666666,
+      "fixed_by_category": {
+        "exhaustive list extraction": 1,
+        "counting/spatial": 1,
+        "numerical calculation": 1
+      },
+      "broken": 10,
+      "broken_by_category": {
+        "E6 V was correct (no label)": 10
+      }
+    },
+    "X8 vs X4": {
+      "fixed": 2,
+      "fixed_in_targeted_categories": 0,
+      "share_of_fixes_targeted": 0.0,
+      "fixed_by_category": {
+        "partial evidence": 1,
+        "E6 V was correct (no label)": 1
+      },
+      "broken": 4,
+      "broken_by_category": {
+        "E6 V was correct (no label)": 4
+      }
+    },
+    "X8 vs V0": {
+      "fixed": 4,
+      "fixed_in_targeted_categories": 2,
+      "share_of_fixes_targeted": 0.5,
+      "fixed_by_category": {
+        "partial evidence": 1,
+        "exhaustive list extraction": 1,
+        "counting/spatial": 1,
+        "numerical calculation": 1
+      },
+      "broken": 13,
+      "broken_by_category": {
+        "E6 V was correct (no label)": 13
+      }
+    }
+  },
+  "fixed": [
+    "mmlb-0081",
+    "mmlb-1001",
+    "mmlb-1014"
+  ],
+  "broken": [
+    "mmlb-0044",
+    "mmlb-0137",
+    "mmlb-0404",
+    "mmlb-0579",
+    "mmlb-0599",
+    "mmlb-0600",
+    "mmlb-0688",
+    "mmlb-0988",
+    "mmlb-0998",
+    "mmlb-1063"
+  ],
+  "additional_pages_X8_minus_X4": {
+    "questions": 102,
+    "documents": 14,
+    "before": 0.30392156862745096,
+    "after": 0.28431372549019607,
+    "delta": -0.0196078431372549,
+    "fixed": 2,
+    "broken": 4,
+    "both_correct": 27,
+    "both_wrong": 69,
+    "bootstrap_p05": -0.05555555555555555,
+    "ci95": [
+      -0.06382978723404255,
+      0.017699115044247787
+    ],
+    "sign_flip_p_one_sided": 0.9375,
+    "sign_flip_p_two_sided": 0.625,
+    "mcnemar_p_ignores_clustering": 0.6875,
+    "document_weighted_delta": -0.03809523809523809,
+    "leave_one_document_out": {
+      "11-21-16-Updated-Post-Election-Release.pdf": -0.021052631578947368,
+      "2021-Apple-Catalog.pdf": -0.010101010101010102,
+      "2310.05634v2.pdf": -0.020833333333333332,
+      "2312.10997v5.pdf": -0.020833333333333332,
+      "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": -0.021052631578947368,
+      "AMAZON_2017_10K.pdf": -0.022988505747126436,
+      "COSTCO_2021_10K.pdf": -0.023255813953488372,
+      "Macbook_air.pdf": -0.010416666666666666,
+      "NUS-Business-School-BBA-Brochure-2024.pdf": -0.020618556701030927,
+      "SAO-StudentSupport_Guidebook-Content.pdf": -0.010309278350515464,
+      "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": -0.021052631578947368,
+      "ddoseattle-150627210357-lva1-app6891_95.pdf": -0.021052631578947368,
+      "e639029d16094ea71d964e2fb953952b.pdf": -0.03125,
+      "efd88e41c5f2606c57929cac6c1c0605.pdf": -0.020833333333333332
+    },
+    "decision": {
+      "verdict": "no_meaningful_gain",
+      "reason": "gain below +0.05",
+      "engineering": {
+        "E1 gain >= +0.05": false,
+        "E2 broken <= fixed / 2": false,
+        "G1 correct abstentions X8 >= X4 - 2": true,
+        "G2 citation validity X8 - X4 >= -0.05": true
+      },
+      "statistics": {
+        "S1 one-sided 95 % bootstrap lower bound (5th percentile) > 0": false,
+        "S2 one-sided document sign-flip p <= 0.05": false
+      },
+      "ci95_two_sided": [
+        -0.06382978723404255,
+        0.017699115044247787
+      ],
+      "reading": "The accuracy gain is below +0.05 (between -0.05 and +0.05): no gain worth k+1 calls per question was observed.",
+      "next_step": "Keep E6's one-shot reader."
+    }
+  },
+  "total_X8_minus_V0": {
+    "questions": 102,
+    "documents": 14,
+    "before": 0.37254901960784315,
+    "after": 0.28431372549019607,
+    "delta": -0.08823529411764706,
+    "fixed": 4,
+    "broken": 13,
+    "both_correct": 25,
+    "both_wrong": 60,
+    "bootstrap_p05": -0.15476190476190477,
+    "ci95": [
+      -0.16666666666666666,
+      -0.018018018018018018
+    ],
+    "sign_flip_p_one_sided": 0.9951171875,
+    "sign_flip_p_two_sided": 0.046875,
+    "mcnemar_p_ignores_clustering": 0.049041748046875,
+    "document_weighted_delta": -0.11560374149659865,
+    "leave_one_document_out": {
+      "11-21-16-Updated-Post-Election-Release.pdf": -0.08421052631578947,
+      "2021-Apple-Catalog.pdf": -0.08080808080808081,
+      "2310.05634v2.pdf": -0.09375,
+      "2312.10997v5.pdf": -0.10416666666666667,
+      "3276a5b991c49cf5f9a4af0f7d6fce67.pdf": -0.07368421052631578,
+      "AMAZON_2017_10K.pdf": -0.09195402298850575,
+      "COSTCO_2021_10K.pdf": -0.11627906976744186,
+      "Macbook_air.pdf": -0.08333333333333333,
+      "NUS-Business-School-BBA-Brochure-2024.pdf": -0.09278350515463918,
+      "SAO-StudentSupport_Guidebook-Content.pdf": -0.07216494845360824,
+      "chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf": -0.08421052631578947,
+      "ddoseattle-150627210357-lva1-app6891_95.pdf": -0.08421052631578947,
+      "e639029d16094ea71d964e2fb953952b.pdf": -0.09375,
+      "efd88e41c5f2606c57929cac6c1c0605.pdf": -0.08333333333333333
+    },
+    "decision_descriptive": {
+      "verdict": "regression",
+      "reason": "accuracy fell by 0.05 or more",
+      "engineering": {
+        "E1 gain >= +0.05": false,
+        "E2 broken <= fixed / 2": false,
+        "G1 correct abstentions X8 >= V0 - 2": true,
+        "G2 citation validity X8 - V0 >= -0.05": true
+      },
+      "statistics": {
+        "S1 one-sided 95 % bootstrap lower bound (5th percentile) > 0": false,
+        "S2 one-sided document sign-flip p <= 0.05": false
+      },
+      "ci95_two_sided": [
+        -0.16666666666666666,
+        -0.018018018018018018
+      ],
+      "reading": "A guardrail failed (abstention or citation validity), accuracy fell by 0.05 or more, or the questions broken exceed half of those fixed.",
+      "next_step": "Keep E6's one-shot reader; report which guardrail or which questions regressed."
+    }
+  },
+  "session_noise_frozen_E6_V_vs_V0": {
+    "before": 0.37254901960784315,
+    "after": 0.37254901960784315,
+    "delta": 0.0,
+    "fixed": 2,
+    "broken": 2
+  },
+  "abstentions": {
+    "V0": 7,
+    "X4": 9,
+    "X8": 8
+  },
+  "citation_validity": {
+    "V0": 0.9322033898305084,
+    "X4": 0.9915254237288136,
+    "X8": 0.9830508474576272
+  },
+  "extraction": {
+    "pages read": 944,
+    "unreadable": 10,
+    "page mismatches": 2,
+    "dropped facts": 2,
+    "facts per page (mean)": 1.2404661016949152,
+    "annotated evidence pages flagged relevant": "111/128",
+    "annotated evidence pages with >= 1 fact": "111/128",
+    "other pages flagged relevant": "264/680"
+  },
+  "cache": {
+    "page readings by X4 and X8": 1403,
+    "extraction calls paid": 944,
+    "cache hit rate": 0.3271560940841055
+  },
+  "experiment_list_price_usd": 5.7849201
+}

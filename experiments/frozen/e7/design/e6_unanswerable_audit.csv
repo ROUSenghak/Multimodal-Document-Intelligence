@@ -1,0 +1,10 @@
+qid,category,justification
+mmlb-0043,unsupported answer,false premise ('business cooperation' instead of 'business analytics'); answers the original question
+mmlb-0068,unsupported answer,false premise ('either' instead of 'both'); answers the original question
+mmlb-0079,unsupported answer,no method meets both constraints; names one
+mmlb-0138,unsupported answer,the person is not in the document; names an agency
+mmlb-0205,unsupported answer,asks about a Thinkpad in a MacBook guide; answers for the MacBook
+mmlb-0406,unsupported answer,no such case in chapter 9; answers from another case
+mmlb-0408,annotation issue,'How many cats appear?' -> 0 is a defensible answer; the reference requires 'Not answerable'
+mmlb-0577,unsupported answer,no yellow italic text on page 9; quotes a heading
+mmlb-0596,unsupported answer,no such interview in the complaint; answers with another interview

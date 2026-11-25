@@ -1,0 +1,290 @@
+{
+ "audit": "independent E7 audit",
+ "run_ids": [
+  "20261124T143927981959Z_9b46fcad_smoke",
+  "20261124T160111456175Z_b3d0b5c0_full"
+ ],
+ "audited_at": "2026-11-25T11:13:24+00:00",
+ "method": "standalone script outside the notebooks; it neither imports nor executes notebook 06. It reads the frozen run files, the tracked specs, the frozen E5 rankings and E6 run, git objects at the freeze and run commits, and the reference answers in questions.parquet (evaluation only). Plan properties, citation checks, cost, statistics (cluster bootstrap, exact sign-flip, McNemar, LODO) and the decision rule are re-implemented from the spec text.",
+ "shared_with_notebooks": "only the frozen scoring-rule cell f653d232 of notebook 03 (eval_score and helpers), executed verbatim",
+ "freeze_commit": "f19ac27a9b5c1d8664c1e2ae0aabc7e657d6b122",
+ "run_commit": "469aff55117349ead458eba6be1f9290edb99463",
+ "passed": 38,
+ "total": 38,
+ "checks": {
+  "frozen copy of 20261124T143927981959Z_9b46fcad_smoke is byte-identical to experiments/runs/e7 (12 files)": {
+   "passed": true
+  },
+  "frozen copy of 20261124T160111456175Z_b3d0b5c0_full is byte-identical to experiments/runs/e7 (16 files)": {
+   "passed": true
+  },
+  "tables/ equal notebook 06's evaluation outputs (evaluation_summary.json, per_question.csv)": {
+   "passed": true
+  },
+  "analysis/ and design/ equal their sources (report, literature review, E6 audit labels)": {
+   "passed": true
+  },
+  "spec snapshot (both runs) = tracked spec = spec at the freeze commit and at the run commit = settings hash": {
+   "passed": true,
+   "detail": "7d124b81cbdfc569eae937efebcac66cd09cbea4915f62bcbd486fa486f5c0f9"
+  },
+  "spec frozen before live execution with the approved USD 9.00 cumulative ceiling": {
+   "passed": true
+  },
+  "every session record names the run commit, a clean tree, unchanged protected paths and the committed spec and code": {
+   "passed": true
+  },
+  "notebook 06's code hash at the run commit, recomputed, equals the recorded hash": {
+   "passed": true,
+   "detail": "4d06f48d69f7c83d615f3b8881266e51069dc43f21bbfc6aa7eec2c7c3cae3bb"
+  },
+  "freeze and run commits precede the first request": {
+   "passed": true,
+   "detail": "2026-11-24T14:38:51+01:00 < 2026-11-24T14:39:29.425000+00:00"
+  },
+  "population: 14 documents, 118 questions = 102 answerable + 16 unanswerable; 101 evidence questions + mmlb-0599": {
+   "passed": true
+  },
+  "full plan: 1,309 calls = the 11-call smoke block + 118 contiguous blocks (1 V0, 8 extractions, 2 reasoning calls); indices 1..1309": {
+   "passed": true
+  },
+  "counterbalancing: V0 opens exactly 59 of 118 blocks; X4's reasoning call precedes X8's in exactly 59": {
+   "passed": true,
+   "detail": {
+    "V0 first": 59,
+    "X4 first": 59
+   }
+  },
+  "extraction pages of every question = ColQwen2 top 8 of the frozen E5 rankings (as a set; extraction order is the plan's)": {
+   "passed": true
+  },
+  "V0 = the frozen E6 V request on 118/118 (fingerprint and supplied pages); X4 pages = V0 pages; X8 pages = ColQwen2 top 8 in rank order": {
+   "passed": true
+  },
+  "the smoke V0 request (mmlb-0068) equals the frozen E6 V request": {
+   "passed": true
+  },
+  "one final log record per planned call, in plan order, with matching question, kind, arm and page": {
+   "passed": true
+  },
+  "every call answered on its first attempt; no rate limit, API error, block or budget stop in either run": {
+   "passed": true
+  },
+  "statuses: 1,299 ok; the 10 parse errors are all extractions (unreadable pages, scored by the frozen design)": {
+   "passed": true,
+   "detail": {
+    "v0/ok": 119,
+    "extract/ok": 942,
+    "reason/ok": 238,
+    "extract/parse_error": 10
+   }
+  },
+  "served model = the pinned snapshot, sent fingerprint = planned fingerprint, integrity valid, on every call of both runs": {
+   "passed": true
+  },
+  "backends (recorded limitation): every image call on fp_022a442bda, every text-only reasoning call on fp_9400314673": {
+   "passed": true,
+   "detail": {
+    "image fp_022a442bda": 1080,
+    "text fp_9400314673": 240
+   }
+  },
+  "billed prompt tokens - expected: +1 on 1,071 calls, +2 on 238 (the reasoning calls)": {
+   "passed": true,
+   "detail": {
+    "1": 1071,
+    "2": 238
+   }
+  },
+  "caches: one entry per live call, keys unique and equal to the log's, namespaces run- and replicate-scoped": {
+   "passed": true
+  },
+  "prediction files (V0, X4, X8; main and smoke) equal the log's final answers and cited pages": {
+   "passed": true
+  },
+  "each reasoning memory lists the arm's pages in rank order and is built from this run's extractions; X4 reuses X8's": {
+   "passed": true
+  },
+  "944 paid extraction calls serve 1,403 page readings (cache reuse)": {
+   "passed": true,
+   "detail": {
+    "extractions": 944,
+    "readings": 1403
+   }
+  },
+  "list-price cost recomputed from billed tokens: smoke $0.063019, full $5.848038, cumulative $5.911057 <= $9.00; main replicate $5.7849": {
+   "passed": true,
+   "detail": {
+    "smoke": 0.06301905,
+    "full": 5.84803755,
+    "main_r1": 5.7849201
+   }
+  },
+  "the frozen scorer cell f653d232, executed verbatim, reproduces frozen E6 V: 38/102": {
+   "passed": true
+  },
+  "accuracy on the 102 answerable questions (score > 0): V0 38, X4 31, X8 29": {
+   "passed": true,
+   "detail": {
+    "V0": 38,
+    "X4": 31,
+    "X8": 29
+   }
+  },
+  "X4 vs V0: 3 fixed, 10 broken, the same questions as the frozen summary": {
+   "passed": true,
+   "detail": {
+    "fixed": [
+     "mmlb-0081",
+     "mmlb-1001",
+     "mmlb-1014"
+    ],
+    "broken": [
+     "mmlb-0044",
+     "mmlb-0137",
+     "mmlb-0404",
+     "mmlb-0579",
+     "mmlb-0599",
+     "mmlb-0600",
+     "mmlb-0688",
+     "mmlb-0988",
+     "mmlb-0998",
+     "mmlb-1063"
+    ]
+   }
+  },
+  "X4 - V0 statistics re-implemented from the spec text equal the frozen summary (delta, bootstrap p05 and CI, sign-flip, McNemar, document-weighted, LODO)": {
+   "passed": true,
+   "detail": {
+    "delta": -0.06862745098039216,
+    "ci95": [
+     -0.1346207865168539,
+     -0.008128442171518514
+    ],
+    "sign_flip_p_one_sided": 0.990234375
+   }
+  },
+  "X8 - X4 = -0.020 (2 fixed / 4 broken) and X8 - V0 = -0.088 (4 / 13) equal the frozen summary": {
+   "passed": true
+  },
+  "correct abstentions (16): V0 7, X4 9, X8 8, equal to the scorer's unanswerable credit and to the frozen summary": {
+   "passed": true
+  },
+  "citation validity (118; every cited page supplied and no answer without a citation): 0.932, 0.992, 0.983, equal to the frozen summary": {
+   "passed": true,
+   "detail": {
+    "V0": 0.9322,
+    "X4": 0.9915,
+    "X8": 0.9831
+   }
+  },
+  "decision rule re-applied from the spec text: X4 - V0 regression (delta <= -0.05; guardrails hold); X8 - X4 no_meaningful_gain": {
+   "passed": true,
+   "detail": {
+    "X4 - V0": "regression",
+    "X8 - X4": "no_meaningful_gain"
+   }
+  },
+  "session noise: frozen E6 V 38 -> live V0 38, 2 fixed / 2 broken": {
+   "passed": true,
+   "detail": {
+    "fixed": [
+     "mmlb-0141",
+     "mmlb-0594"
+    ],
+    "broken": [
+     "mmlb-1024",
+     "mmlb-1065"
+    ]
+   }
+  },
+  "scoring sensitivity (descriptive): strict scoring gives -0.049 (4 / 9); correcting mmlb-0998 gives -0.049 (4 / 9)": {
+   "passed": true
+  },
+  "tables/per_question.csv: score and correctness of all 354 rows equal the re-derived values": {
+   "passed": true
+  },
+  "no question text, credential-like string or Base64 payload in any frozen run file; no annotation field in any log record": {
+   "passed": true
+  }
+ },
+ "recomputed": {
+  "accuracy_102": {
+   "V0": 38,
+   "X4": 31,
+   "X8": 29
+  },
+  "X4_minus_V0": {
+   "delta": -0.06862745098039216,
+   "fixed": 3,
+   "broken": 10,
+   "bootstrap_p05": -0.12380952380952381,
+   "ci95": [
+    -0.1346207865168539,
+    -0.008128442171518514
+   ],
+   "sign_flip_p_one_sided": 0.990234375,
+   "sign_flip_p_two_sided": 0.091796875,
+   "mcnemar": 0.09228515625,
+   "document_weighted_delta": -0.07750850340136053,
+   "lodo_range": [
+    -0.09302325581395349,
+    -0.05263157894736842
+   ]
+  },
+  "X8_minus_X4": {
+   "delta": -0.0196078431372549,
+   "fixed": 2,
+   "broken": 4,
+   "bootstrap_p05": -0.05555555555555555,
+   "ci95": [
+    -0.06382978723404255,
+    0.017699115044247787
+   ],
+   "sign_flip_p_one_sided": 0.9375,
+   "sign_flip_p_two_sided": 0.625,
+   "mcnemar": 0.6875,
+   "document_weighted_delta": -0.03809523809523809,
+   "lodo_range": [
+    -0.03125,
+    -0.010101010101010102
+   ]
+  },
+  "X8_minus_V0": {
+   "delta": -0.08823529411764706,
+   "fixed": 4,
+   "broken": 13,
+   "bootstrap_p05": -0.15476190476190477,
+   "ci95": [
+    -0.16666666666666666,
+    -0.018018018018018018
+   ],
+   "sign_flip_p_one_sided": 0.9951171875,
+   "sign_flip_p_two_sided": 0.046875,
+   "mcnemar": 0.049041748046875,
+   "document_weighted_delta": -0.11560374149659865,
+   "lodo_range": [
+    -0.11627906976744186,
+    -0.07216494845360824
+   ]
+  },
+  "correct_abstentions_16": {
+   "V0": 7,
+   "X4": 9,
+   "X8": 8
+  },
+  "citation_validity_118": {
+   "V0": 0.9322033898305084,
+   "X4": 0.9915254237288136,
+   "X8": 0.9830508474576272
+  },
+  "sensitivity": {
+   "strict": -0.049019607843137254,
+   "strict_fixed_broken": [
+    4,
+    9
+   ],
+   "0998_corrected": -0.049019607843137254
+  }
+ }
+}

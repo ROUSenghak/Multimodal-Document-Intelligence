@@ -6,6 +6,10 @@
 | `frozen/e1/` | yes | Byte-identical copy of the E1 full run `20261121T131525011829Z_29c92c8a` plus its per-question table, six figures, `PROVENANCE.json`, `SHA256SUMS` and a [README](frozen/e1/README.md) with results and limitations. Notebook 03 evaluates it by default. Never edited. |
 | `frozen/e2/` | yes | Byte-identical copy of the E2 full run `20261122T120924635816Z_4f2e1369` (Qwen3-VL-8B vs GPT-4o-mini) plus its per-question table, four figures, an independent `AUDIT.json` (44/44), `PROVENANCE.json`, `SHA256SUMS` and a [README](frozen/e2/README.md). Notebook 03 evaluates it by default. Never edited. |
 | `frozen/e3/` | yes | Byte-identical copy of the E3 full run `20261122T143134629529Z_4c62bfc2` (text vs images vs both) plus its per-question table, four figures, an independent `AUDIT.json` (55/55), `PROVENANCE.json`, `SHA256SUMS` and a [README](frozen/e3/README.md). Notebook 03 evaluates it by default. Never edited. |
+| `frozen/e4/` | yes | Byte-identical copies of the E4 smoke and full runs (the application end to end), evaluation tables, `AUDIT.json` (35/35), `PROVENANCE.json`, `SHA256SUMS`, [README](frozen/e4/README.md). Notebook 03 §17 evaluates it by default. Never edited. |
+| `frozen/e5/` | yes | E5 (offline visual retrieval, ColQwen2 v1.0 vs OCR + BM25): frozen rankings, per-question table, render manifest, encoding log, summary, `AUDIT.json` (34/34), `PROVENANCE.json`, `SHA256SUMS`, [README](frozen/e5/README.md). Never edited. |
+| `frozen/e6/` | yes | Byte-identical copies of the E6 smoke and full runs (OCR + BM25 vs ColQwen2 pages, end to end), tables, `AUDIT.json` (43/43), `PROVENANCE.json`, `SHA256SUMS`, [README](frozen/e6/README.md). Notebook 05 evaluates it by default. Never edited. |
+| `frozen/e7/` | yes | Byte-identical copies of the E7 smoke and full runs (extract-then-answer vs one-shot; development), tables, post-run report and literature review, the E6 error labels it was designed from, `AUDIT.json` (38/38) with its script, `PROVENANCE.json`, `SHA256SUMS`, [README](frozen/e7/README.md). Notebook 06 evaluates it by default. Never edited. |
 | `runs/` | no (git-ignored) | Raw outputs of live runs. New runs from `notebooks/02_question_answering.ipynb` go to `runs/qa/<UTC timestamp>_<mode>/`; the historical runs of the archived notebooks 14 and 15 stay in `runs/mmlongbench_doc/` and `runs/mmlongbench_doc_multimodal/` where they exist. |
 
 Experiment E1 resolution runs are isolated under
@@ -62,6 +66,18 @@ with notebook 05 (cumulative ceiling USD 5.60, retries included; upper bound of 
 ($3.7213 in all, list price). The full run stopped once when the OpenAI credit ran out (an unbilled 429) and was resumed in place.
 Both runs are frozen, byte for byte, in [`frozen/e6/`](frozen/e6/README.md) with the evaluation tables, an independent audit (43/43)
 and the provenance. Verdict: `adopt_visual_retrieval` (A 25/102, V 38/102, 13 fixed / 0 broken).
+
+Experiment E5 (offline: ColQwen2 v1.0 against OCR + BM25, evidence after the context guard, no API call) wrote no run
+directory. Its frozen rankings and tables are in [`frozen/e5/`](frozen/e5/README.md). Verdict: `visual_improves_evidence`
+(held-out recall after the guard 0.526 → 0.721).
+
+Experiment E7 (extract-then-answer against E6's one-shot reader, on E6's 118 questions, now a development set) runs go to
+`runs/e7/<UTC timestamp>_<unique id>_<mode>/`. The protocol
+[`specs/e7_extract_then_answer_v1.json`](specs/e7_extract_then_answer_v1.json) was frozen on 2026-11-24 with notebook 06
+(commit `f19ac27`; cumulative ceiling USD 9.00). The approved smoke run (`20261124T143927981959Z_9b46fcad_smoke`, 11 calls)
+and full run (`20261124T160111456175Z_b3d0b5c0_full`, 1,309 calls) completed on 2026-11-24 ($5.911057 in all, list price).
+Both are frozen, byte for byte, in [`frozen/e7/`](frozen/e7/README.md) with the evaluation tables, the post-run report, an
+independent audit (38/38) and the provenance. Verdict: `regression` (V0 38, X4 31, X8 29 of 102): keep the one-shot reader.
 
 ## How results are reproduced
 

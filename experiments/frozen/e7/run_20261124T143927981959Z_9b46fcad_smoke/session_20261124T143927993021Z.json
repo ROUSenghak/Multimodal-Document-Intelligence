@@ -1,0 +1,14 @@
+{
+  "started_at": "2026-11-24T14:39:27.993+00:00",
+  "openai": "2.54.0",
+  "code_provenance": {
+    "git_commit": "469aff55117349ead458eba6be1f9290edb99463",
+    "branch": "refactor/simplify-structure",
+    "spec_sha256": "7d124b81cbdfc569eae937efebcac66cd09cbea4915f62bcbd486fa486f5c0f9",
+    "spec_committed": true,
+    "notebook06_code_sha256": "4d06f48d69f7c83d615f3b8881266e51069dc43f21bbfc6aa7eec2c7c3cae3bb",
+    "notebook06_code_committed": true,
+    "protected_paths_unchanged": true,
+    "git_status": []
+  }
+}

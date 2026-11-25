@@ -1,0 +1,48 @@
+{
+  "passed": true,
+  "checks": {
+    "one block for the smoke question (1 V0, 8 extractions, X4 and X8 reasoning), every call replied": true,
+    "request fingerprints: sent = planned on every call, served snapshot": true,
+    "V0's request is the frozen E6 V request": true,
+    "response parsing: every reply parsed, finish 'stop'": true,
+    "extraction schema: the 8 pages of X8 parsed; provenance from the request": true,
+    "Evidence Memory: schema valid, the arm's pages in rank order, every fact id carries its page": true,
+    "cache reuse: 8 extraction calls serve 11 page readings; X4 reads X8's cached extractions": true,
+    "reasoning requests: built from the memory, leakage-checked, sent as planned": true,
+    "arithmetic request / result path follows the frozen rule": true,
+    "citation provenance: calculation operand pages are among the cited pages": true,
+    "diagnostics: prompt tokens within tolerance, cached-token field recorded": true,
+    "cost accounting: billed list-price cost of the block <= its planned upper bound": true
+  },
+  "observations": {
+    "abstained": {
+      "V0": false,
+      "X4": false,
+      "X8": false
+    },
+    "calculation status": {
+      "X4": "none",
+      "X8": "none"
+    },
+    "cited pages within the arm's pages": {
+      "V0": true,
+      "X4": true,
+      "X8": true
+    },
+    "facts per extracted page": {
+      "2": 2,
+      "5": 1,
+      "8": 3,
+      "4": 2,
+      "1": 3,
+      "7": 5,
+      "9": 2,
+      "6": 3
+    },
+    "pages flagged relevant (diagnostic)": 8,
+    "reported-page mismatches": 0,
+    "billed list-price USD": 0.063117,
+    "planned upper bound USD": 0.072416
+  },
+  "stop_reason": null
+}
