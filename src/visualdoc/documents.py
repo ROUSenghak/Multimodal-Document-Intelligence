@@ -18,6 +18,7 @@ Images are rendered at the resolution adopted by E1 and retained by E2 and E3:
 the whole page fitted in a 768 x 1536 px box (short x long side), opaque RGB PNG.
 """
 
+import hashlib
 from dataclasses import dataclass
 from numbers import Integral
 from pathlib import Path
@@ -40,6 +41,34 @@ class PageText:
     text: str
     native_words: int
     ocr_used: bool
+
+
+@dataclass(frozen=True)
+class DocumentProfile:
+    """Content identity and native-text readiness, computed without OCR or rendering."""
+
+    sha256: str
+    page_count: int
+    native_words_per_page: tuple[int, ...]
+    born_digital: bool
+
+
+def sha256_file(path: str | Path) -> str:
+    """Content key used by caches; changing the path alone does not change identity."""
+    digest = hashlib.sha256()
+    with Path(path).open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def inspect_document(path: str | Path, *, min_native_words: int = OCR_MIN_NATIVE_WORDS) -> DocumentProfile:
+    """Record native words/page; born-digital means every page clears the OCR threshold."""
+    if min_native_words < 0:
+        raise ValueError("min_native_words cannot be negative")
+    with open_pdf(path) as document:
+        words = tuple(len(page.get_text("text", sort=True).split()) for page in document)
+    return DocumentProfile(sha256_file(path), len(words), words, bool(words) and all(n >= min_native_words for n in words))
 
 
 def open_pdf(path: str | Path) -> pymupdf.Document:

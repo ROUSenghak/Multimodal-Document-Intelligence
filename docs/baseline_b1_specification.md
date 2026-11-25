@@ -2,12 +2,12 @@
 
 - **Date:** 2026-11-25.
 - **Builds on:** `docs/baseline_consolidation_assessment.md` and the owner's decisions of 2026-11-25.
-- **Status:** consolidation committed; E8 smoke completed on 2026-11-25; the 354-call full E8 stage is not approved. Nothing in the application changes of sections 4 and 8 is implemented.
+- **Status:** consolidation and E8 smoke committed; the five-module B1 application extension is implemented and validated locally on 2026-11-25. The 354-call full E8 stage is not approved and no call from it has been made.
 
-**Done today (local, not pushed):**
-- **E7 frozen** in `experiments/frozen/e7/`, with an independent audit (38/38) and checksums. Commits `cbb7ac8` (freeze) and `b05bb78` (notebook 06 outputs). Notebook 06 now evaluates the frozen copy by default, re-derives its tables byte for byte and asserts the regression references.
-- **Test-pool ledger:** `experiments/test_pool_ledger.md`.
-- **Notebook `07_baseline_consolidation.ipynb`** (offline, development data): retrieval complementarity and the scoring protocol v2. It was executed top to bottom on a fresh kernel. It and this document are uncommitted, for your review.
+**Current local state (not pushed):**
+- E7, the consolidation evidence, governance wording and E8 smoke are committed through `de3a126`.
+- The B1 application phase extends only the five approved modules. It adds model profiles/contracts, cached MaxSim, quote and numeric grounding, a one-step bounded policy, BM25 fallback, append-only cache/log interfaces and mocked failure-path tests.
+- Notebook 07 imports and hashes those five modules, proves all 236 unique E8 requests equal the preregistered notebook construction, and rebuilds the 354-call plan in replay mode. The plan remains closed.
 
 ---
 
@@ -315,41 +315,36 @@ The smoke authorizes no further paid call. Notebook 07 now rebuilds and fingerpr
 | Laptop (M1, 8 GB RAM, **5.9 GB free disk**, repository in iCloud) | Fine for notebooks 00–07, BM25, NumPy MaxSim over cached embeddings, E8 and the app's BM25 path. **Not** fine for ColQwen2 (4.4 GB of weights not cached) or for indexing the final pool. Move the repository out of iCloud: the `.pth` hidden flag recurs, and held-out PDFs became dataless. |
 | SSP Cloud | The intended place for ColQwen2 indexing (pool for E9) and for running the visual path live. **The GPU type and quota are not verified;** please check your datalab account. Indexing about 5,000 pages at E5's 12 s per page would take about 17 h on the laptop; on a GPU it should be far less. Embeddings take about 193 KB per page (about 1 GB for the pool). |
 | Final evaluation (E9, later) | 111 pool documents, no page cap (GPU indexing), B1 frozen, one session. Somewhat fewer than the pool's 705 answerable questions: the four excluded documents' counts are computed only when that spec is frozen. Accuracy interval about ±0.03–0.04 (cluster); paired differences of about 0.05 detectable (planning simulation) |
-| Engineering size of B1 | About 300–400 new lines in `src/visualdoc` plus tests: reader profiles, contract v2, MaxSim, run log, cache and budget, grounding checks, and one new module `indexing.py` for ColQwen2 encoding (heavy optional dependencies isolated). No framework. |
+| Engineering size of B1 | Five existing modules plus tests: reader profiles, contract v2, cached MaxSim, run log, cache and budget, and grounding checks. No framework and no sixth application module. Live ColQwen2 encoding remains in notebook 04 / the later SSP Cloud phase; B1 consumes cached embeddings through `retrieval.py`. |
 
 ---
 
 ## 8. Repository changes
 
-### 8.1 Done today
+### 8.1 Implemented state
 
 | Change | State |
 |---|---|
 | `experiments/frozen/e7/` (runs, tables, analysis, design labels, AUDIT 38/38, script, PROVENANCE, SHA256SUMS) | committed `cbb7ac8` |
 | `notebooks/06`: evaluates the frozen E7 by default, asserts references, paid gate explicitly closed; executed | committed `cbb7ac8`, outputs `b05bb78` |
 | `experiments/README.md`: rows and entries for E4–E7 | committed `cbb7ac8` |
-| `experiments/test_pool_ledger.md` | uncommitted |
-| `notebooks/07_baseline_consolidation.ipynb` (sections A, B; executed) | uncommitted |
-| `docs/baseline_consolidation_assessment.md`, this file | uncommitted |
+| Consolidation notebook, ledger and documents | committed `d387e05` |
+| Experiment governance through E8 | committed `c97d8f6` |
+| E8 smoke stage and frozen measured profile | committed `e6b0bf6`, `de3a126` |
+| B1 application extension | implemented locally; 133/133 tests pass |
+| Notebook 07 application parity | 118/118 frozen E6 V requests; six smoke prompt totals; 236/236 unique E8 app requests; 354-call offline plan |
 
-### 8.2 Proposed, each needing approval
+### 8.2 Remaining work
 
-1. Commit the uncommitted files above.
-2. **`AGENTS.md`** (wording in §8.3).
-3. **`src/visualdoc` B1 extension.** This is the application phase under `AGENTS.md`.
-   - **Modules:**
-     - `answering.py`: `ReaderProfile` for GPT-4o-mini, frozen and parity-tested, and for `gpt-6-luna`, built from smoke measurements; contracts v1 and v2.
-     - `retrieval.py`: the retriever protocol and MaxSim.
-     - `citations.py`: grounding checks.
-     - `pipeline.py`: stages, `Budget`, `Trace`, run log and cache, BM25 fallback.
-     - New `indexing.py`.
-   - **Tests:** parity to every frozen E6 V request with the GPT-4o-mini profile and contract v1 (fingerprints, 118/118), and mocked `gpt-6-luna` replies.
-4. **Notebook 07 sections C–E:** the E8 smoke stage, the E8 full run *through the B1 application* (the app is the object measured, the `AGENTS.md` exception), and the evaluation. Each paid stage needs its own approval.
-5. **README:** rewritten around B1. Stale items: status block, "Implemented versus planned" (visual retrieval "Planned"), layout and workflow tables stopping at E3/03.
+1. Commit this B1 application increment locally.
+2. Human blind adjudication of the 29 queued replies, before E8 results are interpreted.
+3. Add the gated E8 full executor and evaluation cells to notebook 07. Replay remains the default; `full` requires separate explicit approval.
+4. Run E8 once through the application, freeze its replies and decision, then freeze B1.
+5. Rewrite the README around the frozen B1 outcome. Until E8 decides the reader/contract, presenting B1 as final would be premature.
 
 **Ordering reason.** Implementing B1 in `src` *before* the E8 full run means E8 measures the application that ships. It also avoids writing a fourth notebook executor that the app would then have to duplicate. The smoke test can run before the app changes: it needs only hand-built requests.
 
-### 8.3 Proposed `AGENTS.md` amendments (exact wording; not applied)
+### 8.3 `AGENTS.md` amendments (applied; retained here as the decision record)
 
 **(a) Structure: replace the first bullet**
 
@@ -403,8 +398,8 @@ with
 | G2 | Apply the `AGENTS.md` amendments (§8.3, possibly edited) | $0 |
 | G3 | **Human adjudication** of the 29 queued replies (you) | $0, ~30 min |
 | G4 | E8 smoke (§6): at most 8 calls | ≤ $0.10 |
-| G5 | Freeze the E8 spec with the measured reader profile; begin the `src` B1 extension (application phase) | $0 |
-| G6 | E8 full: 354 calls through the B1 application | ≤ $5 (likely ≈ $0.20) |
+| G5 | Freeze the E8 spec with the measured reader profile; implement and validate the `src` B1 extension | **done**; $0 |
+| G6 | Add the gated executor, then separately approve E8 full: 354 calls through the B1 application | not approved; offline upper bound $0.255901, proposed cumulative ceiling $0.50 |
 | G7 | Freeze B1 (E8 result, frozen replies, tests) | $0 |
 | later | Pool indexing on SSP Cloud and the final evaluation E9; improvement phase | separate specs |
 

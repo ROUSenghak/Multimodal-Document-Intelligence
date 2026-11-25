@@ -7,7 +7,7 @@ import pytest
 
 from conftest import E1_SPEC, E3_SPEC, FROZEN_E0_IMAGE_SETTINGS, FROZEN_E1_LOG, LOCAL_DOCUMENTS, read_json, read_jsonl
 from visualdoc import documents
-from visualdoc.documents import extract_pages, get_page, open_pdf, page_text, render_page_png, render_pages
+from visualdoc.documents import extract_pages, get_page, inspect_document, open_pdf, page_text, render_page_png, render_pages, sha256_file
 
 
 def make_pdf(path, pages_text):
@@ -67,6 +67,14 @@ def test_numpy_page_numbers_are_accepted():
 def test_extract_pages_covers_every_page_in_order():
     pages = extract_pages(LOCAL_DOCUMENTS / "scanned.pdf")
     assert [p.page for p in pages] == [1, 2, 3] and all(p.ocr_used for p in pages)
+
+
+def test_document_profile_is_content_addressed_and_records_native_text(tmp_path):
+    pdf = make_pdf(tmp_path / "native.pdf", [" ".join(["word"] * 35), " ".join(["word"] * 31)])
+    profile = inspect_document(pdf)
+    assert profile.sha256 == sha256_file(pdf)
+    assert profile.page_count == 2 and profile.native_words_per_page == (35, 31) and profile.born_digital
+    assert not inspect_document(pdf, min_native_words=34).born_digital
 
 
 @pytest.mark.parametrize("bad", [0, -1, 4, 1.0, True, "1"])

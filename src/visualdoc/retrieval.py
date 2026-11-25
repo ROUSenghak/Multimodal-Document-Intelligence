@@ -14,13 +14,22 @@ per document: a page competes only with the other pages of its own PDF.
 
 import re
 from collections import Counter
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from math import log
+from typing import Any, Protocol
 
 TOKEN_PATTERN = re.compile(r"[a-z0-9]+")
 BM25_K1 = 1.5
 BM25_B = 0.75
 TOP_K = 5
+
+
+class Retriever(Protocol):
+    """One ranking tool; the pipeline depends on this interface, not a model library."""
+
+    name: str
+
+    def rank(self, question: str) -> list[tuple[int, float]]: ...
 
 
 def tokenize(text: str) -> list[str]:
@@ -29,6 +38,8 @@ def tokenize(text: str) -> list[str]:
 
 class BM25Index:
     """BM25 statistics of one document, built from ``{page_number: text}``."""
+
+    name = "bm25"
 
     def __init__(self, page_texts: Mapping[int, str], k1: float = BM25_K1, b: float = BM25_B):
         if not page_texts:
@@ -57,3 +68,53 @@ class BM25Index:
         if k < 1:
             raise ValueError("k must be at least 1")
         return [page for page, _ in self.rank(query)[:k]]
+
+
+def maxsim_score(query_embeddings: Any, page_embeddings: Any) -> float:
+    """Late interaction: sum, over query tokens, of the best page-token dot product."""
+    try:
+        import numpy as np
+    except ImportError as error:
+        raise RuntimeError("cached visual retrieval needs NumPy; install visualdoc-ai[visual]") from error
+    query, page = np.asarray(query_embeddings), np.asarray(page_embeddings)
+    if query.ndim != 2 or page.ndim != 2 or query.shape[1:] != page.shape[1:]:
+        raise ValueError(f"need query/page matrices with one shared embedding width, got {query.shape} and {page.shape}")
+    if query.shape[0] == 0 or page.shape[0] == 0:
+        raise ValueError("query and page embeddings must contain at least one token")
+    return float((query @ page.T).max(axis=1).sum())
+
+
+class CachedVisualIndex:
+    """ColQwen-style MaxSim over cached page embeddings; it never loads model weights."""
+
+    name = "visual"
+
+    def __init__(self, page_embeddings: Mapping[int, Any], query_encoder: Callable[[str], Any]):
+        if not page_embeddings:
+            raise ValueError("cannot index a document with no page embeddings")
+        self.page_embeddings = dict(page_embeddings)
+        self.query_encoder = query_encoder
+
+    def rank(self, question: str) -> list[tuple[int, float]]:
+        if not str(question).strip():
+            raise ValueError("the question is empty")
+        query = self.query_encoder(question)
+        scored = [(page, maxsim_score(query, embeddings)) for page, embeddings in self.page_embeddings.items()]
+        return sorted(scored, key=lambda item: (-item[1], item[0]))
+
+
+class FrozenRankingRetriever:
+    """A named immutable ranking, used when an experiment freezes retrieval before reader evaluation."""
+
+    def __init__(self, ranking: list[tuple[int, float]], name: str = "frozen_visual"):
+        if not ranking:
+            raise ValueError("a frozen ranking cannot be empty")
+        pages = [page for page, _ in ranking]
+        if len(set(pages)) != len(pages):
+            raise ValueError("a page occurs twice in the frozen ranking")
+        self._ranking, self.name = list(ranking), name
+
+    def rank(self, question: str) -> list[tuple[int, float]]:
+        if not str(question).strip():
+            raise ValueError("the question is empty")
+        return list(self._ranking)
