@@ -1,0 +1,65 @@
+{
+  "run_id": "20261125T171115088784Z_8a4e2bb5_smoke",
+  "mode": "smoke",
+  "git_commit": "a30bb29c3078e5810ce19f1a3ab6cad5b3b4814e",
+  "spec_sha256": "c2cb8ef9f4eaa5ae56c5e842f9e0cbed2127ce3930c41ff34a3977ad65a99a80",
+  "addendum_sha256": "272492578350f237adaf546afdb77509e7e19e60667a0f2766006cff504a0eaa",
+  "budget_usd": 0.5,
+  "prior_spend_usd": 0.0,
+  "plan": [
+    {
+      "execution_index": 1,
+      "replicate_id": "smoke",
+      "qid": "mmlb-0077",
+      "arm": "F8",
+      "fingerprint": "a82bad2f0052b64dc88635aa92af038ba8320d2bffd48f0c5b3b5229caaa96c9",
+      "prompt_tokens": 7715,
+      "max_completion_tokens": 800
+    },
+    {
+      "execution_index": 2,
+      "replicate_id": "smoke",
+      "qid": "mmlb-0138",
+      "arm": "F8",
+      "fingerprint": "d8f93f8307f252df7df055d6fc806cbe43e21086dc3299d8aff2800fe44a5542",
+      "prompt_tokens": 7716,
+      "max_completion_tokens": 800
+    },
+    {
+      "execution_index": 3,
+      "replicate_id": "smoke",
+      "qid": "mmlb-0200",
+      "arm": "F8",
+      "fingerprint": "737d0862cea1368707116f9286d323017d34c9e7e0daf8bf8bc68dd11218f328",
+      "prompt_tokens": 5883,
+      "max_completion_tokens": 800
+    },
+    {
+      "execution_index": 4,
+      "replicate_id": "smoke",
+      "qid": "mmlb-0410",
+      "arm": "F8",
+      "fingerprint": "60b8edbf9893a7093442a437c1b20a930fa749c57124ab5ea8182bfaa869f5e3",
+      "prompt_tokens": 7715,
+      "max_completion_tokens": 800
+    },
+    {
+      "execution_index": 5,
+      "replicate_id": "smoke",
+      "qid": "mmlb-1025",
+      "arm": "F8",
+      "fingerprint": "a4394dd2ef192006533a87682ebaf5dffdbd930a4cdbf6814f5cbde9f23e5aaf",
+      "prompt_tokens": 7716,
+      "max_completion_tokens": 800
+    },
+    {
+      "execution_index": 6,
+      "replicate_id": "smoke",
+      "qid": "mmlb-1056",
+      "arm": "F8",
+      "fingerprint": "12e793e4da3d5638ca21b0d89009db4accedff6db2a0d15193cf81eddf26cd9e",
+      "prompt_tokens": 7727,
+      "max_completion_tokens": 800
+    }
+  ]
+}

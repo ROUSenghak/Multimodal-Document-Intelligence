@@ -1,0 +1,15 @@
+{
+  "complete": true,
+  "successful": 6,
+  "planned": 6,
+  "attempts": 6,
+  "observed_list_price_cost_usd": 0.0045917,
+  "budget_accounted_usd_including_prior": 0.0045917,
+  "served_models": [
+    "gpt-6-luna"
+  ],
+  "system_fingerprints": [
+    "None"
+  ],
+  "updated_at": "2026-11-25T17:11:36.401+00:00"
+}

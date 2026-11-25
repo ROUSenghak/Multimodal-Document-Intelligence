@@ -1,0 +1,58 @@
+{
+  "experiment": "E9 adaptive evidence acquisition, Stage 1 smoke and Stage 2",
+  "frozen_on": "2026-11-25",
+  "population": {
+    "questions": 118,
+    "answerable": 102,
+    "unanswerable": 16,
+    "documents": 14,
+    "test_pool_used": false
+  },
+  "protocol": {
+    "spec": "experiments/specs/e9_adaptive_evidence_v1.json",
+    "spec_commit": "7f41eea",
+    "spec_sha256": "c2cb8ef9f4eaa5ae56c5e842f9e0cbed2127ce3930c41ff34a3977ad65a99a80",
+    "addendum": "experiments/specs/e9_adaptive_evidence_v1_addendum.json",
+    "addendum_commit": "a30bb29",
+    "addendum_sha256": "272492578350f237adaf546afdb77509e7e19e60667a0f2766006cff504a0eaa",
+    "stage0_package": "experiments/frozen/e9_stage0 (commit a30bb29)",
+    "notebook": "notebooks/08_adaptive_evidence.ipynb"
+  },
+  "runs": {
+    "smoke": {
+      "run_id": "20261125T171115088784Z_8a4e2bb5_smoke",
+      "git_commit_at_launch": "a30bb29c3078e5810ce19f1a3ab6cad5b3b4814e",
+      "calls": 6,
+      "started": "2026-11-25T17:11:15.415+00:00",
+      "completed": "2026-11-25T17:11:36.400+00:00",
+      "observed_list_price_usd": 0.0045917
+    },
+    "full": {
+      "run_id": "20261125T171152006205Z_57d16dea_full",
+      "git_commit_at_launch": "a30bb29c3078e5810ce19f1a3ab6cad5b3b4814e",
+      "calls": 354,
+      "attempts": 354,
+      "started": "2026-11-25T17:11:52.271+00:00",
+      "completed": "2026-11-25T17:34:04.788+00:00",
+      "observed_list_price_usd": 0.14705494,
+      "prior_spend_usd": 0.004591700000000001
+    }
+  },
+  "served_identity": {
+    "models": [
+      "gpt-6-luna"
+    ],
+    "system_fingerprints": [
+      "None"
+    ]
+  },
+  "cumulative_cost_usd": 0.15164664,
+  "ceiling_usd": 0.5,
+  "copying": "run and smoke directories copied byte for byte from git-ignored experiments/runs/e9 and experiments/runs/e9_smoke (verified with cmp); tables and the blind queue copied from data/processed/mmlongbench_doc/e9 after the evaluation cell ran on the live run",
+  "recorded_deviations": [
+    "Stage 0 read the answer-side signals from the checksum-protected frozen copy experiments/frozen/e8/tables/evaluation_per_question.csv instead of the processed copy named in the spec; abstained and numeric_support are identical on all 354 rows (independent audit).",
+    "A Stage 0 validation cell first asserted that a within-document permutation null centres on 0.5; it does not (between-document association is preserved). It was replaced by a global-permutation null calibration with the within-document null kept as a decomposition. The frozen gate and its result were not affected."
+  ],
+  "not_verifiable": "Whether gpt-6-luna would give the same replies today: the alias has no dated snapshot and returned no system fingerprint. The frozen replies define this result.",
+  "licence": "MMLongBench-Doc annotations and documents: CC BY-NC 4.0, research use"
+}

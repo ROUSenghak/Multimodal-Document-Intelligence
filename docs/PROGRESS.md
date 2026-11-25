@@ -8,14 +8,31 @@ The single place that records what is done, what is running, what each decision 
 |---|---|---|
 | E0–E8 and validated baseline B1 | **done, frozen** | `docs/validated_baseline_b1.md`, `experiments/frozen/*` |
 | E9 pre-registration | **done** | `experiments/specs/e9_adaptive_evidence_v1.json`, commit `7f41eea` (before any analysis) |
-| E9 Stage 0 (offline trigger selection, $0) | **passed** the frozen gate; independent audit running | notebook 08 §Stage 0, `data/processed/mmlongbench_doc/e9/stage0_summary.json` |
-| E9 Stage 1 smoke (6 calls) | ready, gated on the audit and on committing the technical addendum | notebook 08 §Stages 1–2 |
-| E9 Stage 2 (354 calls) | ready after the smoke | same |
-| Application (B1 with live ColQwen2, cache, CLI, UI) | in progress (engineering agent) | new modules in `src/visualdoc/`, new tests |
+| E9 Stage 0 (offline trigger selection, $0) | **passed**; independently audited (reproduced ≤ 5e-7) | `experiments/frozen/e9_stage0/` (commit `a30bb29`) |
+| E9 Stage 1 smoke (6 calls) | **passed** all 7 gates, $0.004592 | `experiments/frozen/e9/smoke_*` |
+| E9 Stage 2 (354 calls) | **done: `no_meaningful_gain`** (S-v1). B1 unchanged. Independent audit 47/47. 13 S-v2 items await owner labels; no labelling can change the verdict | `experiments/frozen/e9/`, notebook 08 |
+| Application (B1 with live ColQwen2, cache, CLI, UI) | **built and reviewed.** All review defects fixed; 199 tests pass. The live encoder and live reader are not yet verified (need the weights and a paid call) | `src/visualdoc/{visual_index,app,web}.py`, `docs/application.md` |
 | Final held-out evaluation | not started; needs a frozen spec, owner approval, a budget and indexing compute | `experiments/test_pool_ledger.md` |
 | Documentation (README, architecture, report, reproducibility, demo) | not started | — |
 
 ## Decisions and their reasons
+
+### 2026-11-25 — E9 Stage 2 result: `no_meaningful_gain` (development data)
+
+| | B1s | F8a | F8b | A1a | A1b |
+|---|---:|---:|---:|---:|---:|
+| S-v1 / 102 | 44 | 46 | 46 | 47 | 46 |
+
+- **Primary contrast.**
+  - A1 − B1s = +0.025, 95 % CI [0.000, +0.051], sign-flip p = 0.125.
+  - Fixed / broken: 3 / 0 in replicate a, 2 / 0 in replicate b.
+  - The +0.05 engineering criterion fails, which gives `no_meaningful_gain`.
+- **Fixed-depth and attribution contrasts.**
+  - F8 − B1s = +0.020 [−0.048, +0.079].
+  - A1 − F8 = +0.005.
+  - On triggered questions, 8 pages help (+0.061). On untriggered ones they slightly hurt (−0.008).
+- **Session drift.** B1s scores 44 on byte-identical requests, against the frozen E8 L-B1's 46 (6 flips). The same-session control prevented a cross-day comparison that would have hidden most of the effect.
+- **Decision.** B1 keeps k = 4 and a single read. Adaptive acquisition is not adopted, and the application does not implement it. A1 may be reported in the final evaluation only as a pre-registered *secondary* comparison (owner's choice), never to change the shipped system after seeing test results.
 
 ### 2026-11-25 — E9 Stage 0 result (pre-registered gate, development data)
 
@@ -62,6 +79,7 @@ The single place that records what is done, what is running, what each decision 
 | ≤ 2026-11-25 | E8 smoke + full | 6 + 354 | 0.0015431 + 0.144765 | 0.10 + 0.50 |
 | ≤ 2026-11-25 | E0–E2 | — | recorded in their frozen packages (not re-added here) | — |
 | 2026-11-25 | E9 Stage 0 | 0 | 0.00 | — |
+| 2026-11-25 | E9 smoke + Stage 2 | 6 + 354 | 0.004592 + 0.147055 = **0.151647** | 0.50 |
 
 E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Planned upper bound: smoke $0.006847 + full $0.368866.
 
@@ -75,7 +93,7 @@ E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Pl
 
 1. **Final evaluation compute.** The ColQwen2 index of the test pool needs about 10 GB of free disk and many CPU hours, or the SSP Cloud GPU. This is an owner decision (see below).
 2. **Final evaluation budget.** No budget is authorised beyond E9's $0.50. The final evaluation needs the owner's authorisation.
-3. **S-v2 blind labels.** E9's new gray replies need the owner's blind labels, as in E8. S-v1 decides the verdict meanwhile.
+3. **S-v2 blind labels.** 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
 
 ## Known limitations (running list)
 

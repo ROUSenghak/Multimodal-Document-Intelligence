@@ -1,0 +1,165 @@
+{
+  "run": "20261125T171152006205Z_57d16dea_full",
+  "arms": {
+    "B1s": {
+      "S-v1 correct / 102": 44.0,
+      "correct abstentions / 16": 9.0,
+      "citation validity": 1.0,
+      "schema validity": 1.0,
+      "S-v2 correct (auto + owner)": 44.0,
+      "S-v2 pending": 7.0,
+      "S-v2 unsure": 1.0,
+      "pages read (mean)": 4.0,
+      "prompt tokens (mean)": 3977.1525423729,
+      "cost USD (sum)": 0.0497749
+    },
+    "F8a": {
+      "S-v1 correct / 102": 46.0,
+      "correct abstentions / 16": 9.0,
+      "citation validity": 0.9915254237,
+      "schema validity": 1.0,
+      "S-v2 correct (auto + owner)": 47.0,
+      "S-v2 pending": 1.0,
+      "S-v2 unsure": 1.0,
+      "pages read (mean)": 8.0,
+      "prompt tokens (mean)": 7641.3220338983,
+      "cost USD (sum)": 0.07338232
+    },
+    "F8b": {
+      "S-v1 correct / 102": 46.0,
+      "correct abstentions / 16": 8.0,
+      "citation validity": 0.9915254237,
+      "schema validity": 1.0,
+      "S-v2 correct (auto + owner)": 46.0,
+      "S-v2 pending": 5.0,
+      "S-v2 unsure": 1.0,
+      "pages read (mean)": 8.0,
+      "prompt tokens (mean)": 7641.3220338983,
+      "cost USD (sum)": 0.02389772
+    },
+    "A1a": {
+      "S-v1 correct / 102": 47.0,
+      "correct abstentions / 16": 9.0,
+      "citation validity": 0.9915254237,
+      "schema validity": 1.0,
+      "S-v2 correct (auto + owner)": 47.0,
+      "S-v2 pending": 6.0,
+      "S-v2 unsure": 1.0,
+      "pages read (mean)": 5.593220339,
+      "prompt tokens (mean)": 5421.2881355932,
+      "cost USD (sum)": 0.05904206
+    },
+    "A1b": {
+      "S-v1 correct / 102": 46.0,
+      "correct abstentions / 16": 9.0,
+      "citation validity": 0.9915254237,
+      "schema validity": 1.0,
+      "S-v2 correct (auto + owner)": 46.0,
+      "S-v2 pending": 7.0,
+      "S-v2 unsure": 1.0,
+      "pages read (mean)": 5.593220339,
+      "prompt tokens (mean)": 5421.2881355932,
+      "cost USD (sum)": 0.03907236
+    }
+  },
+  "decision": {
+    "primary contrast": "A1 - B1s",
+    "delta (replicate-averaged)": 0.0245,
+    "ci95": [
+      0.0,
+      0.0505
+    ],
+    "bootstrap 5th percentile": 0.0052,
+    "sign-flip p": 0.125,
+    "per replicate": {
+      "A1a": {
+        "delta": 0.029411764705882353,
+        "fixed": 3,
+        "broken": 0
+      },
+      "A1b": {
+        "delta": 0.0196078431372549,
+        "fixed": 2,
+        "broken": 0
+      }
+    },
+    "guardrails pass": true,
+    "engineering criterion (+0.05 in average and each replicate)": false,
+    "broken > fixed/2": false,
+    "A1 - F8 > 0": true,
+    "statistics hold": false,
+    "F8a vs F8b flips": 2,
+    "VERDICT (S-v1, frozen rules)": "no_meaningful_gain"
+  },
+  "secondary": {
+    "F8 - B1s": {
+      "delta": 0.0196078431372549,
+      "ci95": [
+        -0.04762537993920972,
+        0.07895388223032819
+      ],
+      "p05_one_sided": -0.035728571428571415,
+      "sign_flip_p": 0.328125
+    },
+    "A1 - F8": {
+      "delta": 0.004901960784313725,
+      "ci95": [
+        -0.05001050420168066,
+        0.06451612903225806
+      ],
+      "p05_one_sided": -0.041666666666666664,
+      "sign_flip_p": 0.5
+    },
+    "F8 - B1s on triggered": {
+      "delta": 0.06097560975609756,
+      "ci95": [
+        0.0,
+        0.125
+      ],
+      "p05_one_sided": 0.016666666666666666,
+      "sign_flip_p": 0.125
+    },
+    "F8 - B1s on untriggered": {
+      "delta": -0.00819672131147541,
+      "ci95": [
+        -0.10344827586206896,
+        0.07895781119465314
+      ],
+      "p05_one_sided": -0.08771929824561403,
+      "sign_flip_p": 0.625
+    }
+  },
+  "drift": {
+    "B1s vs frozen L-B1": {
+      "B1s correct": 44,
+      "frozen correct": 46,
+      "flips": 6
+    },
+    "B1s vs frozen L-B1r": {
+      "B1s correct": 44,
+      "frozen correct": 46,
+      "flips": 8
+    }
+  },
+  "s_v2": {
+    "pending as wrong": {
+      "B1s": 44.0,
+      "A1 (avg)": 46.5,
+      "F8 (avg)": 46.5,
+      "A1 - B1s": 0.024752475247524754,
+      "F8 - B1s": 0.024752475247524754,
+      "n": 101
+    },
+    "pending as correct": {
+      "B1s": 51.0,
+      "A1 (avg)": 53.0,
+      "F8 (avg)": 49.5,
+      "A1 - B1s": 0.019801980198019802,
+      "F8 - B1s": -0.01485148514851485,
+      "n": 101
+    }
+  },
+  "s_v2_final": false,
+  "new_blind_items": 13,
+  "triggered_questions": 47
+}

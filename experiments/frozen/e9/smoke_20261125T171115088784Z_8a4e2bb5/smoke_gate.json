@@ -1,0 +1,9 @@
+{
+  "6/6 replies": true,
+  "finish_reason stop": true,
+  "strict schema parsed": true,
+  "one served model": true,
+  "served model is the requested alias": true,
+  "billed prompt tokens equal the token model": true,
+  "smoke cost within $0.02": true
+}
