@@ -2,7 +2,7 @@
 
 - **Date:** 2026-11-25.
 - **Builds on:** `docs/baseline_consolidation_assessment.md` and the owner's decisions of 2026-11-25.
-- **Status:** proposal. Nothing in sections 4–8 is implemented. The approval gates are listed in section 9.
+- **Status:** consolidation committed; E8 smoke completed on 2026-11-25; the 354-call full E8 stage is not approved. Nothing in the application changes of sections 4 and 8 is implemented.
 
 **Done today (local, not pushed):**
 - **E7 frozen** in `experiments/frozen/e7/`, with an independent audit (38/38) and checksums. Commits `cbb7ac8` (freeze) and `b05bb78` (notebook 06 outputs). Notebook 06 now evaluates the frozen copy by default, re-derives its tables byte for byte and asserts the regression references.
@@ -281,6 +281,28 @@ Proposed **hard ceiling: $5 cumulative**, smoke included.
 4. Ask for the full-stage approval.
 
 **Note for S1.** The `mmlb-0068` question text is development data, already sent to OpenAI in E6 and E7; nothing from the pool is sent.
+
+### 6.1 Smoke result (2026-11-25)
+
+The committed smoke implementation is notebook 07 at commit `e6b0bf6`. Run `20261125T124909290128Z_cd901245_smoke` completed in **6 calls**; the optional temperature retry was not used. All technical gates passed.
+
+| Measurement | Result |
+|---|---|
+| Requested / served model | `gpt-6-luna` / `gpt-6-luna` on all 6 replies |
+| System fingerprint | not provided by the API (`None`) |
+| `reasoning_effort = "none"` | accepted |
+| `temperature = 0` | accepted |
+| `json_object` / strict `json_schema` | both accepted; every reply parsed and finished with `stop` |
+| Prompt tokens, S1 / S2 / S3 | 224 / 1,149 / 1,466 |
+| Portrait / landscape image contribution from the specified subtraction | 920 / 1,237 tokens; each is one below the fitted patch rule because the text-only and multimodal message overheads differ by one token |
+| Fitted prompt-token profile | `o200k_base` text + 10 tokens for text-only framing or 9 for multimodal framing + `floor(1.2 × ceil(width/32) × ceil(height/32))` per image + 100 tokens for the strict schema; reproduces all six observed prompt totals exactly |
+| Latency | 1.13–2.94 s across the six calls |
+| List-price cost | **$0.0015431**, below the $0.10 ceiling |
+| S6 grounding observation | one quote returned; cited a supplied page; normalised quote matched the page text exactly |
+
+**Behavioural warning, not a failed technical gate.** S5 was the known-unanswerable `mmlb-0068`. Its reply satisfied the strict schema but answered with page 2 instead of abstaining. The old-contract S4 reply also answered. One diagnostic item cannot estimate an abstention rate; the preregistered full-run guardrail on all 16 unanswerable questions therefore remains essential.
+
+The smoke authorizes no further paid call. Notebook 07 now rebuilds and fingerprints all 354 proposed requests offline with the measured profile: 1,379,010 prompt tokens and at most 236,000 output tokens, for a list-price upper bound of **$0.255901**. The earlier $0.20–$3.70 range is superseded. A **$0.50 cumulative ceiling** would leave substantial retry headroom; it is a proposal, not an approval. Mocked application-interface tests remain part of the separately authorized application phase before any full call.
 
 ---
 

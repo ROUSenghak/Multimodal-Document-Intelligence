@@ -1,0 +1,102 @@
+{
+  "run_id": "20261125T124909290128Z_cd901245_smoke",
+  "date": "2026-11-25",
+  "kind": "technical diagnostic; not scored",
+  "implementation_commit": "e6b0bf6",
+  "requested_model": "gpt-6-luna",
+  "served_model": "gpt-6-luna",
+  "system_fingerprint": null,
+  "reasoning_effort": "none",
+  "temperature_0": "accepted",
+  "strict_json_schema": "accepted",
+  "calls": 6,
+  "approved_calls_max": 8,
+  "list_price_cost_usd": 0.0015431,
+  "approved_cost_usd": 0.10,
+  "records": [
+    {
+      "label": "S1",
+      "fingerprint": "578e2ff00dba6a999e76e5c9d276bed64fc4e9525e8aecad5fd2abe76b6b795a",
+      "prompt_tokens": 224,
+      "completion_tokens": 22,
+      "cached_prompt_tokens": 0,
+      "latency_s": 2.533,
+      "finish_reason": "stop",
+      "reply": {"answer": "Not answerable", "cited_pages": [], "evidence": []}
+    },
+    {
+      "label": "S2",
+      "fingerprint": "de1272a87012656d4d8a099147daf2f3fc36b17a368d83d9011a7efa7747a211",
+      "prompt_tokens": 1149,
+      "completion_tokens": 22,
+      "cached_prompt_tokens": 0,
+      "latency_s": 1.132,
+      "finish_reason": "stop",
+      "reply": {"answer": "Not answerable", "cited_pages": [], "evidence": []}
+    },
+    {
+      "label": "S3",
+      "fingerprint": "e2cfa828601f5d59739c2ee12bc3f1ef30f0aa7a358fbdeb2febf2949467369f",
+      "prompt_tokens": 1466,
+      "completion_tokens": 22,
+      "cached_prompt_tokens": 0,
+      "latency_s": 1.229,
+      "finish_reason": "stop",
+      "reply": {"answer": "Not answerable", "cited_pages": [], "evidence": []}
+    },
+    {
+      "label": "S4",
+      "fingerprint": "9724805b1b3bb1b4e4313ae63a0bd8e3125ad566e8b1ae0f8e0e8efb0261691b",
+      "prompt_tokens": 3137,
+      "completion_tokens": 48,
+      "cached_prompt_tokens": 0,
+      "latency_s": 2.9,
+      "finish_reason": "stop",
+      "reply": {"answer": "When it can be verified: the sentence includes knowledge absent from the knowledge graph, and the knowledge can be identified as a subset of the question’s minimum knowledge set.", "cited_pages": [2]}
+    },
+    {
+      "label": "S5",
+      "fingerprint": "1d0e378f254107b7fb7407c594013bb707790cc440cc5ddce9cb1363cb240a0b",
+      "prompt_tokens": 4259,
+      "completion_tokens": 65,
+      "cached_prompt_tokens": 0,
+      "latency_s": 2.94,
+      "finish_reason": "stop",
+      "reply": {"answer": "When it can be verified, but the knowledge is absent from the knowledge graph.", "cited_pages": [2], "evidence": [{"page": 2, "quote": "A sentence can map to both [NA] and a list of sub-graph knowledge if it can"}]}
+    },
+    {
+      "label": "S6",
+      "fingerprint": "2dc8d4f51d1ff400a4f420c66addd0e2f5c76249f80f964cd19bec3bdbd8b260",
+      "prompt_tokens": 4021,
+      "completion_tokens": 56,
+      "cached_prompt_tokens": 0,
+      "latency_s": 1.918,
+      "finish_reason": "stop",
+      "reply": {"answer": 495, "cited_pages": [39], "evidence": [{"page": 39, "quote": "Repurchases of common stock (1,358) — (23) — (472) (495) — (495)"}]}
+    }
+  ],
+  "gates": {
+    "six_required_replies_received": true,
+    "every_reply_parsed_and_finished_with_stop": true,
+    "S5_and_S6_satisfy_strict_schema": true,
+    "one_served_model_string": true,
+    "reasoning_effort_none_accepted": true,
+    "image_token_rule_reproduces_both_shapes": true,
+    "cost_within_ceiling": true,
+    "attempt_count_within_ceiling": true
+  },
+  "reader_profile": {
+    "text_encoding": "o200k_base",
+    "text_only_framing_tokens": 10,
+    "multimodal_framing_tokens": 9,
+    "image_tokens": "floor(1.2 * ceil(width / 32) * ceil(height / 32))",
+    "strict_schema_tokens": 100,
+    "reproduces_all_six_prompt_totals_exactly": true
+  },
+  "observations": {
+    "S5_known_unanswerable_abstained": false,
+    "S6_quotes": 1,
+    "S6_cited_only_supplied_pages": true,
+    "S6_normalised_exact_quote_matches": 1
+  }
+}
