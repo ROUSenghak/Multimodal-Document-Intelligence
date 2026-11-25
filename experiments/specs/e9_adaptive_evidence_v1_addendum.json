@@ -1,0 +1,108 @@
+{
+  "spec": {
+    "path": "experiments/specs/e9_adaptive_evidence_v1.json",
+    "freeze_commit": "7f41eea",
+    "sha256": "c2cb8ef9f4eaa5ae56c5e842f9e0cbed2127ce3930c41ff34a3977ad65a99a80"
+  },
+  "stage0": {
+    "passed": true,
+    "fallback_runs": false,
+    "selected_trigger": "U3_flatness_18",
+    "threshold": -0.153079,
+    "triggered_questions": [
+      "mmlb-0045",
+      "mmlb-0049",
+      "mmlb-0077",
+      "mmlb-0078",
+      "mmlb-0081",
+      "mmlb-0142",
+      "mmlb-0201",
+      "mmlb-0203",
+      "mmlb-0204",
+      "mmlb-0205",
+      "mmlb-0405",
+      "mmlb-0408",
+      "mmlb-0409",
+      "mmlb-0411",
+      "mmlb-0577",
+      "mmlb-0578",
+      "mmlb-0579",
+      "mmlb-0581",
+      "mmlb-0597",
+      "mmlb-0598",
+      "mmlb-0599",
+      "mmlb-0600",
+      "mmlb-0990",
+      "mmlb-1001",
+      "mmlb-1004",
+      "mmlb-1005",
+      "mmlb-1013",
+      "mmlb-1014",
+      "mmlb-1015",
+      "mmlb-1016",
+      "mmlb-1017",
+      "mmlb-1018",
+      "mmlb-1019",
+      "mmlb-1022",
+      "mmlb-1023",
+      "mmlb-1024",
+      "mmlb-1025",
+      "mmlb-1027",
+      "mmlb-1051",
+      "mmlb-1052",
+      "mmlb-1053",
+      "mmlb-1054",
+      "mmlb-1055",
+      "mmlb-1057",
+      "mmlb-1058",
+      "mmlb-1060",
+      "mmlb-1061"
+    ]
+  },
+  "reader": {
+    "model": "gpt-6-luna",
+    "reasoning_effort": "none",
+    "temperature": 0,
+    "max_completion_tokens": 800,
+    "contract": "b1 strict JSON schema",
+    "image": "768-px renders from the frozen E5 manifest"
+  },
+  "requests": {
+    "B1s_equals_frozen_E8_L-B1": 118,
+    "F8_extends_B1s_with_ranks_5_8": 118
+  },
+  "seeds": {
+    "smoke": 20261129,
+    "order": 20261127
+  },
+  "smoke": {
+    "calls": 6,
+    "prompt_tokens": 44472,
+    "max_output_tokens": 4800,
+    "upper_usd": 0.006847,
+    "plan_sha256": "80ffc9cd9b3b76db6ef6215a394eb30d430e790409c60fb6bf471ccb0f224ee0",
+    "qids": [
+      "mmlb-0077",
+      "mmlb-0138",
+      "mmlb-0200",
+      "mmlb-0410",
+      "mmlb-1025",
+      "mmlb-1056"
+    ],
+    "ceiling_usd": 0.02
+  },
+  "full": {
+    "calls": 354,
+    "prompt_tokens": 2272656,
+    "max_output_tokens": 283200,
+    "upper_usd": 0.368866,
+    "plan_sha256": "dc34cf76457c809ed3db78bc61407a422bcb8ece2fda9d97550f3385b1d76eb9",
+    "plan_upper_max_usd": 0.45
+  },
+  "budget": {
+    "cumulative_ceiling_usd": 0.5,
+    "sdk_retries": 0,
+    "max_attempts_per_index": 2,
+    "unknown_usage_charge": "the request's precomputed upper bound"
+  }
+}

@@ -1,0 +1,187 @@
+{
+  "base_rate_incomplete": 0.386139,
+  "bootstrap": {
+    "draws": 10000,
+    "seed": 20261126,
+    "unit": "document"
+  },
+  "fallback_runs": false,
+  "gate": {
+    "U1_margin_45": {
+      "G1": false,
+      "G2": true,
+      "G3": false,
+      "G4": true,
+      "G5": true,
+      "auroc": 0.622415,
+      "auroc_ci95": [
+        0.541,
+        0.701
+      ],
+      "auroc_recoverable": 0.682946,
+      "draws_discarded": 0,
+      "lift": 0.101666,
+      "lift_ci95": [
+        0.022,
+        0.181
+      ],
+      "lodo_min": 0.606203,
+      "p_holm": 0.005999,
+      "p_one_sided": 0.0015,
+      "passes": false,
+      "precision": 0.487805,
+      "recoverable_triggered": 10,
+      "triggered_P0": 41
+    },
+    "U2_top_standout": {
+      "G1": false,
+      "G2": true,
+      "G3": false,
+      "G4": false,
+      "G5": true,
+      "auroc": 0.619934,
+      "auroc_ci95": [
+        0.517,
+        0.719
+      ],
+      "auroc_recoverable": 0.543411,
+      "draws_discarded": 0,
+      "lift": 0.028496,
+      "lift_ci95": [
+        -0.062,
+        0.135
+      ],
+      "lodo_min": 0.584291,
+      "p_holm": 0.022998,
+      "p_one_sided": 0.011499,
+      "passes": false,
+      "precision": 0.414634,
+      "recoverable_triggered": 6,
+      "triggered_P0": 41
+    },
+    "U3_flatness_18": {
+      "G1": true,
+      "G2": true,
+      "G3": true,
+      "G4": true,
+      "G5": true,
+      "auroc": 0.782878,
+      "auroc_ci95": [
+        0.661,
+        0.861
+      ],
+      "auroc_recoverable": 0.634109,
+      "draws_discarded": 0,
+      "lift": 0.238861,
+      "lift_ci95": [
+        0.095,
+        0.362
+      ],
+      "lodo_min": 0.751786,
+      "p_holm": 0.0005,
+      "p_one_sided": 0.0001,
+      "passes": true,
+      "precision": 0.625,
+      "recoverable_triggered": 8,
+      "triggered_P0": 40
+    },
+    "U4_abstained": {
+      "G1": false,
+      "G2": true,
+      "G3": true,
+      "G4": false,
+      "G5": true,
+      "auroc": 0.645368,
+      "auroc_ci95": [
+        0.54,
+        0.727
+      ],
+      "auroc_recoverable": 0.583721,
+      "draws_discarded": 0,
+      "lift": 0.267708,
+      "lift_ci95": [
+        0.077,
+        0.446
+      ],
+      "lodo_min": 0.595238,
+      "p_holm": 0.005999,
+      "p_one_sided": 0.0015,
+      "passes": false,
+      "precision": 0.653846,
+      "recoverable_triggered": 6,
+      "triggered_P0": 26
+    },
+    "U5_numeric_unsupported": {
+      "G1": false,
+      "G2": false,
+      "G3": false,
+      "G4": false,
+      "G5": false,
+      "auroc": 0.470223,
+      "auroc_ci95": [
+        0.396,
+        0.527
+      ],
+      "auroc_recoverable": 0.460465,
+      "draws_discarded": 0,
+      "lift": -0.052805,
+      "lift_ci95": [
+        -0.196,
+        0.046
+      ],
+      "lodo_min": 0.437879,
+      "p_holm": 0.838716,
+      "p_one_sided": 0.838716,
+      "passes": false,
+      "precision": 0.333333,
+      "recoverable_triggered": 3,
+      "triggered_P0": 27
+    }
+  },
+  "headroom": {
+    "complete_at_8_not_4": 8,
+    "incomplete_at_4": 39,
+    "no_evidence_in_top_8": 11,
+    "recoverable_ranks_5_8": 15
+  },
+  "population": {
+    "P0": 101,
+    "P_deploy": 118,
+    "documents": 14
+  },
+  "selected_threshold": -0.153079,
+  "selected_trigger": "U3_flatness_18",
+  "spec": {
+    "freeze_commit": "7f41eea",
+    "path": "experiments/specs/e9_adaptive_evidence_v1.json",
+    "sha256": "c2cb8ef9f4eaa5ae56c5e842f9e0cbed2127ce3930c41ff34a3977ad65a99a80"
+  },
+  "stage0_passed": true,
+  "strata_auroc": {
+    "multi-page": {
+      "U1_margin_45": 0.687646,
+      "U2_top_standout": 0.522145,
+      "U3_flatness_18": 0.738928,
+      "U4_abstained": 0.635198,
+      "U5_numeric_unsupported": 0.428904,
+      "incomplete": 33.0,
+      "questions": 46.0
+    },
+    "single-page": {
+      "U1_margin_45": 0.704082,
+      "U2_top_standout": 0.62585,
+      "U3_flatness_18": 0.823129,
+      "U4_abstained": 0.678571,
+      "U5_numeric_unsupported": 0.45068,
+      "incomplete": 6.0,
+      "questions": 55.0
+    }
+  },
+  "thresholds": {
+    "U1_margin_45": -0.006578,
+    "U2_top_standout": -2.422772,
+    "U3_flatness_18": -0.153079,
+    "U4_abstained": 1.0,
+    "U5_numeric_unsupported": 1.0
+  }
+}
