@@ -1,0 +1,121 @@
+{
+  "experiment": "E9 adaptive evidence acquisition",
+  "version": 1,
+  "date_frozen": "2026-11-25",
+  "status": "Stage 0 rules frozen before any trigger-target association was computed. Stage 1/2 decision rules frozen here; their technical addendum (request construction, fingerprints, plan) is frozen separately before any paid call and may not change any rule in this file.",
+  "proposal": "docs/e9_proposal.md (commit 7da078f)",
+  "authorisation": {
+    "date": "2026-11-25",
+    "by": "project owner",
+    "paid_ceiling_usd_cumulative": 0.50,
+    "scope": "E9 Stage 1 smoke and Stage 2 runs on the 118 development questions only; fail-closed"
+  },
+  "knowledge_before_freeze": [
+    "Base rate of incomplete evidence is known in aggregate: ColQwen2 supplies all annotated evidence for 61/101 held-out questions after the GPT-4o-mini guard (E5).",
+    "docs/baseline_b1_specification.md states that 8 pages add complete evidence for at most 9/101 questions (notebook 07).",
+    "E8: grounding failure is anti-predictive of S-v1 correctness (P(wrong|fail) 0.39/0.43 vs P(wrong|pass) 0.67/0.63).",
+    "No association between any candidate signal below and evidence completeness has been computed or displayed before this freeze."
+  ],
+  "test_pool_used": false,
+
+  "stage0": {
+    "cost_usd": 0,
+    "inputs": {
+      "rankings": "experiments/frozen/e5/tables/rankings.parquet (arm V, population held-out; full page ranking and MaxSim scores)",
+      "evidence": "experiments/frozen/e5/tables/per_question.csv (population held-out; evidence_pages)",
+      "answer_side": "experiments/frozen/e8 L-B1 replicate (abstention, numeric support) as re-derived in data/processed/mmlongbench_doc/b1/e8_evaluation_per_question.csv; checksums verified against the frozen package"
+    },
+    "populations": {
+      "P0_labelled": "held-out questions with at least one annotated evidence page (expected 101 questions, 14 documents). Unit: question; cluster: document.",
+      "P_deploy": "all 118 held-out questions (label-free; used only for thresholds and trigger rates)"
+    },
+    "targets": {
+      "Y_incomplete": "1 if at least one annotated evidence page is not among ColQwen2's top 4 pages (B1 reads exactly the top 4 for all 118 questions in E8 L-B1). Primary.",
+      "Y_recoverable": "1 if Y_incomplete and at least one missing annotated evidence page is at ColQwen2 rank 5-8. Secondary; used by the futility rule G5 and by the fallback rule."
+    },
+    "signals": {
+      "direction": "higher value = more retrieval uncertainty = trigger. Scores s_i are ColQwen2 MaxSim scores sorted descending; s_1..s_8 the top eight.",
+      "U1_margin_45": "-(s_4 - s_5) / s_1",
+      "U2_top_standout": "-(s_1 - mean(all page scores of the document)) / sd(all page scores, ddof=0)",
+      "U3_flatness_18": "-(s_1 - s_8) / s_1",
+      "U4_abstained": "1 if the frozen E8 L-B1 reply is the exact abstention 'Not answerable', else 0",
+      "U5_numeric_unsupported": "1 if the frozen E8 L-B1 numeric-support check is False, else 0 (not applicable counts as 0)"
+    },
+    "operating_point": {
+      "continuous": "trigger iff signal >= its 60th percentile over P_deploy (target trigger rate 40%, the proposal's cost assumption); the threshold uses no label",
+      "binary": "trigger iff signal == 1"
+    },
+    "statistics": {
+      "auroc": "Mann-Whitney AUROC with mid-ranks for ties, signal against Y_incomplete on P0",
+      "bootstrap": "document-cluster percentile bootstrap, 10,000 draws, numpy default_rng seed 20261126; documents resampled with replacement; draws in which Y_incomplete is constant are discarded and counted",
+      "p_value": "one-sided bootstrap p = (1 + #draws with AUROC <= 0.5) / (1 + #valid draws)",
+      "multiplicity": "Holm step-down over the 5 signals at familywise alpha 0.05",
+      "lift": "precision at the operating point minus the base rate of Y_incomplete, computed within each bootstrap draw for its interval",
+      "lodo": "AUROC recomputed with each of the 14 documents left out"
+    },
+    "gate": {
+      "G1_discrimination": "AUROC >= 0.65",
+      "G2_significance": "Holm-adjusted one-sided p <= 0.05",
+      "G3_materiality": "lift >= +0.15 at the operating point, and the lift's 95% bootstrap lower bound > 0",
+      "G4_robustness": "minimum leave-one-document-out AUROC >= 0.60",
+      "G5_futility": "the triggered set contains at least 6 Y_recoverable questions (6/102 > the +0.05 engineering criterion)",
+      "pass": "Stage 0 passes iff at least one signal satisfies G1-G5. The selected trigger is the passing signal with the highest AUROC (ties: lowest signal index). Its threshold value is frozen with the Stage 0 result."
+    },
+    "descriptive_only": [
+      "AUROC against Y_recoverable",
+      "AUROC within single-page and multi-page evidence strata",
+      "per-document trigger rates and base rates",
+      "trigger rate on the 16 unanswerable questions",
+      "counts of questions whose evidence becomes complete or partially recovered at k = 8"
+    ]
+  },
+
+  "after_stage0": {
+    "if_pass": "Stage 1 smoke, then Stage 2 with arms B1s, F8a, F8b and derived A1a, A1b.",
+    "if_fail": "Adaptive acquisition stops at $0 and is reported as a negative result. Fallback rule: the fixed-depth arms (B1s, F8a, F8b; no A1) run only if Y_recoverable >= 12 on P0. Reason: a +0.05 gain needs >= 6 net fixes (0.05 x 102 = 5.1), and with roughly half of evidence recoveries converting into correct answers, >= 12 recoverable questions are needed for the criterion to be reachable at all. Otherwise E9 closes without a paid call and B1 keeps k = 4."
+  },
+
+  "stage1_smoke": {
+    "calls_max": 6,
+    "ceiling_usd": 0.02,
+    "purpose": "validate the 8-page request path only: strict schema accepted, one served model, the token model reproduces observed prompt totals, cost within bound. Not scored."
+  },
+
+  "stage2": {
+    "population": "the 118 development questions (102 answerable, 16 unanswerable) of E6/E8",
+    "reader": "identical to E8 L-B1: gpt-6-luna, reasoning_effort none, temperature 0, image detail high, contract b1 (strict JSON schema), 800 maximum completion tokens, 768-px page images",
+    "arms": {
+      "B1s": "ColQwen2 top 4, one replicate in this session (118 calls). Same-session control; its requests must equal the frozen E8 L-B1 request fingerprints.",
+      "F8a": "ColQwen2 top 8, same contract (118 calls)",
+      "F8b": "repeat of F8a after all F8a/B1s pairs (118 calls); never served from F8a's cache",
+      "A1a": "derived, no call: F8a's reply on triggered questions, B1s's reply otherwise",
+      "A1b": "derived, no call: F8b's reply on triggered questions, B1s's reply otherwise"
+    },
+    "order": "B1s and F8a adjacent per question, order counterbalanced 59/59 by a seeded permutation (seed 20261127); the F8b block after all pairs",
+    "plan_upper_bound_usd_max": 0.45,
+    "primary_contrast": {
+      "if_stage0_passed": "A1 - B1s, answerable accuracy under S-v1, A1 averaged over replicates a and b per question",
+      "if_fallback": "F8 - B1s, answerable accuracy under S-v1, F8 averaged over replicates a and b per question"
+    },
+    "secondary": [
+      "F8 - B1s and A1 - F8 (attribution), when A1 exists",
+      "each arm against the frozen E8 L-B1 and L-B1r (cross-session drift, descriptive)",
+      "S-v2 for every contrast once new gray items are labelled blind by the owner; never substituted by model judgment",
+      "correct abstentions, citation validity, schema validity, grounding diagnostic, tokens, USD, latency"
+    ],
+    "decision_rules_in_order": [
+      "Guardrails (each paid arm and each derived arm vs B1s): correct abstentions >= B1s - 2; citation validity >= B1s - 0.05; schema validity >= 0.99. Failure -> regression.",
+      "Delta <= -0.05 -> regression.",
+      "Delta < +0.05 -> no_meaningful_gain.",
+      "Broken > fixed / 2 in either replicate -> regression.",
+      "A1 only: A1 - F8 <= 0 -> more_pages_not_triggering.",
+      "One-sided document-cluster bootstrap 5th percentile of Delta > 0 (10,000 draws, seed 20261128) and document sign-flip p <= 0.05 -> adopt_adaptive_acquisition (A1) or adopt_fixed_k8 (fallback).",
+      "Otherwise -> promising_but_uncertain."
+    ],
+    "engineering_criterion_both_replicates": "Delta >= +0.05 must hold in replicate a and in replicate b separately, in addition to the replicate average",
+    "stability": "correctness flips between F8a and F8b reported; more than 10 marks the arm unstable and blocks any adopt verdict",
+    "budget": "cumulative observed cost ceiling 0.50 USD across Stage 1 and Stage 2, fail-closed; an attempt without returned usage is charged at its precomputed upper bound; SDK retries 0; stop on any served-model or system-fingerprint change"
+  },
+
+  "application_consequence": "B1 changes only on an adopt verdict. Any adopted policy is then frozen for the final evaluation together with B1, and B1 remains the primary configuration if it is not adopted."
+}
