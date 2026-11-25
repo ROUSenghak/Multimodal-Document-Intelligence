@@ -28,6 +28,7 @@ That leaves **115 documents and 916 questions.**
 | 3. Question content | `mmlb-0210`, `mmlb-0980`: reference answer and format (a scorer self-check listing references that score 0 against themselves) | Archived notebook 14 | `05-03-18-political-release.pdf`, `2312.04350v3.pdf` |
 | 3. Named in archived work | Document name only | Archived notebooks (listed by the E5 spec as touched) | `RAR.pdf` |
 | 2. Per-document metadata | The SHA-256 of the PDF bytes (no text, image or page extracted), computed so that the application's test-pool guard can also refuse the file under another name; and the list of all 135 document names (`resources/mmlongbench_doc_documents.json`, built from the `doc_id` column only) | Application layer, 2026-11-25 | `PH_2016.06.08_Economy-Final.pdf` (hash); all (names, level 0) |
+| 2–4. Final evaluation, step 1 (approved, spec `experiments/specs/final_evaluation_v1.json`, commit `1c54a3e`) | 2026-11-25: all 111 pool PDFs downloaded at the pinned revision; per-document size, SHA-256 and page count; per-page native text, OCR text, 768-px renders and ColQwen2 page embeddings (indexing). **No question, answer or evidence read at this step.** | Notebook 09, `index` mode | the 111 evaluation documents |
 | 4. System outputs | **None.** No retriever ranking, model reply or score has been produced for any pool question. The archived matches are scorer self-checks on reference strings. | — | — |
 
 ## Consequences for the final evaluation
