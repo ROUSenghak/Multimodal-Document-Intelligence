@@ -1,0 +1,355 @@
+qid,doc_id,arm,answerable,s1_score,s1_correct,s1_strict,v2_class,v2_reason,schema_valid,citation_valid,cites_annotated_evidence,grounding_valid,quotes_supported,numeric_support,invalid_evidence_pages,missing_evidence_pages,minimum_quote_score,abstained,v2_final,historical_label_reused
+mmlb-0140,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1,True,0.95,True,False,correct,same items after normalisation,True,True,False,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-0140,efd88e41c5f2606c57929cac6c1c0605.pdf,L-v1,True,0.6363636363636364,True,False,gray,every reference item matched up to formatting,True,True,False,,,,,,,False,pending,False
+mmlb-1001,NUS-Business-School-BBA-Brochure-2024.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-1001,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,False,False,0.0,0.0,0.7480916030534351,False,wrong,False
+mmlb-1063,AMAZON_2017_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,False,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-1063,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,False,,,,,,,False,wrong,False
+mmlb-0141,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0141,efd88e41c5f2606c57929cac6c1c0605.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-0593,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-v1,True,0.0,False,False,gray,the reference is a phrase inside a longer reply,True,True,True,,,,,,,False,pending,False
+mmlb-0593,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,,0.0,0.0,0.8679245283018868,False,correct,False
+mmlb-0989,SAO-StudentSupport_Guidebook-Content.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0989,SAO-StudentSupport_Guidebook-Content.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0203,Macbook_air.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0203,Macbook_air.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1002,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,False,False,False,False,0.0,0.0,0.36470588235294116,False,wrong,False
+mmlb-1002,NUS-Business-School-BBA-Brochure-2024.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,False,,,,,,,False,wrong,False
+mmlb-1051,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1051,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1064,AMAZON_2017_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-1064,AMAZON_2017_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1058,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1058,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0991,SAO-StudentSupport_Guidebook-Content.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.6055045871559633,False,correct,False
+mmlb-0991,SAO-StudentSupport_Guidebook-Content.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1028,COSTCO_2021_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1028,COSTCO_2021_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0081,2312.10997v5.pdf,L-v1,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,,,,,,,False,pending,False
+mmlb-0081,2312.10997v5.pdf,L-B1,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,True,True,,0.0,0.0,1.0,False,pending,False
+mmlb-0688,11-21-16-Updated-Post-Election-Release.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.7572815533980582,False,correct,False
+mmlb-0688,11-21-16-Updated-Post-Election-Release.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-0411,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,False,1.0,True,True,correct,exact abstention,True,True,False,,,,,,,True,correct,False
+mmlb-0411,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0044,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,,0.0,0.0,0.8372093023255814,False,correct,False
+mmlb-0044,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0687,11-21-16-Updated-Post-Election-Release.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0687,11-21-16-Updated-Post-Election-Release.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,,0.0,0.0,0.7674418604651163,False,correct,False
+mmlb-1018,COSTCO_2021_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1018,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0988,SAO-StudentSupport_Guidebook-Content.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0988,SAO-StudentSupport_Guidebook-Content.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-0410,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-0410,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1027,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1027,COSTCO_2021_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0577,e639029d16094ea71d964e2fb953952b.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0577,e639029d16094ea71d964e2fb953952b.pdf,L-v1,False,1.0,True,True,correct,exact abstention,True,True,False,,,,,,,True,correct,False
+mmlb-0139,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0139,efd88e41c5f2606c57929cac6c1c0605.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1025,COSTCO_2021_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1025,COSTCO_2021_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0408,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,False,0.0,0.0,0.6153846153846154,False,wrong,False
+mmlb-0408,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,,,,,,,False,wrong,False
+mmlb-1013,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,gray,reference flagged as debatable by the frozen E6 audit,True,True,True,,,,,,,False,unsure,True
+mmlb-1013,COSTCO_2021_10K.pdf,L-B1,True,0.0,False,False,gray,reference flagged as debatable by the frozen E6 audit,True,True,True,True,True,True,0.0,0.0,1.0,False,unsure,True
+mmlb-0048,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0048,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0581,e639029d16094ea71d964e2fb953952b.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,True,0.0,0.0,0.4117647058823529,False,correct,False
+mmlb-0581,e639029d16094ea71d964e2fb953952b.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0066,2310.05634v2.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0066,2310.05634v2.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1016,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-1016,COSTCO_2021_10K.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,True,True,True,0.0,0.0,1.0,False,wrong,False
+mmlb-0077,2312.10997v5.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0077,2312.10997v5.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0200,Macbook_air.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0200,Macbook_air.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-1019,COSTCO_2021_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1019,COSTCO_2021_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0199,Macbook_air.pdf,L-v1,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,,,,,,,False,wrong,True
+mmlb-0199,Macbook_air.pdf,L-B1,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,True,True,True,0.0,0.0,1.0,False,wrong,True
+mmlb-0409,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,False,False,,0.0,0.0,0.6136363636363636,False,pending,False
+mmlb-0409,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,,,,,,,False,pending,False
+mmlb-0684,11-21-16-Updated-Post-Election-Release.pdf,L-v1,True,0.0,False,False,gray,the reference is a phrase inside a longer reply,True,True,True,,,,,,,False,pending,False
+mmlb-0684,11-21-16-Updated-Post-Election-Release.pdf,L-B1,True,0.75,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,False,False,False,0.0,0.0,0.7027027027027027,False,pending,False
+mmlb-0080,2312.10997v5.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0080,2312.10997v5.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1003,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1003,NUS-Business-School-BBA-Brochure-2024.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0407,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-0407,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,0.9615384615384616,False,wrong,False
+mmlb-0579,e639029d16094ea71d964e2fb953952b.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0579,e639029d16094ea71d964e2fb953952b.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0689,11-21-16-Updated-Post-Election-Release.pdf,L-v1,True,0.0,False,False,gray,reference flagged as debatable by the frozen E6 audit,True,True,True,,,,,,,False,pending,False
+mmlb-0689,11-21-16-Updated-Post-Election-Release.pdf,L-B1,True,0.0,False,False,gray,reference flagged as debatable by the frozen E6 audit,True,True,True,False,False,True,0.0,0.0,0.8387096774193549,False,wrong,True
+mmlb-1055,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1055,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0137,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,,0.0,0.0,0.8695652173913043,False,correct,False
+mmlb-0137,efd88e41c5f2606c57929cac6c1c0605.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0600,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0600,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,True,0.0,0.0,0.6190476190476191,False,correct,False
+mmlb-0405,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0405,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,False,1.0,True,True,correct,exact abstention,True,True,False,,,,,,,True,correct,False
+mmlb-1022,COSTCO_2021_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-1022,COSTCO_2021_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0403,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.5,False,correct,False
+mmlb-0403,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0142,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,0.9273743016759777,False,wrong,False
+mmlb-0142,efd88e41c5f2606c57929cac6c1c0605.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-0578,e639029d16094ea71d964e2fb953952b.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,False,,,,,,,False,correct,False
+mmlb-0578,e639029d16094ea71d964e2fb953952b.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,False,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-1017,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-1017,COSTCO_2021_10K.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,1.0,False,wrong,False
+mmlb-0065,2310.05634v2.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,False,,,,,,,False,wrong,False
+mmlb-0065,2310.05634v2.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0582,e639029d16094ea71d964e2fb953952b.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0582,e639029d16094ea71d964e2fb953952b.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1057,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,False,False,0.0,0.0,0.8852459016393442,False,wrong,False
+mmlb-1057,AMAZON_2017_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1026,COSTCO_2021_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,False,,,,,,,False,correct,False
+mmlb-1026,COSTCO_2021_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,False,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0404,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,True,0.7777777777777778,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,False,False,,0.0,0.0,0.5,False,pending,False
+mmlb-0404,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,True,0.7777777777777778,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,,,,,,,False,pending,False
+mmlb-1052,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1052,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0064,2310.05634v2.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0064,2310.05634v2.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,True,0.0,0.0,0.8266666666666667,False,correct,False
+mmlb-0401,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0401,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,False,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0685,11-21-16-Updated-Post-Election-Release.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0685,11-21-16-Updated-Post-Election-Release.pdf,L-v1,False,1.0,True,True,correct,exact abstention,True,True,False,,,,,,,True,correct,False
+mmlb-0402,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,True,0.0,False,False,wrong,a reference item is missing,True,True,False,True,True,,0.0,0.0,0.9943502824858758,False,wrong,False
+mmlb-0402,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,,,,,,,False,wrong,False
+mmlb-1059,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1059,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-0046,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0046,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0050,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,True,0.7941176470588236,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,,,,,,,False,pending,False
+mmlb-0050,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,True,0.7941176470588236,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,True,True,,0.0,0.0,0.984375,False,pending,False
+mmlb-0580,e639029d16094ea71d964e2fb953952b.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0580,e639029d16094ea71d964e2fb953952b.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0201,Macbook_air.pdf,L-v1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,,,,,,,False,wrong,False
+mmlb-0201,Macbook_air.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,True,0.0,0.0,0.7945205479452054,False,correct,False
+mmlb-0596,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0596,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-v1,False,1.0,True,True,correct,exact abstention,True,True,False,,,,,,,True,correct,False
+mmlb-1021,COSTCO_2021_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-1021,COSTCO_2021_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0686,11-21-16-Updated-Post-Election-Release.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,False,True,0.0,0.0,0.7848101265822784,False,wrong,False
+mmlb-0686,11-21-16-Updated-Post-Election-Release.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-0047,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,False,1.0,True,True,correct,exact abstention,True,True,False,,,,,,,True,correct,False
+mmlb-0047,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0138,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0138,efd88e41c5f2606c57929cac6c1c0605.pdf,L-v1,False,1.0,True,True,correct,exact abstention,True,True,False,,,,,,,True,correct,False
+mmlb-0597,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-v1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,,,,,,,False,wrong,False
+mmlb-0597,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,True,0.0,0.0,0.9866666666666667,False,wrong,False
+mmlb-0078,2312.10997v5.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0078,2312.10997v5.pdf,L-v1,True,0.0,False,False,wrong,string mismatch,True,True,False,,,,,,,False,wrong,False
+mmlb-0205,Macbook_air.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0205,Macbook_air.pdf,L-v1,False,1.0,True,True,correct,exact abstention,True,True,False,,,,,,,True,correct,False
+mmlb-0406,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,,0.0,0.0,0.7903225806451613,False,wrong,False
+mmlb-0406,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-v1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,,,,,,,False,wrong,False
+mmlb-0990,SAO-StudentSupport_Guidebook-Content.pdf,L-B1,True,0.0,False,False,wrong,string mismatch,True,True,False,False,False,,0.0,0.0,0.8058608058608059,False,wrong,False
+mmlb-0990,SAO-StudentSupport_Guidebook-Content.pdf,L-v1,True,0.0,False,False,gray,the reference is a phrase inside a longer reply,True,True,False,,,,,,,False,pending,False
+mmlb-1006,2021-Apple-Catalog.pdf,L-B1,True,0.0,False,False,gray,the reference value is one of several numbers in the reply,True,True,True,False,False,True,0.0,0.0,0.6216216216216216,False,wrong,True
+mmlb-1006,2021-Apple-Catalog.pdf,L-v1,True,0.0,False,False,correct,"numeric match after normalisation (currency signs, separators, %, scale words)",True,True,True,,,,,,,False,correct,False
+mmlb-0998,NUS-Business-School-BBA-Brochure-2024.pdf,L-v1,True,0.8536585365853658,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,,,,,,,False,pending,False
+mmlb-0998,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-1004,2021-Apple-Catalog.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,False,False,True,False,0.0,0.0,1.0,False,wrong,False
+mmlb-1004,2021-Apple-Catalog.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,False,,,,,,,False,wrong,False
+mmlb-0076,2312.10997v5.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0076,2312.10997v5.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1065,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,gray,"same number up to a factor of 1,000^n (unit scale ambiguous)",True,True,True,,,,,,,False,wrong,True
+mmlb-1065,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,gray,"same number up to a factor of 1,000^n (unit scale ambiguous)",True,True,True,False,True,False,0.0,0.0,1.0,False,wrong,True
+mmlb-0049,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,,,,,,,False,wrong,False
+mmlb-0049,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-1056,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,False,False,True,False,0.0,0.0,0.9195402298850575,False,wrong,False
+mmlb-1056,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,False,,,,,,,False,wrong,False
+mmlb-1054,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1054,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0683,11-21-16-Updated-Post-Election-Release.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,True,0.0,0.0,0.8645833333333334,False,correct,False
+mmlb-0683,11-21-16-Updated-Post-Election-Release.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0204,Macbook_air.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-0204,Macbook_air.pdf,L-v1,True,0.8,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,,,,,,,False,pending,False
+mmlb-1007,2021-Apple-Catalog.pdf,L-v1,True,0.0,False,False,wrong,string mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-1007,2021-Apple-Catalog.pdf,L-B1,True,0.0,False,False,wrong,string mismatch,True,True,True,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-1015,COSTCO_2021_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1015,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1053,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1053,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0082,2312.10997v5.pdf,L-v1,True,0.0,False,False,wrong,string mismatch,True,True,False,,,,,,,False,wrong,False
+mmlb-0082,2312.10997v5.pdf,L-B1,True,0.0,False,False,wrong,string mismatch,True,True,True,False,False,,0.0,0.0,0.7111111111111111,False,wrong,False
+mmlb-0042,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,True,0.95,True,False,gray,every reference item matched up to formatting,True,True,True,False,False,,0.0,0.0,0.5793650793650794,False,pending,False
+mmlb-0042,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,True,0.95,True,False,gray,every reference item matched up to formatting,True,True,True,,,,,,,False,pending,False
+mmlb-1061,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1061,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1060,AMAZON_2017_10K.pdf,L-v1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,,,,,,,False,wrong,False
+mmlb-1060,AMAZON_2017_10K.pdf,L-B1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-0079,2312.10997v5.pdf,L-v1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,,,,,,,False,wrong,False
+mmlb-0079,2312.10997v5.pdf,L-B1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,,0.0,0.0,0.7341772151898734,False,wrong,False
+mmlb-0999,NUS-Business-School-BBA-Brochure-2024.pdf,L-v1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,,,,,,,False,wrong,False
+mmlb-0999,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,True,True,True,0.0,0.0,1.0,False,wrong,False
+mmlb-0067,2310.05634v2.pdf,L-v1,True,0.0,False,False,wrong,string mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-0067,2310.05634v2.pdf,L-B1,True,0.0,False,False,wrong,string mismatch,True,True,True,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-0068,2310.05634v2.pdf,L-B1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-0068,2310.05634v2.pdf,L-v1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,,,,,,,False,wrong,False
+mmlb-0043,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0043,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,,,,,,,False,wrong,False
+mmlb-0143,efd88e41c5f2606c57929cac6c1c0605.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0143,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.6349206349206349,False,correct,False
+mmlb-0576,e639029d16094ea71d964e2fb953952b.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0576,e639029d16094ea71d964e2fb953952b.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0202,Macbook_air.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-0202,Macbook_air.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0599,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,False,,,,,,,False,correct,False
+mmlb-0599,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0594,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,0.9900990099009901,False,correct,False
+mmlb-0594,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0595,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0595,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-v1,True,0.0,False,False,gray,the reference is a phrase inside a longer reply,True,True,True,,,,,,,False,pending,False
+mmlb-0063,2310.05634v2.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0063,2310.05634v2.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-0598,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.8518518518518519,False,correct,False
+mmlb-0598,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1023,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-1023,COSTCO_2021_10K.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,1.0,False,wrong,False
+mmlb-1000,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,,0.0,0.0,0.9615384615384616,False,wrong,False
+mmlb-1000,NUS-Business-School-BBA-Brochure-2024.pdf,L-v1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,,,,,,,False,wrong,False
+mmlb-0051,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,,,,,,,False,wrong,False
+mmlb-0051,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,True,True,,0.0,0.0,0.984375,False,wrong,False
+mmlb-0987,SAO-StudentSupport_Guidebook-Content.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0987,SAO-StudentSupport_Guidebook-Content.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0062,2310.05634v2.pdf,L-B1,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0062,2310.05634v2.pdf,L-v1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,,,,,,,False,wrong,False
+mmlb-1024,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,wrong,false abstention,True,True,False,,,,,,,True,wrong,False
+mmlb-1024,COSTCO_2021_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0690,11-21-16-Updated-Post-Election-Release.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0690,11-21-16-Updated-Post-Election-Release.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0045,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,,0.0,0.0,0.9830508474576272,False,wrong,False
+mmlb-0045,ddoseattle-150627210357-lva1-app6891_95.pdf,L-v1,True,0.0,False,False,wrong,a reference item is missing,True,True,True,,,,,,,False,wrong,False
+mmlb-1020,COSTCO_2021_10K.pdf,L-B1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,1.0,False,wrong,False
+mmlb-1020,COSTCO_2021_10K.pdf,L-v1,True,0.0,False,False,wrong,numeric mismatch,True,True,True,,,,,,,False,wrong,False
+mmlb-1062,AMAZON_2017_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,0.990990990990991,False,correct,False
+mmlb-1062,AMAZON_2017_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-1005,2021-Apple-Catalog.pdf,L-v1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,,,,,,,False,wrong,False
+mmlb-1005,2021-Apple-Catalog.pdf,L-B1,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,,0.0,0.0,0.3384615384615385,False,wrong,False
+mmlb-1014,COSTCO_2021_10K.pdf,L-B1,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,0.946969696969697,False,correct,False
+mmlb-1014,COSTCO_2021_10K.pdf,L-v1,True,1.0,True,True,correct,S-v1 full match,True,True,True,,,,,,,False,correct,False
+mmlb-0140,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1r,True,0.95,True,False,correct,same items after normalisation,True,True,False,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-1001,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,False,False,0.0,0.0,0.7480916030534351,False,wrong,False
+mmlb-1063,AMAZON_2017_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,False,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0141,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0593,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,,0.0,0.0,0.8679245283018868,False,correct,False
+mmlb-0989,SAO-StudentSupport_Guidebook-Content.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0203,Macbook_air.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1002,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,False,False,False,True,0.0,0.0,0.35555555555555557,False,wrong,False
+mmlb-1051,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1064,AMAZON_2017_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-1058,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0991,SAO-StudentSupport_Guidebook-Content.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.6055045871559633,False,correct,False
+mmlb-1028,COSTCO_2021_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0081,2312.10997v5.pdf,L-B1r,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,True,True,,0.0,0.0,1.0,False,pending,False
+mmlb-0688,11-21-16-Updated-Post-Election-Release.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,False,False,0.0,0.0,0.7572815533980582,False,wrong,False
+mmlb-0411,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0044,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,,0.0,0.0,0.8372093023255814,False,correct,False
+mmlb-0687,11-21-16-Updated-Post-Election-Release.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,,0.0,0.0,0.7674418604651163,False,correct,False
+mmlb-1018,COSTCO_2021_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0988,SAO-StudentSupport_Guidebook-Content.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-0410,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-1027,COSTCO_2021_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0577,e639029d16094ea71d964e2fb953952b.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0139,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-1025,COSTCO_2021_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0408,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,False,0.0,0.0,0.6153846153846154,False,wrong,False
+mmlb-1013,COSTCO_2021_10K.pdf,L-B1r,True,0.0,False,False,gray,reference flagged as debatable by the frozen E6 audit,True,True,True,True,True,True,0.0,0.0,1.0,False,unsure,True
+mmlb-0048,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0581,e639029d16094ea71d964e2fb953952b.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,True,0.0,0.0,0.49056603773584906,False,correct,False
+mmlb-0066,2310.05634v2.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1016,COSTCO_2021_10K.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,True,True,True,0.0,0.0,1.0,False,wrong,False
+mmlb-0077,2312.10997v5.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0200,Macbook_air.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-1019,COSTCO_2021_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0199,Macbook_air.pdf,L-B1r,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,True,True,True,0.0,0.0,1.0,False,wrong,True
+mmlb-0409,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,True,0.0,False,False,gray,every reference item matched up to formatting,True,True,True,False,False,,0.0,0.0,0.6136363636363636,False,pending,False
+mmlb-0684,11-21-16-Updated-Post-Election-Release.pdf,L-B1r,True,0.6,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,False,False,False,0.0,0.0,0.7027027027027027,False,pending,False
+mmlb-0080,2312.10997v5.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1003,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0407,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,0.9615384615384616,False,wrong,False
+mmlb-0579,e639029d16094ea71d964e2fb953952b.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0689,11-21-16-Updated-Post-Election-Release.pdf,L-B1r,True,0.0,False,False,gray,reference flagged as debatable by the frozen E6 audit,True,True,True,False,False,True,0.0,0.0,0.8923076923076924,False,wrong,True
+mmlb-1055,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0137,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,,0.0,0.0,0.8695652173913043,False,correct,False
+mmlb-0600,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,True,0.0,0.0,0.6190476190476191,False,correct,False
+mmlb-0405,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-1022,COSTCO_2021_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0403,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.5,False,correct,False
+mmlb-0142,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,0.9273743016759777,False,wrong,False
+mmlb-0578,e639029d16094ea71d964e2fb953952b.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,False,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-1017,COSTCO_2021_10K.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,1.0,False,wrong,False
+mmlb-0065,2310.05634v2.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,False,False,False,True,0.0,0.0,0.8571428571428571,False,wrong,False
+mmlb-0582,e639029d16094ea71d964e2fb953952b.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1057,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,False,False,0.0,0.0,0.8852459016393442,False,wrong,False
+mmlb-1026,COSTCO_2021_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,False,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0404,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,True,0.7777777777777778,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,False,False,,0.0,0.0,0.5,False,pending,False
+mmlb-1052,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0064,2310.05634v2.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,False,True,0.0,0.0,0.8266666666666667,False,wrong,False
+mmlb-0401,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,False,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0685,11-21-16-Updated-Post-Election-Release.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0402,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,True,0.0,False,False,wrong,a reference item is missing,True,True,False,True,True,,0.0,0.0,0.9943502824858758,False,wrong,False
+mmlb-1059,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0046,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0050,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,True,0.7941176470588236,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,True,True,,0.0,0.0,0.984375,False,pending,False
+mmlb-0580,e639029d16094ea71d964e2fb953952b.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0201,Macbook_air.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0596,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-1021,COSTCO_2021_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0686,11-21-16-Updated-Post-Election-Release.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0047,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0138,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0597,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1r,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,True,0.0,0.0,0.9866666666666667,False,wrong,False
+mmlb-0078,2312.10997v5.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0205,Macbook_air.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0406,chapter8-geneticscompatibilitymode-141214140247-conversion-gate02_95.pdf,L-B1r,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,,0.0,0.0,0.7903225806451613,False,wrong,False
+mmlb-0990,SAO-StudentSupport_Guidebook-Content.pdf,L-B1r,True,0.0,False,False,wrong,string mismatch,True,True,False,False,False,,0.0,0.0,0.8058608058608059,False,wrong,False
+mmlb-1006,2021-Apple-Catalog.pdf,L-B1r,True,0.0,False,False,correct,"numeric match after normalisation (currency signs, separators, %, scale words)",True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0998,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-1004,2021-Apple-Catalog.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,False,False,False,False,0.0,0.0,0.3384615384615385,False,wrong,False
+mmlb-0076,2312.10997v5.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1065,AMAZON_2017_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0049,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-1056,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,False,False,True,False,0.0,0.0,0.9195402298850575,False,wrong,False
+mmlb-1054,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0683,11-21-16-Updated-Post-Election-Release.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,True,0.0,0.0,0.8645833333333334,False,correct,False
+mmlb-0204,Macbook_air.pdf,L-B1r,True,0.8,True,False,gray,partial ANLS credit (0.5 < ANLS < 1),True,True,True,True,True,,0.0,0.0,1.0,False,pending,False
+mmlb-1007,2021-Apple-Catalog.pdf,L-B1r,True,0.0,False,False,wrong,string mismatch,True,True,True,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-1015,COSTCO_2021_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1053,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0082,2312.10997v5.pdf,L-B1r,True,0.0,False,False,wrong,string mismatch,True,True,False,False,False,,0.0,0.0,0.7111111111111111,False,wrong,False
+mmlb-0042,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,True,0.95,True,False,gray,every reference item matched up to formatting,True,True,True,False,False,,0.0,0.0,0.5441176470588235,False,pending,False
+mmlb-1061,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1060,AMAZON_2017_10K.pdf,L-B1r,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,,0.0,0.0,0.9964539007092199,False,wrong,False
+mmlb-0079,2312.10997v5.pdf,L-B1r,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,,0.0,0.0,0.7341772151898734,False,wrong,False
+mmlb-0999,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1r,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,True,0.0,0.0,0.8125,False,wrong,False
+mmlb-0067,2310.05634v2.pdf,L-B1r,True,0.0,False,False,wrong,string mismatch,True,True,True,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-0068,2310.05634v2.pdf,L-B1r,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,True,True,,0.0,0.0,1.0,False,wrong,False
+mmlb-0043,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,False,1.0,True,True,correct,exact abstention,True,True,False,True,True,,0.0,0.0,,True,correct,False
+mmlb-0143,efd88e41c5f2606c57929cac6c1c0605.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.6349206349206349,False,correct,False
+mmlb-0576,e639029d16094ea71d964e2fb953952b.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0202,Macbook_air.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-0599,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,False,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-0594,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,0.9900990099009901,False,correct,False
+mmlb-0595,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,1.0,False,correct,False
+mmlb-0063,2310.05634v2.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,,0.0,0.0,1.0,False,correct,False
+mmlb-0598,3276a5b991c49cf5f9a4af0f7d6fce67.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,False,False,0.0,0.0,0.8518518518518519,False,correct,False
+mmlb-1023,COSTCO_2021_10K.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,1.0,False,wrong,False
+mmlb-1000,NUS-Business-School-BBA-Brochure-2024.pdf,L-B1r,True,0.0,False,False,wrong,a reference item is missing,True,True,True,False,False,,0.0,0.0,0.7916666666666666,False,wrong,False
+mmlb-0051,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,True,True,,0.0,0.0,0.984375,False,wrong,False
+mmlb-0987,SAO-StudentSupport_Guidebook-Content.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0062,2310.05634v2.pdf,L-B1r,True,0.0,False,False,wrong,false abstention,True,True,False,True,True,,0.0,0.0,,True,wrong,False
+mmlb-1024,COSTCO_2021_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,1.0,False,correct,False
+mmlb-0690,11-21-16-Updated-Post-Election-Release.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,0.921875,False,correct,False
+mmlb-0045,ddoseattle-150627210357-lva1-app6891_95.pdf,L-B1r,True,0.0,False,False,wrong,a reference item is missing,True,True,True,True,True,,0.0,0.0,0.9830508474576272,False,wrong,False
+mmlb-1020,COSTCO_2021_10K.pdf,L-B1r,True,0.0,False,False,wrong,numeric mismatch,True,True,True,False,True,False,0.0,0.0,1.0,False,wrong,False
+mmlb-1062,AMAZON_2017_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,True,True,True,0.0,0.0,0.990990990990991,False,correct,False
+mmlb-1005,2021-Apple-Catalog.pdf,L-B1r,False,0.0,False,False,wrong,answered an unanswerable question,True,True,False,False,False,,0.0,0.0,0.3384615384615385,False,wrong,False
+mmlb-1014,COSTCO_2021_10K.pdf,L-B1r,True,1.0,True,True,correct,S-v1 full match,True,True,True,False,True,False,0.0,0.0,0.946969696969697,False,correct,False

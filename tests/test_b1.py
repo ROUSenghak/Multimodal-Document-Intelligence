@@ -1,5 +1,6 @@
 """B1 reader profile, grounding and bounded retrieve-read-verify policy."""
 
+import csv
 import hashlib
 import json
 from pathlib import Path
@@ -66,6 +67,40 @@ def test_e8_full_spec_pins_the_application_and_fail_closed_executor():
     for module, expected in spec["application_module_sha256"].items():
         path = REPO_ROOT / "src" / Path(*module.split(".")).with_suffix(".py")
         assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
+
+
+def test_frozen_e8_execution_and_primary_verdict_are_complete():
+    folder = REPO_ROOT / "experiments" / "frozen" / "e8"
+    entries = [line.split(maxsplit=1) for line in (folder / "SHA256SUMS").read_text().splitlines()]
+    assert len(entries) == 10
+    for expected, name in entries:
+        assert hashlib.sha256((folder / name).read_bytes()).hexdigest() == expected
+
+    run = folder / "run_20261125T140433934010Z_4edb90e7_full"
+    records = [json.loads(line) for line in (run / "execution_log.jsonl").read_text().splitlines()]
+    assert len(records) == 354
+    assert {record["status"] for record in records} == {"ok"}
+    assert {record["attempt"] for record in records} == {1}
+    assert len({record["execution_index"] for record in records}) == 354
+    assert {arm: sum(record["arm"] == arm for record in records) for arm in ("L-v1", "L-B1", "L-B1r")} == {
+        "L-v1": 118, "L-B1": 118, "L-B1r": 118,
+    }
+    assert {record["served_model"] for record in records} == {"gpt-6-luna"}
+    assert {record["system_fingerprint"] for record in records} == {None}
+    assert all(record["finish_reason"] == "stop" and record["parse_error"] is None for record in records)
+
+    summary = json.loads((folder / "tables" / "evaluation_summary.json").read_text())
+    assert {arm: int(summary["per_arm"][arm]["S-v1 correct / 102"]) for arm in ("L-v1", "L-B1", "L-B1r")} == {
+        "L-v1": 42, "L-B1": 46, "L-B1r": 46,
+    }
+    assert summary["decision"]["stability flips / 102"] == 4
+    assert summary["decision"]["promote B1 under frozen S-v1 rules"] is True
+    assert summary["decision"]["S-v2 finalised"] is False
+    queue = list(csv.DictReader((folder / "adjudication" / "blind_queue_unlabelled.csv").open()))
+    assert len(queue) == len({row["item_id"] for row in queue}) == 16
+    assert {row["label (correct / wrong / unsure)"] for row in queue} == {""}
+    audit = json.loads((folder / "AUDIT.json").read_text())
+    assert audit["passed"] and audit["checks_passed"] == audit["checks_total"] == 25
 
 
 def test_measured_luna_profile_reproduces_all_six_smoke_prompt_totals():

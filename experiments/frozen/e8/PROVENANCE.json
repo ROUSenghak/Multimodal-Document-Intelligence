@@ -1,0 +1,17 @@
+{
+  "experiment": "E8 reader migration and B1 stabilisation",
+  "run_id": "20261125T140433934010Z_4edb90e7_full",
+  "executed_at_utc": "2026-11-25T14:04:34.479Z/2026-11-25T14:19:16.920Z",
+  "execution_commit": "406f908629d243f1fab3811615d56eeb976bd4bd",
+  "evaluation_commit": "c03f63ecddcaa9964348677bffc36032b357005c",
+  "specification": "experiments/specs/e8_reader_migration_v1.json",
+  "specification_sha256": "c11227f41078b05a3bdf87f77cc1c8d3eb1f6cdeeda77a920963a3a669a707f9",
+  "source_run": "experiments/runs/e8/20261125T140433934010Z_4edb90e7_full",
+  "copy_policy": "run files and evaluation tables were copied byte for byte; the adjudication queue was frozen before labels",
+  "approval": "The owner replied 'go ahead' immediately after the assistant stated the frozen maximum of 360 attempts and cumulative $0.50 ceiling.",
+  "population": "118 development questions in 14 documents; final test pool unused",
+  "primary_scoring": "S-v1, frozen historical scorer; correct means score > 0",
+  "secondary_scoring": "S-v2 pending 16 new blind owner labels",
+  "observed_cost_usd": 0.144765,
+  "status": "execution and S-v1 verdict frozen; S-v2 incomplete"
+}

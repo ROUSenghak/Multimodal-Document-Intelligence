@@ -1,0 +1,122 @@
+{
+  "run_id": "20261125T140433934010Z_4edb90e7_full",
+  "execution": {
+    "complete": true,
+    "successful": 354,
+    "planned": 354,
+    "attempts": 354,
+    "observed_list_price_cost_usd": 0.144765,
+    "budget_accounted_usd": 0.144765,
+    "served_models": [
+      "gpt-6-luna"
+    ],
+    "system_fingerprints": [
+      "None"
+    ],
+    "updated_at": "2026-11-25T14:19:16.920+00:00"
+  },
+  "per_arm": {
+    "L-B1": {
+      "questions": 118.0,
+      "S-v1 correct / 102": 46.0,
+      "S-v1 strict / 102": 41.0,
+      "correct abstentions / 16": 9.0,
+      "citation validity": 1.0,
+      "cites annotated evidence": 0.5508474576,
+      "grounding validity": 0.593220339,
+      "quote support": 0.7457627119,
+      "numeric support when applicable": 0.4716981132,
+      "invalid evidence-page replies": 0.0,
+      "missing evidence-page replies": 0.0,
+      "S-v2 automatic/reused correct": 42.0,
+      "S-v2 pending": 6.0,
+      "S-v2 unsure excluded": 1.0
+    },
+    "L-v1": {
+      "questions": 118.0,
+      "S-v1 correct / 102": 42.0,
+      "S-v1 strict / 102": 36.0,
+      "correct abstentions / 16": 8.0,
+      "citation validity": 1.0,
+      "cites annotated evidence": 0.5847457627,
+      "grounding validity": null,
+      "quote support": null,
+      "numeric support when applicable": null,
+      "invalid evidence-page replies": 0.0,
+      "missing evidence-page replies": 0.0,
+      "S-v2 automatic/reused correct": 37.0,
+      "S-v2 pending": 13.0,
+      "S-v2 unsure excluded": 1.0
+    },
+    "L-B1r": {
+      "questions": 118.0,
+      "S-v1 correct / 102": 46.0,
+      "S-v1 strict / 102": 40.0,
+      "correct abstentions / 16": 9.0,
+      "citation validity": 1.0,
+      "cites annotated evidence": 0.5338983051,
+      "grounding validity": 0.6016949153,
+      "quote support": 0.7372881356,
+      "numeric support when applicable": 0.5094339623,
+      "invalid evidence-page replies": 0.0,
+      "missing evidence-page replies": 0.0,
+      "S-v2 automatic/reused correct": 42.0,
+      "S-v2 pending": 7.0,
+      "S-v2 unsure excluded": 1.0
+    }
+  },
+  "comparisons": {
+    "L-v1 - frozen E6 V": {
+      "n": 102,
+      "treatment correct": 42,
+      "control correct": 38,
+      "delta": 0.0392156862745098,
+      "ci_low": -0.04504504504504504,
+      "ci_high": 0.13762258778867437,
+      "fixed": 14,
+      "broken": 10
+    },
+    "L-v1 - frozen E7 V0": {
+      "n": 102,
+      "treatment correct": 42,
+      "control correct": 38,
+      "delta": 0.0392156862745098,
+      "ci_low": -0.037505896226415085,
+      "ci_high": 0.12244897959183673,
+      "fixed": 13,
+      "broken": 9
+    },
+    "L-B1 - L-v1": {
+      "n": 102,
+      "treatment correct": 46,
+      "control correct": 42,
+      "delta": 0.0392156862745098,
+      "ci_low": -0.0190521978021978,
+      "ci_high": 0.09782608695652174,
+      "fixed": 8,
+      "broken": 4
+    },
+    "L-B1r - L-v1": {
+      "n": 102,
+      "treatment correct": 46,
+      "control correct": 42,
+      "delta": 0.0392156862745098,
+      "ci_low": -0.024390243902439025,
+      "ci_high": 0.0990990990990991,
+      "fixed": 8,
+      "broken": 4
+    }
+  },
+  "decision": {
+    "technical pass": true,
+    "migration harm": false,
+    "contract v2 pass": true,
+    "unstable (>10 correctness flips)": false,
+    "stability flips / 102": 4,
+    "abstention guardrail pass": true,
+    "promote B1 under frozen S-v1 rules": true,
+    "S-v2 finalised": false
+  },
+  "new_blind_adjudication_items": 16,
+  "rule": "S-v1 is primary; S-v2 remains an interval until every new gray item is blindly labelled"
+}

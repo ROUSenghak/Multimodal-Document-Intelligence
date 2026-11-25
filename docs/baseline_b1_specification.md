@@ -337,11 +337,12 @@ The stricter grounding diagnostic is deliberately reported separately from citat
 | Notebook 07 application parity | 118/118 frozen E6 V requests; six smoke prompt totals; 236/236 unique E8 app requests; 354-call offline plan |
 | S-v2 owner adjudication | frozen with checksums: 7 correct, 21 wrong, 1 unsure; E6 V − A = 39/101 − 28/101, 12 fixed / 1 broken |
 | E8 full protocol and executor | completed 2026-11-25: 354/354 first-attempt successes, $0.144765; notebook 07 reproduces the evaluation in replay |
+| E8 execution and S-v1 evaluation | frozen byte-for-byte in `experiments/frozen/e8` with 25/25 audit checks, provenance and checksums; S-v2 queue frozen empty |
 
 ### 8.2 Remaining work
 
 1. Blindly adjudicate the 16 new E8 S-v2 items and freeze those labels separately from the primary S-v1 verdict.
-2. Audit and freeze the E8 execution and B1 decision.
+2. Freeze the 16 labels as a separate S-v2 artifact and then freeze the complete B1 decision record; the E8 execution and primary S-v1 verdict are already immutable.
 3. Begin notebook 08 only after B1 is frozen: the verification-triggered adaptive evidence-acquisition experiment described in the approved roadmap.
 4. Rewrite the README around the frozen B1 outcome.
 

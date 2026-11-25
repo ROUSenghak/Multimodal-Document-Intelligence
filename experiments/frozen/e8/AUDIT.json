@@ -1,0 +1,33 @@
+{
+  "audit_version": 1,
+  "checks_total": 25,
+  "checks_passed": 25,
+  "passed": true,
+  "checks": {
+    "execution_complete": true,
+    "planned_calls_354": true,
+    "successful_calls_354": true,
+    "attempts_354": true,
+    "all_status_ok": true,
+    "all_first_attempt": true,
+    "unique_execution_indices_354": true,
+    "arm_counts_118_each": true,
+    "one_served_model": true,
+    "served_model_gpt_6_luna": true,
+    "one_system_fingerprint_value": true,
+    "system_fingerprint_not_supplied": true,
+    "all_finish_reason_stop": true,
+    "no_parse_errors": true,
+    "observed_cost_0_144765": true,
+    "cost_below_0_50": true,
+    "settings_match_frozen_spec_hash": true,
+    "evaluation_has_354_rows": true,
+    "s_v1_counts_42_46_46": true,
+    "correct_abstentions_8_9_9": true,
+    "citation_validity_1_each": true,
+    "repeat_correctness_flips_4": true,
+    "promote_b1_true": true,
+    "blind_queue_has_16_unique_empty_labels": true,
+    "s_v2_finalised_false": true
+  }
+}
