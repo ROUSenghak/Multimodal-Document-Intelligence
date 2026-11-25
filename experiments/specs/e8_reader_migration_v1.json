@@ -75,6 +75,7 @@
     "cumulative_ceiling_usd": 0.50,
     "unknown_usage_charge": "For budget gating, an attempt without returned usage is charged at its precomputed request upper bound; observed token cost is reported separately.",
     "sdk_retries": 0,
+    "on_identity_change": "append the reply as identity_mismatch and stop if either served model or system fingerprint changes",
     "on_api_error": "append the failure and stop; a later explicit resume may retry that execution index",
     "resume_key": "execution_index plus request fingerprint",
     "repeat_cache_rule": "L-B1r has a distinct execution index and must make a fresh call",

@@ -302,7 +302,7 @@ The committed smoke implementation is notebook 07 at commit `e6b0bf6`. Run `2026
 
 **Behavioural warning, not a failed technical gate.** S5 was the known-unanswerable `mmlb-0068`. Its reply satisfied the strict schema but answered with page 2 instead of abstaining. The old-contract S4 reply also answered. One diagnostic item cannot estimate an abstention rate; the preregistered full-run guardrail on all 16 unanswerable questions therefore remains essential.
 
-The smoke authorizes no further paid call. Notebook 07 rebuilds and fingerprints all 354 proposed requests offline with the measured profile: 1,379,010 prompt tokens and at most 236,000 output tokens, for a list-price upper bound of **$0.255901**. The earlier $0.20–$3.70 range is superseded. The full protocol is frozen in `experiments/specs/e8_reader_migration_v1.json` with a **$0.50 cumulative ceiling**, 360-attempt maximum and at most two attempts per execution index. A failed attempt with no returned usage is conservatively charged at its precomputed upper bound for budget gating, while observed token cost remains separate. Its mocked executor has passed all 354 indices, interruption/resume, API-error, budget, malformed-contract and model-identity failure tests. This implementation is not approval for a paid run.
+The smoke authorizes no further paid call. Notebook 07 rebuilds and fingerprints all 354 proposed requests offline with the measured profile: 1,379,010 prompt tokens and at most 236,000 output tokens, for a list-price upper bound of **$0.255901**. The earlier $0.20–$3.70 range is superseded. The full protocol is frozen in `experiments/specs/e8_reader_migration_v1.json` with a **$0.50 cumulative ceiling**, 360-attempt maximum and at most two attempts per execution index. A failed attempt with no returned usage is conservatively charged at its precomputed upper bound for budget gating, while observed token cost remains separate. Its mocked executor has passed all 354 indices, interruption/resume, API-error, budget, malformed-contract and served-model/system-fingerprint failure tests. This implementation is not approval for a paid run.
 
 ---
 
@@ -334,7 +334,7 @@ The smoke authorizes no further paid call. Notebook 07 rebuilds and fingerprints
 | B1 application extension | committed `4bf6b19`; full test count is asserted at the current gate |
 | Notebook 07 application parity | 118/118 frozen E6 V requests; six smoke prompt totals; 236/236 unique E8 app requests; 354-call offline plan |
 | S-v2 owner adjudication | frozen with checksums: 7 correct, 21 wrong, 1 unsure; E6 V − A = 39/101 − 28/101, 12 fixed / 1 broken |
-| E8 full protocol and executor | frozen spec; replay mock covers all 354 indices and fail-closed resume, budget, contract and model-identity paths; live mode not approved |
+| E8 full protocol and executor | frozen spec; replay mock covers all 354 indices and fail-closed resume, budget, contract and served-model/system-fingerprint paths; live mode not approved |
 
 ### 8.2 Remaining work
 

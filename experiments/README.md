@@ -84,7 +84,7 @@ independent audit (38/38) and the provenance. Verdict: `regression` (V0 38, X4 3
 Experiment E8 migrates the reader and stabilises B1. Its frozen protocol is
 [`specs/e8_reader_migration_v1.json`](specs/e8_reader_migration_v1.json). Notebook 07 defaults to replay, rebuilds all 354
 requests through the five-module B1 application, and mock-tests every execution index plus interruption/resume, API failure,
-budget refusal, malformed output and served-model change. The offline upper bound is $0.255901 under a frozen $0.50 ceiling.
+budget refusal, malformed output and served-model/system-fingerprint change. The offline upper bound is $0.255901 under a frozen $0.50 ceiling.
 No full E8 call is approved or frozen yet; any live output goes to `runs/e8/<run_id>/`.
 
 ## How results are reproduced

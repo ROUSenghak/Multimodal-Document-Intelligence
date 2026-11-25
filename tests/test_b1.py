@@ -62,6 +62,7 @@ def test_e8_full_spec_pins_the_application_and_fail_closed_executor():
     assert spec["execution"]["maximum_attempts"] == 360
     assert spec["execution"]["maximum_attempts_per_execution_index"] == 2
     assert spec["execution"]["cumulative_ceiling_usd"] == 0.50
+    assert "served model or system fingerprint" in spec["execution"]["on_identity_change"]
     for module, expected in spec["application_module_sha256"].items():
         path = REPO_ROOT / "src" / Path(*module.split(".")).with_suffix(".py")
         assert hashlib.sha256(path.read_bytes()).hexdigest() == expected
