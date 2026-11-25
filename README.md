@@ -1,491 +1,240 @@
-# VisualDoc AI — Multimodal Document Intelligence
+# VisualDoc AI — cited question answering over PDF documents
 
-**Objective.** Answer questions about digital and scanned PDF documents from
-text and visual evidence, cite the pages used, and measure when page images
-help compared with extracted text.
+VisualDoc answers a question about one PDF. It returns the answer, the pages it cites and a short verbatim quote from each cited page, or `Not answerable`. It reads **page images** rather than extracted text, and it finds the pages to read with a **visual page retriever** (ColQwen2).
 
-The project has three parts, one notebook stage each (plus evaluation):
+The repository is also a research record. Ten pre-registered experiments (E0–E9) on the public benchmark [MMLongBench-Doc](https://huggingface.co/datasets/yubo2333/MMLongBench-Doc) decided each component. Every paid run is frozen with its requests, replies, an independent audit and checksums, so every reported number is re-derived without an API call.
 
-1. **Document processing**: inspect each PDF page, extract native text, use OCR
-   when there is no text layer, render page images, and store page records.
-2. **Retrieval and question answering**: rank the pages of a document for a
-   question (BM25), then answer from the top pages with an LLM (text) or a
-   VLM (page images), returning a structured answer with cited pages.
-3. **Evaluation**: retrieval quality, answer correctness, citation validity,
-   abstention, paired comparisons between conditions, error analysis and cost.
+> **Status (2026-11-25).**
+> - **Validated baseline B1: frozen** (`docs/validated_baseline_b1.md`).
+> - **E9 (adaptive evidence acquisition): done**, verdict `no_meaningful_gain`; B1 is unchanged (`experiments/frozen/e9/`).
+> - **Application** (CLI and local web page around B1): built, and revised after an independent review (`docs/application.md`).
+> - **Every result below is development data**: 20 documents that shaped the design. The **final held-out evaluation has not been run**. Its specification is a draft awaiting the owner's approval (`docs/final_evaluation_specification.md`).
 
-> **Status.** A complete, reproducible baseline on a 6-document subset of the
-> public benchmark [MMLongBench-Doc](https://huggingface.co/datasets/yubo2333/MMLongBench-Doc)
-> (57 questions). All four conditions have been run with gpt-4o-mini; their
-> predictions are frozen in the repository and are re-evaluated without API
-> calls. Experiments E1–E3 (image resolution, a stronger VLM, text–image
-> fusion) are frozen with independent audits, and their retained
-> configuration is packaged as a small tested application baseline
-> (`src/visualdoc/`). The project's own annotated question set
-> (`data/annotations/questions.csv`) is still empty.
+---
 
-## Research question and design
+## What B1 does
 
-With the same model, questions and pages, does sending **rendered page
-images** instead of **extracted text** improve answers and citations? Only the
-evidence representation changes between conditions:
+```
+PDF ──► page images, 768 px short side
+          │
+          ▼
+    ColQwen2 v1.0 ── MaxSim over every page ──► ranked pages
+          │          (BM25 over native text + OCR is computed and logged beside it;
+          │           it becomes the retriever only when the visual index cannot run)
+          ▼
+    top k = 4 pages ──► one gpt-6-luna call, temperature 0, reasoning_effort none
+                        strict JSON schema: {answer, cited_pages, evidence[{page, quote}]}
+          │
+          ▼
+    citation check + grounding check ──► answer, cited pages, quotes, or "Not answerable"
+```
 
-| | Retrieved pages (BM25 top 5) | Oracle pages (annotated evidence, padded to 5) |
-| --- | --- | --- |
-| **Extracted text** (native + OCR) | **A** | **C** |
-| **Rendered page images** (≈ 60 dpi) | **B** | **D** |
-
-The oracle column separates "the retriever missed the page" from "the model
-misread the page".
-
-## Results (development subset, local scoring)
-
-6 documents, 57 questions (40 answerable), `gpt-4o-mini-2024-07-18`,
-temperature 0, one run per condition.
-
-| | A text, retrieved | B images, retrieved | C text, oracle | D images, oracle |
-| --- | --- | --- | --- | --- |
-| correct, answerable | 7/40 (0.175) | 7/40 (0.175) | 9/40 (0.225); 9/38 on D's questions | 11/38 (0.289) |
-| accuracy, all 57 / F1 | 0.263 / 0.165 | 0.228 / 0.156 | — | — |
-| correct abstention (17 unanswerable) | 8/17 | 6/17 | — | — |
-| citation validity | 1.000 | 0.895 | 1.000 | 0.921 |
-| mean prompt tokens per question | ≈ 1.9k | ≈ 71k | ≈ 1.8k | ≈ 71k |
-
-Retrieval: BM25 Recall@5 **0.689** and Hit@5 **0.800** with the OCR fallback,
-against 0.358 Recall@5 on native text only and 0.176 for a random ranking.
-
-What the evidence supports (all exploratory: 38–57 questions in 6 documents):
-
-- **Text reading, not retrieval, limits the text pipeline.** Supplying the
-  evidence pages fixes 2 text answers out of 33 errors.
-- **Images trade errors rather than reduce them** on the retrieved pages
-  (3 fixed, 3 broken). They recover values that OCR destroyed on slide decks,
-  and they lose small detail at the resolution gpt-4o-mini's token cost allows.
-- **The image reader benefits more from correct pages** (4 fixed, 0 broken,
-  from retrieved to oracle pages).
-- **Images abstain less, in both directions**, and sometimes cite the page
-  number printed on the page instead of the supplied `[Page N]` tag.
-- Hypotheses: images better than text on retrieved pages (H1) and a larger
-  gain on charts and figures (H2) are **not supported**. Images better on
-  oracle pages (H3) shows a consistent direction but is **not established**
-  (6 fixed, 4 broken, McNemar p = 0.75).
-
-## Experiment E1 — image resolution (completed, frozen)
-
-E1 tests the same annotated oracle evidence pages at a 512-px short side and
-a 768-px short side. It needs a new matched 512-px control: the frozen D
-condition pads oracle evidence to five pages, while five high-detail 768-px
-pages plus the unchanged 400-token output allowance exceed GPT-4o-mini's
-128k context. The matched preflight retains 37/40 answerable questions and
-excludes the three questions with 5, 10 and 13 evidence pages.
-
-**Result** (full run of 2026-11-21, 113 calls, $0.50 at list price; frozen in
-[`experiments/frozen/e1/`](experiments/frozen/e1/README.md)):
-
-| | 512 px | 512 px repeat | 768 px |
-| --- | --- | --- | --- |
-| correct (37 questions, 6 documents) | 10/37 (0.270) | 11/37 (0.297) | 16/37 (0.432) |
-| citation validity, given a citation | 0.944 | 0.944 | 0.892 |
-| mean input tokens | ≈ 21.6k | ≈ 21.6k | ≈ 45.8k |
-
-Paired: 6 fixed, 0 broken. The identical 512-px repeat changed correctness on 1/37
-questions. The pre-registered rule says **adopt 768 px for this model and
-question set**, at $0.022 per additional correct answer. Higher resolution fixes
-small printed digits, counts and labels. It does not fix the counting and
-reasoning failures that make up most remaining errors (21/37 wrong at both
-resolutions). The sample is small and clustered, so intervals are descriptive.
-An independent audit of the saved run passed. Notebook 02 rebuilds its 113
-requests byte for byte, and notebook 03 re-evaluates it with figures; see the
-package README for limitations, including how the executing code revision was
-established.
-
-The frozen specification is
-[`experiments/specs/e1_image_resolution_v1.json`](experiments/specs/e1_image_resolution_v1.json).
-Offline rendering, request invariants, decoded image dimensions and hashes,
-replicate-isolated cache tests, reproducible randomized ordering, mocked
-responses, context feasibility and cost estimation pass.
-
-The primary outcome is the paired answer-accuracy difference. Mean benchmark
-score is secondary. A full run adds an independent repeated 512-px control to
-estimate run-to-run variability. Requests are adjacent pairs by question with
-seeded within-pair order; the run log records timestamps, model/system
-fingerprints, token usage and cache provenance. The 8-question pilot validates
-technical feasibility only and is not an accuracy estimate.
-
-Upper-bound list cost (including the full 400-token allowance) is about
-**$0.0065** for the two-call technical smoke, **$0.0881** for smoke plus the
-8-question pilot pair, and **$0.5276** for smoke plus the 37-question main pair
-and 37-question repeated control. Actual cost should be lower when replies use
-fewer than 400 output tokens.
-
-The 768-px choice is deliberate: GPT-4o-mini high-detail billing
-preprocessing does not enlarge the 512-px control and reduces a shortest side
-above 768 px to 768. A 1024-px render is therefore not a distinct documented
-input treatment for this model. Observed token counts validate the expected
-billing accounting; they do not prove the model's internal visual resolution. The pinned
-snapshot is deprecated and scheduled for shutdown on 2027-01-14; retain it
-for E1 comparability, then treat a newer-model resolution study as a separate
-experiment.
-
-## Experiment E2 — a stronger VLM through OpenRouter (done: retain GPT-4o-mini)
-
-**Result (frozen in [`experiments/frozen/e2/`](experiments/frozen/e2/README.md)).**
-
-| | 512 px | 768 px | 768 px repeat |
-|---|---:|---:|---:|
-| GPT-4o-mini (frozen E1) | 10/37 | **16/37** | |
-| Qwen3-VL-8B (E2) | 11/37 | **15/37** | 15/37 |
-
-- **Primary 768-px comparison:** 4 fixed, 5 broken, −0.027, bootstrap [−0.29, +0.22]. That is a tie within noise, and the pre-registered rule **retains GPT-4o-mini at 768 px**.
-- **Resolution:** 768 px helps Qwen too (+4 fixed, 0 broken).
-- **Repeat:** Qwen's repeat changed no answer's correctness.
-- **Cost:** Qwen's 768-px cell cost $0.014 for 37 questions, against $0.255 for GPT-4o-mini.
-- **Validation:** the frozen run passed an independent 44-check audit, and notebook 03 reproduces it by default without any API call.
-- **Not verifiable:** the hosted weight revision and image preprocessing.
-
-
-E2 asks whether **Qwen3-VL-8B-Instruct** answers the same 37 questions better
-than GPT-4o-mini. Qwen is served through OpenRouter as `qwen/qwen3-vl-8b-instruct`,
-pinned to the provider Parasail in BF16, the only endpoint listed on 2026-11-22.
-Image resolution is controlled with a 2 × 2 design:
-
-| | 512 px | 768 px |
+| Component | Choice | Decided by |
 |---|---|---|
-| GPT-4o-mini | frozen E1, 10/37 | frozen E1, 16/37 (comparator) |
-| Qwen3-VL-8B | new | new (primary), plus an independent repeat |
+| Page rendering | 768 px short side, image only (no OCR text in the prompt) | E1, E3 |
+| Retrieval | ColQwen2 v1.0, MaxSim late interaction over page images; BM25 as fallback | E5, E6, notebook 07 |
+| Reading | one call over the retrieved pages | E7 |
+| Reader | `gpt-6-luna`, temperature 0, strict JSON schema, 800 output tokens | E8 |
+| Output contract | answer + cited pages + evidence quotes + explicit abstention | E8 |
+| Pages read | k = 4, one read (no adaptive deepening) | E9 |
 
-- **Same request.** Each E2 request body reuses the E1 request messages that
-  GPT-4o-mini answered: the same prompt, page tags, page order and PNG bytes.
-  It also keeps temperature 0, the 400-token cap and JSON mode. Only the model
-  slug, the cap's parameter name (`max_tokens`) and a provider-pinning block
-  (no fallbacks) change.
-- **What the hosted API cannot verify.** OpenRouter exposes a slug, a provider
-  name and a generation id, not a weight hash. The served weight revision, the
-  provider's image resizing, its chat-template rendering and its serving stack
-  cannot be checked, and the slug can change later. The only indirect check:
-  each reply's prompt-token count must lie within 2 % of the count the shipped
-  Qwen processor implies (336–448 visual tokens per page at 512 px, 744–1,032 at
-  768 px). This is **less reproducible than self-hosting** the pinned weights,
-  which was set aside for simplicity.
-- **Decision rule, fixed in advance.** Adopt only if all three hold:
-  - the paired gain is ≥ 0.05;
-  - it exceeds the larger repeat change rate of the two models;
-  - broken ≤ fixed / 2.
+Source: `docs/validated_baseline_b1.md` §1, `experiments/frozen/e9/README.md`. The system design is in [`docs/architecture.md`](docs/architecture.md).
 
-  Retain GPT-4o-mini if the gain is ≤ 0; otherwise the result is inconclusive.
-- **Cost.** At the 2026-11-22 price ($0.25 / $0.75 per million input / output
-  tokens), smoke + pilot + full (133 calls) was estimated at about **$0.04**, with a
-  list-price upper bound of about **$0.08**. Actual spend for all four E2 runs
-  was **$0.0436**. Paid modes re-check the public price
-  listing, and every call is checked against the approved budget.
-- **Spec.** [`experiments/specs/e2_stronger_vlm_v2.json`](experiments/specs/e2_stronger_vlm_v2.json),
-  frozen on 2026-11-22 with a $1.00 budget. Paid modes refuse to run unless the
-  spec is frozen with a budget. It supersedes
-  [`v1`](experiments/specs/e2_stronger_vlm_v1.json). v1's smoke and pilot passed,
-  but its full run was stopped twice by HTTP 429 "rate-limited upstream". v2
-  changes only the execution rules: a 2-s pause between calls, and 429s waited
-  out (30–480 s) without using one of a request's two attempts.
+---
 
-```bash
-# Offline (default): nothing is sent to OpenRouter
-jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
-# Paid, after approval, one stage at a time (OPENROUTER_API_KEY in .env);
-# add VISUALDOC_E2_RESUME_DIR=experiments/runs/e2/<run-id> to resume an interrupted run
-VISUALDOC_E2_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
-# Evaluate without any API call: the frozen run by default, or another saved run
-VISUALDOC_E2_RUN_DIR=experiments/runs/e2/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
-```
+## Results at a glance (development data)
 
-Answer scores re-implement the benchmark's rule-based scorer with structured
-JSON answers instead of its GPT-4o extraction stage, so they are **local
-diagnostics, not leaderboard numbers**. Details, limitations and the manual
-error review are in `notebooks/03_evaluation.ipynb`.
+All numbers are from frozen, audited packages in `experiments/frozen/`. "Correct" uses the frozen scorer S-v1 (correct = score > 0), a local re-implementation of the benchmark's rule-based scorer: **these are not leaderboard numbers**.
 
-## Experiment E3 — text–image fusion (done: retain images only)
+| Exp. | Question | Population | Result | Verdict |
+|---|---|---|---|---|
+| E0 | Text vs page images, on retrieved vs annotated pages (GPT-4o-mini) | 6 docs, 57 q (40 answerable) | A text 7/40, B images 7/40, C text-oracle 9/40, D image-oracle 11/38; BM25 Recall@5 0.689, Hit@5 0.800 | exploratory: images not better on retrieved pages |
+| E1 | 512 vs 768 px page images | 37 q | 10/37 → 16/37; 6 fixed, 0 broken | `adopt_768` |
+| E2 | Qwen3-VL-8B vs GPT-4o-mini at 768 px | 37 q | 15/37 vs 16/37; 4 fixed, 5 broken | retain GPT-4o-mini |
+| E3 | Text only vs images only vs both | 37 q | T 13, I 17, IT 16 of 37 | retain images only |
+| E4 | The application end to end (BM25 → images → GPT-4o-mini) | 57 q | APP 11/40 answerable; ORACLE pages 17/37 | `page_selection_costs_accuracy` |
+| E5 | ColQwen2 vs OCR + BM25: evidence reaching the reader | 14 new docs, 101 q | evidence recall 0.526 → 0.721, +0.195 [+0.110, +0.309] | `visual_improves_evidence` |
+| E6 | Same, measured on answers | 118 q (102 answerable) | 25/102 → 38/102, +0.127 [0.074, 0.193], 13 fixed, 0 broken | `adopt_visual_retrieval` |
+| E7 | Extract-then-answer vs one-shot reading | same 118 q | V0 38, X4 31, X8 29 of 102; X4 − V0 −0.069 [−0.135, −0.008] | `regression` |
+| E8 | Reader migration to `gpt-6-luna` and the B1 contract | same 118 q | L-v1 42/102, L-B1 46/102, repeat 46/102; B1 − v1 +0.039 [−0.019, +0.098] | promote B1 (non-inferiority only) |
+| E9 | Read pages 5–8 only when retrieval looks uncertain | same 118 q | B1s 44, F8 46/46, A1 47/46 of 102; A1 − B1s +0.025 [0.000, +0.051], sign-flip p = 0.125 (the smallest attainable here) | `no_meaningful_gain` |
 
-**Result (frozen in [`experiments/frozen/e3/`](experiments/frozen/e3/README.md)).**
-GPT-4o-mini, 768-px page images, the 37 matched questions and their annotated
-evidence pages, one shared prompt (`mmlb-evidence-v1`):
+Intervals are document-cluster bootstrap 95 % intervals. Sources: `AGENTS.md` (regression references), the `README.md` of each package in `experiments/frozen/`, and `experiments/frozen/e9/tables/evaluation_summary.json`. The full account, with hypotheses, designs and threats to validity, is in [`docs/research_report.md`](docs/research_report.md).
 
-| | text only (T) | images only (I) | images + text (IT) | IT repeat |
-|---|---:|---:|---:|---:|
-| correct (37 questions) | 13/37 | **17/37** | **16/37** | 16/37 |
+### What the evidence supports, and how strongly
 
-- **Primary, IT − I:** 1 fixed, 2 broken, −0.027, cluster bootstrap [−0.11, +0.06]. All three criteria of the pre-registered rule fail and the gain is ≤ 0, so the verdict is **retain images only at 768 px**. S1–S3 (known scoring defects, strict scoring) each give 1 fixed, 2 broken.
-- **Images are the stronger single source** here (I − T: 6 fixed, 2 broken). Fusion reaches 16 of the 19 questions that T or I answers, with no synergy: where T and I disagree, IT follows the text 9 times and is right once. On OCR documents a misread digit pulls the fused reader to a wrong answer (`mmlb-0729`: OCR reads 12 as "42").
-- **Repeat:** 65 min later, fully cold (no cached tokens), 0/37 correctness changes.
-- **Cost:** $0.78 for the full run, $0.91 for all three E3 runs (list price; ceiling $1.25).
-- **Validation:** an independent 55-check audit; notebook 03 reproduces the result by default without any API call. The 14-question manual-review queue is not labelled yet.
+- **One strong, replicated result: visual retrieval beats OCR + BM25.** It holds for evidence (E5) and for answers (E6). E6 fixed 13 questions and broke none, with an exact document sign-flip p = 2⁻¹⁰ ≈ 0.00098. Under the secondary scorer S-v2 it is 28/101 → 39/101 (`docs/validated_baseline_b1.md` §2).
+- **Negative results, reported as such.**
+  - E2: a stronger open VLM did not beat GPT-4o-mini (a tie within noise).
+  - E3: adding the extracted text to the images did not help.
+  - E7: reading each page separately, then answering from the extracted facts, was **worse** (the interval excludes zero).
+  - E9: the adaptive policy was directionally positive (5 fixed, 0 broken across two replicates) but missed the pre-registered +0.05 criterion, and always reading 8 pages was not better than 4.
+- **Non-inferiority only: the B1 contract.** 46 vs 42 of 102 (S-v1), 47 vs 44 of 101 (S-v2), with an interval that straddles zero. Two identical B1 replicates flip 4 questions (S-v1), 7 under S-v2. **B1 is not a demonstrated accuracy improvement over the previous contract.** What it does buy, measured: citation validity 1.000, 9/16 correct abstentions (8/16 before), 118/118 schema-valid replies (`docs/validated_baseline_b1.md` §2).
+- **The ceiling.** B1 answers 46 of 102 answerable development questions. ColQwen2's top 4 pages miss part of the annotated evidence for 39 of 101 questions (`experiments/frozen/e9_stage0/README.md`). The strict grounding diagnostic passes 70 of 118 replies, and E8's data show it is a poor signal of correctness (`docs/e9_proposal.md` §1).
 
-Design in brief: per page, `[Page N]` then the image (I, IT) then the extracted
-text (T, IT); I is IT minus its text parts and T is IT minus its image parts,
-asserted for every question. Images are E1's exact PNGs; texts are untruncated
-and pinned by SHA-256. The T/I/IT requests of a question were sent as an
-adjacent, counterbalanced triplet. Spec:
-[`experiments/specs/e3_text_image_fusion_v1.json`](experiments/specs/e3_text_image_fusion_v1.json),
-frozen and committed with the implementation before the first call.
+---
+
+## Try it (offline, no cost)
+
+Use the project environment (`.venv`, Python 3.12). `PYTHONPATH=src` avoids a macOS import problem described in [`docs/reproducibility.md`](docs/reproducibility.md).
 
 ```bash
-# Evaluate without any API call: the frozen run by default, or another saved run
-VISUALDOC_E3_RUN_DIR=experiments/runs/e3/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
+# Ask one question about a local PDF (BM25 fallback until the PDF has a visual index)
+PYTHONPATH=src .venv/bin/python -m visualdoc.app ask data/documents/ch2.pdf "What does Cromwell's rule say about prior probability?"
+
+# The same, as JSON
+PYTHONPATH=src .venv/bin/python -m visualdoc.app ask data/documents/ch2.pdf "What does Cromwell's rule say about prior probability?" --json
+
+# Build a visual index for a development document from notebook 04's cached E5 embeddings (no model needed)
+PYTHONPATH=src .venv/bin/python -m visualdoc.app index data/external/mmlongbench_doc/documents/watch_d.pdf --from-e5-cache
+
+# Start the local web page, then open http://127.0.0.1:8765
+PYTHONPATH=src .venv/bin/python -m visualdoc.app serve
 ```
 
-## Experiment E4 — the application end to end (run 2026-11-23, audited and frozen)
+**What the offline answer means.** Offline, no model is called. `OfflineB1Reader` returns a **placeholder**: it cites the first supplied page and quotes that page's first words, so that the citation and grounding checks run on a reply of the right shape. The CLI, the JSON (`"offline_placeholder": true`) and the web page all label it **OFFLINE PLACEHOLDER**. It is never an answer. What runs as in B1 offline: retrieval and page selection, and the request that would be sent, with its fingerprint, token bound and cost bound. The citation and grounding checks also run, but on the placeholder reply, so their verdicts mean nothing; the web page greys them out.
 
-E4 measures the application in `src/visualdoc/` **as shipped**: BM25 top 5, the context guard, 768-px page images and GPT-4o-mini. It runs on all 57 questions and asks how much of the application's error on the 37 matched questions comes from **page selection** (retrieval, the guard, distractor pages) rather than from **reading**.
+**Visual retrieval offline** needs a page index for the PDF *and* a cached embedding of the exact question. The E5 cache holds both only for the 20 development documents and their 175 benchmark questions. For any other question the app falls back to BM25 and says why. The development PDFs are downloaded by notebooks 00 and 04 (they are not in git).
 
-| arm | pages sent (same prompt, model, parameters and parser) | questions | correct |
-|---|---|---:|---:|
-| `APP` | the application's own request, built by `answer_question`: top 5 after the guard (3–4 pages) | 57 | **11/40** answerable (0.275, cluster 95 % 0.13–0.43); 11/37 matched |
-| `ORACLE` | the annotated evidence pages: byte-identical to the frozen E1_768 requests | 37 | **17/37** (0.459) |
+**Live mode is paid and opt-in.** `--live` sends page images to the OpenAI API and needs `OPENAI_API_KEY` exported in the shell (the app never reads `.env`). It is guarded by a per-request ceiling (default $0.01) and a session ceiling (default $0.10), both checked before any call. One 4-page B1 question has an upper bound of about $0.0008 at list price. `gpt-6-luna` is an alias without a dated snapshot, so the served model is recorded on every call. Run it only with the owner's approval.
 
-- **Execution.** Spec frozen in commit `72791e9` (ceiling $1.50). Smoke (2 calls) and full (96 calls) runs completed with every integrity check valid. Spend: $1.2006 at list price. Both runs, the summary, an independent audit (35/35) and the provenance are frozen in [`experiments/frozen/e4/`](experiments/frozen/e4/README.md); notebook 03 §17 reproduces them by default.
-- **Verdict (pre-registered rule): `page_selection_costs_accuracy`.**
-  - Gap: ORACLE − APP = +6/37 = 0.162 (8 fixed, 2 broken; cluster 95 % 0.09–0.26; McNemar p = 0.11).
-  - Margin: 5/37, the ORACLE vs frozen E1_768 cross-day change rate. The gap clears it by one question.
-  - Stable core: five questions are fixed against both ORACLE sessions.
-- **Reading still loses more.** The reading loss is 20/37, against a page-selection loss of 6/37. The 29 answerable APP errors split into:
-  - 14 page selection: 7 retrieval, 3 context guard, 4 incomplete evidence;
-  - 15 reader: 8 reasoning or aggregation, 3 visual reading, 4 annotation or scoring issues.
-  - These are diagnostic hypotheses, not proven causes. Distractor pages showed no measurable cost: with all evidence supplied, APP scored 10/20 and ORACLE 8/20.
-- **Behaviour.** The application never abstained when no evidence page was sent (0/11). It answered 11 of 17 unanswerable questions with content. Citations are valid in 47/57 replies.
-- **Limits.** In-sample: E1–E3 chose the application's settings on these questions. Only 6 documents, and no APP repeat. The model snapshot shuts down on 2027-01-14.
-- **Details.** Notebook 02 §13 (execution), notebook 03 §17 (validation, results, manual review, audit), and the spec [`experiments/specs/e4_application_end_to_end_v1.json`](experiments/specs/e4_application_end_to_end_v1.json).
+Usage details, the visual index and the web page's safeguards: [`docs/application.md`](docs/application.md).
 
-```bash
-VISUALDOC_E4_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb   # then full
-VISUALDOC_E4_RUN_DIR=experiments/runs/e4/<run-id> jupyter nbconvert --execute --to notebook --inplace notebooks/03_evaluation.ipynb
-```
+---
 
-## Experiments E5–E6 — visual retrieval with ColQwen2 (held-out documents, frozen)
+## Reproduce the research
 
-E5 and E6 use 14 held-out MMLongBench-Doc documents (118 questions) that no earlier experiment touched.
-
-- **E5 (notebook 04, [`experiments/frozen/e5/`](experiments/frozen/e5/README.md)) measured evidence.**
-  - After the context guard, ColQwen2 v1.0's pages hold an annotated evidence page for 86 of 101 questions; BM25's hold one for 66.
-  - Evidence recall rises from 0.526 to 0.721. Verdict: `visual_improves_evidence`.
-- **E6 (notebook 05, [`experiments/frozen/e6/`](experiments/frozen/e6/README.md)) measured answers.** It used the same GPT-4o-mini reader, prompt, 768-px images and guard; only the page list differs.
-
-| arm | pages | correct, 102 answerable | correct abstention, 16 unanswerable | valid citations, 118 |
-|---|---|---:|---:|---:|
-| `A` | OCR + BM25 top 5 (the application as shipped) | 25 (0.245) | 9 | 108 |
-| `V` | ColQwen2 top 5 (E5's frozen rankings) | **38 (0.373)** | 7 | 107 |
-
-- **Verdict (pre-registered rule): `adopt_visual_retrieval`.**
-  - Δ = +0.127: 13 fixed, 0 broken.
-  - Document-cluster 95 % interval [0.074, 0.193]; exact document sign-flip p = 2⁻¹⁰.
-  - The abstention guardrail held at its limit (7 vs 9 of 16).
-  - V is at least as accurate in all 14 documents.
-- **Deployment action.** ColQwen2 becomes the default retriever in the application phase, with OCR + BM25 as the fallback; this needs the owner's separate approval.
-  - API cost is the same in both arms.
-  - Indexing costs about 12 s and 193 KB per page on a fanless M1, against milliseconds for BM25. Pages must be indexed once at upload.
-- **Execution.**
-  - The spec was frozen in `c2ac6e6` (ceiling $5.60). Smoke (2 calls) and full (238 calls) runs completed.
-  - The full run was interrupted once when the OpenAI credit ran out (unbilled refusal) and resumed in place; every pair stayed adjacent.
-  - Spend: $3.7213 at list price.
-  - An independent audit passed 43/43. Notebook 05 reproduces the frozen result by default.
-- **Limits.**
-  - One replicate; 14 documents.
-  - The difference mixes evidence availability with distractors and page order.
-  - ColQwen2's training data may overlap the held-out documents.
-
-## Application baseline (`src/visualdoc/`)
-
-Small reusable modules that answer a question about **any** PDF with the
-configuration the frozen experiments retained. The notebooks do not import
-them, except where the application itself is the object measured: section 16 of `03_evaluation`, section 13 of
-`02_question_answering` (E4 requests) and section 17 of `03_evaluation` (E4 parser) run the application
-offline to measure it. The notebooks stay the record of how each choice was measured.
-
-| Module | Does | Pinned to |
-| --- | --- | --- |
-| `documents.py` | page text (native layer; full-page OCR at 150 dpi below 30 native words), 768 × 1536-px page PNGs, 1-based page access | notebook 00; tests reproduce E3's pinned page texts and E1's 768-px PNG byte for byte |
-| `retrieval.py` | BM25 per document (k1 1.5, b 0.75), ties by page number | notebook 01; tests reproduce the frozen rankings of all 57 questions |
-| `answering.py` | image request (`mmlb-image-v1` prompt, GPT-4o-mini, temperature 0, 400 tokens, JSON), question-aware context guard, context and cost check before every call, reply parser, one model call through an injected `create` | notebook 02; tests rebuild a frozen E1 request with an identical fingerprint and re-parse all 264 frozen GPT-4o-mini replies |
-| `citations.py` | cited pages vs supplied pages: invalid, off-by-one (printed page number), missing citation | notebook 03's definitions |
-| `pipeline.py` | PDF → text → BM25 top 5 → images → context guard → answer → citation check; command-line demo | — |
-
-```bash
-# Offline demonstration (default): no model is called, the answer is a placeholder
-PYTHONPATH=src python -m visualdoc.pipeline data/documents/ch2.pdf "What does Cromwell's rule say about prior probability?"
-# Live (paid, sends page images to OpenAI): add --live with OPENAI_API_KEY set
-```
-
-- **OCR policy.** The application uses notebook 00's policy, the one behind
-  every frozen result. The older routing in `src/visualdoc/parsing.py`
-  (NATIVE / OCR / HYBRID / REVIEW by image coverage, OCR at 200 dpi) is kept
-  unchanged with its tests but not used: on the vector-outlined benchmark PDF
-  `bdf54dxa.pdf` it routes 53 of 54 pages to REVIEW and returns no text, where
-  notebook 00's policy recovers a median of 158 words per page.
-**Limitations of the application baseline.**
-
-1. **Its default configuration is untested.** The experiments measured BM25
-   top-5 pages at 512 px (condition B: 7/40) and 768-px images on annotated
-   evidence pages only (E1–E3: 16–17/37). They never measured BM25-retrieved
-   pages at 768 px, which is what the pipeline sends. It follows each
-   decision, but its accuracy is unknown until that condition is run.
-2. **Retrieved pages are truncated to fit the context.** At 768 px a 4:3 or
-   US-letter page costs about 25.5k prompt tokens and a 16:9 slide 36.8k, so
-   only 4 (or 3) of the 5 retrieved pages fit GPT-4o-mini's 128k context. The
-   guard keeps the best-ranked prefix that fits and lists the rest in
-   `dropped_pages`; nothing is dropped silently. Measured offline on the
-   benchmark (notebook 03, section 16): BM25 top-5 retrieves Recall 0.689 and
-   Hit 0.800 of the evidence, but the pages actually sent keep Recall 0.608 and
-   Hit 0.725 (29/40), the same as top-3. Three questions lose their only
-   retrieved evidence page, which BM25 ranked 5th; eight others have no evidence
-   page in the top 5 at all.
-3. **A valid citation is not evidence support.** `citations.ok` only checks
-   form: every cited page was supplied, and an answer other than "Not
-   answerable" cites at least one page. It does not check that the cited page
-   contains the answer, and the answer itself is not verified at all. In the
-   frozen E0 text condition A, citation validity was 1.000 while 7 of 40
-   answers were correct. `cites_evidence` (a cited page is an annotated
-   evidence page) is available only when evidence annotations exist, i.e. in
-   evaluation, never for a new user PDF.
-4. **Context and cost limits rest on an upper bound.** Before every call,
-   `check_request` requires the prompt bound plus the 400-token output
-   allowance to fit the 128k context, and the maximum cost to stay under a
-   per-request ceiling ($0.02 by default, `--max-cost-usd`). Otherwise it raises
-   `ValueError` and nothing is sent. The bound has three parts:
-   - **Text:** UTF-8 bytes of the system prompt, question and page tags. A
-     byte-level BPE tokenizer never produces more tokens than bytes, so this
-     bound accounts for the question's length.
-   - **Images:** the billed image tokens, by a rule that reproduced every
-     frozen billed count.
-   - **Framing:** 100 tokens; 10–29 were observed.
-
-   On all 151 billed image-only E1/E3 requests it exceeded the billed prompt
-   by 637–867 tokens. It is therefore safe but loose, and could drop a page
-   that would barely fit (no benchmark case: counted exactly, every dropped
-   page still overflows).
-
-   Assumptions: only the `gpt-4o-mini-2024-07-18` snapshot (other models are
-   refused); list prices of 2026-11-22, hard-coded; framing measured on
-   1–3-page requests only. The ceiling applies per request, not in total. A
-   request that fills the context costs at most about $0.0194, so the default
-   only catches price or configuration mistakes; lower it to cap spending.
-5. **Engineering gaps.** No retry, rate limiting, response cache or
-   cumulative budget; API errors propagate to the caller.
-
-## Workflow
-
-Run the notebooks in order. Each one reads only the saved files of the
-previous ones (never their variables) and states its inputs and outputs at the
-top.
-
-| Notebook | Purpose | Reads | Writes (git-ignored, regenerable) |
-| --- | --- | --- | --- |
-| [`00_document_processing`](notebooks/00_document_processing.ipynb) | Pinned questions, seeded subset, page anatomy, native text + OCR fallback, page-number checks, page rendering | MMLongBench-Doc question table (tracked) and PDFs (downloaded at a pinned revision) | `data/processed/mmlongbench_doc/{questions,pages}.parquet`, `render_manifest.csv`; PNGs in `data/cache/` |
-| [`01_retrieval`](notebooks/01_retrieval.ipynb) | BM25 by hand and per document, Recall@k / Hit@k against a random reference, OCR ablation, failure cases | 00 outputs | `rankings.parquet`, `retrieval_*.csv` |
-| [`02_question_answering`](notebooks/02_question_answering.ipynb) | Page lists for A–D, text and image prompts, token/cost budget, API error handling, response cache, mocked tests, generation | 00–01 outputs, `experiments/frozen/` | `predictions/{A,B,C,D}.jsonl`, `predictions/manifest.json` |
-| [`03_evaluation`](notebooks/03_evaluation.ipynb) | Scoring rules, four-condition metrics, paired comparisons, citations, abstention, legibility, error categories, manual review, cost; offline evidence loss of the application (section 16) | 00–02 outputs; `src/visualdoc/` (section 16) | `evaluation_summary.json`, `app_context/` |
-
-**No paid call by default.** `02_question_answering` runs in `replay` mode
-unless `VISUALDOC_QA_MODE` is set to `smoke`, `pilot` or `full`. Replay
-rebuilds every request (page lists, prompts, parameters, image fingerprints,
-token estimates), asserts that it equals what was sent in the frozen runs, and
-reuses those replies. `03_evaluation` then reproduces the table above and
-checks it against the frozen files.
-
-## Setup
-
-Tested with Python 3.12.6 on macOS (Apple Silicon).
+Short version (full guide: [`docs/reproducibility.md`](docs/reproducibility.md)):
 
 ```bash
 python3.12 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt          # project, notebooks (incl. offline API tests) and pytest
+pip install -r requirements.txt          # the package, notebook dependencies and pytest
 python -m ipykernel install --user --name visualdoc-venv --display-name "VisualDoc (.venv, Python 3.12)"
-cp .env.example .env                     # only for live API runs
+
+# Verify a frozen package (repeat for each folder in experiments/frozen/)
+cd experiments/frozen/e6 && shasum -a 256 -c SHA256SUMS && cd -
+
+pytest                                   # application modules, frozen protocols, parity with frozen runs
 ```
 
-OCR uses the Tesseract engine built into PyMuPDF with the model in
-`resources/tessdata/`; no system Tesseract is needed. Notebook 00 downloads
-6 PDFs (≈ 22 MB) from Hugging Face and OCRs 120 pages (≈ 1 minute).
+Then run the notebooks in order, on the `visualdoc-venv` kernel. **No notebook makes a paid call by default**: `VISUALDOC_QA_MODE` defaults to `replay` and every `VISUALDOC_E*_MODE` to `offline`. In those modes each notebook rebuilds its requests, asserts that they equal the frozen ones, re-scores the frozen replies and asserts the regression references in `AGENTS.md`. Paid modes (`smoke`, `pilot`, `full`) run only with the owner's explicit approval.
 
-```bash
-pytest                                   # application modules, frozen protocols, parsing module and annotation schema
-jupyter lab notebooks/                   # then run 00 → 01 → 02 → 03 with the visualdoc-venv kernel
-```
+| Notebook | Stage | Main outputs (git-ignored, regenerable) |
+|---|---|---|
+| [`00_document_processing`](notebooks/00_document_processing.ipynb) | E0: pinned questions, seeded 6-document subset, native text + OCR fallback, page rendering (512 px and 768 px) | `data/processed/mmlongbench_doc/{questions,pages}.parquet`, page PNGs in `data/cache/` |
+| [`01_retrieval`](notebooks/01_retrieval.ipynb) | E0: BM25 by hand and per document, Recall@k / Hit@k, OCR ablation | `rankings.parquet`, retrieval tables |
+| [`02_question_answering`](notebooks/02_question_answering.ipynb) | E0 conditions A–D; E1–E4 requests and executors | predictions, request plans |
+| [`03_evaluation`](notebooks/03_evaluation.ipynb) | E0–E4 scoring (S-v1, cell `f653d232`), paired comparisons, error analysis | evaluation summaries, figures |
+| [`04_visual_retrieval`](notebooks/04_visual_retrieval.ipynb) | E5: ColQwen2 vs OCR + BM25 on 14 new documents (no API) | held-out pages, embeddings in `data/cache/e5/` |
+| [`05_visual_retrieval_answering`](notebooks/05_visual_retrieval_answering.ipynb) | E6: ColQwen2 pages vs BM25 pages, end to end | E6 evaluation tables |
+| [`06_extract_then_answer`](notebooks/06_extract_then_answer.ipynb) | E7: extract-then-answer vs one-shot | E7 evaluation tables |
+| [`07_baseline_consolidation`](notebooks/07_baseline_consolidation.ipynb) | B1: retrieval complementarity, scoring protocol S-v2, E8 reader migration | `data/processed/mmlongbench_doc/b1/` |
+| [`08_adaptive_evidence`](notebooks/08_adaptive_evidence.ipynb) | E9: trigger selection (Stage 0) and adaptive arms (Stage 2) | `data/processed/mmlongbench_doc/e9/` |
 
-For a live run, set `OPENAI_API_KEY` and `VISUALDOC_QA_MODE` in `.env`, and
-always go `smoke` → `pilot` → `full`. A full run costs about $1.10 at list
-prices if no image reply is cached.
+Notebooks communicate only through saved files. Each states its inputs and outputs at the top and stops with a clear message when an input is missing.
 
-E1 is gated separately so the frozen baseline can remain in replay mode:
+**What cannot be reproduced without paying:** whether the models would give the same replies today. At temperature 0 the same requests already differ between sessions (E9: 6 flips on byte-identical B1 requests sent on the same day). `gpt-6-luna` has no dated snapshot, and `gpt-4o-mini-2024-07-18` shuts down on 2027-01-14. The frozen replies, not the model names, define every result.
 
-```bash
-# Offline validation only (default; no API call)
-VISUALDOC_QA_MODE=replay VISUALDOC_E1_MODE=offline jupyter nbconvert \
-  --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+---
 
-# Paid modes: run only after explicit approval, in this order
-VISUALDOC_QA_MODE=replay VISUALDOC_E1_MODE=smoke jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
-VISUALDOC_QA_MODE=replay VISUALDOC_E1_MODE=pilot jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
-VISUALDOC_QA_MODE=replay VISUALDOC_E1_MODE=full jupyter nbconvert --execute --to notebook --inplace notebooks/02_question_answering.ipynb
+## How results are produced
 
-# Evaluate one immutable saved run without calling the API
-VISUALDOC_E1_RUN_DIR=experiments/runs/e1/<run-id> jupyter nbconvert \
-  --execute --to notebook --inplace notebooks/03_evaluation.ipynb
-```
+- **Pre-registration.** From E1 on, each experiment has a JSON specification in `experiments/specs/`, committed before the first paid call. It fixes the population, arms, request construction, seeds, decision rule and budget ceiling. Paid modes refuse to run if the specification or the notebook code differs from the committed version.
+- **Controlled comparisons.** Arms differ in one factor; requests of a question are sent adjacently in a seeded, counterbalanced order; repeat arms or a same-session control measure run-to-run change.
+- **Scoring.** S-v1 (notebook 03 cell `f653d232`, correct = score > 0) is frozen and decides every verdict. S-v2 adds the owner's blind labels for ambiguous replies and is reported beside it; no model judgment replaces a human label.
+- **Statistics.** The question is the unit, clustered by document: document-cluster bootstrap intervals (10,000 draws) and exact document sign-flip tests. McNemar and leave-one-document-out are descriptive. One primary contrast per experiment. Non-inferiority is not claimed on about 100 questions.
+- **Freezing.** After a run, its directory is copied byte for byte into `experiments/frozen/<exp>/` with evaluation tables, an independent audit, provenance and `SHA256SUMS`. Frozen files are never edited.
 
-Each paid E1 invocation creates a unique run directory and refuses to
-overwrite an earlier run. `smoke` writes technical verification only;
-`pilot` saves selected responses but 03 suppresses performance claims;
-`full` is the only mode that writes the repeated-control comparison and the
-predefined accuracy–cost decision readout.
+Details: [`docs/research_report.md`](docs/research_report.md) §4.
 
-**Troubleshooting.** `ModuleNotFoundError: No module named 'visualdoc'` while
-`pip show visualdoc-ai` works: the editable-install `.pth` file has the macOS
-`hidden` flag. Run `chflags nohidden .venv/lib/python3.12/site-packages/*.pth`
-(the flag can come back; `pytest` does not depend on it, and `PYTHONPATH=src`
-works for the demo).
+## Open items
+
+From `docs/PROGRESS.md` and `docs/final_evaluation_specification.md`:
+
+1. **Final held-out evaluation.** The draft specification (B1 against OCR + BM25 with the same reader, on 111 untouched documents) needs the owner's approval, a budget (proposed ceiling $2.00) and a choice of indexing compute: about 5,300 pages to index with ColQwen2, about 18 h on the laptop or under an hour on an SSP Cloud GPU.
+2. **S-v2 labels for E9.** 13 arm-blind items await the owner's labels; they cannot change the S-v1 verdict.
+3. **Environment.** The repository sits in an iCloud-synced folder on a nearly full disk; evicted files must be downloaded again before some runs (`docs/reproducibility.md`).
+
+---
 
 ## Repository layout
 
 ```text
 .
-├── notebooks/                 # the four-stage workflow (00 → 03)
+├── notebooks/                 # 00–08: the research record, one stage per notebook
+├── src/visualdoc/             # the application
+│   ├── documents.py           #   PDF validation, SHA-256, text (native + OCR), 768-px rendering      ┐
+│   ├── retrieval.py           #   BM25, MaxSim, cached visual index                                     │ five modules,
+│   ├── answering.py           #   reader profiles, contract b1, request builder, token/cost guard, parser │ SHA-256-pinned by
+│   ├── citations.py           #   citation check, quote and numeric grounding                           │ the frozen E8 spec
+│   ├── pipeline.py            #   answer_question_b1 (retrieve, read, verify), Budget, caches, run log  ┘
+│   ├── visual_index.py        #   ColQwen2 embedding store, E5 importer, live encoder
+│   ├── app.py                 #   B1App service and CLI (ask, index, serve)
+│   ├── web.py                 #   local web page (stdlib http.server)
+│   └── parsing.py             #   older page-routing baseline, kept for reference, unused
+├── tests/                     # pytest: modules, parity with frozen runs, frozen-package integrity
 ├── experiments/
-│   ├── frozen/mmlongbench_doc/  # committed canonical predictions and results, with SHA256SUMS
-│   ├── frozen/e1/             # frozen E1 full run, figures, per-question table, provenance, SHA256SUMS
-│   ├── frozen/e2/             # frozen E2 full run, figures, audit, provenance, SHA256SUMS
-│   ├── frozen/e3/             # frozen E3 full run, figures, audit, provenance, SHA256SUMS
-│   ├── specs/                 # experiment specifications (E1–E4 frozen)
-│   └── runs/                  # git-ignored outputs of new live runs (e1/, e2/, e3/, ...)
+│   ├── specs/                 # pre-registered specifications E1–E9 (frozen before any call)
+│   ├── frozen/                # committed runs, tables, audits, provenance and SHA256SUMS
+│   ├── runs/                  # git-ignored outputs of new live runs
+│   ├── README.md              # what each frozen folder holds
+│   └── test_pool_ledger.md    # everything already seen about the untouched test pool
+├── docs/                      # reports, specifications and the progress log (see below)
 ├── data/
-│   ├── external/              # MMLongBench-Doc question table (tracked) and PDFs (git-ignored); other benchmarks
-│   ├── processed/, cache/     # git-ignored outputs of the notebooks
-│   ├── annotations/           # schema and guide for the project's own question set (empty)
-│   └── documents/             # three local candidate PDFs, used by the tests
-├── src/visualdoc/             # application modules (documents, retrieval, answering, citations, pipeline);
-│                              #   parsing.py = older page-routing baseline, kept for reference
-├── tests/                     # application, parsing and annotation-schema tests
-├── resources/tessdata/        # Tesseract English model
-├── archive/                   # superseded notebooks, course labs, old docs (see archive/README.md)
-├── AGENTS.md                  # development policy for coding agents
-└── pyproject.toml, requirements*.txt
+│   ├── external/              # MMLongBench-Doc question table (tracked); PDFs downloaded on demand
+│   ├── processed/, cache/     # git-ignored notebook and application outputs
+│   ├── annotations/           # schema for the project's own question set (empty)
+│   └── documents/             # three local sample PDFs, used by the tests and the demo
+├── resources/                 # Tesseract English model; benchmark document list
+├── archive/                   # superseded notebooks, course labs, old docs (read-only)
+├── AGENTS.md                  # development policy: notebook-first, frozen files, paid-call gates
+└── pyproject.toml, requirements.txt
 ```
 
-## Implemented versus planned
+## Documentation map
 
-| Component | Status |
-| --- | --- |
-| Native text + OCR fallback, page records, rendering | Implemented (00); application module `documents.py` |
-| BM25 page retrieval and metrics | Implemented (01); application module `retrieval.py` |
-| Text and image QA with page citations, four conditions | Implemented and run (02) |
-| Experiments E1–E4 (resolution, stronger VLM, text–image fusion, application end to end) | Run, audited and frozen (`experiments/frozen/`) |
-| End-to-end application baseline (image answering, citation check) | Implemented with offline tests (`src/visualdoc/`); measured end to end in E4 (2026-11-23): 11/40 answerable, in-sample |
-| Evaluation, paired comparisons, error analysis | Implemented (03); manual review of the E0 queue done (29 cases); E3's 14-question queue not labelled |
-| Dense or visual retrieval (embeddings, ColPali) | Planned; no model chosen |
-| Project's own verified question set | Not started (needs annotation) |
-| User interface (e.g. Streamlit) | Deferred until after the experimental phase |
+| Document | Content |
+|---|---|
+| [`docs/research_report.md`](docs/research_report.md) | Research report for E0–E9: questions, data, method, each experiment, negative results, statistics, threats to validity, the pending final evaluation |
+| [`docs/architecture.md`](docs/architecture.md) | System architecture: the B1 pipeline, the application layer, caches, budgets, the notebook workflow, how experiments map to code |
+| [`docs/reproducibility.md`](docs/reproducibility.md) | Environment, data, notebook order and modes, verifying frozen packages, what needs paid calls, resources, test-pool rules |
+| [`docs/application.md`](docs/application.md) | Application usage: CLI, web page, visual index, live mode, tests |
+| [`docs/validated_baseline_b1.md`](docs/validated_baseline_b1.md) | What B1 is, what the evidence supports and what it does not claim |
+| [`docs/final_evaluation_specification.md`](docs/final_evaluation_specification.md) | **Draft, not approved**: the one-time held-out evaluation |
+| [`docs/PROGRESS.md`](docs/PROGRESS.md) | Progress log: decisions, spend, resources, open items |
+| `docs/baseline_b1_specification.md`, `docs/baseline_consolidation_assessment.md`, `docs/e9_proposal.md`, `docs/e2_proposal.md` | Design records written before the corresponding experiments |
+| [`experiments/README.md`](experiments/README.md) | The frozen packages and how results are reproduced |
 
-## Data and licensing
+---
 
-MMLongBench-Doc is licensed CC BY-NC 4.0 (research use). Its PDFs are
-downloaded on demand into a git-ignored folder. See
-[`data/external/README.md`](data/external/README.md),
-[`data/annotations/README.md`](data/annotations/README.md) and
-[`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Do not commit private or
-rights-restricted documents.
+## API spend (list price)
+
+| Experiment | Spend | Source |
+|---|---:|---|
+| E0–E7 | about $13 in all | `docs/baseline_consolidation_assessment.md` §1.1 |
+| of which E1 (3 runs) / E2 (4 runs) / E3 (3 runs) | about $0.59 / $0.0436 / $0.91 | `experiments/frozen/e1/README.md`, `e2/README.md`, `e3/README.md` |
+| of which E4 / E6 / E7 | $1.2006 / $3.7213 / $5.911057 | `AGENTS.md` |
+| E5, E9 Stage 0 | $0 (no API call) | `experiments/frozen/e5/README.md`, `docs/PROGRESS.md` |
+| E8 smoke + full | $0.0015431 + $0.144765 | `AGENTS.md` |
+| E9 smoke + Stage 2 | $0.151647 | `experiments/frozen/e9/README.md` |
+
+The reader change explains the drop: E6's GPT-4o-mini requests cost $1.827 per arm of 118 questions, while E8's 354 `gpt-6-luna` calls cost $0.144765 in all.
+
+---
+
+## Data, licences and the test pool
+
+- **MMLongBench-Doc** (revision `2ff6aa92…`) is licensed CC BY-NC 4.0, research use only. Its question table is tracked; its PDFs are downloaded on demand into a git-ignored folder (`data/external/README.md`).
+- **The untouched test pool** is every benchmark document outside the 20 used in development. Its questions, answers and evidence must not be read, and no system output may be produced for it, until a frozen final-evaluation specification is approved (`AGENTS.md`). `experiments/test_pool_ledger.md` records everything already seen about it. The application refuses all 115 pool document names; the check is mainly by name, so a renamed copy would not be recognised (`docs/application.md` §4).
+- **ColQwen2** weights (`vidore/colqwen2-v1.0-hf`, revision `ddc07d23`, 4.4 GB) are downloaded once by notebook 04 and are not in git.
+- Third-party material and local sample PDFs: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Do not commit private or rights-restricted documents.
+
+## Limitations
+
+- **Development data only.** E0–E9 use 20 documents (175 questions) that shaped every decision; E6–E9 reuse the same 118 questions. No held-out result for B1 exists yet.
+- **Small, clustered samples.** About 100 questions in 14 documents: one question is about 0.01 of accuracy, and replicate churn is 4–7 questions.
+- **Single-annotator evidence.** A page that answers but is not annotated counts as missing.
+- **Local scoring.** S-v1 re-implements the benchmark's rule-based scorer without its GPT-4o extraction step; S-v2 adds blind human labels for ambiguous replies.
+- **An unpinnable reader.** `gpt-6-luna` returns no system fingerprint; frozen replies define the baseline.
+- **Visual indexing is slow on the development laptop** (12.5 s per page on a fanless M1 with 8 GB of RAM) and the ColQwen2 weights are currently an iCloud placeholder there; without an index the app falls back to BM25.

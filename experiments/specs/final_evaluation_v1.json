@@ -1,0 +1,76 @@
+{
+  "experiment": "Final held-out evaluation",
+  "version": 1,
+  "date_frozen": "2026-11-25",
+  "status": "Frozen before any test-pool document, question, answer or evidence was downloaded, read or run. Approved by the owner on 2026-11-25 (arms B1, T1 and secondary A1; ceiling USD 2.50; laptop indexing).",
+  "draft": "docs/final_evaluation_specification.md",
+  "use_of_pool": "once, for the frozen configurations below, in one reader session; no per-question error analysis; no change to the shipped system after results are seen",
+
+  "population": {
+    "dataset": "yubo2333/MMLongBench-Doc",
+    "revision": "2ff6aa9237fc777b6627dc57a486e9225ac5fb86",
+    "document_list": "resources/mmlongbench_doc_documents.json (135 names)",
+    "excluded_development_documents": "the 20 documents of E0-E9 (6 dev + 14 held-out)",
+    "excluded_touched_documents": ["PH_2016.06.08_Economy-Final.pdf", "05-03-18-political-release.pdf", "2312.04350v3.pdf", "RAR.pdf"],
+    "documents": 111,
+    "questions": "every question of the 111 documents, answerable and unanswerable, no question-level filter; exact count computed by code at load time",
+    "page_cap": null,
+    "file_size_cap": null
+  },
+
+  "index": {
+    "order": "download PDFs (record sha256) -> render -> ColQwen2 page embeddings and BM25/OCR text -> write and commit the index manifest -> only then load questions",
+    "render": "documents.render_page_png profile short768-long1536 (768-px short side, 1536-px long side cap, RGB PNG), byte-deterministic; PNG sha256 recorded; PNGs may be deleted after encoding and re-rendered for reading, refused unless the sha256 matches",
+    "visual_model": {"id": "vidore/colqwen2-v1.0-hf", "revision": "ddc07d2317c8", "weights_sha256_prefix": "2f6dbf32", "dtype": "bfloat16",
+                     "encoding": "notebook 04's two-pass encoding, bitwise equal to the single pass (E5)",
+                     "parity_gate": "before any pool page is encoded, re-encode >= 2 development pages and >= 1 development query and require bitwise equality with the frozen E5 cache; otherwise stop"},
+    "text": "native text get_text('text', sort=True); full-page Tesseract OCR (eng, 150 dpi) for pages with < 30 native words",
+    "bm25": {"k1": 1.5, "b": 0.75, "tokens": "lower-cased ASCII letter/digit runs", "ties": "page number"}
+  },
+
+  "arms": {
+    "B1": {"retrieval": "ColQwen2 MaxSim over every page, top 4 (all pages if fewer)", "role": "the selected system (primary)"},
+    "T1": {"retrieval": "BM25 over native+OCR text, top 4 (all pages if fewer)", "role": "text-retrieval baseline for the confirmatory contrast"},
+    "A1": {"retrieval": "if U3 = -(s_1 - s_k)/s_1 >= -0.153079 with k = min(8, pages): read ColQwen2 top 8 (all pages if fewer); otherwise reuse B1's reply. Documents with <= 4 pages never trigger.",
+           "role": "secondary only; B1 remains the shipped system whatever A1 scores"},
+    "reader": {"model": "gpt-6-luna (alias; served model and system fingerprint recorded per call)", "reasoning_effort": "none", "temperature": 0,
+               "max_completion_tokens": 800, "contract": "b1 strict JSON schema", "image_detail": "high",
+               "request_template": "system prompt, response_format and message layout byte-identical to the frozen E8 L-B1 requests; parity proven by rebuilding all 118 E8 L-B1 requests from development questions with identical fingerprints"}
+  },
+
+  "execution": {
+    "smoke": "<= 6 calls on development questions (B1, T1 and 8-page requests), not scored, no pool output; gates as E9 Stage 1",
+    "order": "per question, a seeded random order of its calls (B1, T1, and the 8-page call when triggered); seed 20261201",
+    "replicates": 1,
+    "cumulative_ceiling_usd": 2.50,
+    "plan_upper_bound_max_usd": 2.40,
+    "fail_closed": "append-only log; SDK retries 0, timeout 120 s; at most 2 attempts per index; stop on API error, contract failure, served-model or system-fingerprint change; unknown usage charged at the request's upper bound"
+  },
+
+  "scoring": {
+    "primary": "S-v1 (notebook 03 cell f653d232; correct = score > 0), answerable questions",
+    "secondary": "S-v2 (notebook 07 b1-scorer-v2) with arm-blind owner adjudication of gray items (optional; never model judgment). Before labels: the exact min/max of each contrast over all consistent labellings.",
+    "unanswerable": "correct abstention = exact 'Not answerable'"
+  },
+
+  "claims_and_rules": {
+    "C1_estimate": "B1 answerable accuracy with a document-cluster 95% interval, overall and on the core scope (born-digital financial / research report / administration documents); compared descriptively with the development estimate 46/102.",
+    "C2_confirmatory": {
+      "contrast": "acc(B1) - acc(T1), answerable, paired by question",
+      "visual_retrieval_confirmed": "delta > 0 and one-sided bootstrap 5th percentile > 0 and sign-flip p <= 0.05",
+      "reversed": "bootstrap 97.5th percentile < 0",
+      "otherwise": "visual_retrieval_not_confirmed"
+    },
+    "C3_secondary_A1": {
+      "contrast": "acc(A1) - acc(B1)",
+      "a1_gain_supported": "one-sided bootstrap 5th percentile > 0 and sign-flip p <= 0.05",
+      "otherwise": "a1_gain_not_supported",
+      "consequence": "reported only; the shipped system remains B1"
+    },
+    "statistics": "unit = question, cluster = document; percentile bootstrap 10,000 draws (seed 20261202); Monte Carlo sign-flip test 100,000 draws (seed 20261203) on per-document summed differences, one-sided; McNemar descriptive",
+    "secondary_metrics": ["correct abstention on unanswerable questions", "citation validity", "evidence Recall@4 and complete-evidence rate of ColQwen2 vs BM25 (annotations used for scoring only)", "tokens, USD and latency"],
+    "subgroups_descriptive": ["document type", "core scope vs other", "pages <= 50 / 51-200 / > 200", "evidence span 1 / 2-3 / 4+ pages", "evidence source", "answer format", "born-digital vs image-only"]
+  },
+
+  "ledger": "experiments/test_pool_ledger.md is updated at each access step (download, index, question load, run)."
+}

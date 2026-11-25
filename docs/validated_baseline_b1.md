@@ -48,7 +48,7 @@ Five decisions, each the survivor of a pre-registered experiment:
 | Answer accuracy end to end (E6, 102 q) | 25/102 | 38/102 | **+0.127 [+0.074, +0.193]** |
 | Same, under S-v2 | 28/101 | 39/101 | +0.109 |
 
-Supporting checks: E6 fixed 13 questions and broke **0**; the document sign-flip test gives one-sided p = 0.00098; leave-one-document-out keeps the gain between +0.113 and +0.154. E5's gain holds on 12 of 14 documents and on none is it negative. The gain concentrates where OCR is weakest — figures 0.40 → 0.85, layout text 0.45 → 0.76, OCR'd pages 0.49 → 0.85 — and is near zero on plain text (0.66 → 0.68).
+Supporting checks: E6 fixed 13 questions and broke **0**; the document sign-flip test gives one-sided p = 0.00098; leave-one-document-out keeps the gain between +0.113 and +0.149. E5's gain holds on 12 of 14 documents and on none is it negative. The gain concentrates where OCR is weakest — figures 0.40 → 0.85, layout text 0.45 → 0.76, OCR'd pages 0.49 → 0.85 — and is near zero on plain text (0.66 → 0.68).
 
 **Per-page extract-then-answer is worse than one-shot.** A supported *negative* result, which is why B1 reads in a single call.
 
@@ -85,7 +85,7 @@ What B1 *does* buy, and these are measured, not inferred:
 |---|---|---|
 | E1 image resolution | `adopt_768` — 10/37 → 16/37, 6 fixed / 0 broken | 37 questions, development |
 | E3 text–image fusion | `retain_image_only_768` — text 13, image 17, both 16 /37 | image vs both is within noise; both clearly beat text alone |
-| E4 application end to end | `page_selection_costs_accuracy` — app 11/40, oracle pages 17/37 | confirms retrieval, not reading, is the bottleneck |
+| E4 application end to end | `page_selection_costs_accuracy` — app 11/40, oracle pages 17/37 | page selection costs accuracy, but reading still loses about three times more: even on oracle pages only 17/37 are correct (`experiments/frozen/e4/README.md`) |
 
 ---
 
@@ -102,7 +102,7 @@ Point 2 is the single most actionable finding in E8, and it is the motivation fo
 
 ## 4. What this baseline does not claim
 
-- **It is a development result.** 14 documents, 118 questions. The 111-document / ~916-question test pool is untouched and must be used once, against frozen configurations, under its own approved specification.
+- **It is a development result.** 14 documents, 118 questions. The test pool (115 documents and 916 questions; 111 documents and about 880 questions once the four touched documents are excluded) is untouched and must be used once, against frozen configurations, under its own approved specification.
 - **The reader is an alias, not a snapshot.** `gpt-6-luna` returns no system fingerprint. The **frozen replies**, not the model name, define this baseline. A change in served model or fingerprint is a new condition.
 - **S-v1 is primary and is never re-labelled.** S-v2 is reported beside it. One item (`mmlb-1013`) carries an inherited `unsure` and is excluded from S-v2, giving a denominator of 101.
 - **Scoring is itself approximate.** Across the two adjudication rounds, human judgment disagreed with the automatic scorer on 13 of 58 gray arm-cells. That is why every result carries both scorers.
