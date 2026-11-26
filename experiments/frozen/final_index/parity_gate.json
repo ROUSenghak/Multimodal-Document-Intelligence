@@ -1,0 +1,26 @@
+{
+ "passed": true,
+ "checks": {
+  "page 11-21-16-Updated-Post-Election p.1": true,
+  "page 2021-Apple-Catalog.pdf p.1": true,
+  "question (E8's first)": true
+ },
+ "encoder": {
+  "repo": "vidore/colqwen2-v1.0-hf",
+  "revision": "ddc07d2317c80f75fc742b7362ee9ad1912908f9",
+  "weights_sha256": "2f6dbf32fc2db5b045d74ae73b148425d6e03cc1106a047cdcc7e72b6dc53aba",
+  "transformers": "5.23.0",
+  "torch": "2.15.0",
+  "device": "mps",
+  "dtype": "bfloat16",
+  "attn_implementation": "sdpa",
+  "batch_size": 1,
+  "page_image": "E1 profile: 768 x 1536 box, RGB PNG",
+  "preprocessor_config_sha256": "be69973e9e1f8404b6fb70f246ad8307086d614b31464e3048c387945ac66bf0",
+  "tokenizer_sha256": "091aa7594dc2fcfbfa06b9e3c22a5f0562ac14f30375c13af7309407a0e67b8a",
+  "visual_prompt": "<|im_start|>user\n<|vision_start|><|image_pad|><|vision_end|>Describe the image.<|im_end|><|endoftext|>",
+  "query_prefix": "Query: ",
+  "query_augmentation": "10 x <|endoftext|>",
+  "embedding_rule": "model(**batch).embeddings; rows with attention_mask 0 removed; stored bf16"
+ }
+}

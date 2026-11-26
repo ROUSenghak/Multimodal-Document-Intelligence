@@ -1,0 +1,23 @@
+{
+ "documents_downloaded": 111,
+ "documents_verified": 110,
+ "excluded": [
+  {
+   "doc_id": "mi_phone.pdf",
+   "problem": "served bytes differ from the pinned revision's recorded sha256"
+  }
+ ],
+ "pages": 5554,
+ "distinct_page_images": 5348,
+ "ocr_pages": 1657,
+ "encoding": {
+  "vision_s_per_page_mean": 6.822,
+  "language_s_per_page_mean": 2.597,
+  "vectors_per_page_median": 755,
+  "vectors_per_page_min": 731,
+  "vectors_per_page_max": 779,
+  "log_rows": 10701
+ },
+ "parity_gate": true,
+ "questions_read": false
+}
