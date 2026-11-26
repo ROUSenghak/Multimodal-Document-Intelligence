@@ -1,7 +1,7 @@
 # The validated baseline (B1)
 
-**Status:** frozen 2026-11-25. Evidence: E1–E8, all development data.
-**Population for every number below:** 118 questions (102 answerable, 16 unanswerable) across 14 MMLongBench-Doc documents. The final test pool has never been run.
+**Status:** frozen 2026-11-25. Evidence: E1–E8, all development data; then confirmed once on held-out data by the final evaluation of 2026-11-26 (§3a).
+**Population for every number in §1–§3:** 118 development questions (102 answerable, 16 unanswerable) across 14 MMLongBench-Doc documents. §3a reports the held-out result on 110 other documents (`experiments/frozen/final/`).
 
 ---
 
@@ -100,9 +100,32 @@ Point 2 is the single most actionable finding in E8, and it is the motivation fo
 
 ---
 
+## 3a. Held-out confirmation (final evaluation, 2026-11-26)
+
+B1 was evaluated once, unchanged, on the test pool under the protocol frozen in `experiments/specs/final_evaluation_v1.json` before any pool document was downloaded. Population: 110 documents never used in development, 872 questions (674 answerable, 198 unanswerable). The same reader and contract read ColQwen2's top 4 (B1) or OCR + BM25's top 4 (T1).
+
+| Claim (S-v1) | Held-out result | Development |
+|---|---|---|
+| B1 accuracy, answerable | **288/674 = 0.427** [0.386, 0.470] | 46/102 = 0.451 |
+| B1 − T1, visual vs text retrieval | **+0.119** [+0.088, +0.150], p = 1.0e-05, 103 fixed / 23 broken: **`visual_retrieval_confirmed`** | E6: +0.127 (GPT-4o-mini reader) |
+| Evidence recall at 4 pages, ColQwen2 vs BM25 | 0.711 vs 0.543 | E5: 0.721 vs 0.526 (after the guard) |
+| Correct abstentions | 120/198 | 9/16 |
+| Citation validity | 1.000 | 1.000 |
+
+- **The statistically supported result above (visual retrieval beats OCR + BM25) is now confirmed out of sample.** The independent audit found it in all 110 leave-one-document-out folds, and under the worst-case S-v2 labelling of the 85 pending items (+0.077).
+- **B1's accuracy estimate held:** 0.427 held out against 0.451 in development, inside the development interval.
+- **The core scope remains harder:** 77/207 = 0.372 [0.305, 0.443] on 32 born-digital report-type documents.
+- **E9's adaptive policy (A1)** gained +0.021 [+0.007, +0.036] on held-out data (19 fixed / 5 broken), a pre-registered secondary contrast that is fragile (p = 0.049 under the worst-case S-v2 labelling). By the frozen rule, **B1 remains the shipped system**.
+- The B1-contract-versus-old-contract question of §2 was not re-tested; it remains a non-inferiority result.
+
+Source: `experiments/frozen/final/README.md`, `tables/evaluation_summary.json`, `AUDIT.json`. Full account: `docs/research_report.md` §9.
+
+---
+
 ## 4. What this baseline does not claim
 
-- **It is a development result.** 14 documents, 118 questions. The test pool (115 documents and 916 questions; 111 documents and about 880 questions once the four touched documents are excluded) is untouched and must be used once, against frozen configurations, under its own approved specification.
+- **§1–§3 are development results.** 14 documents, 118 questions. The held-out estimate is §3a: the test pool (115 documents and 916 questions) was used once by the final evaluation, on 110 documents and 872 questions after the four touched documents and `mi_phone.pdf` (deviation D1) were excluded. **The pool is now used:** it may be reported, never used to tune a system.
+- **One held-out run per arm.** Reader noise is not part of the held-out test; E8 measured 4–7 flips between identical replicates on 102 questions.
 - **The reader is an alias, not a snapshot.** `gpt-6-luna` returns no system fingerprint. The **frozen replies**, not the model name, define this baseline. A change in served model or fingerprint is a new condition.
 - **S-v1 is primary and is never re-labelled.** S-v2 is reported beside it. One item (`mmlb-1013`) carries an inherited `unsure` and is excluded from S-v2, giving a denominator of 101.
 - **Scoring is itself approximate.** Across the two adjudication rounds, human judgment disagreed with the automatic scorer on 13 of 58 gray arm-cells. That is why every result carries both scorers.
@@ -123,6 +146,7 @@ Point 2 is the single most actionable finding in E8, and it is the motivation fo
 |---|---|
 | E8 execution and S-v1 verdict | `experiments/frozen/e8/` (commit `0d68a93`) |
 | E8 S-v2 blind labels | `experiments/frozen/e8_scoring_v2/` (commit `bedb8f3`) |
+| Held-out confirmation | `experiments/frozen/final/` (commit `c6c450d`), with `final_index/` and `final_retrieval/` |
 | E5 / E6 / E7 frozen results | `experiments/frozen/e5/`, `e6/`, `e7/` |
 | S-v2 labels for E6/E7 | `experiments/frozen/scoring_v2/` |
 | Reproduction | `notebooks/07_baseline_consolidation.ipynb`, `VISUALDOC_QA_MODE=replay` (no API call) |

@@ -1,6 +1,10 @@
-# Final held-out evaluation: specification (approved 2026-11-25; frozen JSON in `experiments/specs/final_evaluation_v1.json`)
+# Final held-out evaluation: specification (historical draft; executed 2026-11-26)
 
-**Status.** Approved by the owner on 2026-11-25: arms B1, T1 and secondary A1; ceiling USD 2.50; laptop indexing. Frozen as `experiments/specs/final_evaluation_v1.json`, which takes precedence over this draft wherever they differ.
+**Status: executed.** The evaluation ran once on 2026-11-26 and is audited and frozen in `experiments/frozen/final/` (commit `c6c450d`), with its index in `experiments/frozen/final_index/` and its retrieval in `experiments/frozen/final_retrieval/`. Results: B1 288/674 = 0.427 [0.386, 0.470]; B1 − T1 +0.119 [+0.088, +0.150], `visual_retrieval_confirmed`; A1 − B1 +0.021 [+0.007, +0.036], `a1_gain_supported` (secondary, reported only). See `experiments/frozen/final/README.md` and `docs/research_report.md` §9. **The test pool is now used.**
+
+**What governed the run.** The owner approved the evaluation on 2026-11-25 (arms B1, T1 and secondary A1; ceiling USD 2.50; laptop indexing). It was frozen as `experiments/specs/final_evaluation_v1.json` (commit `1c54a3e`), which takes precedence over this draft wherever they differ, together with `final_evaluation_v1_plan.json` and the deviations in `final_evaluation_v1_deviations.md` (D1: `mi_phone.pdf` excluded, so 110 documents and 872 questions; D2: an S-v1 crash fixed before any number was computed). Differences from this draft include the claim numbering (the frozen C3 is the A1 contrast; abstention, citations and recall became secondary metrics) and the indexing compute: the laptop's M1 GPU, about 14 h for 5,554 pages (`docs/PROGRESS.md`), rather than SSP Cloud.
+
+**The text below is the draft as approved, kept unchanged as a historical record.** Its estimates (about 880 questions, about 5,300 pages) and its "what the owner must decide" list predate the run.
 
 **Sources of pool information used here:** only `experiments/test_pool_ledger.md` (frame-level counts) and the published benchmark statistics.
 

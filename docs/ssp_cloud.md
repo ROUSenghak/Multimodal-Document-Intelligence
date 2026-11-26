@@ -60,6 +60,29 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
    mc du s3/$U/visualdoc/     # about 3.4 GB; compare file counts and bytes with the Mac before deleting anything
    ```
 
+### What the upload achieved (2026-11-26, ENSAE-ENSAI Datalab)
+
+| Folder | On MinIO | Notes |
+|---|---|---|
+| `data/cache/final` (test embeddings, 1.04 GB) | ✅ 6,223 files, bytes identical | irreplaceable (14 h of M1 encoding) |
+| `data/cache/e5` (E5 embeddings) | ✅ 1,013 files, bytes identical | |
+| `data/cache/mmlongbench_doc` (page images) | ❌ mostly blocked | |
+| `data/external/mmlongbench_doc` (PDFs) | ❌ mostly blocked | |
+| `data/processed` | ⚠️ 213 of 250 files | |
+| `experiments/runs` | ⚠️ 452 of 453 files | |
+
+**The storage gateway's filter rejected many uploads with an HTML block page.**
+- **It filters content, not size.** Random files of 1–3 MB pass. Some ordinary CSV, parquet and log files, PDFs and some PNGs are rejected, consistently. A 20 MB file was also rejected.
+- **Do not try to disguise the files** (for example by encrypting them). That would circumvent the school's security control.
+- **Legitimate routes:**
+  1. **Report the false positives** to the Datalab administrators.
+  2. **Rebuild inside a Datalab service.**
+     - Re-download the PDFs from Hugging Face. Notebook 09's download cell checks each one against the pinned revision's hash.
+     - Re-render the pages, and check them against the frozen manifest's image hashes.
+     - Re-run the notebooks offline to regenerate the processed tables.
+
+**Do not delete the Mac copy** until one of these routes has succeeded and been verified.
+
 ## 2. On SSP Cloud
 
 1. **My secrets** (left menu of the datalab):

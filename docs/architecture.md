@@ -1,6 +1,6 @@
 # VisualDoc AI: architecture
 
-- **Date:** 2026-11-25.
+- **Date:** 2026-11-26.
 - **What this covers:** the B1 question-answering pipeline, the application layer built around it, caches and their keys, budgets and guards, the notebook-first research workflow, the frozen packages and specifications, and how each experiment maps to code.
 - **What it does not repeat:** command-line usage and the web page's details are in [`docs/application.md`](application.md); results are in [`docs/research_report.md`](research_report.md).
 
@@ -15,7 +15,7 @@ The application layer (`src/visualdoc/app.py`, `visual_index.py`, `web.py`) was 
 | **Research record** | `notebooks/00`–`08`, `experiments/` | Measure each design choice under a frozen specification and keep the evidence | Notebook-first: each operation is rebuilt visibly in cells; notebooks share only saved files (`AGENTS.md`) |
 | **Application** | `src/visualdoc/` | Answer a question about any PDF with the configuration the experiments retained | Five modules are SHA-256-pinned to the frozen E8 run; the application grows only by new modules |
 
-The two meet in a few places only. Notebooks import `src/visualdoc` where the application itself is the object measured: notebook 02 §13 (E4), notebook 03 §16–17, and the E8 sections of notebook 07. Those sections check module hashes or outputs against the notebooks' own construction. Notebook 08 (E9) imports nothing from `src/` and instead proves that its requests equal the frozen E8 requests (`AGENTS.md`; `docs/PROGRESS.md`, Application constraints).
+The two meet in a few places only. Notebooks import `src/visualdoc` where the application itself is the object measured: notebook 02 §13 (E4), notebook 03 §16–17, and the E8 sections of notebook 07. Those sections check module hashes or outputs against the notebooks' own construction. Notebook 08 (E9) imports nothing from `src/` and instead proves that its requests equal the frozen E8 requests (`AGENTS.md`; `docs/PROGRESS.md`, Application constraints). Notebook 09 (the final held-out evaluation) also imports nothing from `src/`: it rebuilds rendering, MaxSim, BM25, requests and the executor in its own cells, and proves on development data that its rankings equal E5's (118/118) and its B1 requests equal frozen E8 L-B1 (118/118) before building any pool request (`experiments/frozen/final_retrieval/README.md`).
 
 ---
 
@@ -67,8 +67,8 @@ B1 is the configuration frozen after E8 (`docs/validated_baseline_b1.md`). Its p
 |---|---|---|
 | Text extraction with OCR fallback | needed for BM25 and for grounding checks, not sent to the reader | E0 (OCR raises BM25 Recall@5 from 0.358 to 0.689); E3 (adding text to the prompt did not help) |
 | 768-px images | the reader sees page images only | E1 (10/37 → 16/37 with GPT-4o-mini); E3 |
-| ColQwen2 primary, BM25 fallback | no fusion | E5, E6; notebook 07 (RRF and interleaving worse than ColQwen2 alone) |
-| k = 4, one read | no adaptive deepening | E6 read 4 pages for 105 of 118 questions; E9 `no_meaningful_gain` |
+| ColQwen2 primary, BM25 fallback | no fusion | E5, E6; notebook 07 (RRF and interleaving worse than ColQwen2 alone); **confirmed held out**: the final evaluation's B1 − T1 is +0.119, `visual_retrieval_confirmed` |
+| k = 4, one read | no adaptive deepening | E6 read 4 pages for 105 of 118 questions; E9 `no_meaningful_gain`; held out, the adaptive policy's +0.021 is a secondary result that by rule does not change the shipped system |
 | One-shot read | not extract-then-answer | E7 `regression` |
 | `gpt-6-luna`, contract b1 | the successor reader with structured, quotable evidence | E8 (non-inferior; citation validity 1.000) |
 | Grounding check | shown to the user as a trust signal, never used to retry or repair | E8: grounding failure is *anti*-predictive of a wrong answer |
@@ -155,13 +155,16 @@ Three new modules wrap the pinned ones. Each question still goes through `pipeli
 | Benchmark page images | `data/cache/mmlongbench_doc/page_images/<render box>/` | render box in the folder name; per-page SHA-256 in the render manifests | notebooks 00, 04 |
 | Page records | `data/processed/mmlongbench_doc/{questions,pages}.parquet`, `e5/heldout_pages.parquet` | dataset revision and settings recorded beside them | notebooks 00, 04 |
 | E5 page and query embeddings | `data/cache/e5/colqwen2-v1.0-hf@ddc07d2317c8/<config hash>/` | a hash over model revision, weight hash, library versions, device, dtype, preprocessing, prompts and embedding rule | notebook 04 |
-| ColQwen2 checkpoint | `data/cache/hf/colqwen2-v1.0-hf@ddc07d2317c8/` | revision in the folder name; weight SHA-256 recorded by E5 | notebook 04 |
+| ColQwen2 checkpoint | `data/cache/hf/colqwen2-v1.0-hf@ddc07d2317c8/` (E5; now an evicted iCloud placeholder); for the final evaluation, the same revision in the Hugging Face cache outside the repository | revision in the folder name; weight, preprocessor and tokenizer hashes equal E5's | notebooks 04, 09 |
+| Final-evaluation page and query embeddings | `data/cache/final/` (about 1 GB) | SHA-256 of every page embedding in `experiments/frozen/final_index/index_manifest.csv`, of every query embedding in `experiments/frozen/final_retrieval/query_manifest.csv` | notebook 09 (`index`, `queries`) |
+| Final-evaluation tables | `data/processed/mmlongbench_doc/final/` | document and page tables, encoding log, plan design, evaluation; frozen copies in `experiments/frozen/final*/` | notebook 09 |
 | Application visual index | `data/cache/app/visual_index/vidore--colqwen2-v1.0-hf@ddc07d2317c8/short768-long1536/<pdf sha256>.safetensors` | (PDF SHA-256, render profile, model id, model revision), written inside the file and checked on every load; a mismatch raises `IndexKeyMismatch` | `visual_index.py` |
 | Application query embeddings | `…/queries/<sha256 of the exact question>.safetensors` | (model id, revision, SHA-256 of the question) | `visual_index.py` |
 | Application reply caches | `data/cache/app/replies_offline.jsonl`, `replies_live_gpt-6-luna.jsonl` | request fingerprint; one file per mode and model, so a placeholder is never replayed as a live answer; failed replies are not cached | `app.py` via `pipeline.JsonlReplyCache` |
 | Application run log | `data/cache/app/run_log.jsonl` | append-only JSON lines in `append_run_log`'s format plus `record`, `mode`, `charged_usd` and `time`; live mode writes an `attempt` record before each send, then `answer` or `attempt_failed`; an `answer` holds the full B1 result with its retrieve / read / verify trace and the BM25 pages logged beside | `app.py` |
 | Uploaded PDFs | `data/cache/app/uploads/<sha256>.pdf` | PDF SHA-256 | `app.py`, `web.py` |
 | Experiment response caches | `experiments/runs/<exp>/<run-id>/response_cache.jsonl` | SHA-256(run id : replicate : request fingerprint): scoped to one run and one replicate | notebooks 02, 05–08 |
+| Experiment run logs | `experiments/runs/<exp>/<run-id>/execution_log.jsonl` | append-only, one record per call with fingerprint, usage and served identity | notebooks 02, 05–09 |
 | Frozen runs (tracked) | `experiments/frozen/<exp>/` | byte-identical copies, protected by `SHA256SUMS` | copied after each run |
 
 Two design points recur. **Content addressing:** a document is identified by the SHA-256 of its bytes, a request by the fingerprint of its loggable form, a question embedding by the SHA-256 of its text. **Key inside the artefact:** the visual index stores its own key, so a file moved or renamed cannot be silently reused for another PDF, rendering or checkpoint. Writes are atomic (temporary file, fsync, rename).
@@ -185,7 +188,7 @@ The B1 specification asks for a reply-cache key of (fingerprint, served model). 
 | Upper bound of one B1 question | about $0.0008 at list price (about 4,000 prompt tokens + 800 output tokens) | — | same |
 | Served identity | served model and system fingerprint recorded per call, including for replies served from the cache; a warning when either changes in a session | `app.py` | same |
 | PDF size | up to 200 pages (the product contract's configurable limit) | `app.py` | `docs/baseline_b1_specification.md` §3 |
-| Untouched test pool | all 115 pool document names (from `resources/mmlongbench_doc_documents.json`) are refused, on disk or not, for a path, a question or an upload; one pool PDF whose bytes were on disk is also refused by SHA-256; the check is mainly by name, so a renamed copy is not recognised | `app.py` | `docs/application.md` §4 |
+| Test pool (used once by the final evaluation) | all 115 pool document names (from `resources/mmlongbench_doc_documents.json`) are refused, on disk or not, for a path, a question or an upload; one pool PDF whose bytes were on disk is also refused by SHA-256; the check is mainly by name, so a renamed copy is not recognised | `app.py` | `docs/application.md` §4 |
 | Web page | binds to 127.0.0.1; Host header must be `127.0.0.1` or `localhost`; a random per-server token on every POST; bounded request bodies (uploads 50 MB, forms 64 KB); a 15 s socket timeout per connection; HTML-escaped output; a Content-Security-Policy that forbids scripts | `web.py` | `docs/application.md` §4 |
 | Live mode | opt-in `--live`; needs `OPENAI_API_KEY` exported; `.env` is never read | `app.py` | `docs/application.md` §2 |
 
@@ -195,12 +198,15 @@ The B1 specification asks for a reply-cache key of (fingerprint, served model). 
 
 | Guard | Rule | Source |
 |---|---|---|
-| Opt-in paid modes | one mode variable per notebook: `VISUALDOC_QA_MODE` (default `replay`), `VISUALDOC_E*_MODE` (default `offline`); `smoke`, `pilot`, `full` need the owner's explicit approval | `AGENTS.md` |
+| Opt-in paid modes | one mode variable per notebook: `VISUALDOC_QA_MODE` (default `replay`), `VISUALDOC_E*_MODE` and `VISUALDOC_FINAL_MODE` (default `offline`); `smoke`, `pilot`, `full` need the owner's explicit approval | `AGENTS.md`; notebook 09 |
 | Frozen specification | paid modes refuse to run unless the spec (and the notebook's code) equal the committed version | `experiments/README.md`; frozen READMEs |
-| Cumulative ceiling | fail-closed across smoke and full; unknown usage charged at its upper bound | notebook 08, Stages 1–2 |
+| Cumulative ceiling | fail-closed across smoke and full; unknown usage charged at its upper bound ($0.50 for E9, $2.50 for the final evaluation) | notebook 08, Stages 1–2; `experiments/specs/final_evaluation_v1.json` |
 | No silent retries | no SDK retries; at most two attempts per planned request; stop on any API error, contract failure, or change of served model or system fingerprint. `gpt-6-luna` returned no system fingerprint on any E8 or E9 call, so in practice only the served-model check could fire | notebook 08 (E9, "as E8"); E9 independent audit |
 | Exclusive run directories | each paid invocation creates a new `experiments/runs/<exp>/<run-id>/` and never overwrites one | `experiments/README.md` |
-| Smoke gate | a few technical calls must pass every check before a full run is proposed | E8, E9 smoke packages |
+| Smoke gate | a few technical calls must pass every check before a full run is proposed; the final evaluation's smoke used development questions only | E8, E9 and final smoke runs |
+| Encoding only on the M1 GPU | notebook 04 and notebook 09's `index` and `queries` modes assert Apple MPS: the specs require bit-for-bit equality with E5's embeddings, and another GPU type gives slightly different numbers. A parity gate re-encodes development pages and a question and requires bitwise equality with the E5 cache before any pool page is encoded | notebook 09 (`fe-encoder`, `fe-parity`); `docs/ssp_cloud.md` |
+| Frozen rankings elsewhere | on any other machine, notebook 09 reads the frozen rankings in `experiments/frozen/final_retrieval/` and only checks that recomputed scores agree within 1e-4 | `experiments/frozen/final_retrieval/README.md` |
+| Index before questions | the pool index was committed before any pool question was read; the `queries` mode refuses to run until the index manifest is committed | `experiments/frozen/final_index/README.md`; notebook 09 |
 
 ---
 
@@ -230,7 +236,10 @@ Notebooks are the record of how each choice was measured. They communicate **onl
           ├──► 05 E6: ColQwen2 pages vs BM25 pages, end to end
           ├──► 06 E7: extract-then-answer
           ├──► 07 B1: retrieval complementarity, S-v2, E8 reader migration
-          └──► 08 E9: trigger selection (Stage 0), adaptive arms (Stage 2)
+          ├──► 08 E9: trigger selection (Stage 0), adaptive arms (Stage 2)
+          └──► 09 final held-out evaluation (test pool, used once):
+                 index (M1 only) ──► frozen/final_index ──► queries (M1 only) ──► frozen/final_retrieval
+                 ──► smoke, full reader run ──► frozen/final
 
  every paid run ──► experiments/runs/<exp>/<run-id>/   (git-ignored, append-only)
                         │ copied byte for byte after the run
@@ -251,6 +260,7 @@ Notebooks are the record of how each choice was measured. They communicate **onl
 | 06 | E7 | 00 and 04 outputs, frozen E5, E6 | E7 tables | `VISUALDOC_E7_MODE` |
 | 07 | B1 consolidation, E8 | 00 and 04 outputs, frozen E5–E8, S-v2 labels | `data/processed/mmlongbench_doc/b1/` | `VISUALDOC_QA_MODE`, `VISUALDOC_E8_RUN_DIR` |
 | 08 | E9 | frozen E5 and E8 tables, frozen E9 | `data/processed/mmlongbench_doc/e9/` | `VISUALDOC_E9_MODE` |
+| 09 | final held-out evaluation | frozen spec and plan, document list, pool PDFs at the pinned revision, ColQwen2 snapshot and E5 cache (parity gate), frozen `final_index`, `final_retrieval` and `final` | `data/processed/mmlongbench_doc/final/`, `data/cache/final/` | `VISUALDOC_FINAL_MODE` (`offline`, `index`, `queries`, `smoke`, `full`) |
 
 Each notebook follows Objective → Method → small sequential implementation cells → Validation (including a failure case) → Results → Interpretation. Important operations are shown once by hand before being wrapped in a helper (for example BM25 on one question in notebook 01).
 
@@ -258,7 +268,7 @@ Each notebook follows Objective → Method → small sequential implementation c
 
 ## 7. Frozen packages and specifications
 
-**Specifications** (`experiments/specs/`): one JSON file per experiment from E1 to E9, frozen and committed before the first paid call. E2 has a superseded v1 and a v2 that changed only execution rules; E9 has a technical addendum committed before its paid stages. The final-evaluation specification exists only as a draft in `docs/final_evaluation_specification.md`; after approval it becomes `experiments/specs/final_evaluation_v1.json`.
+**Specifications** (`experiments/specs/`): one JSON file per experiment from E1 to E9, frozen and committed before the first paid call. E2 has a superseded v1 and a v2 that changed only execution rules; E9 has a technical addendum committed before its paid stages. The final evaluation has `final_evaluation_v1.json` (approved and frozen before any pool access, commit `1c54a3e`), `final_evaluation_v1_plan.json` (the frozen 2,079-call plan) and `final_evaluation_v1_deviations.md` (D1, D2, each committed before any result it could affect). `docs/final_evaluation_specification.md` is the historical draft.
 
 **Frozen packages** (`experiments/frozen/`, never edited):
 
@@ -271,6 +281,9 @@ Each notebook follows Objective → Method → small sequential implementation c
 | `scoring_v2/`, `e8_scoring_v2/` | the owner's blind S-v2 labels, with item-identity hashes |
 | `e9_stage0/` | E9 trigger selection and its independent audit script and output |
 | `e9/` | E9 smoke and Stage 2 run, evaluation tables, blind queue (13 items) and sealed key, the independent Stage 2 audit (`AUDIT.json`, 47/47, with its script in `audit/`), provenance, checksums |
+| `final_index/` | the pool index, frozen before any question was read: the 111 pool documents and their hashes, a per-page manifest (render and embedding SHA-256, no text) for 5,554 pages of 110 documents, the parity gate, a summary |
+| `final_retrieval/` | ColQwen2 and BM25 rankings and scores for the 872 questions, U3 and its trigger, the per-question query-embedding hashes (no question text) |
+| `final/` | the final evaluation's smoke and full run, per-question evaluation (no reply text), summary, blind S-v2 queue (85 items) and sealed key, independent audit (`AUDIT.json` and script), provenance, checksums |
 
 Run files contain request fingerprints, image hashes, prompts and replies; they never contain page images, Base64 payloads or credentials, and most contain no question text. Checksums are verified with `shasum -a 256 -c SHA256SUMS` in each folder (see `docs/reproducibility.md`).
 
@@ -293,6 +306,6 @@ Run files contain request fingerprints, image hashes, prompts and replies; they 
 | E8 | 07 §C–D | `e8_reader_migration_v1` | `e8_smoke/`, `e8/`, `e8_scoring_v2/` | yes (imports and hashes the five modules; 236/236 unique requests equal the notebook's construction) | `LUNA_PROFILE`, contract b1, grounding, `Budget`, caches, run log; module hashes pinned |
 | E9 | 08 | `e9_adaptive_evidence_v1` + addendum | `e9_stage0/`, `e9/` | no (proves B1s requests equal frozen E8 L-B1) | none: k stays 4, one read |
 | Application | — | — | — | — | `visual_index.py`, `app.py`, `web.py` (new modules; the owner's instruction of 2026-11-25 is the approval `AGENTS.md` requires) |
-| Final evaluation | proposed notebook 09 (indexing section named in the draft) | draft only | — | — | none planned: B1 is evaluated as frozen |
+| Final evaluation | 09 | `final_evaluation_v1` + plan + deviations | `final_index/`, `final_retrieval/`, `final/` | no (rebuilds every step in cells; development parity with E5 rankings and E8 requests) | none: B1 evaluated as frozen and kept as shipped; C2 confirms ColQwen2 as the retriever |
 
 Tests tie the two layers together: `tests/test_b1.py` pins the module hashes and checks frozen-package integrity; `tests/test_visual_index.py` reproduces all 175 frozen E5 visual rankings from the cached embeddings; `tests/test_app.py` rebuilds frozen E8 L-B1 requests byte for byte through the application and parses their frozen replies identically (`docs/application.md` §6).

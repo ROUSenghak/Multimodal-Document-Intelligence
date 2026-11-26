@@ -2,13 +2,13 @@
 
 VisualDoc answers a question about one PDF. It returns the answer, the pages it cites and a short verbatim quote from each cited page, or `Not answerable`. It reads **page images** rather than extracted text, and it finds the pages to read with a **visual page retriever** (ColQwen2).
 
-The repository is also a research record. Ten pre-registered experiments (E0–E9) on the public benchmark [MMLongBench-Doc](https://huggingface.co/datasets/yubo2333/MMLongBench-Doc) decided each component. Every paid run is frozen with its requests, replies, an independent audit and checksums, so every reported number is re-derived without an API call.
+The repository is also a research record. Ten pre-registered experiments (E0–E9) on the public benchmark [MMLongBench-Doc](https://huggingface.co/datasets/yubo2333/MMLongBench-Doc) decided each component on 20 development documents. A single pre-registered **final held-out evaluation** then measured the frozen system once on 110 documents never used in development. Every paid run is frozen with its requests, replies, an independent audit and checksums, so every reported number is re-derived without an API call.
 
-> **Status (2026-11-25).**
+> **Status (2026-11-26).**
 > - **Validated baseline B1: frozen** (`docs/validated_baseline_b1.md`).
-> - **E9 (adaptive evidence acquisition): done**, verdict `no_meaningful_gain`; B1 is unchanged (`experiments/frozen/e9/`).
+> - **Final held-out evaluation: done, audited and frozen** (commit `c6c450d`, `experiments/frozen/final/`). B1 answers 42.7 % of held-out answerable questions, and the project's central result, visual retrieval beating OCR + BM25, is **confirmed out of sample**. The test pool is now used: it may be reported, never used to tune a system.
+> - **E9 (adaptive evidence acquisition): done** on development data, verdict `no_meaningful_gain`; B1 is unchanged.
 > - **Application** (CLI and local web page around B1): built, and revised after an independent review (`docs/application.md`).
-> - **Every result below is development data**: 20 documents that shaped the design. The **final held-out evaluation has not been run**. Its specification is a draft awaiting the owner's approval (`docs/final_evaluation_specification.md`).
 
 ---
 
@@ -32,7 +32,7 @@ PDF ──► page images, 768 px short side
 | Component | Choice | Decided by |
 |---|---|---|
 | Page rendering | 768 px short side, image only (no OCR text in the prompt) | E1, E3 |
-| Retrieval | ColQwen2 v1.0, MaxSim late interaction over page images; BM25 as fallback | E5, E6, notebook 07 |
+| Retrieval | ColQwen2 v1.0, MaxSim late interaction over page images; BM25 as fallback | E5, E6, notebook 07; confirmed held out |
 | Reading | one call over the retrieved pages | E7 |
 | Reader | `gpt-6-luna`, temperature 0, strict JSON schema, 800 output tokens | E8 |
 | Output contract | answer + cited pages + evidence quotes + explicit abstention | E8 |
@@ -42,9 +42,38 @@ Source: `docs/validated_baseline_b1.md` §1, `experiments/frozen/e9/README.md`. 
 
 ---
 
-## Results at a glance (development data)
+## Held-out result: the final evaluation (test pool, used once)
 
-All numbers are from frozen, audited packages in `experiments/frozen/`. "Correct" uses the frozen scorer S-v1 (correct = score > 0), a local re-implementation of the benchmark's rule-based scorer: **these are not leaderboard numbers**.
+Protocol frozen in `experiments/specs/final_evaluation_v1.json` (commit `1c54a3e`) and approved by the owner before any pool document was downloaded. The ColQwen2 index of the pool was frozen before any question was read (`experiments/frozen/final_index/`, commit `ab8a9c8`). One reader session, one run per arm, the same reader and contract in every arm; only the pages differ.
+
+**Population.** 110 MMLongBench-Doc documents outside the 20 development documents, minus 4 whose questions had been seen earlier and `mi_phone.pdf` (deviation D1: its served bytes differ from the pinned revision). All 872 of their questions: 674 answerable, 198 unanswerable, no question-level filter.
+
+| Claim (S-v1, primary) | Result | Verdict |
+|---|---|---|
+| **C1** B1 accuracy, answerable | **288 / 674 = 0.427**, document-cluster 95 % CI [0.386, 0.470]; development estimate 0.451 (46/102) | estimate |
+| C1, core scope (born-digital financial, research and administration documents, 32 documents) | 77 / 207 = 0.372 [0.305, 0.443] | estimate |
+| **C2** B1 − T1: ColQwen2 top 4 vs OCR + BM25 top 4 (confirmatory) | **+0.119** [+0.088, +0.150]; sign-flip p = 1.0e-05; 103 fixed / 23 broken | **`visual_retrieval_confirmed`** |
+| **C3** A1 − B1: E9's adaptive policy (secondary) | +0.021 [+0.007, +0.036]; p = 0.0046; 19 fixed / 5 broken | `a1_gain_supported`, reported only; the shipped system stays B1 |
+
+| | B1 | T1 | A1 |
+|---|---:|---:|---:|
+| S-v1 correct / 674 answerable | 288 | 208 | 302 |
+| Correct abstentions / 198 unanswerable | 120 | 140 | 121 |
+| Citation validity | 1.000 | 0.995 | 0.999 |
+
+- **Evidence retrieval at k = 4** (666 answerable questions with annotated evidence): ColQwen2 recall 0.711 vs BM25 0.543, +0.168 [+0.130, +0.207]; complete evidence 0.626 vs 0.459. Development (E5): 0.721 vs 0.526.
+- **Robustness (independent audit).** It reproduced 70 quantities to within 3.7e-11. C2 is `visual_retrieval_confirmed` in all 110 leave-one-document-out folds (Δ from +0.1136 to +0.1239) and with documents weighted equally (+0.1246).
+- **C3 is fragile.** It rests on 24 disagreements and one run per arm, stays below E9's +0.05 materiality, and its sign-flip p rises to 0.049 under the worst-case S-v2 labelling.
+- **S-v2 (secondary).** 85 arm-blind gray items await the owner's labels. Over every consistent labelling, B1 − T1 stays within [+0.077, +0.150] and A1 − B1 within [+0.015, +0.028]; no labelling reverses either sign.
+- **Cost.** 2,079 calls plus a 6-call smoke on development questions, all first-attempt successes on one served model: $0.993449 of a $2.50 ceiling.
+
+Sources: `experiments/frozen/final/README.md`, `tables/evaluation_summary.json`, `AUDIT.json`. Full account: [`docs/research_report.md`](docs/research_report.md) §9.
+
+---
+
+## Development results (E0–E9)
+
+All numbers are from frozen, audited packages in `experiments/frozen/`, on the 20 development documents. "Correct" uses the frozen scorer S-v1 (correct = score > 0), a local re-implementation of the benchmark's rule-based scorer: **these are not leaderboard numbers**.
 
 | Exp. | Question | Population | Result | Verdict |
 |---|---|---|---|---|
@@ -59,18 +88,18 @@ All numbers are from frozen, audited packages in `experiments/frozen/`. "Correct
 | E8 | Reader migration to `gpt-6-luna` and the B1 contract | same 118 q | L-v1 42/102, L-B1 46/102, repeat 46/102; B1 − v1 +0.039 [−0.019, +0.098] | promote B1 (non-inferiority only) |
 | E9 | Read pages 5–8 only when retrieval looks uncertain | same 118 q | B1s 44, F8 46/46, A1 47/46 of 102; A1 − B1s +0.025 [0.000, +0.051], sign-flip p = 0.125 (the smallest attainable here) | `no_meaningful_gain` |
 
-Intervals are document-cluster bootstrap 95 % intervals. Sources: `AGENTS.md` (regression references), the `README.md` of each package in `experiments/frozen/`, and `experiments/frozen/e9/tables/evaluation_summary.json`. The full account, with hypotheses, designs and threats to validity, is in [`docs/research_report.md`](docs/research_report.md).
+Intervals are document-cluster bootstrap 95 % intervals. Sources: `AGENTS.md` (regression references), the `README.md` of each package in `experiments/frozen/`, and `experiments/frozen/e9/tables/evaluation_summary.json`.
 
 ### What the evidence supports, and how strongly
 
-- **One strong, replicated result: visual retrieval beats OCR + BM25.** It holds for evidence (E5) and for answers (E6). E6 fixed 13 questions and broke none, with an exact document sign-flip p = 2⁻¹⁰ ≈ 0.00098. Under the secondary scorer S-v2 it is 28/101 → 39/101 (`docs/validated_baseline_b1.md` §2).
+- **One strong result, now confirmed out of sample: visual retrieval beats OCR + BM25.** On development data it held for evidence (E5) and for answers (E6: 13 fixed, 0 broken, exact document sign-flip p = 2⁻¹⁰ ≈ 0.00098; S-v2 28/101 → 39/101). On 110 held-out documents the answer-level gain is +0.119 against +0.127 in development, and the evidence-level gain +0.168 against +0.195.
 - **Negative results, reported as such.**
   - E2: a stronger open VLM did not beat GPT-4o-mini (a tie within noise).
   - E3: adding the extracted text to the images did not help.
   - E7: reading each page separately, then answering from the extracted facts, was **worse** (the interval excludes zero).
-  - E9: the adaptive policy was directionally positive (5 fixed, 0 broken across two replicates) but missed the pre-registered +0.05 criterion, and always reading 8 pages was not better than 4.
+  - E9: the adaptive policy was directionally positive on development data (5 fixed, 0 broken across two replicates) but missed the pre-registered +0.05 criterion. On held-out data it shows a small, statistically supported but fragile gain (+0.021); B1 stays the shipped system.
 - **Non-inferiority only: the B1 contract.** 46 vs 42 of 102 (S-v1), 47 vs 44 of 101 (S-v2), with an interval that straddles zero. Two identical B1 replicates flip 4 questions (S-v1), 7 under S-v2. **B1 is not a demonstrated accuracy improvement over the previous contract.** What it does buy, measured: citation validity 1.000, 9/16 correct abstentions (8/16 before), 118/118 schema-valid replies (`docs/validated_baseline_b1.md` §2).
-- **The ceiling.** B1 answers 46 of 102 answerable development questions. ColQwen2's top 4 pages miss part of the annotated evidence for 39 of 101 questions (`experiments/frozen/e9_stage0/README.md`). The strict grounding diagnostic passes 70 of 118 replies, and E8's data show it is a poor signal of correctness (`docs/e9_proposal.md` §1).
+- **The ceiling.** More than half of held-out answerable questions remain wrong. Accuracy falls with the number of evidence pages: 54 % for single-page evidence, 13 % for 4+ pages (`experiments/frozen/final/README.md`). The strict grounding diagnostic passes 70 of 118 development replies, and E8's data show it is a poor signal of correctness (`docs/e9_proposal.md` §1).
 
 ---
 
@@ -113,12 +142,12 @@ pip install -r requirements.txt          # the package, notebook dependencies an
 python -m ipykernel install --user --name visualdoc-venv --display-name "VisualDoc (.venv, Python 3.12)"
 
 # Verify a frozen package (repeat for each folder in experiments/frozen/)
-cd experiments/frozen/e6 && shasum -a 256 -c SHA256SUMS && cd -
+cd experiments/frozen/final && shasum -a 256 -c SHA256SUMS && cd -
 
 pytest                                   # application modules, frozen protocols, parity with frozen runs
 ```
 
-Then run the notebooks in order, on the `visualdoc-venv` kernel. **No notebook makes a paid call by default**: `VISUALDOC_QA_MODE` defaults to `replay` and every `VISUALDOC_E*_MODE` to `offline`. In those modes each notebook rebuilds its requests, asserts that they equal the frozen ones, re-scores the frozen replies and asserts the regression references in `AGENTS.md`. Paid modes (`smoke`, `pilot`, `full`) run only with the owner's explicit approval.
+Then run the notebooks in order, on the `visualdoc-venv` kernel. **No notebook makes a paid call by default**: `VISUALDOC_QA_MODE` defaults to `replay`, every `VISUALDOC_E*_MODE` to `offline` and `VISUALDOC_FINAL_MODE` to `offline`. In those modes each notebook rebuilds its requests, asserts that they equal the frozen ones, re-scores the frozen replies and asserts the regression references in `AGENTS.md`. Paid modes run only with the owner's explicit approval.
 
 | Notebook | Stage | Main outputs (git-ignored, regenerable) |
 |---|---|---|
@@ -131,8 +160,9 @@ Then run the notebooks in order, on the `visualdoc-venv` kernel. **No notebook m
 | [`06_extract_then_answer`](notebooks/06_extract_then_answer.ipynb) | E7: extract-then-answer vs one-shot | E7 evaluation tables |
 | [`07_baseline_consolidation`](notebooks/07_baseline_consolidation.ipynb) | B1: retrieval complementarity, scoring protocol S-v2, E8 reader migration | `data/processed/mmlongbench_doc/b1/` |
 | [`08_adaptive_evidence`](notebooks/08_adaptive_evidence.ipynb) | E9: trigger selection (Stage 0) and adaptive arms (Stage 2) | `data/processed/mmlongbench_doc/e9/` |
+| [`09_final_evaluation`](notebooks/09_final_evaluation.ipynb) | Final held-out evaluation: pool indexing, questions and retrieval, reader run, frozen claims C1–C3 | `data/processed/mmlongbench_doc/final/`, embeddings in `data/cache/final/` |
 
-Notebooks communicate only through saved files. Each states its inputs and outputs at the top and stops with a clear message when an input is missing.
+Notebooks communicate only through saved files. Each states its inputs and outputs at the top and stops with a clear message when an input is missing. ColQwen2 *encoding* (notebook 04, and notebook 09's `index` and `queries` modes) requires the Apple M1 GPU, where E5 encoded, because the specs require bit-for-bit equality with it; everything else runs on any machine from the saved embeddings and frozen rankings (`docs/ssp_cloud.md`).
 
 **What cannot be reproduced without paying:** whether the models would give the same replies today. At temperature 0 the same requests already differ between sessions (E9: 6 flips on byte-identical B1 requests sent on the same day). `gpt-6-luna` has no dated snapshot, and `gpt-4o-mini-2024-07-18` shuts down on 2027-01-14. The frozen replies, not the model names, define every result.
 
@@ -140,21 +170,22 @@ Notebooks communicate only through saved files. Each states its inputs and outpu
 
 ## How results are produced
 
-- **Pre-registration.** From E1 on, each experiment has a JSON specification in `experiments/specs/`, committed before the first paid call. It fixes the population, arms, request construction, seeds, decision rule and budget ceiling. Paid modes refuse to run if the specification or the notebook code differs from the committed version.
-- **Controlled comparisons.** Arms differ in one factor; requests of a question are sent adjacently in a seeded, counterbalanced order; repeat arms or a same-session control measure run-to-run change.
+- **Pre-registration.** From E1 on, each experiment has a JSON specification in `experiments/specs/`, committed before the first paid call. It fixes the population, arms, request construction, seeds, decision rule and budget ceiling. Paid modes refuse to run if the specification or the notebook code differs from the committed version. Deviations are written down and committed before any result they could affect (`experiments/specs/final_evaluation_v1_deviations.md`).
+- **Controlled comparisons.** Arms differ in one factor; requests of a question are sent in a seeded order; repeat arms or a same-session control measure run-to-run change.
 - **Scoring.** S-v1 (notebook 03 cell `f653d232`, correct = score > 0) is frozen and decides every verdict. S-v2 adds the owner's blind labels for ambiguous replies and is reported beside it; no model judgment replaces a human label.
-- **Statistics.** The question is the unit, clustered by document: document-cluster bootstrap intervals (10,000 draws) and exact document sign-flip tests. McNemar and leave-one-document-out are descriptive. One primary contrast per experiment. Non-inferiority is not claimed on about 100 questions.
+- **Statistics.** The question is the unit, clustered by document: document-cluster bootstrap intervals (10,000 draws) and document sign-flip tests (exact for 14 documents, Monte Carlo for 110). McNemar and leave-one-document-out are descriptive. One primary contrast per experiment. Non-inferiority is not claimed on about 100 questions.
 - **Freezing.** After a run, its directory is copied byte for byte into `experiments/frozen/<exp>/` with evaluation tables, an independent audit, provenance and `SHA256SUMS`. Frozen files are never edited.
+- **One held-out test.** The test pool stayed untouched until the final evaluation, and everything seen about it is recorded in `experiments/test_pool_ledger.md`. It has now been used once.
 
 Details: [`docs/research_report.md`](docs/research_report.md) §4.
 
 ## Open items
 
-From `docs/PROGRESS.md` and `docs/final_evaluation_specification.md`:
+From `docs/PROGRESS.md` and the frozen packages:
 
-1. **Final held-out evaluation.** The draft specification (B1 against OCR + BM25 with the same reader, on 111 untouched documents) needs the owner's approval, a budget (proposed ceiling $2.00) and a choice of indexing compute: about 5,300 pages to index with ColQwen2, about 18 h on the laptop or under an hour on an SSP Cloud GPU.
-2. **S-v2 labels for E9.** 13 arm-blind items await the owner's labels; they cannot change the S-v1 verdict.
-3. **Environment.** The repository sits in an iCloud-synced folder on a nearly full disk; evicted files must be downloaded again before some runs (`docs/reproducibility.md`).
+1. **S-v2 labels (optional, owner).** 85 arm-blind items for the final evaluation (`experiments/frozen/final/adjudication/`) and 13 for E9. No labelling can reverse C2, C3 or E9's verdict.
+2. **Environment.** The work is moving to an Onyxia datalab (ENSAE-ENSAI Datalab or SSP Cloud); the step-by-step guide is [`docs/ssp_cloud.md`](docs/ssp_cloud.md). Encoding stays on the M1.
+3. **Future work** must use new data: the test pool may be reported but never used to tune a system, so A1's held-out gain is a reason for a new experiment, not for changing B1.
 
 ---
 
@@ -162,7 +193,7 @@ From `docs/PROGRESS.md` and `docs/final_evaluation_specification.md`:
 
 ```text
 .
-├── notebooks/                 # 00–08: the research record, one stage per notebook
+├── notebooks/                 # 00–09: the research record, one stage per notebook
 ├── src/visualdoc/             # the application
 │   ├── documents.py           #   PDF validation, SHA-256, text (native + OCR), 768-px rendering      ┐
 │   ├── retrieval.py           #   BM25, MaxSim, cached visual index                                     │ five modules,
@@ -175,11 +206,11 @@ From `docs/PROGRESS.md` and `docs/final_evaluation_specification.md`:
 │   └── parsing.py             #   older page-routing baseline, kept for reference, unused
 ├── tests/                     # pytest: modules, parity with frozen runs, frozen-package integrity
 ├── experiments/
-│   ├── specs/                 # pre-registered specifications E1–E9 (frozen before any call)
-│   ├── frozen/                # committed runs, tables, audits, provenance and SHA256SUMS
+│   ├── specs/                 # pre-registered specifications: E1–E9 and the final evaluation (+ plan, deviations)
+│   ├── frozen/                # committed runs, tables, audits, provenance and SHA256SUMS (e1…e9, final_index, final_retrieval, final)
 │   ├── runs/                  # git-ignored outputs of new live runs
 │   ├── README.md              # what each frozen folder holds
-│   └── test_pool_ledger.md    # everything already seen about the untouched test pool
+│   └── test_pool_ledger.md    # everything seen about the test pool, before and during the final evaluation
 ├── docs/                      # reports, specifications and the progress log (see below)
 ├── data/
 │   ├── external/              # MMLongBench-Doc question table (tracked); PDFs downloaded on demand
@@ -187,6 +218,7 @@ From `docs/PROGRESS.md` and `docs/final_evaluation_specification.md`:
 │   ├── annotations/           # schema for the project's own question set (empty)
 │   └── documents/             # three local sample PDFs, used by the tests and the demo
 ├── resources/                 # Tesseract English model; benchmark document list
+├── requirements/              # course-lab requirements; dependency lock of 2026-11-26
 ├── archive/                   # superseded notebooks, course labs, old docs (read-only)
 ├── AGENTS.md                  # development policy: notebook-first, frozen files, paid-call gates
 └── pyproject.toml, requirements.txt
@@ -196,12 +228,13 @@ From `docs/PROGRESS.md` and `docs/final_evaluation_specification.md`:
 
 | Document | Content |
 |---|---|
-| [`docs/research_report.md`](docs/research_report.md) | Research report for E0–E9: questions, data, method, each experiment, negative results, statistics, threats to validity, the pending final evaluation |
+| [`docs/research_report.md`](docs/research_report.md) | Research report: E0–E9, the final held-out evaluation, negative results, statistics, threats to validity |
 | [`docs/architecture.md`](docs/architecture.md) | System architecture: the B1 pipeline, the application layer, caches, budgets, the notebook workflow, how experiments map to code |
 | [`docs/reproducibility.md`](docs/reproducibility.md) | Environment, data, notebook order and modes, verifying frozen packages, what needs paid calls, resources, test-pool rules |
 | [`docs/application.md`](docs/application.md) | Application usage: CLI, web page, visual index, live mode, tests |
-| [`docs/validated_baseline_b1.md`](docs/validated_baseline_b1.md) | What B1 is, what the evidence supports and what it does not claim |
-| [`docs/final_evaluation_specification.md`](docs/final_evaluation_specification.md) | **Draft, not approved**: the one-time held-out evaluation |
+| [`docs/validated_baseline_b1.md`](docs/validated_baseline_b1.md) | What B1 is, what the evidence supports, its held-out confirmation, what it does not claim |
+| [`docs/final_evaluation_specification.md`](docs/final_evaluation_specification.md) | The historical draft of the final evaluation; the executed protocol is `experiments/specs/final_evaluation_v1.json` |
+| [`docs/ssp_cloud.md`](docs/ssp_cloud.md) | Moving the project to an Onyxia datalab: storage, secrets, what must stay on the M1 |
 | [`docs/PROGRESS.md`](docs/PROGRESS.md) | Progress log: decisions, spend, resources, open items |
 | `docs/baseline_b1_specification.md`, `docs/baseline_consolidation_assessment.md`, `docs/e9_proposal.md`, `docs/e2_proposal.md` | Design records written before the corresponding experiments |
 | [`experiments/README.md`](experiments/README.md) | The frozen packages and how results are reproduced |
@@ -218,23 +251,25 @@ From `docs/PROGRESS.md` and `docs/final_evaluation_specification.md`:
 | E5, E9 Stage 0 | $0 (no API call) | `experiments/frozen/e5/README.md`, `docs/PROGRESS.md` |
 | E8 smoke + full | $0.0015431 + $0.144765 | `AGENTS.md` |
 | E9 smoke + Stage 2 | $0.151647 | `experiments/frozen/e9/README.md` |
+| Final evaluation, smoke + run | $0.003216 + $0.990233 = $0.993449 | `experiments/frozen/final/README.md` |
 
-The reader change explains the drop: E6's GPT-4o-mini requests cost $1.827 per arm of 118 questions, while E8's 354 `gpt-6-luna` calls cost $0.144765 in all.
+The reader change explains the drop: E6's GPT-4o-mini requests cost $1.827 per arm of 118 questions, while the final evaluation's 2,079 `gpt-6-luna` calls on 872 questions cost $0.990233.
 
 ---
 
 ## Data, licences and the test pool
 
 - **MMLongBench-Doc** (revision `2ff6aa92…`) is licensed CC BY-NC 4.0, research use only. Its question table is tracked; its PDFs are downloaded on demand into a git-ignored folder (`data/external/README.md`).
-- **The untouched test pool** is every benchmark document outside the 20 used in development. Its questions, answers and evidence must not be read, and no system output may be produced for it, until a frozen final-evaluation specification is approved (`AGENTS.md`). `experiments/test_pool_ledger.md` records everything already seen about it. The application refuses all 115 pool document names; the check is mainly by name, so a renamed copy would not be recognised (`docs/application.md` §4).
-- **ColQwen2** weights (`vidore/colqwen2-v1.0-hf`, revision `ddc07d23`, 4.4 GB) are downloaded once by notebook 04 and are not in git.
+- **The test pool** is every benchmark document outside the 20 used in development. It stayed untouched until the approved final evaluation, which used it once (110 documents). **It is now used: it may be reported, never used to tune a system** (`experiments/frozen/final/README.md`). `experiments/test_pool_ledger.md` records everything seen about it. The application still refuses all 115 pool document names; the check is mainly by name (`docs/application.md` §4).
+- **ColQwen2** weights (`vidore/colqwen2-v1.0-hf`, revision `ddc07d23`, 4.4 GB) are downloaded from Hugging Face and are not in git.
 - Third-party material and local sample PDFs: [`THIRD_PARTY_NOTICES.md`](THIRD_PARTY_NOTICES.md). Do not commit private or rights-restricted documents.
 
 ## Limitations
 
-- **Development data only.** E0–E9 use 20 documents (175 questions) that shaped every decision; E6–E9 reuse the same 118 questions. No held-out result for B1 exists yet.
-- **Small, clustered samples.** About 100 questions in 14 documents: one question is about 0.01 of accuracy, and replicate churn is 4–7 questions.
+- **One held-out evaluation, one run per arm.** E8 measured 4–7 flips between identical replicates on 102 questions; C2's 80 net questions are far above that, C3's 14 are closer to it.
+- **Design data are small and reused.** E0–E9 used 20 documents (175 questions); E6–E9 reused the same 118 questions.
 - **Single-annotator evidence.** A page that answers but is not annotated counts as missing.
-- **Local scoring.** S-v1 re-implements the benchmark's rule-based scorer without its GPT-4o extraction step; S-v2 adds blind human labels for ambiguous replies.
-- **An unpinnable reader.** `gpt-6-luna` returns no system fingerprint; frozen replies define the baseline.
-- **Visual indexing is slow on the development laptop** (12.5 s per page on a fanless M1 with 8 GB of RAM) and the ColQwen2 weights are currently an iCloud placeholder there; without an index the app falls back to BM25.
+- **Local scoring.** S-v1 re-implements the benchmark's rule-based scorer without its GPT-4o extraction step; S-v2 adds blind human labels for ambiguous replies (85 held-out items still unlabelled).
+- **An unpinnable reader.** `gpt-6-luna` returns no system fingerprint; frozen replies define every result.
+- **A thin core scope.** The product's core document types account for 32 of the 110 held-out documents.
+- **Visual indexing is slow on the development laptop**: the 5,554 pool pages took about 14 h on the M1 GPU, about 9.5 s per page (`docs/PROGRESS.md`). Without an index the app falls back to BM25.

@@ -35,6 +35,16 @@ The single place that records what is done, what is running, what each decision 
   - Two low-severity findings are recorded: token-model rounding, and a pool reference quoted in D2's text, now in the ledger.
 - **Decision.** B1 remains the shipped system. A1's gain is reported, not adopted. The pool is now used: it may be reported, never tuned on.
 - **Open (owner, optional).** 85 blind S-v2 items, `experiments/frozen/final/adjudication/`. No labelling can reverse C2 or C3.
+- **Move to the ENSAE-ENSAI Datalab.**
+  - Done:
+    - GitHub is complete.
+    - The OpenAI key and a GitHub token are set up.
+    - The embeddings are on MinIO, byte-verified.
+  - Blocked: page images, PDFs and some tables. The storage gateway's content filter rejects them; see `docs/ssp_cloud.md`.
+  - Next:
+    - **Owner:** report the filter to the Datalab admins.
+    - **In a first service:** test re-downloading the PDFs (hash-checked) and re-rendering the pages against the manifest.
+    - Keep the Mac copy until this works.
 
 ### 2026-11-26 — Final evaluation is ready to run; the move to SSP Cloud is prepared
 

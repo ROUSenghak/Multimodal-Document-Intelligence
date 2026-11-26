@@ -1,8 +1,8 @@
-# VisualDoc AI: research report, E0–E9
+# VisualDoc AI: research report, E0–E9 and the final held-out evaluation
 
-- **Date:** 2026-11-25.
-- **Scope:** every experiment from E0 to E9, the consolidation into the validated baseline B1, and the pending final held-out evaluation.
-- **Status of the evidence:** **all results in this report are development results.** They come from 20 MMLongBench-Doc documents that shaped the design. No result exists on the untouched test pool; the final evaluation that would produce one is specified only as a draft and is not approved (`docs/final_evaluation_specification.md`).
+- **Date:** 2026-11-26.
+- **Scope:** every experiment from E0 to E9, the consolidation into the validated baseline B1, and the final held-out evaluation.
+- **Status of the evidence:** E0–E9 are **development results**, from 20 MMLongBench-Doc documents that shaped the design. The **final held-out evaluation** (section 9) is the one confirmatory result: it ran once, on 2026-11-26, on 110 documents never used in development, under a protocol frozen before any of them was downloaded (`experiments/frozen/final/`). The test pool is now used and may not be used to tune a system again.
 - **Sources:** every number is taken from a frozen package in `experiments/frozen/`, from `AGENTS.md` (regression references), or from the documents in `docs/`. The source is named beside each table. Where two sources disagree, both are given (section 10).
 
 ---
@@ -13,11 +13,11 @@ The project asks how to answer questions about long PDF documents with **cited, 
 
 What the record supports:
 
-1. **Visual retrieval beats OCR + BM25** for evidence (E5: recall after the context guard 0.526 → 0.721) and for answers (E6: 25/102 → 38/102, 13 fixed, 0 broken, document-cluster 95 % interval [0.074, 0.193]). This is the project's one strong result.
+1. **Visual retrieval beats OCR + BM25, in development and held out.** In development it held for evidence (E5: recall after the context guard 0.526 → 0.721) and for answers (E6: 25/102 → 38/102, 13 fixed, 0 broken, document-cluster 95 % interval [0.074, 0.193]). The final evaluation **confirmed it out of sample**: with the same reader, ColQwen2's top 4 pages beat OCR + BM25's by +0.119 [+0.088, +0.150] on 674 held-out answerable questions (103 fixed, 23 broken, sign-flip p = 1.0e-05), verdict `visual_retrieval_confirmed`.
 2. **Per-page extract-then-answer is worse than one-shot reading** (E7: −0.069, interval [−0.135, −0.008]). A supported negative result.
-3. **Several plausible changes did not help:** a stronger open VLM (E2), adding OCR text to images (E3), adaptive reading of more pages (E9). These are reported as negative or null results.
+3. **Several plausible changes did not help in development:** a stronger open VLM (E2), adding OCR text to images (E3), adaptive reading of more pages (E9). These are reported as negative or null results. On held-out data, E9's adaptive policy showed a small, fragile gain (+0.021, secondary claim C3); it is reported, not adopted.
 4. **The B1 output contract is non-inferior, not better**, than the previous contract (E8: 46 vs 42 of 102, interval [−0.019, +0.098]); it adds valid citations and verbatim quotes.
-5. **The ceiling is evidence supply.** B1 answers 46 of 102 answerable development questions; ColQwen2's top 4 pages miss part of the annotated evidence for 39 of 101 questions (E9 Stage 0).
+5. **B1's held-out accuracy is 0.427** (288 of 674 answerable questions, [0.386, 0.470]), slightly below its development estimate of 0.451 and inside its interval. **The ceiling is evidence supply:** accuracy falls from 54 % for single-page evidence to 13 % for 4+ pages (`experiments/frozen/final/README.md`), and in development ColQwen2's top 4 pages missed part of the annotated evidence for 39 of 101 questions (E9 Stage 0).
 
 ---
 
@@ -34,6 +34,7 @@ The question changed as the evidence came in. Each stage is recorded in its note
 | E7 | Does separating per-page extraction from reasoning help the reader? | 06 |
 | B1, E8 | Which retriever does the baseline use, how are answers scored, and can a successor reader with a structured contract replace the retiring one? | 07 |
 | E9 | Can a retrieval-uncertainty signal decide when to read more pages? | 08 |
+| Final | How accurate is the frozen system on documents never used in development, and does the visual-retrieval result hold out of sample? | 09 |
 
 ---
 
@@ -46,9 +47,10 @@ The question changed as the evidence came in. Each stage is recorded in its note
 | dev6 | 6 | 57 (40 answerable, 17 unanswerable) | E0–E4 | seeded draw (seed 42) of documents ≤ 15 MB; 195 pages, 120 needed OCR; E1–E3 use the 37 answerable questions whose evidence fits the context at both resolutions |
 | held-out-14 | 14 | 118 (102 answerable, 16 unanswerable; 101 with annotated evidence) | E5, E6; then E7–E9 as development data | two documents per benchmark type, seeded, ≤ 100 pages each, 647 pages; never used before E5 |
 | **Development total** | **20** | **175** | — | every design decision rests on these |
-| Untouched test pool | 115 | 916 (705 answerable) | nothing yet | the final evaluation would use 111 of them (section 9) |
+| Test pool (untouched until the final evaluation) | 115 | 916 (705 answerable) | nothing before 2026-11-26 | defined in `experiments/test_pool_ledger.md` |
+| **Final evaluation population** (pool, used once) | **110** | **872 (674 answerable, 198 unanswerable)** | the final held-out evaluation | the pool minus 4 documents whose questions had been seen and `mi_phone.pdf` (deviation D1); 5,554 pages; no page cap, no question filter |
 
-Sources: notebook 00 (§1–4), `experiments/frozen/e5/README.md`, `experiments/test_pool_ledger.md`, `docs/baseline_consolidation_assessment.md` §4.2.
+Sources: notebook 00 (§1–4), `experiments/frozen/e5/README.md`, `experiments/test_pool_ledger.md`, `docs/baseline_consolidation_assessment.md` §4.2, `experiments/frozen/final/README.md`, `experiments/frozen/final_index/README.md`.
 
 **Known data properties.**
 - Half of dev6 has no usable text layer: two slide decks exported as images and one guidebook whose text is vector outlines. Without OCR, a text system sees empty pages and raises no error (notebook 00, Interpretation).
@@ -81,7 +83,7 @@ Sources: notebook 00 (§1–4), `experiments/frozen/e5/README.md`, `experiments/
 |---|---|---|
 | Unit | the question, paired across arms, clustered by document | `docs/baseline_b1_specification.md` §4.4 |
 | Interval | document-cluster percentile bootstrap, 10,000 draws, seeded | same |
-| Paired test | exact document sign-flip test on per-document summed differences (2¹⁴ patterns for 14 documents); Monte Carlo when exact enumeration is impossible | same; notebook 08 |
+| Paired test | exact document sign-flip test on per-document summed differences (2¹⁴ patterns for 14 documents); Monte Carlo with 100,000 draws for the 110 documents of the final evaluation | same; notebook 08; `experiments/specs/final_evaluation_v1.json` |
 | Descriptive only | McNemar (ignores clustering), leave-one-document-out, document-weighted Δ | each frozen README |
 | Multiplicity | one primary contrast per experiment; Holm adjustment where several signals are screened (E9 Stage 0) | `docs/baseline_consolidation_assessment.md` §7.3; notebook 08 |
 | Decision rules | typically: gain ≥ +0.05, gain larger than the measured repeat change rate, broken ≤ fixed / 2; from E6 on also a one-sided lower bound > 0 and sign-flip p ≤ 0.05; guardrails on abstention and citation validity | each spec and frozen README |
@@ -226,7 +228,7 @@ Each entry gives the hypothesis, the design, the result and the decision. Costs 
   - **The smallest attainable sign-flip p was 0.125.** Only 3 of the 14 documents had a non-zero A1 − B1s, so 2³ sign patterns carry all the information; p = 0.125 is the floor, not a near miss.
   - **The single invalid citation in F8a and F8b** (citation validity 0.992) is a *missing* citation: a non-abstaining answer with empty `cited_pages` on `mmlb-0579`, not a page outside those supplied.
   - **Counterbalance.** B1s went first in 59 of 118 pairs, but in 55 of the 102 answerable pairs (47 F8a-first).
-- **Decision.** `no_meaningful_gain`. B1 keeps k = 4 and one read; the application does not implement adaptive acquisition. Always reading 8 pages is not better than 4 for this reader, so the GPT-4o-mini-era 4-page cap costs no measurable accuracy and halves prompt tokens. Spend $0.151647 of a $0.50 ceiling (smoke $0.004592, full run $0.147055, lowered by the prompt caching noted above).
+- **Decision.** `no_meaningful_gain`. B1 keeps k = 4 and one read; the application does not implement adaptive acquisition. (On held-out data, the same policy was re-tested as the final evaluation's secondary claim C3: +0.021, `a1_gain_supported` but fragile, reported only; section 9.) Always reading 8 pages is not better than 4 for this reader, so the GPT-4o-mini-era 4-page cap costs no measurable accuracy and halves prompt tokens. Spend $0.151647 of a $0.50 ceiling (smoke $0.004592, full run $0.147055, lowered by the prompt caching noted above).
 
 ---
 
@@ -240,7 +242,7 @@ Each entry gives the hypothesis, the design, the result and the decision. Costs 
 | E5 (exploratory) and notebook 07 | fusing BM25 and ColQwen2 rankings helps | RRF −0.090 (E5), −0.079 (notebook 07) vs ColQwen2 alone | static retrieval fusion |
 | E7 | extract-then-answer fixes multi-page and reading errors | −0.069 [−0.135, −0.008], 3 fixed / 10 broken | per-page textualisation of evidence |
 | E8 (diagnostic) | grounding failures flag wrong answers | they flag *correct* answers more often | grounding as a repair trigger |
-| E9 | an uncertainty trigger plus 8 pages recovers answers | +0.025, p = 0.125; F8 not better than 4 pages | adaptive deepening as a material gain at this sample size |
+| E9 | an uncertainty trigger plus 8 pages recovers answers | +0.025, p = 0.125; F8 not better than 4 pages | adaptive deepening as a material gain at this sample size (held out, a small gain of +0.021 appeared: section 9) |
 
 These are reported with the same weight as the positive results. Several are "ties within noise" rather than evidence of harm (E2, E3); E7 is the only negative result whose interval excludes zero.
 
@@ -265,10 +267,15 @@ These are reported with the same weight as the positive results. Several are "ti
 - **Coarse bootstrap.** Percentile intervals over 14 clusters may be slightly narrow (`notebooks/08`, recorded deviation 2).
 
 **External validity**
-- **One benchmark, a thin core scope.** Only 6 of the 20 development documents are born-digital report-type, and two 10-Ks hold 31 of their 57 evidence questions (notebook 07).
+- **One benchmark, a thin core scope.** Only 6 of the 20 development documents are born-digital report-type, and two 10-Ks hold 31 of their 57 evidence questions (notebook 07). In the final evaluation the core scope is 32 of 110 documents (207 answerable questions).
 - **Possible training overlap.** ColQwen2's training data may overlap benchmark pages; that would favour visual retrieval and cannot be checked (`experiments/frozen/e5/README.md`).
 - **Model-specific settings.** 768 px and the 4-page cap were chosen for GPT-4o-mini; E9 showed the cap costs no measurable accuracy for `gpt-6-luna`, but resolution was not re-tested for it.
-- **Laptop constraints shaped selection.** E5 capped held-out documents at 100 pages for compute reasons, which excluded long filings.
+- **Laptop constraints shaped selection.** E5 capped held-out documents at 100 pages for compute reasons, which excluded long filings. The final evaluation had no page cap, but only 4 of its answerable questions are on documents over 200 pages.
+
+**Specific to the final evaluation**
+- **One run per arm.** Reader noise is not part of the test. E8 measured 4–7 flips between identical replicates on 102 questions; C2's 80 net questions are far above that, C3's 14 are closer to it (`experiments/frozen/final/README.md`).
+- **Deviations.** D1 excluded one document whose served bytes did not match the pinned revision, before any question was read; D2 fixed an S-v1 crash after the run but before any number was computed (2 replies affected). Both are recorded in `experiments/specs/final_evaluation_v1_deviations.md`.
+- **Two audit findings.** The independent audit passed 36 of its 38 integrity checks. The two failures are low-severity and recorded: the token model undercounted 49 calls by 1–8 prompt tokens through floating-point rounding (146 tokens in all; costs come from billed usage and are unaffected), and D2's committed text quotes one pool reference answer, now entered in the ledger (`experiments/frozen/final/AUDIT.json`, checks 1.15 and 5.03; `experiments/test_pool_ledger.md`).
 
 ---
 
@@ -278,40 +285,99 @@ These are reported with the same weight as the positive results. Several are "ti
 |---|---|---|
 | E0 | exploratory | no pre-registered rule; 6 documents |
 | E1–E4 | pre-registered, development | specs frozen before calls, but on dev6, where the settings were chosen (in-sample) |
-| E5, E6 | pre-registered, **first use** of 14 new documents | the closest the record has to a confirmatory test; still only 14 documents, and the documents were then reused |
+| E5, E6 | pre-registered, **first use** of 14 new documents | the closest the development record has to a confirmatory test; only 14 documents, which were then reused |
 | E7, B1 consolidation, E8, E9 | pre-registered, development | the 118 questions were inspected to design these experiments |
-| Final held-out evaluation | **confirmatory, not run** | specified only as a draft; no pool document has been downloaded, indexed or run |
+| Final held-out evaluation | **confirmatory, run once (2026-11-26)** | 110 documents never used in development; spec approved and frozen before any pool document was downloaded; index frozen before any question was read; one reader session |
 
-No result on the untouched pool exists. A headline accuracy for B1 should not be quoted from development data as if it were a held-out estimate.
+Only C2 of the final evaluation is a confirmatory test. C1 is an estimate, and C3 is a pre-registered secondary contrast that cannot change the shipped system. Development figures should be quoted as development figures; the held-out accuracy of B1 is 0.427.
 
 ---
 
-## 9. The pending final held-out evaluation
+## 9. The final held-out evaluation
 
-Source: `docs/final_evaluation_specification.md` (**DRAFT, not approved, not frozen**) and `experiments/test_pool_ledger.md`.
+Sources: `experiments/frozen/final/README.md`, `tables/evaluation_summary.json`, `AUDIT.json`, `PROVENANCE.json`; `experiments/frozen/final_index/README.md`; `experiments/frozen/final_retrieval/README.md`; `experiments/specs/final_evaluation_v1.json`, `final_evaluation_v1_plan.json`, `final_evaluation_v1_deviations.md`; notebook 09, cell `fe-results`.
 
-- **Population.** All MMLongBench-Doc documents minus the 20 development documents and minus 4 pool documents whose questions were already seen (`PH_2016.06.08_Economy-Final.pdf`, `05-03-18-political-release.pdf`, `2312.04350v3.pdf`, `RAR.pdf`): **111 documents**, about 880 questions expected, every question kept, no page cap. About 5,300 pages (± 1,000).
-- **Arms.** **B1** as frozen, and **T1**: the same reader and contract on OCR + BM25 top 4. An optional third arm, **A1** (E9's adaptive policy), only as a pre-registered secondary contrast if the owner chooses it; the shipped system stays B1 whatever A1 scores.
-- **Claims.** C1: B1's held-out accuracy with its interval (the headline). C2: **confirmatory test** that visual retrieval beats OCR + BM25 end to end (`visual_retrieval_confirmed` if Δ > 0, one-sided lower bound > 0 and sign-flip p ≤ 0.05). C3: abstention, citation validity and evidence recall. C4: prespecified descriptive subgroups. No per-question error analysis on the pool.
-- **Scoring.** S-v1 primary; S-v2 beside it, reported as an interval until blind owner labels exist.
-- **Budget and compute.** Expected about $0.75 for B1 + T1; proposed ceiling $2.00 without A1, $2.50 with it. ColQwen2 indexing of about 5,300 pages would take about 18 h on the laptop and needs more free disk than is available, or under an hour on an SSP Cloud GPU.
-- **Owner decisions still needed.** Approve the specification (a one-time, irreversible use of the pool), authorise the budget, choose the indexing compute, and optionally label the S-v2 queue afterwards.
+### 9.1 Protocol and order of operations
 
-Until these decisions are made, the pool stays untouched: no question, answer or evidence is read and no system output is produced for it (`AGENTS.md`). The ledger records what has been seen: frame-level counts, the page counts of three documents, question-level content from three of the four excluded documents (the fourth, `RAR.pdf`, was only named in archived work). No system output exists for any pool question.
+| Step | Commit | What it fixed |
+|---|---|---|
+| Specification approved by the owner and frozen (2026-11-25) | `1c54a3e` | population, indexing order, parity gate, arms, scoring, decision rules, a $2.50 ceiling, laptop indexing |
+| Deviation D1 | `dfeaad0`, `476b156` | documents whose bytes do not match the hash recorded at the pinned revision are excluded; `mi_phone.pdf` is the only one (committed before any question was read) |
+| Index frozen | `ab8a9c8` | 110 documents, 5,554 pages (5,348 distinct images), ColQwen2 page embeddings on the M1 GPU after a parity gate that reproduced E5 bit for bit; **no question read** |
+| Questions encoded, retrieval and plan frozen | `8d5768a` | ColQwen2 and BM25 rankings for 872 questions; development rankings 118/118 equal to E5's (maximum score difference 5.0e-07) and development requests 118/118 equal to frozen E8; U3 fires on 335 questions (38.4 %; development 39.8 %); a 2,079-call plan with an upper bound of $1.831161 |
+| Reader session (2026-11-26) | run launched at `61f769f` | 6-call smoke on development questions, then 2,079 calls; all first-attempt successes; one served model, `gpt-6-luna`; no system fingerprint |
+| Deviation D2 | `bcf0345` | after the run, before any number: the frozen S-v1 copy crashed on a non-numeric reply to a `$`-formatted Float reference; such replies now score 0, as in the official code (2 replies, both on `mmlb-1087`); the wrapper reproduces all 708 frozen E8 and E9 S-v1 scores |
+| Evaluation, audit and freeze | `c6c450d` | `experiments/frozen/final/` |
+
+**Arms.** All use the same reader as B1 (`gpt-6-luna`, contract b1, temperature 0, reasoning effort none); only the pages differ.
+
+| Arm | Pages | Role |
+|---|---|---|
+| **B1** | ColQwen2 v1.0 top 4 | the selected system |
+| **T1** | OCR + BM25 top 4 | text-retrieval baseline for the confirmatory contrast |
+| **A1** | ColQwen2 top 8 when E9's frozen trigger U3 fires (335 questions), otherwise B1's reply | secondary contrast only; B1 stays the shipped system whatever A1 scores |
+
+**Decision rules** (`experiments/specs/final_evaluation_v1.json`). C2 is `visual_retrieval_confirmed` if Δ > 0, the one-sided bootstrap 5th percentile > 0 and the sign-flip p ≤ 0.05; `reversed` if the 97.5th percentile < 0; otherwise `visual_retrieval_not_confirmed`. C3 is `a1_gain_supported` if the one-sided 5th percentile > 0 and p ≤ 0.05. Unit: the question, clustered by document; percentile bootstrap with 10,000 draws; Monte Carlo sign-flip test with 100,000 draws.
+
+### 9.2 Results (S-v1, primary)
+
+| Claim | Result | Verdict |
+|---|---|---|
+| **C1** B1 accuracy, answerable | **288 / 674 = 0.427** [0.386, 0.470]; development estimate 0.451 (46/102) | estimate |
+| C1, core scope (32 documents) | 77 / 207 = 0.372 [0.305, 0.443] | estimate |
+| **C2** B1 − T1 (confirmatory) | **+0.119** [+0.088, +0.150]; sign-flip p = 1.0e-05; 103 fixed / 23 broken | **`visual_retrieval_confirmed`** |
+| **C3** A1 − B1 (secondary) | +0.021 [+0.007, +0.036]; p = 0.0046; 19 fixed / 5 broken | `a1_gain_supported`, reported only |
+
+| | B1 | T1 | A1 |
+|---|---:|---:|---:|
+| S-v1 correct / 674 answerable | 288 | 208 | 302 |
+| Correct abstentions / 198 unanswerable | 120 | 140 | 121 |
+| Citation validity | 1.000 | 0.995 | 0.999 |
+| Mean prompt tokens | 4,198 | 4,199 | 5,671 |
+| Latency p50 / p90 (s) | 2.5 / 5.1 | 2.4 / 4.7 | 3.0 / 6.6 |
+
+**Evidence retrieval at k = 4** (666 answerable questions with annotated evidence): ColQwen2 recall 0.711 against BM25 0.543, +0.168 [+0.130, +0.207]; complete evidence 0.626 against 0.459. The development figures (E5, after the context guard) were 0.721 and 0.526.
+
+**S-v2 (secondary).** 85 arm-blind gray items await the owner's labels (`experiments/frozen/final/adjudication/`). Over every consistent correct/wrong labelling, B1 − T1 stays within [+0.077, +0.150] and A1 − B1 within [+0.015, +0.028]; with "unsure" also allowed, the upper ends rise to +0.159 and +0.031. No labelling can reverse either sign.
+
+**Independent audit** (`experiments/frozen/final/AUDIT.json`). It reproduced 70 quantities to within 3.7e-11 and passed 36 of 38 integrity checks (the two failures are described in section 7). Robustness variations:
+- leave-one-document-out: C2 between +0.1136 and +0.1239, `visual_retrieval_confirmed` in 110 of 110 folds;
+- documents weighted equally: C2 +0.1246;
+- without the D2 question: C2 unchanged in its verdict; C3 +0.019, p = 0.008, still supported (`experiments/frozen/final/README.md`);
+- worst-case S-v2 labelling: C2 still confirmed (+0.077); **C3's sign-flip p rises to 0.049**.
+
+**Cost.** $0.990233 for the run plus $0.003216 for the smoke = $0.993449 of the $2.50 ceiling; 2,085 calls, all first-attempt successes.
+
+### 9.3 Interpretation
+
+Drawn from `experiments/frozen/final/README.md` (Interpretation) and notebook 09 (`fe-results`).
+
+1. **The central result replicates out of sample, at both layers.** Answers: +11.9 points against +12.7 in development (E6). Evidence: +16.8 points against +19.5 (E5). The answer-level gain is positive in every document type, from +0.026 on financial reports to +0.245 on tutorials; it is larger on figures (+0.171) than on plain text (+0.112) or tables (+0.077), and larger on image-heavy documents (+0.180) than on born-digital ones (+0.091). These subgroup figures are descriptive.
+2. **B1's held-out accuracy is 42.7 %,** slightly below the development estimate and inside its interval. More than half of answerable questions remain wrong. Accuracy falls with the number of evidence pages: 54 % for one page, 31 % for 2–3 pages, 13 % for 4+ pages. Gathering evidence across pages remains the main weakness.
+3. **E9's adaptive policy shows a small, statistically supported gain on held-out data** that 102 development questions could not resolve. It is fragile: 24 disagreements, one run per arm, p = 0.049 under the worst-case S-v2 labelling, and below E9's pre-registered +0.05 materiality. By the frozen rule B1 stays the shipped system; any adoption would be a new decision tested on new data.
+4. **T1 abstains correctly more often (140 vs 120 of 198)** because its pages more often lack the evidence. Answerable accuracy, the primary metric, is what the claims rest on.
+
+### 9.4 Limitations
+
+- One run per arm; single-annotator evidence; a reader alias without a snapshot (frozen replies define the result).
+- The core-scope subgroup has only 32 documents, and only 4 answerable questions are on documents over 200 pages.
+- The token model undercounts some prompts (`floor(1.2 × tiles)` in floating point): 49 calls were billed 1–8 more prompt tokens than planned. No cost figure is affected; future plans should compute `(12 × tiles) // 10` in integers.
+- **The test pool is now used.** It may be reported, but never used to tune a system again. Its use is recorded in `experiments/test_pool_ledger.md`.
 
 ---
 
 ## 10. Where the sources disagree
 
+Three disagreements found in an earlier version of this report were corrected in `docs/validated_baseline_b1.md` (commit `1c54a3e`): E6's leave-one-document-out range (now +0.113 to +0.149, as in `experiments/frozen/e6/tables/evaluation_summary.json`), the reading of E4 (reading still loses more than page selection), and the size of the test pool. The remaining ones:
+
 | Item | Source 1 | Source 2 | Note |
 |---|---|---|---|
-| E6 leave-one-document-out range | `docs/validated_baseline_b1.md` §2: "+0.113 and +0.154" | `experiments/frozen/e6/README.md` and `tables/evaluation_summary.json`: 0.113 to 0.149 | 0.154 is E6's document-weighted Δ; the frozen summary gives a maximum leave-one-out of 0.149 |
-| Reading of E4 | `docs/validated_baseline_b1.md` §2: E4 "confirms retrieval, not reading, is the bottleneck" | `experiments/frozen/e4/README.md`: "Reading still loses about three times more than page selection" (20/37 vs 6/37) | the frozen verdict is `page_selection_costs_accuracy` by one question; the package itself says reading loses more |
-| Test pool size | `docs/validated_baseline_b1.md` §4: "111-document / ~916-question test pool" | ledger: 115 documents and 916 questions; final-evaluation draft: 111 documents, about 880 questions | 916 belongs to the 115-document pool; 111 documents leave about 880 |
 | Replicate churn in E8 | `docs/e9_proposal.md` and notebook 08: "7 flips between identical replicates" | `experiments/frozen/e8/README.md`: 4 correctness flips | 4 is under S-v1, 7 under S-v2 (`docs/validated_baseline_b1.md` §2) |
 | E7 cost per call count | `docs/e9_proposal.md` §7: "E7's 1,309-call run cost $5.911057" | `experiments/frozen/e7/README.md`: $5.911057 is smoke + full ($0.063019 + $5.848038) | the 1,309-call full run alone cost $5.848038 |
 | Evicted source PDFs | `docs/validated_baseline_b1.md` §5: 11 of 24 | `docs/PROGRESS.md`: 12 | iCloud eviction changes over time |
 | E0 text run-to-run changes | `experiments/README.md`: 3–6 of 57 | `experiments/frozen/mmlongbench_doc/README.md`: 4–6 of 57 | both describe the 2026-11-19 text runs |
+| Final-evaluation claim numbering | `docs/final_evaluation_specification.md` (draft): C3 = secondary estimates, C4 = subgroups, A1 optional | `experiments/specs/final_evaluation_v1.json` (frozen): C3 = the A1 contrast; abstention, citations and recall are secondary metrics; subgroups descriptive | the frozen JSON takes precedence, as the draft itself states |
+| Final-evaluation audit status | `experiments/frozen/final/README.md` and notebook 09: the audit "reproduced all 70 quantities" | `experiments/frozen/final/AUDIT.json`: `all_checks_passed: false` (36 of 38 integrity checks) | both are true; the two failed checks are the low-severity findings in section 7, also recorded in `docs/PROGRESS.md` |
 
 ---
 
@@ -329,6 +395,7 @@ Until these decisions are made, the pool stays untouched: no question, answer or
 | E7 | 11 + 1,309 | 5.911057 | `AGENTS.md` |
 | E8 | 6 + 354 | 0.0015431 + 0.144765 | `AGENTS.md` |
 | E9 | 6 + 354 | 0.151647 | `experiments/frozen/e9/README.md` |
+| Final evaluation | 6 + 2,079 | 0.003216 + 0.990233 = 0.993449 | `experiments/frozen/final/README.md` |
 
 ---
 
@@ -342,6 +409,10 @@ Until these decisions are made, the pool stays untouched: no question, answer or
 | E8 smoke and execution | `experiments/frozen/e8_smoke/`, `experiments/frozen/e8/` (commit `0d68a93`) |
 | E9 Stage 0 | `experiments/frozen/e9_stage0/` (commit `a30bb29`) |
 | E9 Stage 1–2 | `experiments/frozen/e9/` (commit `7f6c744`; independent audit 47/47; 13 S-v2 items await the owner's labels) |
-| Specifications | `experiments/specs/` (E1–E9, E2 v1 superseded by v2, E9 addendum) |
+| Final evaluation: index | `experiments/frozen/final_index/` (commit `ab8a9c8`, before any question was read) |
+| Final evaluation: retrieval | `experiments/frozen/final_retrieval/` (commit `8d5768a`) |
+| Final evaluation: run, evaluation, audit | `experiments/frozen/final/` (commit `c6c450d`; 85 S-v2 items await the owner's labels) |
+| Specifications | `experiments/specs/` (E1–E9, E2 v1 superseded by v2, E9 addendum; `final_evaluation_v1.json` with its plan and deviations) |
 | Baseline description | `docs/validated_baseline_b1.md` |
-| Reproduction | notebooks 00–08 in their default modes; see `docs/reproducibility.md` |
+| Test-pool record | `experiments/test_pool_ledger.md` |
+| Reproduction | notebooks 00–09 in their default modes; see `docs/reproducibility.md` |
