@@ -12,10 +12,32 @@ The single place that records what is done, what is running, what each decision 
 | E9 Stage 1 smoke (6 calls) | **passed** all 7 gates, $0.004592 | `experiments/frozen/e9/smoke_*` |
 | E9 Stage 2 (354 calls) | **done: `no_meaningful_gain`** (S-v1). B1 unchanged. Independent audit 47/47. 13 S-v2 items await owner labels; no labelling can change the verdict | `experiments/frozen/e9/`, notebook 08 |
 | Application (B1 with live ColQwen2, cache, CLI, UI) | **built, reviewed, verified live.** 200 tests pass. Three live calls reproduced frozen E8 L-B1 requests, tokens and answers exactly. The live *encoder* is checked by notebook 09's parity gate | `src/visualdoc/{visual_index,app,web}.py`, commit `041827f` |
-| Final held-out evaluation | **approved and frozen before access.** Indexing is running (notebook 09, `index` mode) | spec `1c54a3e`; notebook 09 `32b714d`, `1fc0f71`, `f0122c9` |
+| Final held-out evaluation | **ready for the paid run.** Index frozen before any question was read (`ab8a9c8`); retrieval and the 2,079-call plan frozen (`8d5768a`, upper bound $1.83 of $2.50). 110 of 111 documents (D1), 872 questions | `experiments/frozen/final_index`, `final_retrieval`, `experiments/specs/final_evaluation_v1*` |
 | Documentation (README, architecture, report, reproducibility, demo) | written; final-evaluation results are still to be added | `README.md`, `docs/{research_report,architecture,reproducibility}.md` |
 
 ## Decisions and their reasons
+
+### 2026-11-26 — Final evaluation is ready to run; the move to SSP Cloud is prepared
+
+- **Indexing.**
+  - 5,554 pages of 110 documents embedded on the M1 GPU in about 14 h, at 9.5 s per page.
+  - The parity gate reproduced E5 bit for bit, before and after.
+  - Index frozen and committed before any question was read.
+- **Deviation D1.** Pool PDFs must match the revision's recorded hash.
+  - `mi_phone.pdf` is excluded: Hugging Face serves different bytes.
+  - The first check wrongly flagged 20 git-stored PDFs, which have a blob SHA-1 rather than an LFS SHA-256. This was fixed before any question was read.
+  - One LFS pointer has a wrong size but the right content hash. It is included after a verified direct fetch.
+- **Questions.**
+  - 872 encoded on the M1 GPU.
+  - Development rankings 118/118 identical to E5's.
+  - Development requests 118/118 identical to frozen E8.
+  - U3 triggers on 38.4 % of questions.
+  - The 2,079-call plan is frozen.
+- **Ready to move to SSP Cloud.**
+  - Notebook 09 is portable. On non-M1 machines it uses the frozen rankings and checks them within 1e-4; its encoding modes refuse non-M1 machines.
+  - Dependencies are locked in `requirements/lock-2026-11-26.txt`.
+  - Step-by-step guide: `docs/ssp_cloud.md`.
+  - Remaining owner actions: authorise the GitHub push and configure `mc` for the MinIO upload.
 
 ### 2026-11-25 — Final evaluation: approval, environment and two engineering decisions
 
