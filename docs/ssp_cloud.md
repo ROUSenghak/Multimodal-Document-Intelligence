@@ -1,4 +1,6 @@
-# Moving the project to SSP Cloud (Onyxia)
+# Moving the project to an Onyxia datalab (ENSAE-ENSAI Datalab / SSP Cloud)
+
+Both platforms run Onyxia and work the same way. The owner uses the **ENSAE-ENSAI Datalab**, whose storage endpoint is `minio-simple.lab.groupe-genes.fr` and whose bucket is `s3/<username>/`. On the public SSP Cloud the endpoint is `minio.lab.sspcloud.fr`. Always copy the endpoint and credentials from **My account → Connect to storage**, never from this guide.
 
 This guide moves the project from the laptop to an SSP Cloud service. You lose no work and do not depend on any single service's disk.
 
@@ -38,26 +40,29 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
    ```bash
    git push origin refactor/simplify-structure
    ```
-3. **Configure MinIO on the laptop.**
-   1. Install the client: `brew install minio/stable/mc`.
-   2. Open <https://datalab.sspcloud.fr/account/storage> and copy the credentials or the ready-made MinIO client snippet shown there.
-   3. If you get only the three values (access key, secret key, session token), run the command below. Check that the endpoint matches the one shown on the page.
+3. **Configure MinIO on the laptop** (done 2026-11-26).
+   1. Install the client: `brew install minio-mc`. The `minio/stable` tap points to a release that now returns HTTP 410.
+   2. In the datalab, open **My account → Connect to storage** and choose **MC client**. Click the copy icon at the end of the `export MC_HOST_s3=https://…` line. **Never paste it into a chat or a screenshot:** it contains the secret key.
+   3. Save it in a private file, in Terminal: `nano ~/.sspcloud_s3`; paste; **Ctrl+O**, **Enter**, **Ctrl+X**; then `chmod 600 ~/.sspcloud_s3`.
+   4. Load it in any shell that needs it, without printing it:
       ```bash
-      export MC_HOST_s3="https://ACCESS_KEY:SECRET_KEY:SESSION_TOKEN@minio.lab.sspcloud.fr"
-      mc ls s3/<your-username>/
+      source ~/.sspcloud_s3 && mc ls s3/<your-username>/
       ```
+      The credentials expire after about 2 weeks on the ENSAE-ENSAI Datalab and 7 days on SSP Cloud. Refresh the file from the same page.
 4. **Upload the data.** `mc mirror` is resumable, so re-running it skips what is already there.
+
+   **Exclude iCloud placeholders.** A file whose bytes are not on the Mac reads as empty and would be stored as an empty, corrupt copy. List them with `find data experiments/runs -type f -flags +dataless`. On 2026-11-26 the only ones were 9 development PDFs in `data/external/mmlongbench_doc/documents/`. They are re-downloadable from Hugging Face and verifiable by hash, so pass each one to `mc mirror` as `--exclude documents/<name>.pdf`.
    ```bash
    U=<your-username>
    for d in data/processed data/cache/final data/cache/e5 data/cache/mmlongbench_doc data/external/mmlongbench_doc/documents experiments/runs; do
      mc mirror --overwrite "$d" "s3/$U/visualdoc/$d"
    done
-   mc du s3/$U/visualdoc/     # about 3.4 GB
+   mc du s3/$U/visualdoc/     # about 3.4 GB; compare file counts and bytes with the Mac before deleting anything
    ```
 
 ## 2. On SSP Cloud
 
-1. **My secrets** (<https://datalab.sspcloud.fr/my-secrets/>):
+1. **My secrets** (left menu of the datalab):
    1. Create a folder `visualdoc` (**+ New folder**).
    2. Add the secret `OPENAI_API_KEY` = your key (**+ New secret**, then **+ Add a variable**).
    3. Click **Use in a service** to copy its path.
