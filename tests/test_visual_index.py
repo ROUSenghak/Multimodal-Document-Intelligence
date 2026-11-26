@@ -539,3 +539,76 @@ def test_import_refuses_a_pdf_the_e5_cache_never_encoded(tmp_path):
     with pytest.raises(FileNotFoundError, match="1 of 1 pages"):
         import_e5_document(pdf, E5_CACHE, VisualIndexStore(tmp_path / "store"))
     assert not any((tmp_path / "store").rglob("*.safetensors"))
+
+
+# --- archived page images (renders that differ by processor) --------------------------------------------
+
+
+def archived_page_fixture(tmp_path, *, png=None, pdf_sha=None, tamper_manifest=False):
+    """A one-page PDF, a frozen-style package (manifest + SHA256SUMS), an archived PNG and its record, under tmp_path."""
+    import pymupdf
+    from visualdoc.documents import render_pages
+
+    pdf = tmp_path / "doc.pdf"
+    document = pymupdf.open()
+    document.new_page().insert_text((72, 72), "One page.")
+    document.save(pdf)
+    rendered = render_pages(pdf, [1])
+    archived = rendered[1] if png is None else png  # stands in for the M1's image
+    image = tmp_path / "images" / "page_001.png"
+    image.parent.mkdir()
+    image.write_bytes(archived)
+    sha = hashlib.sha256(archived).hexdigest()
+    (tmp_path / "pkg" / "tables").mkdir(parents=True)
+    manifest = tmp_path / "pkg" / "tables" / "render_manifest.csv"
+    manifest.write_text(f"doc_id,page,width_px,height_px,sha256,image_path\ndoc.pdf,1,0,0,{sha},images/page_001.png\n")
+    (tmp_path / "pkg" / "SHA256SUMS").write_text(f"{hashlib.sha256(manifest.read_bytes()).hexdigest()}  tables/render_manifest.csv\n")
+    if tamper_manifest:
+        manifest.write_text(manifest.read_text() + "\n")
+    records = tmp_path / "records.json"
+    records.write_text(json.dumps({"pages": [{"doc_id": "doc.pdf", "page": 1, "pdf_sha256": pdf_sha or sha256_file(pdf),
+                                              "archived_png_sha256": sha, "image_path": "images/page_001.png",
+                                              "frozen_manifest": "pkg/tables/render_manifest.csv"}]}))
+    return pdf, rendered, records, sha
+
+
+def test_archived_page_is_accepted_only_with_its_full_provenance(tmp_path):
+    pdf, rendered, records, sha = archived_page_fixture(tmp_path)
+    accepted = visual_index.verified_archived_pages(pdf, [1], rendered, records_file=records, root=tmp_path)
+    assert accepted == {1: {"png_sha256": sha, "image_path": "images/page_001.png",
+                            "rendered_png_sha256": hashlib.sha256(rendered[1]).hexdigest()}}
+    assert visual_index.verified_archived_pages(pdf, [2], rendered, records_file=records, root=tmp_path) == {}  # not listed
+    assert visual_index.verified_archived_pages(pdf, [1], rendered, records_file=tmp_path / "none.json", root=tmp_path) == {}
+
+
+@pytest.mark.parametrize("problem", ["pdf", "image", "manifest", "size"])
+def test_archived_page_with_broken_provenance_is_refused(tmp_path, problem):
+    from PIL import Image
+
+    options = {"pdf": {"pdf_sha": "0" * 64}, "manifest": {"tamper_manifest": True}}.get(problem, {})
+    if problem == "size":
+        buffer = io.BytesIO()
+        Image.new("RGB", (10, 10)).save(buffer, format="PNG")
+        options = {"png": buffer.getvalue()}
+    pdf, rendered, records, _ = archived_page_fixture(tmp_path, **options)
+    if problem == "image":
+        image = tmp_path / "images" / "page_001.png"
+        image.write_bytes(image.read_bytes() + b"\0")
+    with pytest.raises(IndexKeyMismatch):
+        visual_index.verified_archived_pages(pdf, [1], rendered, records_file=records, root=tmp_path)
+
+
+def test_e639_page_15_is_imported_from_its_archived_m1_image_and_recorded(tmp_path):
+    """The one recorded substitution: page 15's M1 image (frozen hash) and its E5 embedding, provenance kept in the store."""
+    require_e5_cache()
+    pdf = MMLB_DOCUMENTS / PARITY_DOCUMENTS[0]
+    if not materialized(pdf):
+        pytest.skip(f"{pdf.name} absent or an iCloud placeholder")
+    store = VisualIndexStore(tmp_path)
+    key = import_e5_document(pdf, E5_CACHE, store)
+    _, metadata = decode_safetensors(store.path(key).read_bytes())
+    archived = json.loads(metadata["encoder"]).get("archived_page_images", {})
+    assert set(archived) <= {"15"}  # empty where the render already equals the M1's (on the M1 itself)
+    if archived:
+        assert archived["15"]["png_sha256"] == "31c14c7d8006b404b9ab461bc7b9efb4d20800e0b926493b5be9c027ebb70f7a"
+        assert archived["15"]["rendered_png_sha256"] != archived["15"]["png_sha256"]

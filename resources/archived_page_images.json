@@ -1,0 +1,18 @@
+{
+  "description": "Pages whose frozen E5 image (rendered on the Apple M1) is imported from the archive instead of a fresh render, because PyMuPDF 2.1 on another processor renders different bytes. Each entry is checked by visual_index.verified_archived_pages before use: the PDF SHA-256, the frozen render manifest (against its package's SHA256SUMS), the archived PNG's SHA-256 and its pixel size. The embedding is E5's, keyed by the archived PNG's SHA-256; nothing is re-encoded. Add an entry only after verifying it as recorded in docs/PROGRESS.md (2026-11-26).",
+  "pages": [
+    {
+      "doc_id": "e639029d16094ea71d964e2fb953952b.pdf",
+      "page": 15,
+      "pdf_sha256": "773e1fc44166300d1473853e48b2b0c3f16164e3e125b52db8c616a34fdf8ea7",
+      "archived_png_sha256": "31c14c7d8006b404b9ab461bc7b9efb4d20800e0b926493b5be9c027ebb70f7a",
+      "image_path": "data/cache/mmlongbench_doc/page_images/short768-long1536/e639029d16094ea71d964e2fb953952b/page_015.png",
+      "frozen_manifest": "experiments/frozen/e5/tables/render_manifest_heldout.csv",
+      "observed_render": {
+        "platform": "Linux x86_64 (ENSAE-ENSAI Datalab), PyMuPDF 2.1 / MuPDF 1.28.6",
+        "png_sha256": "0860457a7aa22a1e0fba47ee75e863c683cd7161ab8bf5550e628dbc78304507",
+        "difference": "38 of 763,392 pixels, all in row y=211 (x 365-402), max channel difference 18; same 768 x 994 size and PNG length"
+      }
+    }
+  ]
+}

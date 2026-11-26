@@ -17,6 +17,68 @@ The single place that records what is done, what is running, what each decision 
 
 ## Decisions and their reasons
 
+### 2026-11-26 — Datalab test suite: two failures from one page rendered differently on x86-64; fixed by a provenance-checked archive import
+
+**Symptom.** On the Datalab (`.venv-cu126`), `pytest` gave 2 failed, 198 passed, 6 skipped. Both failures were raised by `import_e5_document`: "the E5 cache has no embedding for 1 of 20 pages of e639029d16094ea71d964e2fb953952b.pdf (first: [15])".
+- `test_visual_index.py::test_store_imported_from_the_pdf_reproduces_frozen_rankings[e639…]`
+- `test_app.py::test_application_rebuilds_the_frozen_e8_b1_requests_and_replays_their_replies`
+
+**1. The archived image and embedding exist and match their records.**
+- Page 15's archived M1 image has SHA-256 `31c14c7d…27ebb70f7a`. It equals:
+  - the git-frozen `experiments/frozen/e5/tables/render_manifest_heldout.csv`, itself checked against `experiments/frozen/e5/SHA256SUMS`;
+  - the archive manifest entry. The manifest's own SHA-256 is `d3b11c16…`, as recorded. Both copies are byte-identical, and `sha256sum -c` passes on all files in the archive folder and in the project.
+- The E5 embedding `pages/31c14c7d….safetensors` exists and holds 755 × 128 tokens. That equals the 755 tokens that `experiments/frozen/e5/tables/encoding_log.csv` records for this key.
+- The combined digests are unchanged: `data/cache/e5` `dff4abffcfab9345` (1,013 files) and `data/cache/mmlongbench_doc` `36abcd316b292d57` (6,592 files). Every `experiments/frozen/*/SHA256SUMS` passes.
+
+**2. The mismatch is confirmed and is the processor.**
+- The renders were made with the same PDF (SHA-256 `773e1fc4…`, "pdf ok" in the rebuild test) and the same PyMuPDF 2.1 (MuPDF 1.28.6).
+- The Linux x86-64 render of page 15 has SHA-256 `0860457a…`. It has the same 768 × 994 size and the same PNG length (137,391 bytes) as the M1 image.
+- 38 of 763,392 pixels differ, all in row y = 211 (x 365–402), each by 18 levels at most: an anti-aliasing difference.
+- The other 19 pages of this PDF, and all 20 of `efd88e41…`, render to their frozen hashes. This is one more instance of the §2.6 finding in `docs/ssp_cloud.md`.
+
+**3. Fix: archived images may replace renders only through a reviewed list.**
+- `import_e5_document` still renders every page and still uses the fresh render where E5 has an embedding for it. Only a page whose render has no E5 embedding may use E5's archived M1 image, and only if all of these hold:
+  - the page is listed in the committed `resources/archived_page_images.json` (one entry: e639… page 15);
+  - `visual_index.verified_archived_pages` checks:
+    - the PDF's SHA-256;
+    - the frozen render manifest, against its package's `SHA256SUMS`;
+    - the manifest row's hash and path;
+    - the archived PNG's bytes;
+    - its pixel size, against the fresh render's.
+- Any failed check raises `IndexKeyMismatch`. Unlisted pages fail as before.
+- The store records each substituted page (archived hash, path, and the hash of the differing render) in its `encoder` metadata.
+- Nothing is re-rendered into the store, nothing is re-encoded, and no embedding is regenerated. The five SHA-pinned B1 modules are untouched (`test_b1` passes), and no frozen file changed.
+- **Why the E8 requests still match.** Page 15 of e639… is never in the top 4 that B1 reads for that document's 7 questions. So the reader request fingerprints are unaffected, and the app test reproduces all 14 frozen E8 requests and replies exactly.
+- **Limit.** The index now holds the M1 embedding of page 15. A live encoding on the Datalab would encode the x86 render, and its embedding would almost surely differ slightly. Any new Datalab run is a new rendering condition, as already noted above.
+- **New tests** (no existing test changed):
+  - acceptance with full provenance;
+  - refusal for a wrong PDF, a tampered image, a tampered manifest and a wrong size;
+  - an unlisted page is not substituted;
+  - the e639 import records its substitution.
+
+**4. The six skips: missing inputs, not failures.**
+
+| Skipped test | Missing input |
+|---|---|
+| `test_documents.py::test_page_text_equals_the_text_pinned_by_the_e3_spec[PG_2020…]` | `PG_2020.05.21_International-Cooperation-COVID_FINAL.pdf` |
+| `test_documents.py::test_page_text_equals_the_text_pinned_by_the_e3_spec[germanwings…]` | `germanwingsdigitalcrisisanalysis-150403064828-conversion-gate01_95.pdf` |
+| `test_documents.py::test_page_text_equals_the_text_pinned_by_the_e3_spec[bdf54dxa…]` | `bdf54dxa.pdf` |
+| `test_documents.py::test_render_equals_the_frozen_e1_768_px_image` | germanwings PDF (mmlb-0729) |
+| `test_answering.py::test_request_fingerprint_equals_the_frozen_e1_768_request` | germanwings PDF (mmlb-0729) |
+| `test_visual_index.py::test_identity_checks_pass_on_the_real_small_files_and_processor` | ColQwen2 small files in `data/cache/hf/colqwen2-v1.0-hf@ddc07d2317c8/` (`preprocessor_config.json`, `tokenizer.json`, `tokenizer_config.json`) |
+
+- **PDFs.** All 6 development PDFs are absent on the Datalab: `2210.02442v1`, `PG_2020…`, `bdf54dxa`, `earlybird…`, `germanwings…` and `watch_d`. The rebuild test downloaded only 124 PDFs. They are git-ignored, and notebook 00 downloads them at the pinned revision.
+- **Expected after download.** These tests may then *fail* on x86-64 rather than pass:
+  - germanwings and bdf54dxa are OCR pages, and OCR text differed for 24/330 pages in the rebuild test;
+  - the two E1 tests check render hashes.
+  Such a failure would be the same processor effect. It must be recorded, not silenced.
+- **ColQwen2 small files.** Once they are present, the test will still fail: `.venv-cu126` has torch **2.14.0**+cu126, while E5 and `requirements/lock-2026-11-26.txt` pin **2.15.0**. `check_library_versions` would report "a new condition", correctly. `.venv` has neither torch nor pytest.
+- Nothing was downloaded here.
+
+**5. Result.**
+- `pytest` in `.venv-cu126`: **206 passed, 6 skipped, 0 failed** (89 s). That is the 198 earlier passes, the 2 fixed tests and 6 new tests.
+- No paid call, no regenerated embedding, no push.
+
 ### 2026-11-26 — Final held-out evaluation: results (test pool used once)
 
 | Claim (S-v1) | Result | Verdict |
@@ -183,7 +245,12 @@ E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Pl
 
 1. **Final-evaluation indexing time.** About 5,000 pages at about 12.5 s per page on the fanless M1, so the job runs for many hours under `caffeinate`. It is resumable: re-running `index` mode skips every page already encoded.
 2. **No off-machine backup of today's work.** iCloud sync is blocked by the account's storage quota, and commits since `7da078f` are local only, because pushing needs the owner's authorisation.
-3. **S-v2 blind labels.** 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
+3. **Datalab test inputs (2026-11-26).**
+   - The 6 development PDFs are not downloaded there.
+   - The ColQwen2 small files are absent.
+   - `.venv-cu126` has torch 2.14.0, not the pinned 2.15.0.
+   These leave 6 tests skipped. Some may fail once the inputs are present: OCR and rendering differ by processor.
+4. **S-v2 blind labels.** 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
 
 ## Known limitations (running list)
 

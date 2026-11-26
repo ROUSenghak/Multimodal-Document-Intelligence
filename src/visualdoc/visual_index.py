@@ -31,6 +31,7 @@ bfloat16 is the upper half of a float32 (same sign and exponent, 7 mantissa bits
 widening it to float32 is exact: ``float32 bits = bf16 bits << 16``.
 """
 
+import csv
 import gc
 import hashlib
 import io
@@ -351,12 +352,73 @@ def _read_e5_embedding(path: Path) -> np.ndarray:
     return validate_embedding(tensors.get("embedding"), path.name)
 
 
+ARCHIVED_PAGES_FILE = REPO_ROOT / "resources" / "archived_page_images.json"
+
+
+def _png_size(png: bytes) -> tuple[int, int]:
+    """(width, height) from a PNG's IHDR chunk."""
+    if png[:8] != b"\x89PNG\r\n\x1a\n" or png[12:16] != b"IHDR":
+        raise ValueError("not a PNG file")
+    return struct.unpack(">II", png[16:24])
+
+
+def _frozen_manifest_sha256(manifest: Path) -> dict[tuple[str, int], tuple[str, str]]:
+    """{(doc_id, page): (sha256, image_path)} of a frozen render manifest, after checking it against its package's SHA256SUMS."""
+    package = manifest.parent.parent
+    sums = dict(line.split()[::-1] for line in (package / "SHA256SUMS").read_text().splitlines() if line.strip())
+    relative = manifest.relative_to(package).as_posix()
+    if relative not in sums or hashlib.sha256(manifest.read_bytes()).hexdigest() != sums[relative]:
+        raise IndexKeyMismatch(f"{manifest} does not match {package.name}/SHA256SUMS; refusing archived page images")
+    with manifest.open(newline="") as handle:
+        return {(row["doc_id"], int(row["page"])): (row["sha256"], row["image_path"]) for row in csv.DictReader(handle)}
+
+
+def verified_archived_pages(pdf_path: str | Path, pages: list[int], rendered: Mapping[int, bytes], *,
+                            records_file: str | Path = ARCHIVED_PAGES_FILE, root: str | Path = REPO_ROOT) -> dict[int, dict]:
+    """Archived E5 page images allowed to replace fresh renders of ``pages``, after checking their provenance.
+
+    Only pages listed in ``records_file`` (a reviewed, committed list) qualify. For each one the
+    PDF's SHA-256, the frozen render manifest (against its package's SHA256SUMS), the archived
+    PNG's bytes and its pixel size (against the fresh render's) must all agree, or IndexKeyMismatch
+    is raised. Returns {page: {"png_sha256", "rendered_png_sha256", "image_path"}} for the listed pages.
+    """
+    root, name = Path(root), Path(pdf_path).name
+    records = json.loads(Path(records_file).read_text())["pages"] if Path(records_file).is_file() else []
+    listed = {record["page"]: record for record in records if record["doc_id"] == name and record["page"] in pages}
+    if not listed:
+        return {}
+    pdf_sha = sha256_file(pdf_path)
+    accepted = {}
+    for page, record in sorted(listed.items()):
+        what = f"{name} page {page}"
+        if record["pdf_sha256"] != pdf_sha:
+            raise IndexKeyMismatch(f"{what}: the archived image was recorded for PDF {record['pdf_sha256'][:12]}, not {pdf_sha[:12]}")
+        frozen = _frozen_manifest_sha256(root / record["frozen_manifest"]).get((name, page))
+        if frozen != (record["archived_png_sha256"], record["image_path"]):
+            raise IndexKeyMismatch(f"{what}: the frozen manifest records {frozen}, not the archived image's hash and path")
+        image = root / record["image_path"]
+        if not image.is_file():
+            raise FileNotFoundError(f"{what}: archived image {record['image_path']} absent (restore it from the archive)")
+        png = image.read_bytes()
+        if hashlib.sha256(png).hexdigest() != record["archived_png_sha256"]:
+            raise IndexKeyMismatch(f"{what}: archived image bytes do not match their recorded SHA-256")
+        if _png_size(png) != _png_size(rendered[page]):
+            raise IndexKeyMismatch(f"{what}: archived image is {_png_size(png)}, the fresh render {_png_size(rendered[page])}")
+        accepted[page] = {"png_sha256": record["archived_png_sha256"], "image_path": record["image_path"],
+                          "rendered_png_sha256": hashlib.sha256(rendered[page]).hexdigest()}
+    return accepted
+
+
 def import_e5_document(pdf_path: str | Path, e5_dir: str | Path, store: VisualIndexStore) -> IndexKey:
     """Copy E5's page embeddings of one PDF into the store under the document key.
 
     E5 keyed each page by the SHA-256 of its 768-px PNG. The pages are rendered here with
     ``documents.render_pages`` and looked up by that hash, so an embedding is imported only
     for exactly the image B1 would encode (E5 checked that cached images equal fresh renders).
+
+    Exception: on another processor PyMuPDF can render a few pages with different bytes than the
+    M1 did. A page whose render has no E5 embedding may use E5's archived image instead, only if
+    ``verified_archived_pages`` accepts it; the store records which pages were imported this way.
     """
     e5_dir = Path(e5_dir)
     config = read_e5_config(e5_dir)
@@ -366,6 +428,11 @@ def import_e5_document(pdf_path: str | Path, e5_dir: str | Path, store: VisualIn
     png_sha = {page: hashlib.sha256(png).hexdigest() for page, png in images.items()}
     files = {page: e5_dir / "pages" / f"{digest}.safetensors" for page, digest in png_sha.items()}
     missing = [page for page, path in files.items() if not path.is_file()]
+    archived = verified_archived_pages(pdf_path, missing, images) if missing else {}
+    for page, record in archived.items():
+        png_sha[page] = record["png_sha256"]
+        files[page] = e5_dir / "pages" / f"{record['png_sha256']}.safetensors"
+    missing = [page for page, path in files.items() if not path.is_file()]
     if missing:
         raise FileNotFoundError(
             f"the E5 cache has no embedding for {len(missing)} of {page_count} pages of {Path(pdf_path).name} "
@@ -373,8 +440,10 @@ def import_e5_document(pdf_path: str | Path, e5_dir: str | Path, store: VisualIn
         )
     key = IndexKey(sha256_file(pdf_path))
     config_hash = e5_dir.name
-    store.save(key, {page: _read_e5_embedding(path) for page, path in files.items()}, png_sha256=png_sha,
-               encoder={"source": f"E5 cache {config_hash}", **{k: config.get(k) for k in ("device", "torch", "transformers")}})
+    encoder = {"source": f"E5 cache {config_hash}", **{k: config.get(k) for k in ("device", "torch", "transformers")}}
+    if archived:
+        encoder["archived_page_images"] = {str(page): record for page, record in archived.items()}
+    store.save(key, {page: _read_e5_embedding(path) for page, path in files.items()}, png_sha256=png_sha, encoder=encoder)
     return key
 
 
