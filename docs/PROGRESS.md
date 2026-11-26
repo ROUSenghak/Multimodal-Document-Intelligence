@@ -48,6 +48,8 @@ The single place that records what is done, what is running, what each decision 
     - Page images: 354/372. Page texts: 306/330.
     - The Mac reproduces the same pages: 36/36 images, 57/57 texts. So the cause is the processor (M1 ARM vs x86-64), not the files.
     - **Consequence:** the Mac's page images (1.69 GB) and 30 files in `data/processed` (4.0 MB) are irreplaceable bit for bit. Notebook 09's offline audit needs them. Details: `docs/ssp_cloud.md` §2.6.
+  - Embeddings copied from MinIO to the Datalab disk and verified (2026-11-26). The combined SHA-256 over all files matches the Mac: `data/cache/final` 6,223 files `b12dec4646a211a4`; `data/cache/e5` 1,013 files `dff4abffcfab9345`. The Datalab also holds the 213 `data/processed` and 452 `experiments/runs` files from MinIO.
+  - Uploads to MinIO work from inside a Datalab service; the filter blocks only uploads from outside.
   - Next:
     - **Owner:** choose an archive for those files.
     - Then free the rest of the Mac: PDFs, embeddings (on MinIO), `.venv`, the ColQwen2 weights.
