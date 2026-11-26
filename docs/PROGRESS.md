@@ -61,7 +61,10 @@ The single place that records what is done, what is running, what each decision 
     - 6,847/6,847 files are identical to the Mac.
     - 6,092/6,092 page images referenced by the frozen packages are archived with identical bytes.
   - Next:
-    - **Owner, on the Datalab:** restore, check and back up to MinIO (§2.9 steps 1–4).
+    - Restored on the Datalab and backed up to MinIO from there (2026-11-26):
+      - all 6,846 files pass `sha256sum -c`;
+      - the combined digests match the Mac (`36abcd316b292d57`, `94b7096c3ad2a24b`);
+      - MinIO has 6,846/6,846 files identical by MD5.
     - **Owner:** then approve deleting the last Mac copies: page images, `data/processed`, `.venv`.
     - New Datalab experiments are a new rendering and OCR condition: run all arms there.
 

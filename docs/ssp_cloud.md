@@ -416,7 +416,12 @@ The combined digest is the same one-liner used for the embeddings: file paths so
 
 **Reproducibility.** These files, the frozen packages in git and the embeddings (checked on MinIO and the Datalab) are everything the offline notebooks read. Notebook 09's offline mode also re-renders 3 development pages as a determinism check, so on an x86-64 machine it may stop there, by design (§0).
 
-**Deleting the Mac copy** of these files, and of `.venv`, waits until steps 2–4 have passed on the Datalab and the owner approves.
+**Result on the Datalab (2026-11-26).** All three checks passed:
+- step 2: `ALL 6846 FILES OK`;
+- step 3: `36abcd316b292d57` 6,592 files and `94b7096c3ad2a24b` 254 files, identical to the Mac;
+- step 4: MinIO 6,846/6,846 identical (MD5).
+
+The files now exist in three checked places: Hugging Face, the Datalab disk and MinIO. **Deleting the Mac copy** of these files, and of `.venv`, waits for the owner's approval.
 
 ## 3. Working there after the final evaluation
 
