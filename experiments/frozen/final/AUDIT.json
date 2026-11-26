@@ -1,0 +1,1449 @@
+{
+ "audit": "final held-out evaluation v1",
+ "generated_utc": "2026-11-26T15:00:00+00:00",
+ "repo_head": "bcf0345",
+ "run_id": "20261126T124411360565Z_8feb6d9f_full",
+ "all_checks_passed": false,
+ "checks": [
+  {
+   "name": "1.01 spec equals its freeze commit 1c54a3e and is unchanged at HEAD",
+   "passed": true,
+   "details": {
+    "commits": [
+     "1c54a3e"
+    ],
+    "sha256": "a681abcba172bd859117c914845a846b5608f92de6b2df6da6f394ca86483c61"
+   }
+  },
+  {
+   "name": "1.02 deviations file committed and unchanged at HEAD (D1 then D2)",
+   "passed": true,
+   "details": {
+    "commits": [
+     "bcf0345",
+     "476b156",
+     "dfeaad0"
+    ]
+   }
+  },
+  {
+   "name": "1.03 plan spec committed once (8d5768a) and unchanged",
+   "passed": true,
+   "details": {
+    "commits": [
+     "8d5768a"
+    ],
+    "sha256": "8b34d0ac8996aa3bcb363aa52795666a42bd41445c67877cce8c0c0af938d109"
+   }
+  },
+  {
+   "name": "1.04 experiments/frozen/final_index: committed in ab8a9c8 only, clean, SHA256SUMS valid",
+   "passed": true,
+   "details": {
+    "bad": [],
+    "unlisted": [],
+    "commits": [
+     "ab8a9c8"
+    ]
+   }
+  },
+  {
+   "name": "1.04 experiments/frozen/final_retrieval: committed in 8d5768a only, clean, SHA256SUMS valid",
+   "passed": true,
+   "details": {
+    "bad": [],
+    "unlisted": [],
+    "commits": [
+     "8d5768a"
+    ]
+   }
+  },
+  {
+   "name": "1.05 working copies in data/processed/.../final equal the frozen packages",
+   "passed": true,
+   "details": {
+    "index_manifest.csv": true,
+    "pool_documents.csv": true,
+    "parity_gate.json": true,
+    "rankings.parquet": true
+   }
+  },
+  {
+   "name": "1.06 index frozen (ab8a9c8) before the first commit carrying question-derived files (final_retrieval, plan)",
+   "passed": true,
+   "details": {
+    "chain": [
+     "1c54a3e",
+     "dfeaad0",
+     "476b156",
+     "ab8a9c8",
+     "8d5768a",
+     "de38422",
+     "61f769f",
+     "bcf0345"
+    ],
+    "first_question_derived_commit": "8d5768a",
+    "index_summary_questions_read": false,
+    "notebook_at_ab8a9c8_fe_questions_output": true
+   }
+  },
+  {
+   "name": "1.07 scoring, claims, request, plan and executor cells identical from f0122c9 (before questions) to the run commit 61f769f",
+   "passed": true,
+   "details": {
+    "changed": []
+   }
+  },
+  {
+   "name": "1.08 D2 (bcf0345) committed after the run ended and before any evaluation output; only D2 code changed; nothing evaluated is committed",
+   "passed": true,
+   "details": {
+    "cells_changed_by_d2": [
+     "fe-eval",
+     "fe-scorer-d2",
+     "fe-scorer-d2-md"
+    ],
+    "non_d2_diff_lines": 0,
+    "worktree_code_vs_bcf0345": [],
+    "commits_with_eval_output": [],
+    "tracked_eval_files": 0,
+    "run_end_utc": "2026-11-26T14:35:16.817000+00:00",
+    "d2_commit": "2026-11-26T15:37:11+01:00",
+    "evaluation_summary_mtime_utc": "2026-11-26T14:38:09.949727+00:00",
+    "note": "eval-output mtime is file-system evidence only (not cryptographic)"
+   }
+  },
+  {
+   "name": "1.09 settings: spec/plan-spec hashes, plan hash = plan spec full.plan_sha256, totals equal the frozen plan",
+   "passed": true,
+   "details": {
+    "plan_sha256": "f6308da27dd031ad6d654dd80569caae8944e9ca1e670631ea3dcf799c8dadbb",
+    "run_commit": "61f769f",
+    "plan_upper_usd": 1.831161,
+    "prompt_tokens": 9995608
+   }
+  },
+  {
+   "name": "2.01 population: 135 - 20 development - 4 touched = 111; 110 verified (mi_phone.pdf excluded, D1)",
+   "passed": true,
+   "details": {
+    "pool": 111,
+    "verified": 110,
+    "excluded": [
+     "mi_phone.pdf"
+    ],
+    "ledger_touched_equals_spec": true
+   }
+  },
+  {
+   "name": "2.02 questions: 872 in 110 documents, 674 answerable / 198 unanswerable, no development or touched document, references equal the git-tracked raw table",
+   "passed": true,
+   "details": {
+    "questions": 872,
+    "documents": 110,
+    "answerable": 674,
+    "dev_or_touched_docs_included": [],
+    "equal_to_raw_tracked_table": true
+   }
+  },
+  {
+   "name": "2.03 frozen query manifest covers exactly these 872 questions with matching question-text hashes",
+   "passed": true,
+   "details": {
+    "rows": 872
+   }
+  },
+  {
+   "name": "2.04 D1: every evaluated PDF available locally hashes to the revision's recorded hash (LFS SHA-256 or git blob SHA-1); page counts = manifest",
+   "passed": true,
+   "details": {
+    "verified": 110,
+    "page_counts_ok": 110,
+    "skipped_dataless_or_missing": 0,
+    "mismatched": [],
+    "kinds": {
+     "sha256": 90,
+     "git-blob-sha1": 20
+    }
+   }
+  },
+  {
+   "name": "1.10 frozen rankings: full best-first rankings of every page; U3 trigger recomputed = frozen flag (335)",
+   "passed": true,
+   "details": {
+    "triggered": 335,
+    "triggered_answerable": 259
+   }
+  },
+  {
+   "name": "1.11 plan order equals the seeded order (seed 20261201) with F8 exactly for triggered questions",
+   "passed": true,
+   "details": {
+    "calls": 2079
+   }
+  },
+  {
+   "name": "1.12 execution log: 2079 records, 2079 unique indices, one attempt each, all ok, fingerprints = sha256(json.dumps(request, sort_keys=True)) = plan",
+   "passed": true,
+   "details": {
+    "records": 2079,
+    "unique_indices": 2079,
+    "fingerprints_ok": 2079,
+    "plan_fields_ok": 2079,
+    "statuses": {
+     "ok": 2079
+    }
+   }
+  },
+  {
+   "name": "1.13 requests: page tags and images equal the frozen rankings in order (B1 V top4, T1 BM25 top4, F8 V top8), F8 only and always when triggered, question text and system prompt and parameters equal the frozen template",
+   "passed": true,
+   "details": {
+    "problems": {},
+    "coverage": true,
+    "params": [
+     "max_completion_tokens",
+     "model",
+     "reasoning_effort",
+     "response_format",
+     "temperature"
+    ]
+   }
+  },
+  {
+   "name": "1.14 reader: served model only gpt-6-luna, one system fingerprint, finish_reason stop, no parse error, re-parse of every raw reply = stored parse",
+   "passed": true,
+   "details": {
+    "served_models": [
+     "gpt-6-luna"
+    ],
+    "system_fingerprints": [
+     "None"
+    ],
+    "reparse_mismatches": 0
+   }
+  },
+  {
+   "name": "1.15 billed prompt tokens equal planned (and the token model) on every call",
+   "passed": false,
+   "details": {
+    "billed_equal": 2030,
+    "token_model_equal": 2079,
+    "calls_billed_more": 49,
+    "calls_billed_less": 0,
+    "extra_tokens": 146,
+    "by_arm": {
+     "T1": 23,
+     "F8": 4,
+     "B1": 22
+    },
+    "questions_affected": 26,
+    "billed_prompt_tokens": 9995754,
+    "planned_prompt_tokens": 9995608,
+    "cached_tokens": 610688,
+    "calls_with_cache": 157,
+    "completion_tokens": 91240
+   }
+  },
+  {
+   "name": "1.15b every billed-vs-planned difference = 1 token per image whose tile product hits a float-rounding artifact in the token model",
+   "passed": true,
+   "details": {
+    "calls_explained": 2079,
+    "artifact_image_dimensions": [
+     [
+      768,
+      1089
+     ],
+     [
+      768,
+      1090
+     ],
+     [
+      768,
+      1098
+     ],
+     [
+      768,
+      1099
+     ]
+    ],
+    "cost_effect_usd": 1.46e-05
+   }
+  },
+  {
+   "name": "1.16 cost recomputed at $0.10/1M input, $0.01/1M cached, $0.50/1M output; within the frozen ceilings",
+   "passed": true,
+   "details": {
+    "observed_usd": 0.99023348,
+    "smoke_usd": 0.0032157,
+    "total_usd": 0.99344918,
+    "max_per_record_diff": 0.0
+   }
+  },
+  {
+   "name": "1.17 smoke: 6 calls on development questions only (plan qids), all ok, same model, never scored with the pool",
+   "passed": true,
+   "details": {
+    "calls": 6,
+    "arms": {
+     "B1": 2,
+     "T1": 2,
+     "F8": 2
+    }
+   }
+  },
+  {
+   "name": "3.01 scorer provenance: notebook 07/09 S-v1 functions = notebook 03 f653d232; notebook 09 scorer cells = notebook 07 pinned cells",
+   "passed": true,
+   "details": {
+    "nb03_cell_sha256": "e4ad7fbe85c08ed922861fb276bb17ebc8a81c72c7529570414345d767d65f02"
+   }
+  },
+  {
+   "name": "3.02 own D2 implementation reproduces all frozen E8/E9 S-v1 scores (no exception in development data)",
+   "passed": true,
+   "details": {
+    "checked": 708,
+    "mismatches": "0"
+   }
+  },
+  {
+   "name": "3.03 every reply re-scored (2,079 replies + 872 derived A1 rows): identical to the notebook's per-question table",
+   "passed": true,
+   "details": {
+    "s1_score max |diff|": 0.0,
+    "s1_correct mismatches": 0,
+    "v2_class mismatches": 0,
+    "v2_final mismatches": 0,
+    "citation_valid mismatches": 0,
+    "abstained mismatches": 0,
+    "s1_exception mismatches": 0,
+    "owner_label_hits_from_development_packages": 0
+   }
+  },
+  {
+   "name": "3.04 every claimed number reproduced (exact vs summary JSON; within stated rounding vs the brief)",
+   "passed": true,
+   "details": {
+    "max_abs_diff_vs_summary_json": 3.6697311855959924e-11,
+    "brief_mismatches": [],
+    "quantities": 70
+   }
+  },
+  {
+   "name": "3.05 verdicts: C2 visual_retrieval_confirmed, C3 a1_gain_supported (applied from the frozen rules)",
+   "passed": true,
+   "details": {
+    "C2": "visual_retrieval_confirmed",
+    "C3": "a1_gain_supported"
+   }
+  },
+  {
+   "name": "3.06 S-v2: 85 pending identities, each labelled once and consistently across arms; exact ranges reproduced; random labellings stay inside",
+   "passed": true,
+   "details": {
+    "identities_shared_by_several_questions": 0,
+    "B1_T1": {
+     "low": 0.0771513353115727,
+     "high": 0.14985163204747776,
+     "n": 674,
+     "pending_identities": 81,
+     "random_labellings_inside": true,
+     "auto_only_delta": 0.1083086053412463
+    },
+    "A1_B1": {
+     "low": 0.01483679525222552,
+     "high": 0.028189910979228485,
+     "n": 674,
+     "pending_identities": 66,
+     "random_labellings_inside": true,
+     "auto_only_delta": 0.019287833827893175
+    }
+   }
+  },
+  {
+   "name": "3.07 D2 counts: 2 'reply not numeric' answerable replies, 0 'reference not numeric' questions",
+   "passed": true,
+   "details": {
+    "counts": {
+     "none": 1605,
+     "reply not numeric": 2
+    },
+    "arms_of_affected_replies": {
+     "B1": 1,
+     "T1": 1
+    },
+    "affected_qids": [
+     "mmlb-1087"
+    ]
+   }
+  },
+  {
+   "name": "3.08 core scope definition: born-digital share (native_words>=30) >= 0.8 AND doc_type in the three report types",
+   "passed": true,
+   "details": {
+    "core_documents": 32,
+    "core_answerable": 207,
+    "born_digital_documents": 77
+   }
+  },
+  {
+   "name": "4.01 C3 fixed/broken all on triggered questions (by construction); untriggered A1 reuses the B1 reply",
+   "passed": true,
+   "details": {
+    "fixed": 19,
+    "broken": 5,
+    "on_triggered": 24,
+    "on_untriggered": 0,
+    "untriggered_A1_reply_is_B1_reply": true
+   }
+  },
+  {
+   "name": "3.09 descriptive subgroup table (27 rows) reproduced",
+   "passed": true,
+   "details": {
+    "rows": 27,
+    "max_abs_diff": 4.927536156884571e-11,
+    "B1_minus_T1_min_over_document_types": 0.025974025974025983
+   }
+  },
+  {
+   "name": "1.18 BM25 (T1) recomputed independently from the page texts (text hashes = manifest): rankings equal the frozen ones",
+   "passed": true,
+   "details": {
+    "text_hashes_ok": 5554,
+    "pages": 5554,
+    "identical_full_rankings": 872,
+    "consistent": 872,
+    "identical_top4": 872,
+    "max_score_diff": 2.842170943040401e-14
+   }
+  },
+  {
+   "name": "1.19 ColQwen2 MaxSim (B1/F8) recomputed from the cached embeddings (hashes = manifests): consistent with the frozen rankings",
+   "passed": true,
+   "details": {
+    "page_embeddings_hash_ok": 5348,
+    "distinct_pages": 5348,
+    "query_embeddings_hash_ok": 872,
+    "identical_full_rankings": 872,
+    "consistent_within_1e4": 872,
+    "identical_top8": 872,
+    "max_score_diff": 0.0
+   }
+  },
+  {
+   "name": "5.01 no credential or API key in the run directories, final outputs or notebook 09 (pattern scan); .env untracked",
+   "passed": true,
+   "details": {
+    "files_scanned": 17,
+    "hits": {},
+    "env_var_name_references_without_value": {
+     "notebooks/09_final_evaluation.ipynb": 2
+    },
+    "env_tracked": false
+   }
+  },
+  {
+   "name": "5.03 no pool question/answer text outside the blind queue (committed D2 text, notebook 09 outputs, summary, per-question table)",
+   "passed": false,
+   "details": {
+    "committed_D2_literals_equal_to_a_pool_reference": 1,
+    "qids": [
+     "mmlb-1087"
+    ],
+    "committed_in": "bcf0345 (deviations.md D2 section, fe-scorer-d2, fe-scorer-d2-md)",
+    "recorded_in_ledger": false,
+    "pool_questions_in_outputs": 0,
+    "long_pool_answers_in_outputs": 0
+   }
+  },
+  {
+   "name": "5.02 blind queue: no arm/qid column or arm-valued cell; 85 items whose recomputed identities equal the sealed key; key arms/qids correct; seeded order",
+   "passed": true,
+   "details": {
+    "columns": [
+     "item_id",
+     "document",
+     "evidence_pages",
+     "question",
+     "answer_format",
+     "reference",
+     "reply",
+     "label (correct / wrong / unsure)",
+     "note"
+    ],
+    "arm_like_columns": [],
+    "arm_valued_cells": 0,
+    "identity_matches": 85,
+    "key_arms_ok": 85,
+    "key_qids_ok": 85,
+    "seeded_order_reproduced": true,
+    "labels_still_empty": true
+   }
+  }
+ ],
+ "reproduction": [
+  {
+   "quantity": "C1 B1 correct",
+   "claimed_brief": 288,
+   "claimed_summary_json": 288,
+   "recomputed": 288,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "C1 B1 n answerable",
+   "claimed_brief": 674,
+   "claimed_summary_json": 674,
+   "recomputed": 674,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "C1 B1 accuracy",
+   "claimed_brief": 0.4273,
+   "claimed_summary_json": 0.42729970326409494,
+   "recomputed": 0.42729970326409494,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 2.967359050698448e-07
+  },
+  {
+   "quantity": "C1 CI 2.5%",
+   "claimed_brief": 0.3858,
+   "claimed_summary_json": 0.385814129679904,
+   "recomputed": 0.385814129679904,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 1.412967990405134e-05
+  },
+  {
+   "quantity": "C1 CI 97.5%",
+   "claimed_brief": 0.4697,
+   "claimed_summary_json": 0.46969873150105707,
+   "recomputed": 0.46969873150105707,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 1.2684989429412319e-06
+  },
+  {
+   "quantity": "C1 core correct",
+   "claimed_brief": 77,
+   "claimed_summary_json": 77,
+   "recomputed": 77,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "C1 core n",
+   "claimed_brief": 207,
+   "claimed_summary_json": 207,
+   "recomputed": 207,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "C1 core documents",
+   "claimed_brief": null,
+   "claimed_summary_json": 32,
+   "recomputed": 32,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "C1 core accuracy",
+   "claimed_brief": 0.372,
+   "claimed_summary_json": 0.3719806763285024,
+   "recomputed": 0.3719806763285024,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 1.9323671497595285e-05
+  },
+  {
+   "quantity": "C1 core CI 2.5%",
+   "claimed_brief": 0.305,
+   "claimed_summary_json": 0.30493273542600896,
+   "recomputed": 0.30493273542600896,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 6.72645739910327e-05
+  },
+  {
+   "quantity": "C1 core CI 97.5%",
+   "claimed_brief": 0.443,
+   "claimed_summary_json": 0.4433497536945813,
+   "recomputed": 0.4433497536945813,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0003497536945812896
+  },
+  {
+   "quantity": "C2 delta",
+   "claimed_brief": 0.1187,
+   "claimed_summary_json": 0.11869436201780416,
+   "recomputed": 0.11869436201780416,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 5.637982195841329e-06
+  },
+  {
+   "quantity": "C2 CI 2.5%",
+   "claimed_brief": 0.0883,
+   "claimed_summary_json": 0.08832324666905506,
+   "recomputed": 0.08832324666905506,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 2.3246669055052016e-05
+  },
+  {
+   "quantity": "C2 CI 97.5%",
+   "claimed_brief": 0.1499,
+   "claimed_summary_json": 0.14992503748125938,
+   "recomputed": 0.14992503748125938,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 2.503748125937122e-05
+  },
+  {
+   "quantity": "C2 bootstrap 5th pct",
+   "claimed_brief": 0.0926,
+   "claimed_summary_json": 0.09256449165402124,
+   "recomputed": 0.09256449165402124,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 3.550834597876307e-05
+  },
+  {
+   "quantity": "C2 sign-flip p",
+   "claimed_brief": 1e-05,
+   "claimed_summary_json": 9.99990000099999e-06,
+   "recomputed": 9.99990000099999e-06,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 9.99990000100624e-11
+  },
+  {
+   "quantity": "C2 fixed",
+   "claimed_brief": 103,
+   "claimed_summary_json": 103,
+   "recomputed": 103,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "C2 broken",
+   "claimed_brief": 23,
+   "claimed_summary_json": 23,
+   "recomputed": 23,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "C3 delta",
+   "claimed_brief": 0.0208,
+   "claimed_summary_json": 0.020771513353115726,
+   "recomputed": 0.020771513353115726,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 2.848664688427302e-05
+  },
+  {
+   "quantity": "C3 CI 2.5%",
+   "claimed_brief": 0.0072,
+   "claimed_summary_json": 0.0071630675832441764,
+   "recomputed": 0.0071630675832441764,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 3.6932416755823365e-05
+  },
+  {
+   "quantity": "C3 CI 97.5%",
+   "claimed_brief": 0.0361,
+   "claimed_summary_json": 0.03614457831325301,
+   "recomputed": 0.03614457831325301,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 4.4578313253010315e-05
+  },
+  {
+   "quantity": "C3 bootstrap 5th pct",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.008967940566227161,
+   "recomputed": 0.008967940566227161,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "C3 sign-flip p",
+   "claimed_brief": 0.00463,
+   "claimed_summary_json": 0.004629953700462996,
+   "recomputed": 0.004629953700462996,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 4.6299537003781366e-08
+  },
+  {
+   "quantity": "C3 fixed",
+   "claimed_brief": 19,
+   "claimed_summary_json": 19,
+   "recomputed": 19,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "C3 broken",
+   "claimed_brief": 5,
+   "claimed_summary_json": 5,
+   "recomputed": 5,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "B1 S-v1 correct",
+   "claimed_brief": 288,
+   "claimed_summary_json": 288.0,
+   "recomputed": 288,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "B1 answerable",
+   "claimed_brief": 674,
+   "claimed_summary_json": 674.0,
+   "recomputed": 674,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "B1 correct abstentions",
+   "claimed_brief": 120,
+   "claimed_summary_json": 120.0,
+   "recomputed": 120,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "B1 citation validity",
+   "claimed_brief": 1.0,
+   "claimed_summary_json": 1.0,
+   "recomputed": 1.0,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "B1 S-v2 auto correct",
+   "claimed_brief": null,
+   "claimed_summary_json": 255.0,
+   "recomputed": 255,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "B1 S-v2 pending (answerable rows)",
+   "claimed_brief": null,
+   "claimed_summary_json": 60.0,
+   "recomputed": 60,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "B1 cost USD",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.38509352,
+   "recomputed": 0.38509352,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "T1 S-v1 correct",
+   "claimed_brief": 208,
+   "claimed_summary_json": 208.0,
+   "recomputed": 208,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "T1 answerable",
+   "claimed_brief": 674,
+   "claimed_summary_json": 674.0,
+   "recomputed": 674,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "T1 correct abstentions",
+   "claimed_brief": 140,
+   "claimed_summary_json": 140.0,
+   "recomputed": 140,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "T1 citation validity",
+   "claimed_brief": 0.9954,
+   "claimed_summary_json": 0.995412844,
+   "recomputed": 0.9954128440366973,
+   "abs_diff_vs_json": 3.6697311855959924e-11,
+   "abs_diff_vs_brief": 1.2844036697323702e-05
+  },
+  {
+   "quantity": "T1 S-v2 auto correct",
+   "claimed_brief": null,
+   "claimed_summary_json": 182.0,
+   "recomputed": 182,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "T1 S-v2 pending (answerable rows)",
+   "claimed_brief": null,
+   "claimed_summary_json": 53.0,
+   "recomputed": 53,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "T1 cost USD",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.3820322,
+   "recomputed": 0.38203220000000004,
+   "abs_diff_vs_json": 5.551115123125783e-17,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "A1 S-v1 correct",
+   "claimed_brief": 302,
+   "claimed_summary_json": 302.0,
+   "recomputed": 302,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "A1 answerable",
+   "claimed_brief": 674,
+   "claimed_summary_json": 674.0,
+   "recomputed": 674,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "A1 correct abstentions",
+   "claimed_brief": 121,
+   "claimed_summary_json": 121.0,
+   "recomputed": 121,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "A1 citation validity",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.998853211,
+   "recomputed": 0.9988532110091743,
+   "abs_diff_vs_json": 9.174327963989981e-12,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "A1 S-v2 auto correct",
+   "claimed_brief": null,
+   "claimed_summary_json": 268.0,
+   "recomputed": 268,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "A1 S-v2 pending (answerable rows)",
+   "claimed_brief": null,
+   "claimed_summary_json": 63.0,
+   "recomputed": 63,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "A1 cost USD",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.46234388,
+   "recomputed": 0.46234388000000004,
+   "abs_diff_vs_json": 5.551115123125783e-17,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "F8 S-v1 correct",
+   "claimed_brief": 84,
+   "claimed_summary_json": 84.0,
+   "recomputed": 84,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "F8 answerable",
+   "claimed_brief": 259,
+   "claimed_summary_json": 259.0,
+   "recomputed": 259,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "F8 correct abstentions",
+   "claimed_brief": null,
+   "claimed_summary_json": 51.0,
+   "recomputed": 51,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "F8 citation validity",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.9970149254,
+   "recomputed": 0.9970149253731343,
+   "abs_diff_vs_json": 2.686573186139185e-11,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "F8 S-v2 auto correct",
+   "claimed_brief": null,
+   "claimed_summary_json": 76.0,
+   "recomputed": 76,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "F8 S-v2 pending (answerable rows)",
+   "claimed_brief": null,
+   "claimed_summary_json": 15.0,
+   "recomputed": 15,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "F8 cost USD",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.22310776,
+   "recomputed": 0.22310776000000002,
+   "abs_diff_vs_json": 2.7755575615628914e-17,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "observed cost USD",
+   "claimed_brief": 0.99023348,
+   "claimed_summary_json": 0.9902334800000001,
+   "recomputed": 0.9902334800000001,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 1.1102230246251565e-16
+  },
+  {
+   "quantity": "smoke cost USD",
+   "claimed_brief": 0.003216,
+   "claimed_summary_json": null,
+   "recomputed": 0.0032157,
+   "abs_diff_vs_json": null,
+   "abs_diff_vs_brief": 2.999999999999531e-07
+  },
+  {
+   "quantity": "D2 reply not numeric (answerable paid replies)",
+   "claimed_brief": 2,
+   "claimed_summary_json": 2,
+   "recomputed": 2,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "D2 reference-not-numeric questions",
+   "claimed_brief": 0,
+   "claimed_summary_json": 0,
+   "recomputed": 0,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "S-v2 B1-T1 low",
+   "claimed_brief": 0.0772,
+   "claimed_summary_json": 0.0771513353115727,
+   "recomputed": 0.0771513353115727,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 4.866468842730509e-05
+  },
+  {
+   "quantity": "S-v2 B1-T1 high",
+   "claimed_brief": 0.1499,
+   "claimed_summary_json": 0.14985163204747776,
+   "recomputed": 0.14985163204747776,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 4.8367952522249125e-05
+  },
+  {
+   "quantity": "S-v2 A1-B1 low",
+   "claimed_brief": 0.0148,
+   "claimed_summary_json": 0.01483679525222552,
+   "recomputed": 0.01483679525222552,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 3.679525222551917e-05
+  },
+  {
+   "quantity": "S-v2 A1-B1 high",
+   "claimed_brief": 0.0282,
+   "claimed_summary_json": 0.028189910979228485,
+   "recomputed": 0.028189910979228485,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 1.0089020771514301e-05
+  },
+  {
+   "quantity": "S-v2 pending items (unique identities)",
+   "claimed_brief": 85,
+   "claimed_summary_json": 85,
+   "recomputed": 85,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "retrieval questions",
+   "claimed_brief": 666,
+   "claimed_summary_json": 666,
+   "recomputed": 666,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0
+  },
+  {
+   "quantity": "V recall@4",
+   "claimed_brief": 0.711,
+   "claimed_summary_json": 0.7114982198315531,
+   "recomputed": 0.7114982198315531,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.0004982198315531816
+  },
+  {
+   "quantity": "BM25 recall@4",
+   "claimed_brief": 0.543,
+   "claimed_summary_json": 0.5433531975198642,
+   "recomputed": 0.5433531975198642,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": 0.000353197519864179
+  },
+  {
+   "quantity": "V complete@4",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.6261261261261262,
+   "recomputed": 0.6261261261261262,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "BM25 complete@4",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.4594594594594595,
+   "recomputed": 0.4594594594594595,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "V-BM25 recall@4 delta",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.16814502231168899,
+   "recomputed": 0.16814502231168899,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "V-BM25 recall@4 5th pct",
+   "claimed_brief": null,
+   "claimed_summary_json": 0.13643510482371607,
+   "recomputed": 0.13643510482371607,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  },
+  {
+   "quantity": "triggered",
+   "claimed_brief": null,
+   "claimed_summary_json": 335,
+   "recomputed": 335,
+   "abs_diff_vs_json": 0.0,
+   "abs_diff_vs_brief": null
+  }
+ ],
+ "recomputed": {
+  "C1": {
+   "overall": {
+    "n": 674,
+    "correct": 288,
+    "accuracy": 0.42729970326409494,
+    "ci95": [
+     0.385814129679904,
+     0.46969873150105707
+    ],
+    "documents": 110
+   },
+   "core scope": {
+    "n": 207,
+    "correct": 77,
+    "accuracy": 0.3719806763285024,
+    "ci95": [
+     0.30493273542600896,
+     0.4433497536945813
+    ],
+    "documents": 32
+   }
+  },
+  "C2": {
+   "n": 674,
+   "delta": 0.11869436201780416,
+   "ci95": [
+    0.08832324666905506,
+    0.14992503748125938
+   ],
+   "p05_one_sided": 0.09256449165402124,
+   "sign_flip_p": 9.99990000099999e-06,
+   "fixed": 103,
+   "broken": 23,
+   "documents": 110,
+   "verdict": "visual_retrieval_confirmed"
+  },
+  "C3": {
+   "n": 674,
+   "delta": 0.020771513353115726,
+   "ci95": [
+    0.0071630675832441764,
+    0.03614457831325301
+   ],
+   "p05_one_sided": 0.008967940566227161,
+   "sign_flip_p": 0.004629953700462996,
+   "fixed": 19,
+   "broken": 5,
+   "documents": 110,
+   "verdict": "a1_gain_supported"
+  },
+  "arms": {
+   "B1": {
+    "answerable": 674,
+    "correct": 288,
+    "accuracy": 0.42729970326409494,
+    "unanswerable": 198,
+    "abstentions": 120,
+    "citation_validity": 1.0,
+    "v2_correct": 255,
+    "v2_pending": 60,
+    "strict_correct": 249
+   },
+   "T1": {
+    "answerable": 674,
+    "correct": 208,
+    "accuracy": 0.3086053412462908,
+    "unanswerable": 198,
+    "abstentions": 140,
+    "citation_validity": 0.9954128440366973,
+    "v2_correct": 182,
+    "v2_pending": 53,
+    "strict_correct": 177
+   },
+   "A1": {
+    "answerable": 674,
+    "correct": 302,
+    "accuracy": 0.44807121661721067,
+    "unanswerable": 198,
+    "abstentions": 121,
+    "citation_validity": 0.9988532110091743,
+    "v2_correct": 268,
+    "v2_pending": 63,
+    "strict_correct": 262
+   },
+   "F8": {
+    "answerable": 259,
+    "correct": 84,
+    "accuracy": 0.32432432432432434,
+    "unanswerable": 76,
+    "abstentions": 51,
+    "citation_validity": 0.9970149253731343,
+    "v2_correct": 76,
+    "v2_pending": 15,
+    "strict_correct": 76
+   }
+  },
+  "S_v2": {
+   "B1 - T1": {
+    "low": 0.0771513353115727,
+    "high": 0.14985163204747776,
+    "n": 674,
+    "pending_identities": 81,
+    "random_labellings_inside": true,
+    "auto_only_delta": 0.1083086053412463
+   },
+   "A1 - B1": {
+    "low": 0.01483679525222552,
+    "high": 0.028189910979228485,
+    "n": 674,
+    "pending_identities": 66,
+    "random_labellings_inside": true,
+    "auto_only_delta": 0.019287833827893175
+   },
+   "pending_identities": 85
+  },
+  "retrieval": {
+   "questions": 666,
+   "V recall@4": 0.7114982198315531,
+   "BM25 recall@4": 0.5433531975198642,
+   "V complete@4": 0.6261261261261262,
+   "BM25 complete@4": 0.4594594594594595,
+   "V - BM25 recall@4": {
+    "n": 666,
+    "delta": 0.16814502231168899,
+    "ci95": [
+     0.1301530540787945,
+     0.2074416006130917
+    ],
+    "p05_one_sided": 0.13643510482371607,
+    "sign_flip_p": 9.99990000099999e-06,
+    "fixed": 93,
+    "broken": 10,
+    "documents": 110
+   }
+  },
+  "D2": {
+   "counts_answerable_paid": {
+    "none": 1605,
+    "reply not numeric": 2
+   },
+   "arms": {
+    "B1": 1,
+    "T1": 1
+   }
+  }
+ },
+ "robustness": {
+  "equal_weight_documents": {
+   "C2": {
+    "documents": 110,
+    "delta": 0.12460415846779482,
+    "ci95": [
+     0.09278059818968908,
+     0.15786180801521701
+    ],
+    "p05_one_sided": 0.09769270628361536,
+    "sign_flip_p": 9.99990000099999e-06
+   },
+   "C3": {
+    "documents": 110,
+    "delta": 0.023351042896497445,
+    "ci95": [
+     0.008923307752853207,
+     0.03853118850846119
+    ],
+    "p05_one_sided": 0.011225206611570246,
+    "sign_flip_p": 0.0014799852001479985
+   }
+  },
+  "leave_one_document_out": {
+   "C2": {
+    "delta_min": 0.11360239162929746,
+    "delta_max": 0.12386706948640483,
+    "verdicts": {
+     "visual_retrieval_confirmed": 110
+    }
+   },
+   "C3": {
+    "delta_min": 0.01661631419939577,
+    "delta_max": 0.02262443438914027,
+    "verdicts": {
+     "a1_gain_supported": 110
+    }
+   }
+  },
+  "excluding_D2_questions": {
+   "questions_removed": [
+    "mmlb-1087"
+   ],
+   "C2": {
+    "n": 673,
+    "delta": 0.1188707280832095,
+    "ci95": [
+     0.0884824617185789,
+     0.15024393688613139
+    ],
+    "p05_one_sided": 0.09267563527653214,
+    "sign_flip_p": 9.99990000099999e-06,
+    "fixed": 103,
+    "broken": 23,
+    "documents": 110,
+    "verdict": "visual_retrieval_confirmed"
+   },
+   "C3": {
+    "n": 673,
+    "delta": 0.019316493313521546,
+    "ci95": [
+     0.005755188952286447,
+     0.03458646616541353
+    ],
+    "p05_one_sided": 0.007462686567164179,
+    "sign_flip_p": 0.007649923500764992,
+    "fixed": 18,
+    "broken": 5,
+    "documents": 110,
+    "verdict": "a1_gain_supported"
+   }
+  },
+  "strict_s1_score_eq_1": {
+   "B1 correct": 249,
+   "T1 correct": 177,
+   "A1 correct": 262,
+   "C2": {
+    "n": 674,
+    "delta": 0.10682492581602374,
+    "ci95": [
+     0.07645050630568702,
+     0.1375583599315914
+    ],
+    "p05_one_sided": 0.08120268620268621,
+    "sign_flip_p": 9.99990000099999e-06,
+    "fixed": 94,
+    "broken": 22,
+    "documents": 110,
+    "verdict": "visual_retrieval_confirmed"
+   },
+   "C3": {
+    "n": 674,
+    "delta": 0.019287833827893175,
+    "ci95": [
+     0.005788712011577424,
+     0.0344311377245509
+    ],
+    "p05_one_sided": 0.007530120481927711,
+    "sign_flip_p": 0.007799922000779992,
+    "fixed": 18,
+    "broken": 5,
+    "documents": 110,
+    "verdict": "a1_gain_supported"
+   }
+  },
+  "s2_worst_and_best_case_labelling": {
+   "C2_worst": {
+    "n": 674,
+    "delta": 0.0771513353115727,
+    "ci95": [
+     0.04619911054337284,
+     0.10857279780921951
+    ],
+    "p05_one_sided": 0.05082092935972283,
+    "sign_flip_p": 9.99990000099999e-06,
+    "fixed": 90,
+    "broken": 38,
+    "documents": 110,
+    "verdict": "visual_retrieval_confirmed"
+   },
+   "C2_best": {
+    "n": 674,
+    "delta": 0.14985163204747776,
+    "ci95": [
+     0.1159409522578978,
+     0.18338171444301246
+    ],
+    "p05_one_sided": 0.1212099093120991,
+    "sign_flip_p": 9.99990000099999e-06,
+    "fixed": 123,
+    "broken": 22,
+    "documents": 110,
+    "verdict": "visual_retrieval_confirmed"
+   },
+   "C3_worst": {
+    "n": 674,
+    "delta": 0.01483679525222552,
+    "ci95": [
+     0.0,
+     0.030837467794452917
+    ],
+    "p05_one_sided": 0.002793296089385475,
+    "sign_flip_p": 0.04930950690493095,
+    "fixed": 18,
+    "broken": 8,
+    "documents": 110,
+    "verdict": "a1_gain_supported"
+   },
+   "C3_best": {
+    "n": 674,
+    "delta": 0.028189910979228485,
+    "ci95": [
+     0.013313609467455622,
+     0.044349913389248354
+    ],
+    "p05_one_sided": 0.015781922525107604,
+    "sign_flip_p": 0.00043999560004399956,
+    "fixed": 24,
+    "broken": 5,
+    "documents": 110,
+    "verdict": "a1_gain_supported"
+   }
+  },
+  "C3_changes_on_triggered": {
+   "fixed": 19,
+   "broken": 5,
+   "on_triggered": 24,
+   "on_untriggered": 0,
+   "untriggered_A1_reply_is_B1_reply": true
+  },
+  "mcnemar": {
+   "C2 B1 vs T1": {
+    "fixed": 103,
+    "broken": 23,
+    "discordant": 126,
+    "exact_two_sided_p": 2.785639130957218e-13
+   },
+   "C3 A1 vs B1": {
+    "fixed": 19,
+    "broken": 5,
+    "discordant": 24,
+    "exact_two_sided_p": 0.006610751152038574
+   },
+   "C3 restricted to triggered answerable": {
+    "n": 259
+   }
+  },
+  "seed_sensitivity": {
+   "C2 seed 1": {
+    "p05": 0.0925651545916979,
+    "sign_flip_p": 9.99990000099999e-06
+   },
+   "C3 seed 1": {
+    "p05": 0.008862629246676515,
+    "sign_flip_p": 0.004669953300466995
+   },
+   "C2 seed 2": {
+    "p05": 0.09298609079606539,
+    "sign_flip_p": 9.99990000099999e-06
+   },
+   "C3 seed 2": {
+    "p05": 0.008836524300441826,
+    "sign_flip_p": 0.004989950100498995
+   },
+   "C2 seed 3": {
+    "p05": 0.09248554913294797,
+    "sign_flip_p": 9.99990000099999e-06
+   },
+   "C3 seed 3": {
+    "p05": 0.008708272859216255,
+    "sign_flip_p": 0.004669953300466995
+   }
+  },
+  "s2_range_allowing_unsure": {
+   "B1 - T1": {
+    "low": 0.0771513353115727,
+    "n_at_low": 674,
+    "high": 0.15880503144654087,
+    "n_at_high": 636
+   },
+   "A1 - B1": {
+    "low": 0.01483679525222552,
+    "n_at_low": 674,
+    "high": 0.03079416531604538,
+    "n_at_high": 617
+   }
+  }
+ },
+ "notes": [],
+ "audited_file_sha256": {
+  "experiments/runs/final/20261126T124411360565Z_8feb6d9f_full/execution_log.jsonl": "dd07502e4b5f6f0ea47e188b2d689e58e81c34919c8493f00707dd20d355a100",
+  "experiments/runs/final/20261126T124411360565Z_8feb6d9f_full/settings.json": "76c51234107d1f94cc8c232fb3d24432604dbf2e1cba9d656b674d127dcf55bf",
+  "experiments/runs/final/20261126T124411360565Z_8feb6d9f_full/summary.json": "302e94e27c24bb99bde73015dad06461e3c6f7425114248d6083a7338223a13b",
+  "experiments/runs/final_smoke/20261126T124251445853Z_67741662_smoke/execution_log.jsonl": "7fae8ff010075caf68f91c6bc97e8495fe38f4ee5aa1469649561d4d4021bf3c",
+  "experiments/runs/final_smoke/20261126T124251445853Z_67741662_smoke/settings.json": "07c09e2cc72b8d0441796a48cb7f617b473367835e872ca3c846d6de78ce0783",
+  "data/processed/mmlongbench_doc/final/evaluation_summary.json": "aa7c9bd155b7714144db26478a56a0c8a95615b06af4ed31524c605ff8cb16fe",
+  "data/processed/mmlongbench_doc/final/evaluation_per_question.csv": "df98ea30ef1a5b1015ca9f62be45140ad3f1e525fb59969baf48c8755c45268c",
+  "data/processed/mmlongbench_doc/final/adjudication_queue.csv": "8f9022224577b883190bc12c89d646aafc5873944a8edcae2d41a4aaa5be580e",
+  "data/processed/mmlongbench_doc/final/adjudication_key_SEALED.csv": "6db39edd65e12ade44b22f76652e3320169a00d9bbe3ef52b070ccf637f7b01a",
+  "data/processed/mmlongbench_doc/final/plan_design.json": "6963e28d6c291636cb0ce3d0fcf925fb413c3c5a93098691c9dad23a572c04e3",
+  "data/processed/mmlongbench_doc/questions.parquet": "0d145b5396851d6bf2539547efe36ccc2addb10d5a3f8b4ca4a6bef1c06f97d6",
+  "notebooks/09_final_evaluation.ipynb": "55af31e875358bbdab0540e7cddd25042ca905ad2caa45cabbf3a00a8a1cb701"
+ },
+ "unfrozen_state": {
+  "experiments/frozen/final exists": true,
+  "run directory git-ignored": true,
+  "uncommitted paths": [
+   " M experiments/test_pool_ledger.md",
+   " M notebooks/09_final_evaluation.ipynb",
+   "?? experiments/frozen/final/"
+  ]
+ },
+ "runtime_s": 68.1
+}

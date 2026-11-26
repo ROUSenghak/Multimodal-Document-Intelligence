@@ -1,0 +1,52 @@
+{
+  "experiment": "Final held-out evaluation (notebook 09)",
+  "frozen_on": "2026-11-26",
+  "protocol": {
+    "spec": "experiments/specs/final_evaluation_v1.json",
+    "spec_commit": "1c54a3e",
+    "deviations": "experiments/specs/final_evaluation_v1_deviations.md (D1 commit dfeaad0/476b156, D2 commit bcf0345)",
+    "plan": "experiments/specs/final_evaluation_v1_plan.json (commit 8d5768a)",
+    "index": "experiments/frozen/final_index (commit ab8a9c8, before any question was read)",
+    "retrieval": "experiments/frozen/final_retrieval (commit 8d5768a)",
+    "owner_approval": "2026-11-25: arms B1, T1, secondary A1; ceiling USD 2.50; laptop indexing"
+  },
+  "population": {
+    "documents": 110,
+    "questions": 872,
+    "answerable": 674,
+    "unanswerable": 198,
+    "excluded": "mi_phone.pdf (D1)"
+  },
+  "runs": {
+    "smoke": {
+      "run_id": "20261126T124251445853Z_67741662_smoke",
+      "git_commit_at_launch": "61f769fc175887f95c258174d9a9c8280809a5f5",
+      "calls": 6,
+      "source": "development questions only",
+      "observed_usd": 0.0032157
+    },
+    "full": {
+      "run_id": "20261126T124411360565Z_8feb6d9f_full",
+      "git_commit_at_launch": "61f769fc175887f95c258174d9a9c8280809a5f5",
+      "calls": 2079,
+      "attempts": 2079,
+      "started": "2026-11-26T12:44:11.876+00:00",
+      "completed": "2026-11-26T14:35:16.817+00:00",
+      "observed_usd": 0.99023348
+    }
+  },
+  "served_identity": {
+    "models": [
+      "gpt-6-luna"
+    ],
+    "system_fingerprints": [
+      "None"
+    ]
+  },
+  "cumulative_cost_usd": 0.99344918,
+  "ceiling_usd": 2.5,
+  "scoring": "S-v1 primary (notebook 03 f653d232 with the D2 wrapper; 2 replies affected); S-v2 secondary, 85 blind items pending owner labels",
+  "environment": "Apple M1 (8 GB), macOS; ColQwen2 v1.0 ddc07d23 on MPS (bitwise E5 parity); reader gpt-6-luna via OpenAI API",
+  "not_verifiable": "Whether gpt-6-luna would give the same replies again: the alias has no snapshot and returned no system fingerprint. The frozen replies define this result.",
+  "licence": "MMLongBench-Doc documents and annotations: CC BY-NC 4.0, research use"
+}

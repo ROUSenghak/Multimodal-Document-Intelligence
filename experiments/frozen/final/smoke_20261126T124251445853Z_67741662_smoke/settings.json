@@ -1,0 +1,71 @@
+{
+ "run_id": "20261126T124251445853Z_67741662_smoke",
+ "mode": "smoke",
+ "git_commit": "61f769fc175887f95c258174d9a9c8280809a5f5",
+ "spec_sha256": "a681abcba172bd859117c914845a846b5608f92de6b2df6da6f394ca86483c61",
+ "plan_spec_sha256": "8b34d0ac8996aa3bcb363aa52795666a42bd41445c67877cce8c0c0af938d109",
+ "budget_usd": 2.5,
+ "prior_spend_usd": 0.0,
+ "plan": [
+  {
+   "execution_index": 1,
+   "replicate_id": "smoke",
+   "qid": "mmlb-0082",
+   "arm": "B1",
+   "source": "development",
+   "fingerprint": "532a1d03a3eabc7aa5ae8b463b37a19f2a1767a0be38617f931cedd765d5f44f",
+   "prompt_tokens": 4013,
+   "max_completion_tokens": 800
+  },
+  {
+   "execution_index": 2,
+   "replicate_id": "smoke",
+   "qid": "mmlb-0202",
+   "arm": "B1",
+   "source": "development",
+   "fingerprint": "35ab5652e4d105fbb9181430a62b04741215f80d3b4cffd67330843e865522b0",
+   "prompt_tokens": 3112,
+   "max_completion_tokens": 800
+  },
+  {
+   "execution_index": 3,
+   "replicate_id": "smoke",
+   "qid": "mmlb-0403",
+   "arm": "T1",
+   "source": "development",
+   "fingerprint": "3ca7a984041f4d329cdf16a915d1ee87030ca9348751da11fa6dc90e243b26cf",
+   "prompt_tokens": 4027,
+   "max_completion_tokens": 800
+  },
+  {
+   "execution_index": 4,
+   "replicate_id": "smoke",
+   "qid": "mmlb-0579",
+   "arm": "T1",
+   "source": "development",
+   "fingerprint": "29d5c1d3fbead839c8634eb5de6dd037628614b3bde2e536b635252f918be0df",
+   "prompt_tokens": 4019,
+   "max_completion_tokens": 800
+  },
+  {
+   "execution_index": 5,
+   "replicate_id": "smoke",
+   "qid": "mmlb-1025",
+   "arm": "F8",
+   "source": "development",
+   "fingerprint": "a4394dd2ef192006533a87682ebaf5dffdbd930a4cdbf6814f5cbde9f23e5aaf",
+   "prompt_tokens": 7716,
+   "max_completion_tokens": 800
+  },
+  {
+   "execution_index": 6,
+   "replicate_id": "smoke",
+   "qid": "mmlb-1064",
+   "arm": "F8",
+   "source": "development",
+   "fingerprint": "3a42f3291cfca7bf2836a2f9e13bd2cd76bb3fe29f15dc347af715fac6c677c7",
+   "prompt_tokens": 7735,
+   "max_completion_tokens": 800
+  }
+ ]
+}

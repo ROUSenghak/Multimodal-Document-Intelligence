@@ -1,6 +1,10 @@
 # Final evaluation v1: recorded deviations
 
-Each deviation is written and committed **before** any pool question, answer or evidence is read, and before any reader call. None depends on a result.
+Each deviation is written and committed **before any result it could affect was computed**:
+- D1 was committed before any question was read;
+- D2 was committed after the reader run but before any final number existed.
+
+None was chosen by looking at a result.
 
 ## D1 — Documents whose bytes cannot be verified are excluded (2026-11-25)
 

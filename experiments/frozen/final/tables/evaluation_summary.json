@@ -1,0 +1,378 @@
+{
+ "run": "20261126T124411360565Z_8feb6d9f_full",
+ "arms": {
+  "B1": {
+   "answerable": 674.0,
+   "S-v1 correct": 288.0,
+   "accuracy": 0.4272997033,
+   "unanswerable": 198.0,
+   "correct abstentions": 120.0,
+   "citation validity": 1.0,
+   "S-v2 correct (auto + owner)": 255.0,
+   "S-v2 pending": 60.0,
+   "pages read (mean)": 4.0,
+   "prompt tokens (mean)": 4198.4908256881,
+   "cost USD": 0.38509352,
+   "latency p50 s": 2.4715,
+   "latency p90 s": 5.1263
+  },
+  "T1": {
+   "answerable": 674.0,
+   "S-v1 correct": 208.0,
+   "accuracy": 0.3086053412,
+   "unanswerable": 198.0,
+   "correct abstentions": 140.0,
+   "citation validity": 0.995412844,
+   "S-v2 correct (auto + owner)": 182.0,
+   "S-v2 pending": 53.0,
+   "pages read (mean)": 4.0,
+   "prompt tokens (mean)": 4198.9197247706,
+   "cost USD": 0.3820322,
+   "latency p50 s": 2.4385,
+   "latency p90 s": 4.6904
+  },
+  "A1": {
+   "answerable": 674.0,
+   "S-v1 correct": 302.0,
+   "accuracy": 0.4480712166,
+   "unanswerable": 198.0,
+   "correct abstentions": 121.0,
+   "citation validity": 0.998853211,
+   "S-v2 correct (auto + owner)": 268.0,
+   "S-v2 pending": 63.0,
+   "pages read (mean)": 5.5366972477,
+   "prompt tokens (mean)": 5670.5699541284,
+   "cost USD": 0.46234388,
+   "latency p50 s": 3.0045,
+   "latency p90 s": 6.5786
+  },
+  "F8": {
+   "answerable": 259.0,
+   "S-v1 correct": 84.0,
+   "accuracy": 0.3243243243,
+   "unanswerable": 76.0,
+   "correct abstentions": 51.0,
+   "citation validity": 0.9970149254,
+   "S-v2 correct (auto + owner)": 76.0,
+   "S-v2 pending": 15.0,
+   "pages read (mean)": 8.0,
+   "prompt tokens (mean)": 7979.7373134328,
+   "cost USD": 0.22310776,
+   "latency p50 s": 3.464,
+   "latency p90 s": 8.5412
+  }
+ },
+ "C1": {
+  "overall": {
+   "n": 674,
+   "correct": 288,
+   "accuracy": 0.42729970326409494,
+   "ci95": [
+    0.385814129679904,
+    0.46969873150105707
+   ],
+   "documents": 110
+  },
+  "core scope": {
+   "n": 207,
+   "correct": 77,
+   "accuracy": 0.3719806763285024,
+   "ci95": [
+    0.30493273542600896,
+    0.4433497536945813
+   ],
+   "documents": 32
+  },
+  "development estimate (E8 L-B1)": {
+   "correct": 46,
+   "n": 102,
+   "accuracy": 0.45098039215686275
+  }
+ },
+ "C2": {
+  "n": 674,
+  "delta": 0.11869436201780416,
+  "ci95": [
+   0.08832324666905506,
+   0.14992503748125938
+  ],
+  "p05_one_sided": 0.09256449165402124,
+  "sign_flip_p": 9.99990000099999e-06,
+  "fixed": 103,
+  "broken": 23,
+  "documents": 110,
+  "verdict": "visual_retrieval_confirmed"
+ },
+ "C3": {
+  "n": 674,
+  "delta": 0.020771513353115726,
+  "ci95": [
+   0.0071630675832441764,
+   0.03614457831325301
+  ],
+  "p05_one_sided": 0.008967940566227161,
+  "sign_flip_p": 0.004629953700462996,
+  "fixed": 19,
+  "broken": 5,
+  "documents": 110,
+  "verdict": "a1_gain_supported"
+ },
+ "S_v2_ranges": {
+  "B1 - T1": [
+   0.0771513353115727,
+   0.14985163204747776
+  ],
+  "A1 - B1": [
+   0.01483679525222552,
+   0.028189910979228485
+  ],
+  "pending items": 85
+ },
+ "retrieval": {
+  "questions": 666,
+  "V recall@4": 0.7114982198315531,
+  "BM25 recall@4": 0.5433531975198642,
+  "V complete@4": 0.6261261261261262,
+  "BM25 complete@4": 0.4594594594594595,
+  "V - BM25 recall@4": {
+   "n": 666,
+   "delta": 0.16814502231168899,
+   "ci95": [
+    0.1301530540787945,
+    0.2074416006130917
+   ],
+   "p05_one_sided": 0.13643510482371607,
+   "sign_flip_p": 9.99990000099999e-06,
+   "fixed": 93,
+   "broken": 10,
+   "documents": 110
+  }
+ },
+ "subgroups": [
+  {
+   "grouping": "document type",
+   "group": "Academic paper",
+   "n": 125,
+   "B1": 0.352,
+   "T1": 0.256,
+   "B1 - T1": 0.096
+  },
+  {
+   "grouping": "document type",
+   "group": "Administration/Industry file",
+   "n": 51,
+   "B1": 0.4705882353,
+   "T1": 0.3333333333,
+   "B1 - T1": 0.137254902
+  },
+  {
+   "grouping": "document type",
+   "group": "Brochure",
+   "n": 69,
+   "B1": 0.4057971014,
+   "T1": 0.2898550725,
+   "B1 - T1": 0.115942029
+  },
+  {
+   "grouping": "document type",
+   "group": "Financial report",
+   "n": 77,
+   "B1": 0.3376623377,
+   "T1": 0.3116883117,
+   "B1 - T1": 0.025974026
+  },
+  {
+   "grouping": "document type",
+   "group": "Guidebook",
+   "n": 93,
+   "B1": 0.5053763441,
+   "T1": 0.3978494624,
+   "B1 - T1": 0.1075268817
+  },
+  {
+   "grouping": "document type",
+   "group": "Research report / Introduction",
+   "n": 161,
+   "B1": 0.3788819876,
+   "T1": 0.2732919255,
+   "B1 - T1": 0.1055900621
+  },
+  {
+   "grouping": "document type",
+   "group": "Tutorial/Workshop",
+   "n": 98,
+   "B1": 0.5918367347,
+   "T1": 0.3469387755,
+   "B1 - T1": 0.2448979592
+  },
+  {
+   "grouping": "core scope",
+   "group": "core",
+   "n": 207,
+   "B1": 0.3719806763,
+   "T1": 0.3043478261,
+   "B1 - T1": 0.0676328502
+  },
+  {
+   "grouping": "core scope",
+   "group": "other",
+   "n": 467,
+   "B1": 0.4518201285,
+   "T1": 0.3104925054,
+   "B1 - T1": 0.1413276231
+  },
+  {
+   "grouping": "document length",
+   "group": "51-200",
+   "n": 179,
+   "B1": 0.3519553073,
+   "T1": 0.2681564246,
+   "B1 - T1": 0.0837988827
+  },
+  {
+   "grouping": "document length",
+   "group": "<= 50",
+   "n": 491,
+   "B1": 0.4521384929,
+   "T1": 0.3177189409,
+   "B1 - T1": 0.1344195519
+  },
+  {
+   "grouping": "document length",
+   "group": "> 200",
+   "n": 4,
+   "B1": 0.75,
+   "T1": 1.0,
+   "B1 - T1": -0.25
+  },
+  {
+   "grouping": "evidence span",
+   "group": "1",
+   "n": 384,
+   "B1": 0.5442708333,
+   "T1": 0.4166666667,
+   "B1 - T1": 0.1276041667
+  },
+  {
+   "grouping": "evidence span",
+   "group": "2-3",
+   "n": 220,
+   "B1": 0.3136363636,
+   "T1": 0.1909090909,
+   "B1 - T1": 0.1227272727
+  },
+  {
+   "grouping": "evidence span",
+   "group": "4+",
+   "n": 62,
+   "B1": 0.1290322581,
+   "T1": 0.0806451613,
+   "B1 - T1": 0.0483870968
+  },
+  {
+   "grouping": "evidence span",
+   "group": "none annotated",
+   "n": 8,
+   "B1": 0.25,
+   "T1": 0.125,
+   "B1 - T1": 0.125
+  },
+  {
+   "grouping": "answer format",
+   "group": "Float",
+   "n": 122,
+   "B1": 0.4180327869,
+   "T1": 0.3442622951,
+   "B1 - T1": 0.0737704918
+  },
+  {
+   "grouping": "answer format",
+   "group": "Int",
+   "n": 229,
+   "B1": 0.3580786026,
+   "T1": 0.2139737991,
+   "B1 - T1": 0.1441048035
+  },
+  {
+   "grouping": "answer format",
+   "group": "List",
+   "n": 118,
+   "B1": 0.3474576271,
+   "T1": 0.2542372881,
+   "B1 - T1": 0.093220339
+  },
+  {
+   "grouping": "answer format",
+   "group": "Str",
+   "n": 205,
+   "B1": 0.556097561,
+   "T1": 0.4243902439,
+   "B1 - T1": 0.1317073171
+  },
+  {
+   "grouping": "born-digital",
+   "group": "born-digital",
+   "n": 463,
+   "B1": 0.4060475162,
+   "T1": 0.3153347732,
+   "B1 - T1": 0.090712743
+  },
+  {
+   "grouping": "born-digital",
+   "group": "image-heavy",
+   "n": 211,
+   "B1": 0.4739336493,
+   "T1": 0.2938388626,
+   "B1 - T1": 0.1800947867
+  },
+  {
+   "grouping": "evidence source (overlapping)",
+   "group": "Chart",
+   "n": 138,
+   "B1": 0.3768115942,
+   "T1": 0.3115942029,
+   "B1 - T1": 0.0652173913
+  },
+  {
+   "grouping": "evidence source (overlapping)",
+   "group": "Figure",
+   "n": 234,
+   "B1": 0.3803418803,
+   "T1": 0.2094017094,
+   "B1 - T1": 0.1709401709
+  },
+  {
+   "grouping": "evidence source (overlapping)",
+   "group": "Generalized-text (Layout)",
+   "n": 98,
+   "B1": 0.4183673469,
+   "T1": 0.3163265306,
+   "B1 - T1": 0.1020408163
+  },
+  {
+   "grouping": "evidence source (overlapping)",
+   "group": "Pure-text (Plain-text)",
+   "n": 240,
+   "B1": 0.45,
+   "T1": 0.3375,
+   "B1 - T1": 0.1125
+  },
+  {
+   "grouping": "evidence source (overlapping)",
+   "group": "Table",
+   "n": 169,
+   "B1": 0.3668639053,
+   "T1": 0.2899408284,
+   "B1 - T1": 0.0769230769
+  }
+ ],
+ "triggered": 335,
+ "questions": 872,
+ "documents": 110,
+ "observed_cost_usd": 0.9902334800000001,
+ "D2_s1_exceptions": {
+  "none": 1605,
+  "reply not numeric": 2
+ },
+ "D2_questions_reference_not_numeric": 0
+}
