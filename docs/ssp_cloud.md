@@ -289,6 +289,48 @@ https://raw.githubusercontent.com/ROUSenghak/Multimodal-Document-Intelligence/re
 
 **History.** The first version of the script used npm, which the `vscode-python-gpu` image does not have. Its first Onyxia start (2026-11-26) linked the state and installed both extensions, but not Claude Code. The current version was tested on the Mac in a sandbox home in three cases: a fresh start, a second start in the same home (nothing changes), and a resume with the home wiped (the program and state come back from `~/work` without reinstalling). The installer was simulated in that test; the real one runs on the Datalab. The log shows what each step did.
 
+### 2.8 The routine: start, work, pause
+
+**Pause, never delete.** In **My services**:
+- **Pause** stops the machine and frees the GPU, but keeps the disk `~/work`.
+- **Delete** (the bin icon) erases the disk too.
+
+| Event | Running programs | Files in `~/work` | Rest of the home folder |
+|---|---|---|---|
+| Close a terminal (bin icon) | stopped, unless started with `nohup` | kept | kept |
+| Pause, then resume | stopped | kept | recreated; the start-up script restores Claude Code, the extensions and the kernel |
+| Delete the service | stopped | **erased** | erased |
+
+**At each start or resume.**
+1. In **My services**, resume the service, then open VS Code.
+2. In a terminal, run `tail -8 ~/work/.datalab_init.log`. Expect:
+   - `claude <version> ready`;
+   - two `extension ok` lines;
+   - `kernel visualdoc-venv registered`.
+3. Run `cd ~/work/Multimodal-Document-Intelligence && source .venv/bin/activate && git pull`.
+   - Every new terminal needs the `source` step.
+   - Work on one machine at a time: pull when you start, push when you stop.
+4. Start Claude Code:
+   - `claude --continue` resumes the last conversation;
+   - `claude --resume` lists earlier conversations;
+   - `claude` starts a new one.
+5. For notebooks, choose the kernel "VisualDoc (.venv, Python 3.12)".
+
+**Long jobs.** Start them so that closing the terminal or the browser does not stop them, and log to `~/work`:
+```bash
+nohup python -u <script>.py > ~/work/<job>.log 2>&1 &
+tail -f ~/work/<job>.log      # Ctrl+C stops watching, not the job
+pgrep -af <script>            # still running?
+```
+- **A pause still stops them.** Design jobs to resume. The rebuild test does: it skips PDFs that are already downloaded and hash-verified, and a partial download never replaces a file.
+- **A file in `/tmp` disappears at a pause.** Keep scripts and logs in `~/work`.
+
+**Before pausing.**
+1. Let long jobs finish, or accept that they restart.
+2. Save notebooks. Then commit and push code and notebooks (`git status` shows what changed).
+3. Pause rather than leave the service idle: the GPU is shared with other users.
+4. Git-ignored results stay on the disk. Before ever deleting a service, follow §4.
+
 ## 3. Working there after the final evaluation
 
 The final evaluation is complete and frozen (`experiments/frozen/final`, run on the Mac on 2026-11-26). **Never run notebook 09's `smoke` or `full` modes again.** The test pool has been used once and may only be reported (AGENTS.md). Notebook 09's default `offline` mode (the check in step 5 above) re-verifies the frozen package with no API call.
