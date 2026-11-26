@@ -12,10 +12,29 @@ The single place that records what is done, what is running, what each decision 
 | E9 Stage 1 smoke (6 calls) | **passed** all 7 gates, $0.004592 | `experiments/frozen/e9/smoke_*` |
 | E9 Stage 2 (354 calls) | **done: `no_meaningful_gain`** (S-v1). B1 unchanged. Independent audit 47/47. 13 S-v2 items await owner labels; no labelling can change the verdict | `experiments/frozen/e9/`, notebook 08 |
 | Application (B1 with live ColQwen2, cache, CLI, UI) | **built, reviewed, verified live.** 200 tests pass. Three live calls reproduced frozen E8 L-B1 requests, tokens and answers exactly. The live *encoder* is checked by notebook 09's parity gate | `src/visualdoc/{visual_index,app,web}.py`, commit `041827f` |
-| Final held-out evaluation | **ready for the paid run.** Index frozen before any question was read (`ab8a9c8`); retrieval and the 2,079-call plan frozen (`8d5768a`, upper bound $1.83 of $2.50). 110 of 111 documents (D1), 872 questions | `experiments/frozen/final_index`, `final_retrieval`, `experiments/specs/final_evaluation_v1*` |
+| Final held-out evaluation | **done, audited, frozen** (`c6c450d`). C1 B1 0.427; C2 `visual_retrieval_confirmed` (+0.119); C3 `a1_gain_supported` (+0.021, secondary). $0.993 | `experiments/frozen/final/` |
 | Documentation (README, architecture, report, reproducibility, demo) | written; final-evaluation results are still to be added | `README.md`, `docs/{research_report,architecture,reproducibility}.md` |
 
 ## Decisions and their reasons
+
+### 2026-11-26 — Final held-out evaluation: results (test pool used once)
+
+| Claim (S-v1) | Result | Verdict |
+|---|---|---|
+| C1 B1 accuracy | 288/674 = **0.427** [0.386, 0.470] (development 0.451); core scope 0.372 | — |
+| C2 B1 − T1 (confirmatory) | **+0.119** [+0.088, +0.150], p 1e-5, 103/23 | **`visual_retrieval_confirmed`** |
+| C3 A1 − B1 (secondary) | +0.021 [+0.007, +0.036], p 0.0046, 19/5 | `a1_gain_supported` (report only) |
+
+- **Retrieval.** Evidence recall@4 is 0.711 for ColQwen2 against 0.543 for BM25, replicating E5 out of sample.
+- **Cost.** 2,079 calls plus a 6-call smoke on development questions, all first-attempt successes: $0.993449 of $2.50.
+- **Deviation D2.** It was fixed after the run but before any number was computed. The frozen S-v1 copy crashed on non-numeric replies to `$`-formatted Float references; they now score 0, as in the official code. Two replies, both on one question, were affected.
+- **Independent audit.**
+  - It reproduced all 70 quantities.
+  - C2 holds in every leave-one-document-out fold.
+  - C3 is fragile: p = 0.049 under the worst-case S-v2 labelling.
+  - Two low-severity findings are recorded: token-model rounding, and a pool reference quoted in D2's text, now in the ledger.
+- **Decision.** B1 remains the shipped system. A1's gain is reported, not adopted. The pool is now used: it may be reported, never tuned on.
+- **Open (owner, optional).** 85 blind S-v2 items, `experiments/frozen/final/adjudication/`. No labelling can reverse C2 or C3.
 
 ### 2026-11-26 — Final evaluation is ready to run; the move to SSP Cloud is prepared
 
@@ -115,6 +134,7 @@ The single place that records what is done, what is running, what each decision 
 | 2026-11-25 | E9 Stage 0 | 0 | 0.00 | — |
 | 2026-11-25 | E9 smoke + Stage 2 | 6 + 354 | 0.004592 + 0.147055 = **0.151647** | 0.50 |
 | 2026-11-25 | Application live check | 3 | ≈ 0.0013 observed (≤ 0.0024 charged at the upper bound) | 0.01 |
+| 2026-11-26 | Final evaluation smoke + full | 6 + 2,079 | 0.003216 + 0.990233 = **0.993449** | 2.50 |
 
 E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Planned upper bound: smoke $0.006847 + full $0.368866.
 
