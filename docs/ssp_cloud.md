@@ -369,11 +369,11 @@ pgrep -af <script>            # still running?
 |---|---|
 | Page images referenced by the frozen packages (render manifests, request plans and execution logs of E1–E9 and the final evaluation) that are archived with identical bytes | 6,092 / 6,092 |
 | Archived files identical to the Mac on Hugging Face (LFS SHA-256 or git blob SHA-1, and size) | 6,847 / 6,847, including the manifest |
-| Combined digest, `data/cache/mmlongbench_doc` (6,592 files) | `d38ce7c0692bcad6` |
-| Combined digest, `data/processed` (254 files) | `24a6f95a365dddcf` |
+| Combined digest, `data/cache/mmlongbench_doc` (6,592 files) | `36abcd316b292d57` |
+| Combined digest, `data/processed` (254 files) | `94b7096c3ad2a24b` |
 | SHA-256 of the manifest | `d3b11c1633eb0256d218336238eca205234f6182f685c09fe754c731fae9a19e` |
 
-The combined digest is the same one-liner used for the embeddings: the SHA-256 of the sorted `sha256sum` lines.
+The combined digest is the same one-liner used for the embeddings: file paths sorted bytewise (`LC_ALL=C`), then the SHA-256 of their `sha256sum` lines. The first values recorded here (`d38ce7c0…`, `24a6f95a…`) sorted the lines by checksum instead of by path. They were wrong and corrected the same day; the Datalab copy matched the corrected values.
 
 **Restore in a Datalab service, then back up to MinIO from inside.**
 1. Log in. Use a read-only token, typed in the terminal only:
