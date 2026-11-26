@@ -128,7 +128,7 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
 
 ### 2.6 The rebuild test: can the Datalab re-create what the storage filter blocked?
 
-Run this in your first service. It answers whether the PDFs and page images can be re-created identically on the Datalab. If they can, nothing more needs uploading, and the Mac copy can be deleted afterwards.
+Run this in your first service. It answers whether the PDFs, page images and page texts can be re-created identically on the Datalab. If they can, nothing more needs uploading, and the Mac copy can be deleted afterwards.
 
 1. **Install the minimum.** In the service terminal, inside the cloned repository:
    ```bash
@@ -136,16 +136,20 @@ Run this in your first service. It answers whether the PDFs and page images can 
    pip install pymupdf==2.1 pandas pyarrow huggingface_hub certifi ipykernel
    python -m ipykernel install --user --name visualdoc-venv --display-name "VisualDoc (.venv, Python 3.12)"
    ```
-   `pymupdf==2.1` must match exactly: the renderer's version decides the page bytes.
-2. **Run the test.** Open a notebook on the `visualdoc-venv` kernel, with the working directory set to the repository root, and paste the code below into one cell. It downloads about 0.6 GB (124 PDFs) and renders 3 pages per document, in about 10–20 minutes.
-3. **Check whether the filter applies from inside the Datalab.** These files were blocked from the Mac:
+   - **`pymupdf==2.1` must match exactly:** the renderer's version decides the page bytes.
+   - **No separate OCR program is needed.** Tesseract is built into PyMuPDF and uses the language file `resources/tessdata/eng.traineddata` from the repository. This was checked on 2026-11-26 with no `tesseract` program available.
+2. **Run the test.** Open a notebook on the `visualdoc-venv` kernel, with the working directory set to the repository root, and paste the code below into one cell.
+   - It downloads about 0.6 GB (124 PDFs) and checks every PDF against the pinned revision's hash.
+   - For 3 pages per document, it compares the re-rendered image and the re-extracted text (with OCR where needed) with the frozen hashes.
+   - It takes about 10–20 minutes.
+3. **Check whether the filter applies from inside the Datalab.** This file was blocked from the Mac:
    ```bash
    mc cp data/external/mmlongbench_doc/documents/0b85477387a9d0cc33fca0f4becaa0e5.pdf s3/<your-username>/visualdoc/_filtertest/ && echo "inside: upload OK"
    mc rm --recursive --force s3/<your-username>/visualdoc/_filtertest
    ```
-4. **Read the summary.** The last three lines give the counts and the verdict.
-   - **"REBUILD WORKS"**: PDFs and pages can be re-created here.
-   - **"NOT IDENTICAL"**: keep the Mac copy, or wait for the admins to fix the filter.
+4. **Read the summary.** The last four lines give the counts and the verdict.
+   - **"REBUILD WORKS"**: everything can be re-created here.
+   - **"NOT IDENTICAL"**: keep the Mac copy, and paste the rows that differ.
 
 ```python
 """Datalab rebuild test (run from the repository root). Answers one question: can this machine rebuild the PDFs and page
@@ -179,6 +183,14 @@ def local_hash(path, kind):
     return hashlib.sha256(data).hexdigest() if kind == "sha256" else hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()
 
 
+def page_text(page):  # notebook 00/09 rule: native text, or full-page OCR (eng, 150 dpi) below 30 native words
+    native = page.get_text("text", sort=True)
+    if len(native.split()) >= 30:
+        return native
+    textpage = page.get_textpage_ocr(language="eng", dpi=150, full=True, tessdata="resources/tessdata")
+    return page.get_text("text", textpage=textpage, sort=True)
+
+
 def render(page):  # notebook 09 / E1 profile: whole page fitted in 768 x 1536 px, RGB PNG
     zoom = min(768 / min(page.rect.width, page.rect.height), 1536 / max(page.rect.width, page.rect.height))
     return page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom), alpha=False).tobytes("png")
@@ -186,6 +198,7 @@ def render(page):  # notebook 09 / E1 profile: whole page fitted in 768 x 1536 p
 
 # The documents and their frozen page hashes: the 110 evaluation documents and the 14 held-out development documents.
 pool = pd.read_csv("experiments/frozen/final_index/pool_documents.csv").query("verified")
+texts = pd.read_csv("experiments/frozen/final_index/index_manifest.csv").set_index(["doc_id", "page"])["text_sha256"]
 manifest = pd.concat([pd.read_csv("experiments/frozen/final_index/index_manifest.csv")[["doc_id", "page", "sha256"]],
                       pd.read_csv("experiments/frozen/e5/tables/render_manifest_heldout.csv")[["doc_id", "page", "sha256"]]])
 docs = sorted(pool["doc_id"]) + sorted(set(manifest["doc_id"]) - set(pool["doc_id"]))
@@ -215,7 +228,7 @@ for doc in docs:
             else:
                 tmp.unlink()
         status = "ok" if path.is_file() and local_hash(path, kind) == expected else "HASH MISMATCH"
-    renders = same = 0
+    renders = same = text_checked = text_same = 0
     if status == "ok":
         frozen = manifest[manifest["doc_id"] == doc].set_index("page")["sha256"]
         with pymupdf.open(path) as pdf:
@@ -224,15 +237,20 @@ for doc in docs:
             for p in sample:
                 renders += 1
                 same += hashlib.sha256(render(pdf[p - 1])).hexdigest() == frozen.get(p)
-    rows.append({"doc_id": doc, "pdf": status, "renders": renders, "identical": same})
-    print(f"{len(rows):3d}/{len(docs)} {doc[:50]:50s} pdf {status:13s} renders identical {same}/{renders}", flush=True)
+                if (doc, p) in texts.index:  # page text (with OCR where needed): the frozen hash exists for evaluation documents
+                    text_checked += 1
+                    text_same += hashlib.sha256(page_text(pdf[p - 1]).encode()).hexdigest() == texts[(doc, p)]
+    rows.append({"doc_id": doc, "pdf": status, "renders": renders, "identical": same, "texts": text_checked, "texts_identical": text_same})
+    print(f"{len(rows):3d}/{len(docs)} {doc[:46]:46s} pdf {status:13s} renders {same}/{renders} texts {text_same}/{text_checked}", flush=True)
 
 table = pd.DataFrame(rows)
 print("\n=== REBUILD TEST SUMMARY ===")
 print(f"PDFs verified against the pinned revision: {(table['pdf'] == 'ok').sum()}/{len(table)}")
 print(f"Re-rendered pages identical to the frozen hashes: {table['identical'].sum()}/{table['renders'].sum()}")
-print("Verdict:", "REBUILD WORKS: PDFs and page images can be re-created here" if (table["pdf"] == "ok").all()
-      and table["identical"].sum() == table["renders"].sum() else "NOT IDENTICAL: keep the Mac copy; see the rows above")
+print(f"Re-extracted page texts (with OCR) identical to the frozen hashes: {table['texts_identical'].sum()}/{table['texts'].sum()}")
+ok = (table["pdf"] == "ok").all() and table["identical"].sum() == table["renders"].sum() and table["texts_identical"].sum() == table["texts"].sum()
+print("Verdict:", "REBUILD WORKS: PDFs, page images and page texts can be re-created here" if ok
+      else "NOT IDENTICAL: keep the Mac copy; see the rows above")
 ```
 
 ## 3. Continuing the final evaluation there
