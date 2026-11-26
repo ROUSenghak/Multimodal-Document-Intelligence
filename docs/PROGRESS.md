@@ -78,6 +78,23 @@ The single place that records what is done, what is running, what each decision 
 **5. Result.**
 - `pytest` in `.venv-cu126`: **206 passed, 6 skipped, 0 failed** (89 s). That is the 198 earlier passes, the 2 fixed tests and 6 new tests.
 - No paid call, no regenerated embedding, no push.
+- Committed locally as `4912a69`, not pushed.
+
+**6. Missing inputs supplied (owner-approved, the same day).**
+- **The 6 development PDFs** were downloaded at revision `2ff6aa92` into `data/external/mmlongbench_doc/documents/`. Each was checked against the Hub's record before being copied in: LFS SHA-256 and size, or git blob SHA-1 for `watch_d.pdf`. 6/6 match.
+- **The ColQwen2 small files** (`vidore/colqwen2-v1.0-hf@ddc07d23`, everything except `model.safetensors`, 14 MB) are now in `data/cache/hf/colqwen2-v1.0-hf@ddc07d2317c8/`, which is git-ignored. The preprocessor and tokenizer hashes equal E5's (`be69973e…`, `091aa759…`).
+- **Result: 210 passed, 0 skipped, 2 failed** (91 s). 4 of the 6 formerly skipped tests pass:
+  - the PG_2020 native-text pin;
+  - the germanwings OCR pin;
+  - the E1 768-px render hashes;
+  - the E1 request fingerprint.
+- The two failures, as predicted:
+  - `test_page_text_equals_the_text_pinned_by_the_e3_spec[bdf54dxa.pdf-11-True]`: **OCR differs by processor.**
+    - The Mac's archived `pages.parquet` text equals the pin (`7fe28233…`). The Linux text is `ae5b334c…`.
+    - Both runs used OCR and found 235 words, with 98.7 % character similarity. The only difference is one four-token span of OCR noise on a graphic: `gS &€ Ss ww` became `a S&S S&S ~—`.
+    - The OCR engine is PyMuPDF's built-in Tesseract with `resources/tessdata`; there is no system binary.
+    - This is the same effect as the 24/330 texts in the rebuild test. The pin stays as it is: on x86-64 this page is a new text condition.
+  - `test_identity_checks_pass_on_the_real_small_files_and_processor`: "torch 2.14.0+cu126 / transformers 5.23.0 differ from E5's 2.15.0 / 5.23.0: a new condition". The check is correct, and the environment is what is wrong.
 
 ### 2026-11-26 — Final held-out evaluation: results (test pool used once)
 
@@ -245,11 +262,9 @@ E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Pl
 
 1. **Final-evaluation indexing time.** About 5,000 pages at about 12.5 s per page on the fanless M1, so the job runs for many hours under `caffeinate`. It is resumable: re-running `index` mode skips every page already encoded.
 2. **No off-machine backup of today's work.** iCloud sync is blocked by the account's storage quota, and commits since `7da078f` are local only, because pushing needs the owner's authorisation.
-3. **Datalab test inputs (2026-11-26).**
-   - The 6 development PDFs are not downloaded there.
-   - The ColQwen2 small files are absent.
-   - `.venv-cu126` has torch 2.14.0, not the pinned 2.15.0.
-   These leave 6 tests skipped. Some may fail once the inputs are present: OCR and rendering differ by processor.
+3. **Two Datalab test failures, both expected and recorded (2026-11-26).**
+   - `bdf54dxa.pdf` page 11 OCR text differs on x86-64. This is a processor condition: the test stays as it is.
+   - `.venv-cu126` has torch 2.14.0, not the pinned 2.15.0. Installing 2.15.0 (with CUDA) needs owner approval; until then, no ColQwen2 encoding on the Datalab matches E5's condition.
 4. **S-v2 blind labels.** 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
 
 ## Known limitations (running list)
