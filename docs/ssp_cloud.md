@@ -172,7 +172,7 @@ Run this in your first service. It answers whether the PDFs, page images and pag
 - **Page images and some tables cannot be re-created bit for bit.** They are not on MinIO or in git:
   - the Mac's page images, `data/cache/mmlongbench_doc` (6,535 files, 1.69 GB);
   - 30 files in `data/processed` (4.0 MB).
-  Notebook 09 checks each page image's hash before rebuilding the frozen requests, so its offline audit needs these exact files. **Archive them before deleting the Mac copy.**
+  Notebook 09 checks each page image's hash before rebuilding the frozen requests, so its offline audit needs these exact files. **Archive them before deleting the Mac copy.** They were archived on 2026-11-26 (§2.9).
 - **New experiments on the Datalab render and OCR there.** That is a new condition. Run every arm of a comparison on the same machine, and never mix Mac and Datalab renders.
 
 ```python
@@ -353,6 +353,70 @@ pgrep -af <script>            # still running?
 2. Save notebooks. Then commit and push code and notebooks (`git status` shows what changed).
 3. Pause rather than leave the service idle: the GPU is shared with other users.
 4. Git-ignored results stay on the disk. Before ever deleting a service, follow §4.
+
+### 2.9 The archive of the Mac-only files (page images and processed tables)
+
+**Why.** The page images rendered on the M1, and some processed tables, cannot be re-created bit for bit on another processor (§2.6 result). The frozen requests identify every page image by its hash. The MinIO filter blocked these files from the Mac.
+
+**Where.** A private Hugging Face dataset, `srou/visualdoc-mac-archive`, created 2026-11-26:
+- `data/cache/mmlongbench_doc/`: 6,592 files, 1.69 GB. These are the page images (768 and 512 px profiles) and `vision_response_cache.jsonl`.
+- `data/processed/`: 254 files, 22 MB. This includes the 30 files that existed only on the Mac.
+- `data/cache/visualdoc_mac_archive.sha256`: the SHA-256 of all 6,846 files, in `sha256sum -c` format.
+
+**Checks on the Mac (2026-11-26).**
+
+| Check | Result |
+|---|---|
+| Page images referenced by the frozen packages (render manifests, request plans and execution logs of E1–E9 and the final evaluation) that are archived with identical bytes | 6,092 / 6,092 |
+| Archived files identical to the Mac on Hugging Face (LFS SHA-256 or git blob SHA-1, and size) | 6,847 / 6,847, including the manifest |
+| Combined digest, `data/cache/mmlongbench_doc` (6,592 files) | `d38ce7c0692bcad6` |
+| Combined digest, `data/processed` (254 files) | `24a6f95a365dddcf` |
+| SHA-256 of the manifest | `d3b11c1633eb0256d218336238eca205234f6182f685c09fe754c731fae9a19e` |
+
+The combined digest is the same one-liner used for the embeddings: the SHA-256 of the sorted `sha256sum` lines.
+
+**Restore in a Datalab service, then back up to MinIO from inside.**
+1. Log in. Use a read-only token, typed in the terminal only:
+   ```bash
+   cd ~/work/Multimodal-Document-Intelligence && source .venv/bin/activate
+   hf auth login
+   ```
+2. Download into a separate folder, then check every file:
+   ```bash
+   hf download srou/visualdoc-mac-archive --repo-type dataset --local-dir ~/work/visualdoc-archive
+   (cd ~/work/visualdoc-archive && sha256sum -c --quiet data/cache/visualdoc_mac_archive.sha256 && echo "ALL 6846 FILES OK")
+   ```
+   Never use `--local-dir .` in the project: the archive's README.md would overwrite the project's.
+3. Copy the files into the project, then compare the combined digests with the table above:
+   ```bash
+   cp -a ~/work/visualdoc-archive/data/. data/
+   for d in data/cache/mmlongbench_doc data/processed; do echo "$d $(cd "$d" && find . -type f -print0 | LC_ALL=C sort -z | xargs -0 sha256sum | sha256sum | cut -c1-16) $(find "$d" -type f | wc -l) files"; done
+   ```
+4. Back up to MinIO from inside the service, then compare each object's MD5 (its ETag) with the checked copy:
+   ```bash
+   mc mirror --overwrite data/cache/mmlongbench_doc s3/srou-ensae/visualdoc/data/cache/mmlongbench_doc
+   mc mirror --overwrite data/processed s3/srou-ensae/visualdoc/data/processed
+   mc cp data/cache/visualdoc_mac_archive.sha256 s3/srou-ensae/visualdoc/data/cache/
+   python - <<'PY'
+   import hashlib, json, subprocess
+   from pathlib import Path
+   paths = [line.split("  ", 1)[1] for line in Path("data/cache/visualdoc_mac_archive.sha256").read_text().splitlines()]
+   etag = {}
+   for folder in ("data/cache/mmlongbench_doc", "data/processed"):
+       out = subprocess.run(["mc", "ls", "--recursive", "--json", f"s3/srou-ensae/visualdoc/{folder}"], capture_output=True, text=True).stdout
+       for line in out.splitlines():
+           item = json.loads(line)
+           if item.get("type") == "file":
+               etag[f"{folder}/{item['key']}"] = item["etag"].strip('"')
+   same = sum(etag.get(p) == hashlib.md5(Path(p).read_bytes()).hexdigest() for p in paths)
+   print(f"MinIO: {same}/{len(paths)} files identical (MD5) to the checked copy")
+   PY
+   ```
+   Every archived file is under 2.5 MB, so `mc` uploads each in one part, and its ETag is its MD5.
+
+**Reproducibility.** These files, the frozen packages in git and the embeddings (checked on MinIO and the Datalab) are everything the offline notebooks read. Notebook 09's offline mode also re-renders 3 development pages as a determinism check, so on an x86-64 machine it may stop there, by design (§0).
+
+**Deleting the Mac copy** of these files, and of `.venv`, waits until steps 2–4 have passed on the Datalab and the owner approves.
 
 ## 3. Working there after the final evaluation
 

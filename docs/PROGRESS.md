@@ -50,9 +50,19 @@ The single place that records what is done, what is running, what each decision 
     - **Consequence:** the Mac's page images (1.69 GB) and 30 files in `data/processed` (4.0 MB) are irreplaceable bit for bit. Notebook 09's offline audit needs them. Details: `docs/ssp_cloud.md` §2.6.
   - Embeddings copied from MinIO to the Datalab disk and verified (2026-11-26). The combined SHA-256 over all files matches the Mac: `data/cache/final` 6,223 files `b12dec4646a211a4`; `data/cache/e5` 1,013 files `dff4abffcfab9345`. The Datalab also holds the 213 `data/processed` and 452 `experiments/runs` files from MinIO.
   - Uploads to MinIO work from inside a Datalab service; the filter blocks only uploads from outside.
+  - Freed on the Mac, with the owner's approval (2026-11-26):
+    - the ColQwen2 weights, re-downloadable at the pinned revision;
+    - the 131 PDFs, each re-downloadable identically;
+    - the embeddings, checked on MinIO and the Datalab;
+    - `experiments/runs`, 460 files checked on MinIO or in git.
+    Free space went from 3.0 GB to 9.2 GB.
+  - Archive: the private Hugging Face dataset `srou/visualdoc-mac-archive` (`docs/ssp_cloud.md` §2.9).
+    - It holds the page images (6,592 files) and `data/processed` (254 files), with a SHA-256 manifest.
+    - 6,847/6,847 files are identical to the Mac.
+    - 6,092/6,092 page images referenced by the frozen packages are archived with identical bytes.
   - Next:
-    - **Owner:** choose an archive for those files.
-    - Then free the rest of the Mac: PDFs, embeddings (on MinIO), `.venv`, the ColQwen2 weights.
+    - **Owner, on the Datalab:** restore, check and back up to MinIO (§2.9 steps 1–4).
+    - **Owner:** then approve deleting the last Mac copies: page images, `data/processed`, `.venv`.
     - New Datalab experiments are a new rendering and OCR condition: run all arms there.
 
 ### 2026-11-26 — Final evaluation is ready to run; the move to SSP Cloud is prepared
