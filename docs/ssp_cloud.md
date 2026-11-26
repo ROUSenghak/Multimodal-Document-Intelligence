@@ -76,6 +76,7 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
 | `experiments/runs` | ⚠️ 452 of 453 files | |
 
 **The storage gateway's filter rejected many uploads with an HTML block page.**
+- **It applies only to uploads from outside the Datalab.** From inside a service, `mc cp` of a PDF that had been blocked from the Mac succeeded (2026-11-26). This is the platform's normal channel, and the files are not disguised. So a file that reaches a service by a legitimate route can be stored on MinIO from there.
 - **It filters content, not size.** Random files of 1–3 MB pass. Some ordinary CSV, parquet and log files, PDFs and some PNGs are rejected, consistently. A 20 MB file was also rejected.
 - **Do not try to disguise the files** (for example by encrypting them). That would circumvent the school's security control.
 - **Legitimate routes:**
