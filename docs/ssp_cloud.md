@@ -126,6 +126,115 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
    - the plan frozen;
    - "Paid gate closed".
 
+### 2.6 The rebuild test: can the Datalab re-create what the storage filter blocked?
+
+Run this in your first service. It answers whether the PDFs and page images can be re-created identically on the Datalab. If they can, nothing more needs uploading, and the Mac copy can be deleted afterwards.
+
+1. **Install the minimum.** In the service terminal, inside the cloned repository:
+   ```bash
+   python3 -m venv .venv && source .venv/bin/activate
+   pip install pymupdf==2.1 pandas pyarrow huggingface_hub certifi ipykernel
+   python -m ipykernel install --user --name visualdoc-venv --display-name "VisualDoc (.venv, Python 3.12)"
+   ```
+   `pymupdf==2.1` must match exactly: the renderer's version decides the page bytes.
+2. **Run the test.** Open a notebook on the `visualdoc-venv` kernel, with the working directory set to the repository root, and paste the code below into one cell. It downloads about 0.6 GB (124 PDFs) and renders 3 pages per document, in about 10–20 minutes.
+3. **Check whether the filter applies from inside the Datalab.** These files were blocked from the Mac:
+   ```bash
+   mc cp data/external/mmlongbench_doc/documents/0b85477387a9d0cc33fca0f4becaa0e5.pdf s3/<your-username>/visualdoc/_filtertest/ && echo "inside: upload OK"
+   mc rm --recursive --force s3/<your-username>/visualdoc/_filtertest
+   ```
+4. **Read the summary.** The last three lines give the counts and the verdict.
+   - **"REBUILD WORKS"**: PDFs and pages can be re-created here.
+   - **"NOT IDENTICAL"**: keep the Mac copy, or wait for the admins to fix the filter.
+
+```python
+"""Datalab rebuild test (run from the repository root). Answers one question: can this machine rebuild the PDFs and page
+images that the storage filter blocked, identical to the frozen ones? Downloads PDFs, verifies each against the hash
+recorded at the pinned revision, re-renders sample pages and compares them with the frozen manifests. No API call.
+
+Environment variables: TARGET (download folder, default data/external/mmlongbench_doc/documents), LIMIT (documents, default all),
+PAGES_PER_DOC (sample renders per document, default 3)."""
+import hashlib
+import os
+import shutil
+import ssl
+import urllib.parse
+import urllib.request
+from pathlib import Path
+
+import certifi
+import pandas as pd
+import pymupdf
+from huggingface_hub import HfApi, hf_hub_download
+
+REPO, REVISION = "yubo2333/MMLongBench-Doc", "2ff6aa9237fc777b6627dc57a486e9225ac5fb86"
+TARGET = Path(os.environ.get("TARGET", "data/external/mmlongbench_doc/documents"))
+LIMIT = int(os.environ.get("LIMIT", "0")) or None
+PAGES_PER_DOC = int(os.environ.get("PAGES_PER_DOC", "3"))
+TARGET.mkdir(parents=True, exist_ok=True)
+
+
+def local_hash(path, kind):
+    data = path.read_bytes()
+    return hashlib.sha256(data).hexdigest() if kind == "sha256" else hashlib.sha1(b"blob %d\0" % len(data) + data).hexdigest()
+
+
+def render(page):  # notebook 09 / E1 profile: whole page fitted in 768 x 1536 px, RGB PNG
+    zoom = min(768 / min(page.rect.width, page.rect.height), 1536 / max(page.rect.width, page.rect.height))
+    return page.get_pixmap(matrix=pymupdf.Matrix(zoom, zoom), alpha=False).tobytes("png")
+
+
+# The documents and their frozen page hashes: the 110 evaluation documents and the 14 held-out development documents.
+pool = pd.read_csv("experiments/frozen/final_index/pool_documents.csv").query("verified")
+manifest = pd.concat([pd.read_csv("experiments/frozen/final_index/index_manifest.csv")[["doc_id", "page", "sha256"]],
+                      pd.read_csv("experiments/frozen/e5/tables/render_manifest_heldout.csv")[["doc_id", "page", "sha256"]]])
+docs = sorted(pool["doc_id"]) + sorted(set(manifest["doc_id"]) - set(pool["doc_id"]))
+docs = docs[:LIMIT]
+items = {}
+for start in range(0, len(docs), 50):
+    items.update({Path(i.path).name: i for i in HfApi().get_paths_info(REPO, [f"documents/{d}" for d in docs[start:start + 50]],
+                                                                       repo_type="dataset", revision=REVISION)})
+tls = ssl.create_default_context(cafile=certifi.where())
+rows = []
+for doc in docs:
+    item, path = items[doc], TARGET / doc
+    kind, expected = ("sha256", item.lfs.sha256) if item.lfs else ("git-blob-sha1", item.blob_id)
+    status = "ok" if path.is_file() and path.stat().st_size and local_hash(path, kind) == expected else None
+    if status is None:
+        try:
+            hf_hub_download(REPO, f"documents/{doc}", repo_type="dataset", revision=REVISION, local_dir=TARGET.parent, force_download=True)
+        except OSError:
+            pass
+        if not (path.is_file() and local_hash(path, kind) == expected):  # direct fetch, kept only if the hash matches
+            url = f"https://huggingface.co/datasets/{REPO}/resolve/{REVISION}/documents/{urllib.parse.quote(doc)}"
+            tmp = path.with_name(f".{path.name}.tmp")
+            with urllib.request.urlopen(url, timeout=300, context=tls) as response, open(tmp, "wb") as handle:
+                shutil.copyfileobj(response, handle)
+            if local_hash(tmp, kind) == expected:
+                os.replace(tmp, path)
+            else:
+                tmp.unlink()
+        status = "ok" if path.is_file() and local_hash(path, kind) == expected else "HASH MISMATCH"
+    renders = same = 0
+    if status == "ok":
+        frozen = manifest[manifest["doc_id"] == doc].set_index("page")["sha256"]
+        with pymupdf.open(path) as pdf:
+            n = pdf.page_count
+            sample = sorted({1, max(1, n // 2), n})[:PAGES_PER_DOC] if PAGES_PER_DOC < n else range(1, n + 1)
+            for p in sample:
+                renders += 1
+                same += hashlib.sha256(render(pdf[p - 1])).hexdigest() == frozen.get(p)
+    rows.append({"doc_id": doc, "pdf": status, "renders": renders, "identical": same})
+    print(f"{len(rows):3d}/{len(docs)} {doc[:50]:50s} pdf {status:13s} renders identical {same}/{renders}", flush=True)
+
+table = pd.DataFrame(rows)
+print("\n=== REBUILD TEST SUMMARY ===")
+print(f"PDFs verified against the pinned revision: {(table['pdf'] == 'ok').sum()}/{len(table)}")
+print(f"Re-rendered pages identical to the frozen hashes: {table['identical'].sum()}/{table['renders'].sum()}")
+print("Verdict:", "REBUILD WORKS: PDFs and page images can be re-created here" if (table["pdf"] == "ok").all()
+      and table["identical"].sum() == table["renders"].sum() else "NOT IDENTICAL: keep the Mac copy; see the rows above")
+```
+
 ## 3. Continuing the final evaluation there
 
 The remaining stages are the paid smoke and full runs, then the evaluation. They need no GPU:
