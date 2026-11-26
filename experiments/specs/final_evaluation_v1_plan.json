@@ -1,0 +1,42 @@
+{
+  "spec_commit": "1c54a3e",
+  "index_manifest_sha256": "00a37608f42a94a034850770f295a9c26190a8a78bc9886a1bc04e7bb8ce9894",
+  "seeds": {
+    "order": 20261201,
+    "smoke": 20261204
+  },
+  "smoke": {
+    "calls": 6,
+    "prompt_tokens": 30622,
+    "max_output_tokens": 4800,
+    "upper_usd": 0.005462,
+    "plan_sha256": "f2f529ab1abd0656d7481879e80faca395489ed7c50e76e8a87dc55a45af0387",
+    "qids": [
+      "mmlb-0082",
+      "mmlb-0202",
+      "mmlb-0403",
+      "mmlb-0579",
+      "mmlb-1025",
+      "mmlb-1064"
+    ]
+  },
+  "full": {
+    "calls": 2079,
+    "prompt_tokens": 9995608,
+    "max_output_tokens": 1663200,
+    "upper_usd": 1.831161,
+    "plan_sha256": "f6308da27dd031ad6d654dd80569caae8944e9ca1e670631ea3dcf799c8dadbb",
+    "arms": {
+      "F8": 335,
+      "T1": 872,
+      "B1": 872
+    },
+    "questions": 872,
+    "triggered": 335
+  },
+  "ceilings": {
+    "cumulative_usd": 2.5,
+    "smoke_usd": 0.02,
+    "plan_upper_max_usd": 2.4
+  }
+}
