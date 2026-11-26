@@ -22,7 +22,11 @@ Do **not** move:
 
 SSP Cloud accepts only public, non-sensitive data. MMLongBench-Doc is a public benchmark (CC BY-NC 4.0).
 
-**One rule that does not move.** Notebook 04's and notebook 09's *encoding* modes (`index`, `queries`) require the Apple M1 GPU (MPS). E5 encoded there, and the frozen specs require bit-for-bit equality with it; another GPU type gives slightly different numbers. Everything else reads the saved embeddings and runs anywhere:
+**One rule that does not move.** Notebook 04's and notebook 09's *encoding* modes (`index`, `queries`) require the Apple M1 GPU (MPS). E5 encoded there, and the frozen specs require bit-for-bit equality with it; another GPU type gives slightly different numbers.
+
+**Page rendering and OCR also depend on the processor** (rebuild test, §2.6). With the same PyMuPDF 2.1, the Datalab's x86-64 processor reproduced 354 of 372 sampled page images and 306 of 330 page texts. The Mac reproduced all of them. So the frozen page images and page tables must be **copied**, not re-created.
+
+Given those copies, everything else reads saved files and runs anywhere:
 - offline evaluation;
 - the smoke and full reader runs;
 - tests and the application.
@@ -81,7 +85,7 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
      - Re-render the pages, and check them against the frozen manifest's image hashes.
      - Re-run the notebooks offline to regenerate the processed tables.
 
-**Do not delete the Mac copy** until one of these routes has succeeded and been verified.
+**Do not delete the Mac copy** until one of these routes has succeeded and been verified. Route 2 works for the PDFs only; page images and page tables differ on the Datalab's processor (§2.6 result).
 
 ## 2. On SSP Cloud
 
@@ -151,6 +155,24 @@ Run this in your first service. It answers whether the PDFs, page images and pag
 4. **Read the summary.** The last four lines give the counts and the verdict.
    - **"REBUILD WORKS"**: everything can be re-created here.
    - **"NOT IDENTICAL"**: keep the Mac copy, and paste the rows that differ.
+
+**Result on the ENSAE-ENSAI Datalab (2026-11-26, `vscode-python-gpu`, x86-64 Linux): NOT IDENTICAL.**
+
+| Check | Datalab | The same pages on the Mac |
+|---|---|---|
+| PDFs, against the pinned revision | 124/124 | the 7 other Mac PDFs: 7/7 |
+| Page images, against the frozen hashes | 354/372 (18 differ, in 13 documents) | 36/36 (12 of those documents; the 13th PDF was an iCloud placeholder) |
+| Page texts, against the frozen hashes | 306/330 (24 differ, in 19 documents) | 57/57 |
+
+- **Cause: the processor.** The files and the code are the same; the Mac is an Apple M1 (ARM) and the Datalab is x86-64.
+  - The text differences are consistent with OCR: in every document with a text difference, the sample had at least as many OCR pages as differences (47 of the 57 texts were OCR pages).
+  - Image differences occur on pages with and without embedded images.
+- **PDFs need no copy.** All 131 can be re-downloaded identically.
+- **Page images and some tables cannot be re-created bit for bit.** They are not on MinIO or in git:
+  - the Mac's page images, `data/cache/mmlongbench_doc` (6,535 files, 1.69 GB);
+  - 30 files in `data/processed` (4.0 MB).
+  Notebook 09 checks each page image's hash before rebuilding the frozen requests, so its offline audit needs these exact files. **Archive them before deleting the Mac copy.**
+- **New experiments on the Datalab render and OCR there.** That is a new condition. Run every arm of a comparison on the same machine, and never mix Mac and Datalab renders.
 
 ```python
 """Datalab rebuild test (run from the repository root). Answers one question: can this machine rebuild the PDFs and page

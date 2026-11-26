@@ -43,9 +43,15 @@ The single place that records what is done, what is running, what each decision 
   - Blocked: page images, PDFs and some tables. The storage gateway's content filter rejects them; see `docs/ssp_cloud.md`.
   - The owner chose not to contact the Datalab admins about the filter. The route is to rebuild the blocked files on the Datalab.
   - First service (`vscode-python-gpu`, started 2026-11-26): the Vault key is present and both VS Code extensions installed. Claude Code did not install, because the image has no npm. `tools/datalab_init.sh` now uses the official installer and `CLAUDE_CONFIG_DIR`.
+  - Rebuild test on the Datalab (2026-11-26): **NOT IDENTICAL**.
+    - PDFs: 124/124 identical (the 7 other Mac PDFs: 7/7 from the Mac).
+    - Page images: 354/372. Page texts: 306/330.
+    - The Mac reproduces the same pages: 36/36 images, 57/57 texts. So the cause is the processor (M1 ARM vs x86-64), not the files.
+    - **Consequence:** the Mac's page images (1.69 GB) and 30 files in `data/processed` (4.0 MB) are irreplaceable bit for bit. Notebook 09's offline audit needs them. Details: `docs/ssp_cloud.md` §2.6.
   - Next:
-    - **In the first service:** run the rebuild test (`docs/ssp_cloud.md` §2.6): re-download the PDFs (hash-checked), then re-render pages and re-extract texts against the frozen manifests.
-    - Keep the Mac copy until this works.
+    - **Owner:** choose an archive for those files.
+    - Then free the rest of the Mac: PDFs, embeddings (on MinIO), `.venv`, the ColQwen2 weights.
+    - New Datalab experiments are a new rendering and OCR condition: run all arms there.
 
 ### 2026-11-26 — Final evaluation is ready to run; the move to SSP Cloud is prepared
 
