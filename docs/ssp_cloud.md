@@ -280,7 +280,12 @@ https://raw.githubusercontent.com/ROUSenghak/Multimodal-Document-Intelligence/re
 
 **After a start, check the log:** `cat ~/work/.datalab_init.log`.
 - Expect `claude installed: <version>` at the first start and `claude <version> ready` afterwards. If it says `claude install FAILED`, run `curl -fsSL https://claude.ai/install.sh | bash` once in a terminal; the next start keeps it.
-- Open a **new** terminal, which reads the updated `~/.bashrc`. Run `claude` in the project folder and log in the first time. The login is kept in `~/work/.claude`.
+- Open a **new** terminal, which reads the updated `~/.bashrc`. Run `claude` in the project folder and log in the first time with `/login`. The login is kept in `~/work/.claude`.
+  - **Use the copy-the-code route.** Claude Code waits for the login on the Datalab, so a browser redirect to `localhost:<port>/callback` fails on the laptop ("localhost refused to connect").
+    1. Copy the URL under "Browser didn't open? Use the url below to sign in" (key `c`).
+    2. Approve in the browser.
+    3. Paste the code the page shows at "Paste code here if prompted".
+    This worked on 2026-11-26.
 
 **History.** The first version of the script used npm, which the `vscode-python-gpu` image does not have. Its first Onyxia start (2026-11-26) linked the state and installed both extensions, but not Claude Code. The current version was tested on the Mac in a sandbox home in three cases: a fresh start, a second start in the same home (nothing changes), and a resume with the home wiped (the program and state come back from `~/work` without reinstalling). The installer was simulated in that test; the real one runs on the Datalab. The log shows what each step did.
 
