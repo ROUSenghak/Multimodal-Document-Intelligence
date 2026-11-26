@@ -253,6 +253,36 @@ print("Verdict:", "REBUILD WORKS: PDFs, page images and page texts can be re-cre
       else "NOT IDENTICAL: keep the Mac copy; see the rows above")
 ```
 
+### 2.7 Pausing and resuming a VS Code service without redoing the setup
+
+**What survives.** A paused or restarted service keeps only **`/home/onyxia/work`**: the repository, its `.venv`, data and results. Deleting the service erases even that. Everything else in the home folder is recreated empty:
+- Claude Code, with its login, chat history and memory;
+- the VS Code extensions;
+- the Jupyter kernel registration.
+
+Confirm this once:
+1. Run `echo test > ~/work/keep.txt; echo test > ~/outside.txt`.
+2. Pause, then resume the service.
+3. Run `ls ~/work/keep.txt ~/outside.txt`. Only the first file should remain.
+
+**`tools/datalab_init.sh` restores the rest at every start:**
+- it links `~/.claude` and `~/.claude.json` to `~/work`, so chat, memory and login persist;
+- it installs Claude Code once into `~/work/.npm-global`, with no sudo needed, and puts it on `PATH`;
+- it reinstalls the Python and Jupyter extensions for VS Code;
+- it re-registers the `visualdoc-venv` kernel.
+
+**Set it once, in the service configuration**, in the tab with the init settings (in Onyxia, the field is named `personalInit`):
+
+```
+https://raw.githubusercontent.com/ROUSenghak/Multimodal-Document-Intelligence/refactor/simplify-structure/tools/datalab_init.sh
+```
+
+**After a start, check the log:** `cat ~/work/.datalab_init.log`.
+- If it says "npm not found", install Claude Code once by hand, following its documentation. Its files then live in `~/work` and survive.
+- Log in to Claude Code the first time. The login is kept in `~/work/.claude`.
+
+The script was tested on the Mac in a sandbox home, run twice to check that a second run changes nothing, but not yet on Onyxia. The log shows what each step did.
+
 ## 3. Continuing the final evaluation there
 
 The remaining stages are the paid smoke and full runs, then the evaluation. They need no GPU:
