@@ -27,3 +27,18 @@ Each deviation is written and committed **before** any pool question, answer or 
 - `mi_phone.pdf`: the served bytes differ from the recorded LFS SHA-256.
 
 **Effect.** 110 of the 111 documents are evaluated. Every claim and rule in `final_evaluation_v1.json` is otherwise unchanged.
+
+## D2 — S-v1 scorer crash on numeric questions (2026-11-26)
+
+**When.** Decided after the full run completed but **before any final number was computed**. The evaluation stopped on the first affected reply; no claim, count or contrast had been produced.
+
+**What happened.** The frozen S-v1 cell (notebook 03 `f653d232`, copied in notebooks 07–09) converts a Float question's reference and reply in a single tuple assignment: `gt, pred = float(clean(gt)), float(clean(pred))`. When the reply is not numeric, the assignment fails as a whole. The reference stays an unconverted string, and the next line, `float("$1577.00")`, raises. The official MMLongBench-Doc code converts the two separately, so for the same reply it returns score 0. The case never occurs in the development data.
+
+**Rule.**
+- When, and only when, the frozen function raises on a Float question:
+  - if the cleaned reference is numeric and the reply is not → score **0**, the official result;
+  - if the cleaned reference is not numeric → S-v1 cannot score the question (the official code fails as well). Every arm scores **0**, and the count of such questions is reported.
+- Any other exception still stops the evaluation.
+- The frozen cell's source is unchanged and still pinned. The wrapper is a separate, visible cell in notebook 09.
+
+**Check.** The wrapped scorer reproduces all 708 frozen E8 and E9 S-v1 scores exactly. No historical verdict changes.
