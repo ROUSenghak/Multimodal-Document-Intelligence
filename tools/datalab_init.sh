@@ -10,31 +10,41 @@ WORK=/home/onyxia/work
 REPO="$WORK/Multimodal-Document-Intelligence"
 LOG="$WORK/.datalab_init.log"
 mkdir -p "$WORK"
+add_to_bashrc() { grep -qxF "$1" "$HOME/.bashrc" 2>/dev/null || echo "$1" >> "$HOME/.bashrc"; }
 {
 echo "== $(date -u +%FT%TZ) datalab_init start"
 
-# 1. Claude Code state on the persistent disk: ~/.claude (history, memory, settings, login) and ~/.claude.json.
-mkdir -p "$WORK/.claude"
+# 1. Claude Code state on the persistent disk. CLAUDE_CONFIG_DIR moves all of it there (settings, login, chat
+#    history, memory and the .claude.json file); ~/.claude is linked to the same folder for tools that look there.
+CONFIG="$WORK/.claude"
+mkdir -p "$CONFIG"
 if [ -d "$HOME/.claude" ] && [ ! -L "$HOME/.claude" ]; then
-  cp -rn "$HOME/.claude/." "$WORK/.claude/" && rm -rf "$HOME/.claude"
+  cp -rn "$HOME/.claude/." "$CONFIG/" && rm -rf "$HOME/.claude"
 fi
-ln -sfn "$WORK/.claude" "$HOME/.claude"
-if [ -f "$HOME/.claude.json" ] && [ ! -L "$HOME/.claude.json" ] && [ ! -f "$WORK/.claude.json" ]; then
-  mv "$HOME/.claude.json" "$WORK/.claude.json"
-fi
-[ -f "$WORK/.claude.json" ] && ln -sfn "$WORK/.claude.json" "$HOME/.claude.json"
-echo "claude state linked to $WORK/.claude"
+ln -sfn "$CONFIG" "$HOME/.claude"
+[ -f "$WORK/.claude.json" ] && [ ! -f "$CONFIG/.claude.json" ] && mv "$WORK/.claude.json" "$CONFIG/.claude.json"
+add_to_bashrc "export CLAUDE_CONFIG_DIR=\"$CONFIG\""
+export CLAUDE_CONFIG_DIR="$CONFIG"
+echo "claude state kept in $CONFIG"
 
-# 2. The Claude Code program, installed once into the persistent disk (no sudo needed), then only put on PATH.
-NPM_PREFIX="$WORK/.npm-global"
-grep -q "$NPM_PREFIX/bin" "$HOME/.bashrc" 2>/dev/null || echo "export PATH=\"$NPM_PREFIX/bin:\$PATH\"" >> "$HOME/.bashrc"
-export PATH="$NPM_PREFIX/bin:$PATH"
-if command -v claude >/dev/null 2>&1; then
-  echo "claude already installed: $(command -v claude)"
-elif command -v npm >/dev/null 2>&1; then
-  npm config set prefix "$NPM_PREFIX" && npm install -g @anthropic-ai/claude-code && echo "claude installed"
+# 2. The Claude Code program. This image has no npm, so use the official installer, which needs no sudo. It puts
+#    the program in ~/.local/share/claude/versions/<version> and the command ~/.local/bin/claude. That folder is
+#    kept on the persistent disk, so the installer runs only once; later starts only recreate the links.
+PROGRAM="$WORK/.claude-program"
+mkdir -p "$PROGRAM" "$HOME/.local/share" "$HOME/.local/bin"
+if [ -d "$HOME/.local/share/claude" ] && [ ! -L "$HOME/.local/share/claude" ]; then
+  cp -rn "$HOME/.local/share/claude/." "$PROGRAM/" && rm -rf "$HOME/.local/share/claude"
+fi
+ln -sfn "$PROGRAM" "$HOME/.local/share/claude"
+add_to_bashrc 'export PATH="$HOME/.local/bin:$PATH"'
+export PATH="$HOME/.local/bin:$PATH"
+latest=$(ls "$PROGRAM/versions" 2>/dev/null | sort -V | tail -1)
+if [ -n "$latest" ]; then
+  ln -sfn "$PROGRAM/versions/$latest" "$HOME/.local/bin/claude" && echo "claude $latest ready (kept in $PROGRAM)"
+elif curl -fsSL https://claude.ai/install.sh | bash; then
+  echo "claude installed: $(ls "$PROGRAM/versions" 2>/dev/null | sort -V | tail -1)"
 else
-  echo "npm not found: install Claude Code by hand once (see the Claude Code documentation)"
+  echo "claude install FAILED: run 'curl -fsSL https://claude.ai/install.sh | bash' in a terminal"
 fi
 
 # 3. VS Code extensions (reinstalled at each start; they live outside ~/work).

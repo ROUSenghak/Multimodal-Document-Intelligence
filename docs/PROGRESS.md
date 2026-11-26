@@ -41,9 +41,10 @@ The single place that records what is done, what is running, what each decision 
     - The OpenAI key and a GitHub token are set up.
     - The embeddings are on MinIO, byte-verified.
   - Blocked: page images, PDFs and some tables. The storage gateway's content filter rejects them; see `docs/ssp_cloud.md`.
+  - The owner chose not to contact the Datalab admins about the filter. The route is to rebuild the blocked files on the Datalab.
+  - First service (`vscode-python-gpu`, started 2026-11-26): the Vault key is present and both VS Code extensions installed. Claude Code did not install, because the image has no npm. `tools/datalab_init.sh` now uses the official installer and `CLAUDE_CONFIG_DIR`.
   - Next:
-    - **Owner:** report the filter to the Datalab admins.
-    - **In a first service:** test re-downloading the PDFs (hash-checked) and re-rendering the pages against the manifest.
+    - **In the first service:** run the rebuild test (`docs/ssp_cloud.md` §2.6): re-download the PDFs (hash-checked), then re-render pages and re-extract texts against the frozen manifests.
     - Keep the Mac copy until this works.
 
 ### 2026-11-26 — Final evaluation is ready to run; the move to SSP Cloud is prepared

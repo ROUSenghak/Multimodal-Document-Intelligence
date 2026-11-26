@@ -92,7 +92,7 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
 2. **GitHub token.**
    1. Create one at <https://github.com/settings/tokens> with scope `repo` and a short expiry (30 days).
    2. Add it to your account's **External services**. Set your account email to your GitHub email.
-3. **Launch a service** from the catalog: `vscode-python` or `jupyter-python`. A CPU is enough; a GPU only matters for encoding, which stays on the M1. In the configuration:
+3. **Launch a service** from the catalog: `vscode-python` or `jupyter-python`. A CPU is enough for everything frozen. Choose the GPU version (`vscode-python-gpu`) for new experiments that encode pages; their encodings are a new condition, never a substitute for the frozen M1 ones. In the configuration:
    - **Git** tab: repository `https://github.com/ROUSenghak/Multimodal-Document-Intelligence.git`, branch `refactor/simplify-structure`;
    - **Vault** tab: paste the secret's path;
    - **Resources**: a disk of at least 20 GB.
@@ -104,6 +104,7 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
    python3 -m venv .venv && source .venv/bin/activate
    pip install --upgrade pip
    pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu   # CPU build: much smaller than the CUDA one
+   # on a GPU service, use instead: pip install torch==2.15.0   (the default Linux build includes CUDA)
    pip install -r requirements/lock-2026-11-26.txt
    pip install -e . --no-deps
    python -m ipykernel install --user --name visualdoc-venv --display-name "VisualDoc (.venv, Python 3.12)"
@@ -266,8 +267,8 @@ Confirm this once:
 3. Run `ls ~/work/keep.txt ~/outside.txt`. Only the first file should remain.
 
 **`tools/datalab_init.sh` restores the rest at every start:**
-- it links `~/.claude` and `~/.claude.json` to `~/work`, so chat, memory and login persist;
-- it installs Claude Code once into `~/work/.npm-global`, with no sudo needed, and puts it on `PATH`;
+- it keeps Claude Code's state in `~/work/.claude` (through `CLAUDE_CONFIG_DIR`, with `~/.claude` linked there), so the login, chat history, memory and `.claude.json` persist;
+- it installs Claude Code once with the official installer (`curl -fsSL https://claude.ai/install.sh | bash`; no npm or sudo needed) and keeps the program in `~/work/.claude-program`. Later starts only recreate the command `~/.local/bin/claude` and put it on `PATH`;
 - it reinstalls the Python and Jupyter extensions for VS Code;
 - it re-registers the `visualdoc-venv` kernel.
 
@@ -278,26 +279,20 @@ https://raw.githubusercontent.com/ROUSenghak/Multimodal-Document-Intelligence/re
 ```
 
 **After a start, check the log:** `cat ~/work/.datalab_init.log`.
-- If it says "npm not found", install Claude Code once by hand, following its documentation. Its files then live in `~/work` and survive.
-- Log in to Claude Code the first time. The login is kept in `~/work/.claude`.
+- Expect `claude installed: <version>` at the first start and `claude <version> ready` afterwards. If it says `claude install FAILED`, run `curl -fsSL https://claude.ai/install.sh | bash` once in a terminal; the next start keeps it.
+- Open a **new** terminal, which reads the updated `~/.bashrc`. Run `claude` in the project folder and log in the first time. The login is kept in `~/work/.claude`.
 
-The script was tested on the Mac in a sandbox home, run twice to check that a second run changes nothing, but not yet on Onyxia. The log shows what each step did.
+**History.** The first version of the script used npm, which the `vscode-python-gpu` image does not have. Its first Onyxia start (2026-11-26) linked the state and installed both extensions, but not Claude Code. The current version was tested on the Mac in a sandbox home in three cases: a fresh start, a second start in the same home (nothing changes), and a resume with the home wiped (the program and state come back from `~/work` without reinstalling). The installer was simulated in that test; the real one runs on the Datalab. The log shows what each step did.
 
-## 3. Continuing the final evaluation there
+## 3. Working there after the final evaluation
 
-The remaining stages are the paid smoke and full runs, then the evaluation. They need no GPU:
+The final evaluation is complete and frozen (`experiments/frozen/final`, run on the Mac on 2026-11-26). **Never run notebook 09's `smoke` or `full` modes again.** The test pool has been used once and may only be reported (AGENTS.md). Notebook 09's default `offline` mode (the check in step 5 above) re-verifies the frozen package with no API call.
 
-```bash
-VISUALDOC_FINAL_MODE=smoke jupyter nbconvert --to notebook --execute --output /tmp/nb09_smoke.ipynb notebooks/09_final_evaluation.ipynb
-VISUALDOC_FINAL_MODE=full  jupyter nbconvert --to notebook --execute --output /tmp/nb09_full.ipynb --ExecutePreprocessor.timeout=-1 notebooks/09_final_evaluation.ipynb
-```
-
-The full run is about 2,100 calls and takes about 2.5 hours. It is resumable with `VISUALDOC_FINAL_RUN_ID=<run id>` if interrupted. Use the owner-approved ceiling only; the notebook enforces $2.50.
+New experiments use development documents or a new benchmark, each with its own pre-registration and an owner-approved budget.
 
 To work with Claude Code in the service:
-1. Install it with `npm install -g @anthropic-ai/claude-code`.
-2. Run `claude` in the project folder.
-3. Optionally copy the memory notes from the laptop's `~/.claude/projects/<project-key>/memory/` into the matching folder under the service's `~/.claude/projects/`. They are a convenience; `docs/PROGRESS.md` is the project's own record.
+1. The start-up script (§2.7) installs it. Open a new terminal and run `claude` in the project folder.
+2. Optionally copy the memory notes from the laptop's `~/.claude/projects/<project-key>/memory/` into the matching folder under the service's `~/.claude/projects/`. They are a convenience; `docs/PROGRESS.md` is the project's own record.
 
 ## 4. Before you delete or leave a service
 
