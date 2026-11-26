@@ -17,6 +17,23 @@ The single place that records what is done, what is running, what each decision 
 
 ## Decisions and their reasons
 
+### 2026-11-26 — Datalab environment ready: pinned `.venv` built, notebook 09 audit reproduces the final evaluation
+
+- **No CUDA 12 build of torch 2.15.0 exists.** It ships only for CUDA 13.2 and 13.4 (plus CPU, ROCm and XPU), which need NVIDIA driver 580 or later. The `vscode-python-gpu` A100 has driver 565.77 (CUDA ≤ 12.7). So `.venv-cu126` (torch 2.14.0+cu126) was left unchanged; any result from it is a new condition. The setup guide's GPU line, which would have installed the unusable CUDA 13 wheel, is corrected in `docs/ssp_cloud.md` §2.5.
+- **`.venv` built as the pinned environment** (owner-approved): torch 2.15.0+cpu, `requirements/lock-2026-11-26.txt`, the project in editable mode, then `pip check` with no broken requirements. transformers is 5.23.0 and PyMuPDF 2.1. The `visualdoc-venv` kernel is registered. `pip freeze` snapshots from before the install are in `~/work/venv-freeze-before-setup.txt` and `~/work/venv-cu126-freeze-before-torch215.txt`.
+- **`pytest` in `.venv`: 211 passed, 1 failed.** The ColQwen2 identity check now passes against the real tokenizer and processor. The one failure is the x86 OCR text of `bdf54dxa.pdf` page 11 (see the entry below). It is permanent on this processor and the pin is kept.
+- **Notebooks.** All 10 are valid nbformat and use the `visualdoc-venv` kernel.
+- **Notebook 09 offline audit**, executed in `.venv` with `VISUALDOC_FINAL_MODE=offline` and no API key in the environment; no error output:
+  - "Index frozen and committed: True";
+  - pool question embeddings complete;
+  - 118/118 development rankings identical to E5 (max score difference 3.7e-6), and all 872 frozen rankings consistent;
+  - 118/118 requests equal frozen E8 L-B1;
+  - plan frozen;
+  - "Paid gate closed";
+  - C1 0.427, C2 `visual_retrieval_confirmed` (+0.119), C3 `a1_gain_supported` (+0.021).
+  The combined digests of `data/cache/{mmlongbench_doc,final,e5}` and `git status` were unchanged by the run.
+- **Caution: re-rendering notebooks overwrite the Mac page images.** Notebook 00 writes `page_*.png` unconditionally. Notebook 04 rewrites any whose bytes differ. Run here, either would silently replace some Mac images with x86 renders. Do not re-run them on the Datalab without first protecting `data/cache/mmlongbench_doc/page_images/` (restore source: `~/work/visualdoc-archive`, or `srou/visualdoc-mac-archive`). Notebook 09 writes images only in `index` mode, which refuses non-M1 machines.
+
 ### 2026-11-26 — Datalab test suite: two failures from one page rendered differently on x86-64; fixed by a provenance-checked archive import
 
 **Symptom.** On the Datalab (`.venv-cu126`), `pytest` gave 2 failed, 198 passed, 6 skipped. Both failures were raised by `import_e5_document`: "the E5 cache has no embedding for 1 of 20 pages of e639029d16094ea71d964e2fb953952b.pdf (first: [15])".
@@ -262,9 +279,10 @@ E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Pl
 
 1. **Final-evaluation indexing time.** About 5,000 pages at about 12.5 s per page on the fanless M1, so the job runs for many hours under `caffeinate`. It is resumable: re-running `index` mode skips every page already encoded.
 2. **No off-machine backup of today's work.** iCloud sync is blocked by the account's storage quota, and commits since `7da078f` are local only, because pushing needs the owner's authorisation.
-3. **Two Datalab test failures, both expected and recorded (2026-11-26).**
-   - `bdf54dxa.pdf` page 11 OCR text differs on x86-64. This is a processor condition: the test stays as it is.
-   - `.venv-cu126` has torch 2.14.0, not the pinned 2.15.0. Installing 2.15.0 (with CUDA) needs owner approval; until then, no ColQwen2 encoding on the Datalab matches E5's condition.
+3. **Datalab conditions (2026-11-26).**
+   - `bdf54dxa.pdf` page 11 OCR text differs on x86-64. This is a processor condition, and the test stays as it is (the one `pytest` failure in `.venv`).
+   - GPU encoding is possible only with torch 2.14.0+cu126, a new condition. The pinned torch 2.15.0 needs driver ≥ 580 for CUDA, and the service has 565.
+   - The local commits are not pushed yet.
 4. **S-v2 blind labels.** 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
 
 ## Known limitations (running list)

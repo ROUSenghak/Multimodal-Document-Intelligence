@@ -109,8 +109,7 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
    python3 -m venv .venv && source .venv/bin/activate
    pip install --upgrade pip
    pip install torch==2.15.0 --index-url https://download.pytorch.org/whl/cpu   # CPU build: much smaller than the CUDA one
-   # on a GPU service, use instead: pip install torch==2.15.0   (the default Linux build includes CUDA)
-   pip install -r requirements/lock-2026-11-26.txt
+   pip install -r requirements/lock-2026-11-26.txt "torch==2.15.0+cpu" --extra-index-url https://download.pytorch.org/whl/cpu
    pip install -e . --no-deps
    python -m ipykernel install --user --name visualdoc-venv --display-name "VisualDoc (.venv, Python 3.12)"
    U=<your-username>
@@ -118,6 +117,7 @@ Notebook 09 also uses **frozen rankings** (`experiments/frozen/final_retrieval/`
      mc mirror --overwrite "s3/$U/visualdoc/$d" "$d"
    done
    ```
+   **GPU (checked 2026-11-26).** torch 2.15.0 is built only for CUDA 13.2 and 13.4, which need NVIDIA driver 580 or later. The `vscode-python-gpu` A100 has driver 565.77 (CUDA ≤ 12.7). The default Linux wheel (`pip install torch==2.15.0`) therefore cannot use this GPU. Keep `.venv` on the CPU build: it is the pinned environment. For GPU work, use a separate environment with the newest CUDA 12 build (`.venv-cu126`, torch 2.14.0+cu126). Any result from it is a new condition: the torch version, the device (CUDA, not MPS) and the x86 renders all differ from E5.
    `mc` is preinstalled in SSP Cloud services, with the alias `s3` already configured.
 5. **Check that the move is complete and intact:**
    ```bash
