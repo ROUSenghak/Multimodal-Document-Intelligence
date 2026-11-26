@@ -65,7 +65,10 @@ The single place that records what is done, what is running, what each decision 
       - all 6,846 files pass `sha256sum -c`;
       - the combined digests match the Mac (`36abcd316b292d57`, `94b7096c3ad2a24b`);
       - MinIO has 6,846/6,846 files identical by MD5.
-    - **Owner:** then approve deleting the last Mac copies: page images, `data/processed`, `.venv`.
+  - Deleted on the Mac with the owner's approval (2026-11-26): the page images, `data/processed`, the checksum list and `.venv`. The project folder is now 153 MB (code and git).
+    - Before deleting, all 6,846 files matched the archive manifest: 6,413 read from disk; 433 had become iCloud placeholders and were not read.
+    - iCloud resumed syncing `~/Documents` once space was freed, and evicted files to online-only placeholders. A git checkout there is fragile: keep code elsewhere or rely on GitHub.
+  - Next: push the local commits; test a real pause/resume on the Datalab; set up the full environment there.
     - New Datalab experiments are a new rendering and OCR condition: run all arms there.
 
 ### 2026-11-26 — Final evaluation is ready to run; the move to SSP Cloud is prepared
