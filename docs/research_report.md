@@ -220,7 +220,7 @@ Each entry gives the hypothesis, the design, the result and the decision. Costs 
 
   A1 fixed 3 and broke 0 (replicate a), fixed 2 and broke 0 (replicate b). Guardrails pass; the engineering criterion (+0.05 on average and in each replicate: +0.025, +0.029, +0.020) fails. **Session drift:** on byte-identical requests sent the same day, B1s scored 44 against frozen E8 L-B1's 46 (6 flips).
 
-  **S-v2 (secondary).** 13 new arm-blind gray items await the owner's labels. With every pending item counted wrong, A1 − B1s is +0.025; with every pending item counted correct, +0.020 (`tables/evaluation_summary.json`). These two values are *not* bounds: over every consistent labelling of the 13 items, the independent Stage 2 audit puts A1 − B1s in **[+0.005, +0.040]** ([+0.005, +0.042] if "unsure" is allowed). No labelling reaches +0.05 or −0.05, so S-v2 cannot change the verdict (`experiments/frozen/e9/AUDIT.json`, README).
+  **S-v2 (secondary).** 13 new arm-blind gray items await the owner's labels. With every pending item counted wrong, A1 − B1s is +0.025; with every pending item counted correct, +0.020 (`tables/evaluation_summary.json`). These two values are *not* bounds: over every consistent labelling of the 13 items, the independent Stage 2 audit puts A1 − B1s in **[+0.005, +0.040]** ([+0.005, +0.042] if "unsure" is allowed). No labelling reaches +0.05 or −0.05, so S-v2 cannot change the verdict (`experiments/frozen/e9/AUDIT.json`, README). **Labelled 2026-11-27** (`experiments/frozen/e9_scoring_v2/`, 7 correct, 6 wrong): B1s 47, A1a 49, A1b 49 of 101; A1 − B1s **+0.020** [−0.005, +0.050], sign-flip p 0.19. The verdict stands.
 
   **Caveats from the independent Stage 2 audit** (`experiments/frozen/e9/AUDIT.json`: 47/47 checks passed, verdict confirmed; script in `audit/audit_e9_stage2.py`). The counts below were also re-checked against the frozen execution log and per-question table:
   - **Provider prompt caching was active.** 104 of 118 F8b calls and 54 of 118 F8a calls reused a cached prompt prefix; B1s calls did not. Replies were still generated afresh: 37 of 118 F8a and F8b replies differ. Without caching, the full run would have cost $0.236 instead of the observed $0.147055.
@@ -376,13 +376,13 @@ Sources: `experiments/frozen/final/README.md`, `tables/evaluation_summary.json`,
 
 **Evidence retrieval at k = 4** (666 answerable questions with annotated evidence): ColQwen2 recall 0.711 against BM25 0.543, +0.168 [+0.130, +0.207]; complete evidence 0.626 against 0.459. The development figures (E5, after the context guard) were 0.721 and 0.526.
 
-**S-v2 (secondary).** 85 arm-blind gray items await the owner's labels (`experiments/frozen/final/adjudication/`). Over every consistent correct/wrong labelling, B1 − T1 stays within [+0.077, +0.150] and A1 − B1 within [+0.015, +0.028]; with "unsure" also allowed, the upper ends rise to +0.159 and +0.031. No labelling can reverse either sign.
+**S-v2 (secondary).** 85 arm-blind gray items await the owner's labels (`experiments/frozen/final/adjudication/`). Over every consistent correct/wrong labelling, B1 − T1 stays within [+0.077, +0.150] and A1 − B1 within [+0.015, +0.028]; with "unsure" also allowed, the upper ends rise to +0.159 and +0.031. No labelling can reverse either sign. **Labelled 2026-11-27:** S-v2 with the owner's 85 blind labels (`experiments/frozen/final_scoring_v2/`): B1 − T1 **+0.117** [+0.087, +0.148] and A1 − B1 **+0.022** [+0.009, +0.037], sign-flip p 0.002. Both claims hold, inside the ranges frozen before labelling ([+0.077, +0.150] and [+0.015, +0.028]).
 
 **Independent audit** (`experiments/frozen/final/AUDIT.json`). It reproduced 70 quantities to within 3.7e-11 and passed 36 of 38 integrity checks (the two failures are described in section 7). Robustness variations:
 - leave-one-document-out: C2 between +0.1136 and +0.1239, `visual_retrieval_confirmed` in 110 of 110 folds;
 - documents weighted equally: C2 +0.1246;
 - without the D2 question: C2 unchanged in its verdict; C3 +0.019, p = 0.008, still supported (`experiments/frozen/final/README.md`);
-- worst-case S-v2 labelling: C2 still confirmed (+0.077); **C3's sign-flip p rises to 0.049**.
+- worst-case S-v2 labelling: C2 still confirmed (+0.077); **C3's sign-flip p rises to 0.049**. With the owner's actual labels C3's p is 0.002.
 
 **Cost.** $0.990233 for the run plus $0.003216 for the smoke = $0.993449 of the $2.50 ceiling; 2,085 calls, all first-attempt successes.
 
@@ -392,7 +392,7 @@ Drawn from `experiments/frozen/final/README.md` (Interpretation) and notebook 09
 
 1. **The central result replicates out of sample, at both layers.** Answers: +11.9 points against +12.7 in development (E6). Evidence: +16.8 points against +19.5 (E5). The answer-level gain is positive in every document type, from +0.026 on financial reports to +0.245 on tutorials; it is larger on figures (+0.171) than on plain text (+0.112) or tables (+0.077), and larger on image-heavy documents (+0.180) than on born-digital ones (+0.091). These subgroup figures are descriptive.
 2. **B1's held-out accuracy is 42.7 %,** slightly below the development estimate and inside its interval. More than half of answerable questions remain wrong. Accuracy falls with the number of evidence pages: 54 % for one page, 31 % for 2–3 pages, 13 % for 4+ pages. Gathering evidence across pages remains the main weakness.
-3. **E9's adaptive policy shows a small, statistically supported gain on held-out data** that 102 development questions could not resolve. It is fragile: 24 disagreements, one run per arm, p = 0.049 under the worst-case S-v2 labelling, and below E9's pre-registered +0.05 materiality. By the frozen rule B1 stays the shipped system; any adoption would be a new decision tested on new data.
+3. **E9's adaptive policy shows a small, statistically supported gain on held-out data** that 102 development questions could not resolve. It is fragile: 24 disagreements, one run per arm, p = 0.049 under the worst-case S-v2 labelling (0.002 with the owner's labels), and below E9's pre-registered +0.05 materiality. By the frozen rule B1 stays the shipped system; any adoption would be a new decision tested on new data.
 4. **T1 abstains correctly more often (140 vs 120 of 198)** because its pages more often lack the evidence. Answerable accuracy, the primary metric, is what the claims rest on.
 
 ### 9.4 Limitations
@@ -444,13 +444,13 @@ Three disagreements found in an earlier version of this report were corrected in
 |---|---|
 | E0 canonical runs | `experiments/frozen/mmlongbench_doc/` |
 | E1–E7 runs, tables, audits | `experiments/frozen/e1/` … `e7/` |
-| S-v2 owner labels | `experiments/frozen/scoring_v2/` (E6/E7), `experiments/frozen/e8_scoring_v2/` (E8), `experiments/frozen/e10_scoring_v2/` (E10) |
+| S-v2 owner labels | `experiments/frozen/scoring_v2/` (E6/E7), `experiments/frozen/e8_scoring_v2/` (E8), `experiments/frozen/e9_scoring_v2/` (E9), `experiments/frozen/final_scoring_v2/` (final), `experiments/frozen/e10_scoring_v2/` (E10) |
 | E8 smoke and execution | `experiments/frozen/e8_smoke/`, `experiments/frozen/e8/` (commit `0d68a93`) |
 | E9 Stage 0 | `experiments/frozen/e9_stage0/` (commit `a30bb29`) |
-| E9 Stage 1–2 | `experiments/frozen/e9/` (commit `7f6c744`; independent audit 47/47; 13 S-v2 items await the owner's labels) |
+| E9 Stage 1–2 | `experiments/frozen/e9/` (commit `7f6c744`; independent audit 47/47); S-v2 labels in `experiments/frozen/e9_scoring_v2/` |
 | Final evaluation: index | `experiments/frozen/final_index/` (commit `ab8a9c8`, before any question was read) |
 | Final evaluation: retrieval | `experiments/frozen/final_retrieval/` (commit `8d5768a`) |
-| Final evaluation: run, evaluation, audit | `experiments/frozen/final/` (commit `c6c450d`; 85 S-v2 items await the owner's labels) |
+| Final evaluation: run, evaluation, audit | `experiments/frozen/final/` (commit `c6c450d`); S-v2 labels in `experiments/frozen/final_scoring_v2/` |
 | E10 agentic reader | `experiments/frozen/e10/` (spec commit `25cd488`; audit 31/31); S-v2 labels in `experiments/frozen/e10_scoring_v2/` |
 | Specifications | `experiments/specs/` (E1–E9, E2 v1 superseded by v2, E9 addendum; `final_evaluation_v1.json` with its plan and deviations) |
 | Baseline description | `docs/validated_baseline_b1.md` |

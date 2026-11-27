@@ -10,13 +10,23 @@ The single place that records what is done, what is running, what each decision 
 | E9 pre-registration | **done** | `experiments/specs/e9_adaptive_evidence_v1.json`, commit `7f41eea` (before any analysis) |
 | E9 Stage 0 (offline trigger selection, $0) | **passed**; independently audited (reproduced ≤ 5e-7) | `experiments/frozen/e9_stage0/` (commit `a30bb29`) |
 | E9 Stage 1 smoke (6 calls) | **passed** all 7 gates, $0.004592 | `experiments/frozen/e9/smoke_*` |
-| E9 Stage 2 (354 calls) | **done: `no_meaningful_gain`** (S-v1). B1 unchanged. Independent audit 47/47. 13 S-v2 items await owner labels; no labelling can change the verdict | `experiments/frozen/e9/`, notebook 08 |
+| E9 Stage 2 (354 calls) | **done: `no_meaningful_gain`** (S-v1). B1 unchanged. Independent audit 47/47. S-v2 labelled by the owner (`e9_scoring_v2`): A1 − B1s +0.020, verdict unchanged | `experiments/frozen/e9/`, notebook 08 |
 | E10 agentic reader (spec `25cd488`, smoke, 354-item run) | **done: `regression`** by the frozen broken-ratio rule (AGb 17 fixed / 9 broken), with +8 questions net in both replicates (45 → 53 of 102) and evidence recall of pages seen 0.726 → 0.866. B1 unchanged. Audit 31/31 (32/32 with the package sums). S-v2 labelled by the owner (`e10_scoring_v2`): +0.089 [+0.017, +0.177], p 0.025, verdict unchanged. $0.473 | `experiments/frozen/e10/`, notebook 10 |
 | Application (B1 with live ColQwen2, cache, CLI, UI) | **built, reviewed, verified live.** 200 tests pass. Three live calls reproduced frozen E8 L-B1 requests, tokens and answers exactly. The live *encoder* is checked by notebook 09's parity gate | `src/visualdoc/{visual_index,app,web}.py`, commit `041827f` |
 | Final held-out evaluation | **done, audited, frozen** (`c6c450d`). C1 B1 0.427; C2 `visual_retrieval_confirmed` (+0.119); C3 `a1_gain_supported` (+0.021, secondary). $0.993 | `experiments/frozen/final/` |
 | Documentation (README, architecture, report, reproducibility, demo) | written; final-evaluation results are still to be added | `README.md`, `docs/{research_report,architecture,reproducibility}.md` |
 
 ## Decisions and their reasons
+
+### 2026-11-27 — S-v2 owner labels: all pending blind items labelled
+
+- **What.** The owner labelled every pending arm-blind gray item in chat, in batches, seeing only question, reference and reply: E10 17 (9 correct / 8 wrong), E9 13 (7 / 6), final evaluation 85 (53 / 32), no "unsure". Three E9 items were byte-identical to E10 items already labelled, so those labels were reused (the project's reuse rule), and the owner was told.
+- **How.** Each label is bound to its blind item by the identity SHA-256; the sealed keys were copied in only after all labels were recorded, and all 115 identities match. New packages `experiments/frozen/{e10,e9,final}_scoring_v2/`; the execution packages are unchanged. `tests/test_scoring_v2_packages.py` guards them.
+- **Results (secondary; verdicts and claims rest on S-v1 and do not change).**
+  - E10: AG − B1s +0.089 [+0.017, +0.177], sign-flip p 0.025. Under S-v2 the broken-ratio rule would not fire (AGb 16 / 6), but the 12 replicate flips still block `go`.
+  - E9: A1 − B1s +0.020 [−0.005, +0.050], p 0.19: `no_meaningful_gain` agrees.
+  - Final: C2 B1 − T1 +0.117 [+0.087, +0.148]; C3 A1 − B1 +0.022 [+0.009, +0.037], p 0.002 (its worst case, 0.049, did not occur). All values inside the pre-labelling ranges.
+- **Limitation.** One adjudicator, no page images shown; a few labels (e.g. answers with extra qualifiers) are judgment calls another rater could make differently.
 
 ### 2026-11-27 — E10: an agentic reader (search, read, finish), development data
 
@@ -146,10 +156,10 @@ The single place that records what is done, what is running, what each decision 
 - **Independent audit.**
   - It reproduced all 70 quantities.
   - C2 holds in every leave-one-document-out fold.
-  - C3 is fragile: p = 0.049 under the worst-case S-v2 labelling.
+  - C3 is fragile: p = 0.049 under the worst-case S-v2 labelling (0.002 with the owner's labels).
   - Two low-severity findings are recorded: token-model rounding, and a pool reference quoted in D2's text, now in the ledger.
 - **Decision.** B1 remains the shipped system. A1's gain is reported, not adopted. The pool is now used: it may be reported, never tuned on.
-- **Open (owner, optional).** 85 blind S-v2 items, `experiments/frozen/final/adjudication/`. No labelling can reverse C2 or C3.
+- **S-v2 labels: done (2026-11-27).** S-v2 with the owner's 85 blind labels (`experiments/frozen/final_scoring_v2/`): B1 − T1 **+0.117** [+0.087, +0.148] and A1 − B1 **+0.022** [+0.009, +0.037], sign-flip p 0.002. Both claims hold, inside the ranges frozen before labelling ([+0.077, +0.150] and [+0.015, +0.028]).
 - **Move to the ENSAE-ENSAI Datalab.**
   - Done:
     - GitHub is complete.
@@ -303,7 +313,7 @@ E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Pl
    - `bdf54dxa.pdf` page 11 OCR text differs on x86-64. This is a processor condition, and the test stays as it is (the one `pytest` failure in `.venv`).
    - GPU encoding is possible only with torch 2.14.0+cu126, a new condition. The pinned torch 2.15.0 needs driver ≥ 580 for CUDA, and the service has 565.
    - The local commits are not pushed yet.
-4. **S-v2 blind labels.** E10's 17 items were labelled on 2026-11-27 (`experiments/frozen/e10_scoring_v2/`). 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
+4. **S-v2 blind labels: none pending.** On 2026-11-27 the owner labelled E10's 17, E9's 13 and the final evaluation's 85 items (`experiments/frozen/{e10,e9,final}_scoring_v2/`, guarded by `tests/test_scoring_v2_packages.py`). No verdict or claim changed.
 
 ## Known limitations (running list)
 

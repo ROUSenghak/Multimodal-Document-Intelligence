@@ -64,8 +64,8 @@ Protocol frozen in `experiments/specs/final_evaluation_v1.json` (commit `1c54a3e
 
 - **Evidence retrieval at k = 4** (666 answerable questions with annotated evidence): ColQwen2 recall 0.711 vs BM25 0.543, +0.168 [+0.130, +0.207]; complete evidence 0.626 vs 0.459. Development (E5): 0.721 vs 0.526.
 - **Robustness (independent audit).** It reproduced 70 quantities to within 3.7e-11. C2 is `visual_retrieval_confirmed` in all 110 leave-one-document-out folds (Δ from +0.1136 to +0.1239) and with documents weighted equally (+0.1246).
-- **C3 is fragile.** It rests on 24 disagreements and one run per arm, stays below E9's +0.05 materiality, and its sign-flip p rises to 0.049 under the worst-case S-v2 labelling.
-- **S-v2 (secondary).** 85 arm-blind gray items await the owner's labels. Over every consistent labelling, B1 − T1 stays within [+0.077, +0.150] and A1 − B1 within [+0.015, +0.028]; no labelling reverses either sign.
+- **C3 is fragile.** It rests on 24 disagreements and one run per arm, stays below E9's +0.05 materiality, and it is one run per arm. (Its worst-case S-v2 p of 0.049 did not occur: with the owner's labels p = 0.002.)
+- **S-v2 (secondary).** S-v2 with the owner's 85 blind labels (`experiments/frozen/final_scoring_v2/`): B1 − T1 **+0.117** [+0.087, +0.148] and A1 − B1 **+0.022** [+0.009, +0.037], sign-flip p 0.002. Both claims hold, inside the ranges frozen before labelling ([+0.077, +0.150] and [+0.015, +0.028]).
 - **Cost.** 2,079 calls plus a 6-call smoke on development questions, all first-attempt successes on one served model: $0.993449 of a $2.50 ceiling.
 
 Sources: `experiments/frozen/final/README.md`, `tables/evaluation_summary.json`, `AUDIT.json`. Full account: [`docs/research_report.md`](docs/research_report.md) §9.
@@ -186,7 +186,7 @@ Details: [`docs/research_report.md`](docs/research_report.md) §4.
 
 From `docs/PROGRESS.md` and the frozen packages:
 
-1. **S-v2 labels (optional, owner).** 85 arm-blind items for the final evaluation (`experiments/frozen/final/adjudication/`) and 13 for E9. No labelling can reverse C2, C3 or E9's verdict.
+1. **S-v2 labels: done** (2026-11-27). The owner labelled all pending blind items: 85 for the final evaluation, 13 for E9, 17 for E10 (`experiments/frozen/{final,e9,e10}_scoring_v2/`). No verdict or claim changed.
 2. **Environment.** The work is moving to an Onyxia datalab (ENSAE-ENSAI Datalab or SSP Cloud); the step-by-step guide is [`docs/ssp_cloud.md`](docs/ssp_cloud.md). Encoding stays on the M1.
 3. **Future work** must use new data: the test pool may be reported but never used to tune a system, so A1's held-out gain is a reason for a new experiment, not for changing B1.
 
@@ -272,7 +272,7 @@ The reader change explains the drop: E6's GPT-4o-mini requests cost $1.827 per a
 - **One held-out evaluation, one run per arm.** E8 measured 4–7 flips between identical replicates on 102 questions; C2's 80 net questions are far above that, C3's 14 are closer to it.
 - **Design data are small and reused.** E0–E9 used 20 documents (175 questions); E6–E9 reused the same 118 questions.
 - **Single-annotator evidence.** A page that answers but is not annotated counts as missing.
-- **Local scoring.** S-v1 re-implements the benchmark's rule-based scorer without its GPT-4o extraction step; S-v2 adds blind human labels for ambiguous replies (85 held-out items still unlabelled).
+- **Local scoring.** S-v1 re-implements the benchmark's rule-based scorer without its GPT-4o extraction step; S-v2 adds blind human labels for ambiguous replies (one adjudicator, the owner).
 - **An unpinnable reader.** `gpt-6-luna` returns no system fingerprint; frozen replies define every result.
 - **A thin core scope.** The product's core document types account for 32 of the 110 held-out documents.
 - **Visual indexing is slow on the development laptop**: the 5,554 pool pages took about 14 h on the M1 GPU, about 9.5 s per page (`docs/PROGRESS.md`). Without an index the app falls back to BM25.

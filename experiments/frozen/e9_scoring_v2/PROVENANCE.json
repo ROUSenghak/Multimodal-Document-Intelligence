@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-27",
+  "kind": "blind human adjudication for scoring protocol S-v2, E9 items",
+  "source_notebook": "notebooks/08_adaptive_evidence.ipynb",
+  "source_runs": [
+    "experiments/frozen/e9/run_20261125T171152006205Z_57d16dea_full"
+  ],
+  "blind_queue": "experiments/frozen/e9/adjudication/blind_queue_unlabelled.csv",
+  "blind_queue_sha256": "8eb57dca6fe40ac858ecf29325b759752e85c9c6bc3b98ccf81715e489552232",
+  "items": 13,
+  "labels": {
+    "correct": 7,
+    "wrong": 6,
+    "unsure": 0
+  },
+  "adjudicator": "project owner",
+  "blind_to_arm": true,
+  "paid_calls": 0,
+  "reused_labels": "E9-ADJ-008, E9-ADJ-009 and E9-ADJ-012 are byte-identical (same identity SHA-256) to E10 items the owner labelled in experiments/frozen/e10_scoring_v2; the owner's label was reused, as the project's reuse rule requires, and the owner was told",
+  "identity_fields": [
+    "document",
+    "evidence_pages",
+    "question",
+    "answer_format",
+    "reference",
+    "reply"
+  ],
+  "identity_serialisation": "json.dumps(mapping, sort_keys=True, ensure_ascii=False).encode()",
+  "unsure_policy": "exclude from the S-v2 point estimate and paired contrasts; report wrong/correct sensitivity bounds",
+  "evidence_shown": "question, reference and reply text only; no page render was shown",
+  "unblinding": "adjudication_key.csv is a byte-for-byte copy of experiments/frozen/e9/adjudication/sealed_key.csv, opened only after every label was recorded; all 13 label identities match the key",
+  "e9_package_commit": "7f6c744",
+  "note": "E9's execution package experiments/frozen/e9 is unchanged by this freeze. S-v2 is secondary: these labels do not change the frozen S-v1 verdict."
+}

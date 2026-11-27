@@ -1,0 +1,34 @@
+{
+  "date": "2026-11-27",
+  "kind": "blind human adjudication for scoring protocol S-v2, final held-out evaluation items",
+  "source_notebook": "notebooks/09_final_evaluation.ipynb",
+  "source_runs": [
+    "experiments/frozen/final/run_20261126T124411360565Z_8feb6d9f_full"
+  ],
+  "blind_queue": "experiments/frozen/final/adjudication/blind_queue_unlabelled.csv",
+  "blind_queue_sha256": "8f9022224577b883190bc12c89d646aafc5873944a8edcae2d41a4aaa5be580e",
+  "items": 85,
+  "labels": {
+    "correct": 53,
+    "wrong": 32,
+    "unsure": 0
+  },
+  "adjudicator": "project owner",
+  "blind_to_arm": true,
+  "paid_calls": 0,
+  "identity_fields": [
+    "document",
+    "evidence_pages",
+    "question",
+    "answer_format",
+    "reference",
+    "reply"
+  ],
+  "identity_serialisation": "json.dumps(mapping, sort_keys=True, ensure_ascii=False).encode()",
+  "unsure_policy": "exclude from the S-v2 point estimate and paired contrasts; report wrong/correct sensitivity bounds",
+  "evidence_shown": "question, reference and reply text only; no page render was shown",
+  "unblinding": "adjudication_key.csv is a byte-for-byte copy of experiments/frozen/final/adjudication/sealed_key.csv, opened only after every label was recorded; all 85 label identities match the key",
+  "final_package_commit": "c6c450d",
+  "use_of_held_out_data": "scoring only: labelling the frozen replies of the final run; no design, prompt or threshold was changed",
+  "note": "The final package experiments/frozen/final is unchanged by this freeze. S-v2 is secondary: the claims C2 and C3 are decided on S-v1."
+}
