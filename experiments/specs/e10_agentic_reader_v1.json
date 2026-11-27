@@ -1,0 +1,137 @@
+{
+  "experiment": "E10",
+  "title": "An agentic document reader: search, read, finish under a fixed budget, against a same-session B1 control",
+  "version": 1,
+  "status": "frozen before any paid call",
+  "date": "2026-11-27",
+  "owner_approval": {
+    "date": "2026-11-27",
+    "scope": "smoke and full run",
+    "cumulative_ceiling_usd": 3.5
+  },
+  "design_document": "docs/e10_agentic_reader_proposal.md",
+  "notebook": "notebooks/10_agentic_reader.ipynb",
+  "population": {
+    "name": "held-out-14 (development data since E7)",
+    "documents": 14,
+    "questions": 118,
+    "answerable": 102,
+    "unanswerable": 16,
+    "with_annotated_evidence": 101,
+    "note": "the MMLongBench-Doc test pool is used up (final evaluation, 2026-11-26) and is not touched"
+  },
+  "arms": {
+    "B1s": "B1, requests byte-identical to frozen E8 L-B1 (same-session control)",
+    "AGa": "the agent, replicate 1",
+    "AGb": "the agent, replicate 2 (identical requests at the first call)"
+  },
+  "reader": {
+    "model": "gpt-6-luna",
+    "temperature": 0,
+    "reasoning_effort": "none",
+    "max_completion_tokens_per_call": 800,
+    "images": "768-px short side, the archived E5 renders, detail high"
+  },
+  "agent": {
+    "prompt_version": "e10-agent-v1",
+    "agent_contract_sha256": "de749414e4000d66f593aa735c42f9f26cb1003425008c95e894c3fc176afdad",
+    "warm_start": "the first message holds B1's exact top 4 ColQwen2 pages (frozen E5 ranking)",
+    "tools": {
+      "search_pages": "query -> top 8 page numbers by ColQwen2 MaxSim over all pages, relative scores, no images",
+      "read_pages": "up to 4 page images, each preceded by [Page N]; images in a user message after the tool message",
+      "finish": "B1's strict schema {answer, cited_pages, evidence[{page, quote}]}"
+    },
+    "limits": {
+      "max_calls": 6,
+      "max_distinct_pages_seen": 12,
+      "max_pages_per_read": 4,
+      "search_k": 8,
+      "per_episode_ceiling_usd": 0.03,
+      "tool_choice": "required; finish forced on the last call",
+      "parallel_tool_calls": false
+    },
+    "guards": [
+      "repeated query (case and spacing normalised) refused",
+      "pages already seen not resent",
+      "nonexistent pages reported",
+      "invalid JSON arguments, unknown tool or no tool call cost the step",
+      "invalid finish rejected and may be fixed; on the forced call it is kept as a schema failure"
+    ]
+  },
+  "search_encoder": {
+    "model": "vidore/colqwen2-v1.0-hf@ddc07d2317c80f75fc742b7362ee9ad1912908f9 (E5's checkpoint, weights sha256 2f6dbf32...)",
+    "device": "Datalab CPU, torch 2.15.0+cpu, transformers 5.23.0, bf16, 8 threads",
+    "new_condition": "E5 encoded queries on Apple MPS; CPU query embeddings are not bitwise equal",
+    "page_embeddings": "E5's frozen cache, never recomputed",
+    "parity_gate": {
+      "rule": "top-4 set equal to frozen E5 for >= 90 % of the 118 questions and |recall@4 CPU - E5| <= 0.02",
+      "result": {
+        "top4_set_equal": "113/118",
+        "top4_order_equal": "112/118",
+        "top8_order_equal": "92/118",
+        "full_ranking_equal": "25/118",
+        "recall_at_4_cpu": 0.7234,
+        "recall_at_4_e5": 0.7259,
+        "passed": true
+      }
+    }
+  },
+  "plans": {
+    "smoke_sha256": "2690f1859dccf828b8ff869ab361725ce9c75ea0dd3de5977a75866581e844cf",
+    "full_sha256": "edd9a6cc8890a0e9056d198bde3698238585cb535c2f6474afcc179187d8dd09",
+    "smoke_qids": [
+      "mmlb-0045",
+      "mmlb-0999",
+      "mmlb-1000",
+      "mmlb-1002",
+      "mmlb-1051",
+      "mmlb-1061"
+    ],
+    "smoke": "6 agent episodes on development questions, not scored",
+    "full": "118 blocks (one per question, seeded order) of B1s, AGa, AGb; the 6 arm orders balanced across blocks",
+    "seeds": {
+      "base": 20261127,
+      "smoke": 20261128,
+      "order": 20261129,
+      "bootstrap": 20261128,
+      "adjudication_queue": 20261136
+    }
+  },
+  "budget": {
+    "cumulative_ceiling_usd": 3.5,
+    "worst_case_full_plan_usd": 2.641,
+    "note": "the worst case (every episode using 6 calls and 12 pages) is below the ceiling; every call's upper bound is also checked against the remaining ceiling before it is sent (fail-closed)",
+    "prices_per_1m": {
+      "input": 0.1,
+      "cached_input": 0.01,
+      "output": 0.5
+    }
+  },
+  "metrics": {
+    "primary": "AG - B1s, S-v1 correct (score > 0) on the 102 answerable questions, AG = mean of AGa and AGb per question",
+    "secondary": [
+      "H2 mechanism: evidence recall of the pages seen, AG vs B1s top 4 (101 labelled questions)",
+      "H3: the contrast within the 39 questions whose evidence is incomplete in the top 4, and outside them",
+      "accuracy by number of evidence pages (1, 2-3, 4+), descriptive",
+      "correct abstentions (16), citation validity (cited pages within pages seen), schema validity",
+      "calls, searches, reads, pages seen, prompt tokens (cached and not), cost, latency per question",
+      "AGa vs AGb flips; B1s vs frozen E8 L-B1 and E9 B1s drift",
+      "S-v2 with owner labels reused for identical blind items; new gray items queued, never model-judged"
+    ],
+    "statistics": "document-cluster percentile bootstrap (10,000 draws) and exact document sign-flip test (2^14 patterns), as E9"
+  },
+  "decision_rules_in_order": [
+    "regression if a guardrail fails (each agent replicate: correct abstentions >= B1s - 2, citation validity >= 0.99, schema validity >= 0.99) or delta <= -0.05",
+    "no_meaningful_gain unless delta >= +0.05 on average and in each replicate",
+    "regression if broken > fixed / 2 in either replicate",
+    "gain_without_mechanism unless the evidence-recall contrast is > 0 with bootstrap 5th percentile > 0",
+    "too_expensive if the mean observed agent cost exceeds $0.01 per question",
+    "go if bootstrap 5th percentile > 0, sign-flip p <= 0.05 and AGa vs AGb flips <= 10",
+    "otherwise promising_but_uncertain"
+  ],
+  "interpretation_limits": [
+    "development data: the 118 questions shaped E7-E9; a go here leads to a confirmatory test on a new benchmark, not a claim",
+    "an honest gain of 3-5 questions is within replicate noise on 102 questions",
+    "one reader alias without a snapshot; results are defined by the frozen replies"
+  ]
+}
