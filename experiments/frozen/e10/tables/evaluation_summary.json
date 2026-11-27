@@ -1,0 +1,199 @@
+{
+  "run": "full_20261127T103158Z_3049dc6c",
+  "arms": {
+    "B1s": {
+      "S-v1 correct / 102": 45.0,
+      "correct abstentions / 16": 8.0,
+      "citation validity": 1.0,
+      "schema validity": 1.0,
+      "S-v2 correct (auto + owner)": 46.0,
+      "S-v2 pending": 3.0,
+      "evidence recall of pages seen (101)": 0.725908,
+      "evidence complete in pages seen (101)": 62.0,
+      "pages seen (mean)": 4.0,
+      "calls (mean)": 1.0,
+      "searches (mean)": 0.0,
+      "prompt tokens (mean)": 3977.152542,
+      "cached share": 0.0,
+      "cost USD per question": 0.000422,
+      "latency s p50": 2.2745,
+      "latency s p90": 3.8592
+    },
+    "AGa": {
+      "S-v1 correct / 102": 53.0,
+      "correct abstentions / 16": 9.0,
+      "citation validity": 1.0,
+      "schema validity": 1.0,
+      "S-v2 correct (auto + owner)": 50.0,
+      "S-v2 pending": 8.0,
+      "evidence recall of pages seen (101)": 0.867574,
+      "evidence complete in pages seen (101)": 77.0,
+      "pages seen (mean)": 6.754237,
+      "calls (mean)": 3.347458,
+      "searches (mean)": 1.20339,
+      "prompt tokens (mean)": 21569.525424,
+      "cached share": 0.237825,
+      "cost USD per question": 0.001755,
+      "latency s p50": 5.422,
+      "latency s p90": 17.3022
+    },
+    "AGb": {
+      "S-v1 correct / 102": 53.0,
+      "correct abstentions / 16": 12.0,
+      "citation validity": 1.0,
+      "schema validity": 1.0,
+      "S-v2 correct (auto + owner)": 51.0,
+      "S-v2 pending": 10.0,
+      "evidence recall of pages seen (101)": 0.863531,
+      "evidence complete in pages seen (101)": 78.0,
+      "pages seen (mean)": 6.813559,
+      "calls (mean)": 3.271186,
+      "searches (mean)": 1.135593,
+      "prompt tokens (mean)": 20929.559322,
+      "cached share": 0.247222,
+      "cost USD per question": 0.001686,
+      "latency s p50": 5.728,
+      "latency s p90": 14.9205
+    }
+  },
+  "decision": {
+    "primary contrast": "AG (AGa, AGb averaged) - B1s, S-v1, 102 answerable",
+    "delta": 0.0784,
+    "ci95": [
+      0.0,
+      0.1812
+    ],
+    "bootstrap 5th percentile": 0.0098,
+    "sign-flip p": 0.05273,
+    "per replicate": {
+      "AGa": {
+        "delta": 0.0784313725490196,
+        "fixed": 13,
+        "broken": 5
+      },
+      "AGb": {
+        "delta": 0.0784313725490196,
+        "fixed": 17,
+        "broken": 9
+      }
+    },
+    "guardrails pass": true,
+    "engineering criterion (+0.05 average and each replicate)": true,
+    "broken > fixed/2": true,
+    "mechanism (evidence recall of pages seen)": {
+      "n": 101,
+      "delta": 0.1396,
+      "ci95": [
+        0.08370968980343982,
+        0.19846491228070176
+      ],
+      "p05_one_sided": 0.0915,
+      "sign_flip_p": 0.0002
+    },
+    "agent cost per question (USD)": 0.00172,
+    "cost <= $0.01": true,
+    "statistics hold": false,
+    "AGa vs AGb flips": 12,
+    "VERDICT (S-v1, frozen rules)": "regression"
+  },
+  "where": {
+    "evidence incomplete in top 4 (39)": {
+      "n": 39,
+      "delta": 0.2564102564102564,
+      "ci95": [
+        0.13636363636363635,
+        0.5
+      ],
+      "p05_one_sided": 0.1509433962264151,
+      "sign_flip_p": 0.0009765625
+    },
+    "evidence complete in top 4 or unlabelled": {
+      "n": 63,
+      "delta": -0.031746031746031744,
+      "ci95": [
+        -0.12931832694763729,
+        0.0847457627118644
+      ],
+      "p05_one_sided": -0.11475409836065574,
+      "sign_flip_p": 0.75
+    }
+  },
+  "bucket_table": {
+    "('sum', 'AGa')": {
+      "1 page": 36,
+      "2-3 pages": 16,
+      "4+ pages": 1
+    },
+    "('sum', 'AGb')": {
+      "1 page": 36,
+      "2-3 pages": 16,
+      "4+ pages": 1
+    },
+    "('sum', 'B1s')": {
+      "1 page": 33,
+      "2-3 pages": 10,
+      "4+ pages": 1
+    },
+    "('count', 'AGa')": {
+      "1 page": 55,
+      "2-3 pages": 40,
+      "4+ pages": 6
+    },
+    "('count', 'AGb')": {
+      "1 page": 55,
+      "2-3 pages": 40,
+      "4+ pages": 6
+    },
+    "('count', 'B1s')": {
+      "1 page": 55,
+      "2-3 pages": 40,
+      "4+ pages": 6
+    }
+  },
+  "drift": {
+    "B1s vs frozen E8 L-B1": 5,
+    "B1s vs frozen E9 B1s": 5,
+    "frozen E8 L-B1 correct": 46,
+    "frozen E9 B1s correct": 44
+  },
+  "trajectory": {
+    "finished at call 1": 0.2923728813559322,
+    "calls (mean)": 3.309322033898305,
+    "calls distribution": {
+      "1": 69,
+      "2": 37,
+      "3": 29,
+      "4": 3,
+      "5": 49,
+      "6": 49
+    },
+    "searches (mean)": 1.1694915254237288,
+    "reads (mean)": 1.1355932203389831,
+    "repeated searches": 1,
+    "protocol / argument errors": 0,
+    "forced finishes": 49,
+    "page budget exhausted": 19,
+    "billed minus estimated prompt tokens (agent calls): median": 262.0,
+    "... max": 354.0,
+    "B1s prompt totals exact": true
+  },
+  "s_v2": {
+    "pending as wrong": {
+      "B1s": 46.0,
+      "AG (avg)": 50.5,
+      "AG - B1s": 0.04455445544554455,
+      "n": 101
+    },
+    "pending as correct": {
+      "B1s": 49.0,
+      "AG (avg)": 59.5,
+      "AG - B1s": 0.10396039603960396,
+      "n": 101
+    }
+  },
+  "s_v2_pending_items": 17,
+  "spend_usd": {
+    "observed_list_price": 0.45586162,
+    "smoke_observed_list_price": 0.0163701
+  }
+}

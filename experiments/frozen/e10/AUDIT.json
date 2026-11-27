@@ -1,0 +1,287 @@
+{
+  "audit": "E10 independent audit",
+  "run": "full_20261127T103158Z_3049dc6c",
+  "smoke": [
+    "smoke_20261127T102703Z_df4eb49e",
+    "smoke_20261127T102916Z_9460aea6"
+  ],
+  "passed": 31,
+  "total": 31,
+  "all_checks_passed": true,
+  "facts": {
+    "spend_usd": {
+      "full": 0.455862,
+      "smoke_charged": 0.017513,
+      "total": 0.473375
+    },
+    "primary": {
+      "delta": 0.078431,
+      "ci95": [
+        0.0,
+        0.18125
+      ],
+      "sign_flip_p": 0.052734
+    },
+    "evidence_population": 101,
+    "evidence_recall_seen": {
+      "B1s": 0.725908,
+      "AGa": 0.867574,
+      "AGb": 0.863531
+    }
+  },
+  "checks": [
+    {
+      "name": "frozen package e5 matches SHA256SUMS",
+      "passed": true,
+      "details": {
+        "files": 11,
+        "mismatched": []
+      }
+    },
+    {
+      "name": "frozen package e8 matches SHA256SUMS",
+      "passed": true,
+      "details": {
+        "files": 10,
+        "mismatched": []
+      }
+    },
+    {
+      "name": "frozen package e9 matches SHA256SUMS",
+      "passed": true,
+      "details": {
+        "files": 15,
+        "mismatched": []
+      }
+    },
+    {
+      "name": "frozen package e9_stage0 matches SHA256SUMS",
+      "passed": true,
+      "details": {
+        "files": 5,
+        "mismatched": []
+      }
+    },
+    {
+      "name": "spec byte-identical to its freeze commit",
+      "passed": true,
+      "details": {
+        "commit": "25cd488",
+        "sha256": "de1b9f4e9a88"
+      }
+    },
+    {
+      "name": "spec never changed after its freeze commit",
+      "passed": true,
+      "details": {
+        "later_commits": []
+      }
+    },
+    {
+      "name": "one full run and the smoke runs are in the package",
+      "passed": true,
+      "details": {
+        "full": [
+          "full_20261127T103158Z_3049dc6c"
+        ],
+        "smoke": [
+          "smoke_20261127T102703Z_df4eb49e",
+          "smoke_20261127T102916Z_9460aea6"
+        ]
+      }
+    },
+    {
+      "name": "run settings carry the frozen spec, plan and contract hashes",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "plan: 118 questions x {B1s, AGa, AGb}, one block per question, positions 1-3",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "plan: the six arm orders are balanced (19 or 20 blocks each)",
+      "passed": true,
+      "details": {
+        "orders": {
+          "AGb-B1s-AGa": 19,
+          "B1s-AGa-AGb": 20,
+          "AGa-B1s-AGb": 20,
+          "B1s-AGb-AGa": 20,
+          "AGa-AGb-B1s": 20,
+          "AGb-AGa-B1s": 19
+        }
+      }
+    },
+    {
+      "name": "no test-pool question in the plan",
+      "passed": true,
+      "details": {
+        "documents": 14
+      }
+    },
+    {
+      "name": "354 items completed, one ok record each",
+      "passed": true,
+      "details": {
+        "attempts": 354,
+        "interrupted": 0
+      }
+    },
+    {
+      "name": "every call succeeded on one served model",
+      "passed": true,
+      "details": {
+        "calls": 899,
+        "models": [
+          "gpt-6-luna"
+        ],
+        "fingerprints": [
+          "None"
+        ]
+      }
+    },
+    {
+      "name": "each call's cost equals its billed usage at list price",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "no billed prompt exceeded its pre-call bound",
+      "passed": true,
+      "details": {
+        "max_ratio": 1.0
+      }
+    },
+    {
+      "name": "no call exceeded the output allowance",
+      "passed": true,
+      "details": {
+        "max": 193
+      }
+    },
+    {
+      "name": "cumulative E10 spend within the $3.50 ceiling",
+      "passed": true,
+      "details": {
+        "full": 0.455862,
+        "smoke_charged": 0.017513,
+        "total": 0.473375
+      }
+    },
+    {
+      "name": "118 B1s calls, each byte-identical (loggable form and fingerprint) to frozen E8 L-B1",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "B1s prompt totals equal the E8 token model exactly",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "every agent episode starts with B1's exact top 4 page images",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "pages seen, rebuilt from the logged requests, equal the recorded pages seen",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "limits held: <= 6 calls, <= 12 distinct pages, <= 4 pages per read",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "tool_choice was 'required' except on forced finishes",
+      "passed": true,
+      "details": {}
+    },
+    {
+      "name": "every search result is reproduced from the cached query embedding and E5's page embeddings (numpy, no torch)",
+      "passed": true,
+      "details": {
+        "searches": 276,
+        "equal": 276
+      }
+    },
+    {
+      "name": "B1s: S-v1 correct, abstentions and citation validity reproduced",
+      "passed": true,
+      "details": {
+        "mine": {
+          "S-v1 correct / 102": 45,
+          "correct abstentions / 16": 8,
+          "citation validity": 1.0
+        }
+      }
+    },
+    {
+      "name": "AGa: S-v1 correct, abstentions and citation validity reproduced",
+      "passed": true,
+      "details": {
+        "mine": {
+          "S-v1 correct / 102": 53,
+          "correct abstentions / 16": 9,
+          "citation validity": 1.0
+        }
+      }
+    },
+    {
+      "name": "AGb: S-v1 correct, abstentions and citation validity reproduced",
+      "passed": true,
+      "details": {
+        "mine": {
+          "S-v1 correct / 102": 53,
+          "correct abstentions / 16": 12,
+          "citation validity": 1.0
+        }
+      }
+    },
+    {
+      "name": "primary contrast AG - B1s reproduced (delta, 95 % interval, exact sign-flip p)",
+      "passed": true,
+      "details": {
+        "delta": 0.078431,
+        "ci95": [
+          0.0,
+          0.18125
+        ],
+        "sign_flip_p": 0.052734
+      }
+    },
+    {
+      "name": "fixed / broken per replicate reproduced",
+      "passed": true,
+      "details": {
+        "AGa": {
+          "fixed": 13,
+          "broken": 5
+        },
+        "AGb": {
+          "fixed": 17,
+          "broken": 9
+        }
+      }
+    },
+    {
+      "name": "evidence recall of pages seen reproduced",
+      "passed": true,
+      "details": {
+        "B1s": 0.725908,
+        "AGa": 0.867574,
+        "AGb": 0.863531
+      }
+    },
+    {
+      "name": "verdict recorded",
+      "passed": true,
+      "details": {
+        "verdict": "regression"
+      }
+    }
+  ]
+}

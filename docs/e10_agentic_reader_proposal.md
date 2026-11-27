@@ -1,6 +1,6 @@
 # E10 proposal — an agentic document reader
 
-**Status:** proposal only, for the owner's review. No specification is frozen, no notebook 10 exists, no paid call is authorised.
+**Status:** executed on 2026-11-27. Specification `experiments/specs/e10_agentic_reader_v1.json` (commit `25cd488`), notebook `notebooks/10_agentic_reader.ipynb`, frozen package `experiments/frozen/e10/` (results in its README). As built, the worst case of the full plan was $2.64, not the $3.15 estimated in §5, and the observed spend was $0.473.
 **Population (development):** the same 118 questions in 14 documents used by E6–E9. The MMLongBench-Doc test pool is used up and is not touched (`AGENTS.md`).
 **Written:** 2026-11-27.
 

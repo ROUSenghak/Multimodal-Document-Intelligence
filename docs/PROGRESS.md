@@ -11,11 +11,30 @@ The single place that records what is done, what is running, what each decision 
 | E9 Stage 0 (offline trigger selection, $0) | **passed**; independently audited (reproduced ≤ 5e-7) | `experiments/frozen/e9_stage0/` (commit `a30bb29`) |
 | E9 Stage 1 smoke (6 calls) | **passed** all 7 gates, $0.004592 | `experiments/frozen/e9/smoke_*` |
 | E9 Stage 2 (354 calls) | **done: `no_meaningful_gain`** (S-v1). B1 unchanged. Independent audit 47/47. 13 S-v2 items await owner labels; no labelling can change the verdict | `experiments/frozen/e9/`, notebook 08 |
+| E10 agentic reader (spec `25cd488`, smoke, 354-item run) | **done: `regression`** by the frozen broken-ratio rule (AGb 17 fixed / 9 broken), with +8 questions net in both replicates (45 → 53 of 102) and evidence recall of pages seen 0.726 → 0.866. B1 unchanged. Audit 31/31 (32/32 with the package sums). 17 S-v2 items await owner labels. $0.473 | `experiments/frozen/e10/`, notebook 10 |
 | Application (B1 with live ColQwen2, cache, CLI, UI) | **built, reviewed, verified live.** 200 tests pass. Three live calls reproduced frozen E8 L-B1 requests, tokens and answers exactly. The live *encoder* is checked by notebook 09's parity gate | `src/visualdoc/{visual_index,app,web}.py`, commit `041827f` |
 | Final held-out evaluation | **done, audited, frozen** (`c6c450d`). C1 B1 0.427; C2 `visual_retrieval_confirmed` (+0.119); C3 `a1_gain_supported` (+0.021, secondary). $0.993 | `experiments/frozen/final/` |
 | Documentation (README, architecture, report, reproducibility, demo) | written; final-evaluation results are still to be added | `README.md`, `docs/{research_report,architecture,reproducibility}.md` |
 
 ## Decisions and their reasons
+
+### 2026-11-27 — E10: an agentic reader (search, read, finish), development data
+
+- **Why.** B1 answers 40/62 questions when its top 4 pages hold all the evidence, and 4/39 when they do not. Deeper reading of the same ranking (E9) can complete only 8 of the 39. A reader that writes new queries targets the other 31. Design and reasoning: `docs/e10_agentic_reader_proposal.md`.
+- **Encoder on the Datalab CPU** (new condition). The weights were downloaded at the pinned revision (sha `2f6dbf32…` equals E5's). CPU query embeddings are not bitwise equal to E5's MPS ones (0/175, max |Δ| 0.12 in bf16). The pre-registered parity gate passed: top-4 set equal for 113/118 questions, recall@4 0.723 vs 0.726.
+- **Two Datalab facts found.**
+  - The container's CPU quota is 8 cores, although `nproc` says 256. 32–64 torch threads throttle: 12–19 s per query instead of 1.6 s.
+  - `OPENAI_BASE_URL` is exported empty, which breaks the OpenAI SDK. Notebook 10 falls back to the official endpoint.
+  - Both gate failures happened before any request reached the API.
+- **Result.** B1s 45, AGa 53, AGb 53 of 102.
+  - AG − B1s +0.078 [0.000, +0.181], p = 0.053.
+  - The frozen verdict is `regression`, because AGb broke 9 > 17/2. Without that rule it would be `promising_but_uncertain` (p > 0.05, 12 flips).
+  - Mechanism confirmed: evidence recall of the pages seen +0.140 [+0.084, +0.198].
+  - Gain on the 39 incomplete-evidence questions: +0.256. Every broken question had its evidence complete in the top 4.
+  - Causes of breaks: over-exploration; a different reading of the same pages in tool mode; answer format.
+- **Exploratory.** The agent's own decision to stop at call 1 is a better router than E9's U3 trigger: always-agent 53 vs U3-routed 46/49.
+- **Next.** Keep the search and remove the loss on easy questions (finish-first, B1 fallback, or a final read in B1's mode). Confirm on a new benchmark.
+
 
 ### 2026-11-26 — Datalab environment ready: pinned `.venv` built, notebook 09 audit reproduces the final evaluation
 
@@ -266,6 +285,7 @@ The single place that records what is done, what is running, what each decision 
 | 2026-11-25 | E9 smoke + Stage 2 | 6 + 354 | 0.004592 + 0.147055 = **0.151647** | 0.50 |
 | 2026-11-25 | Application live check | 3 | ≈ 0.0013 observed (≤ 0.0024 charged at the upper bound) | 0.01 |
 | 2026-11-26 | Final evaluation smoke + full | 6 + 2,079 | 0.003216 + 0.990233 = **0.993449** | 2.50 |
+| 2026-11-27 | E10 smoke (26 calls + 1 failed locally) + full (899 calls) | 27 + 899 | 0.017513 (charged) + 0.455862 = **0.473375** | 3.50 |
 
 E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Planned upper bound: smoke $0.006847 + full $0.368866.
 
@@ -283,7 +303,7 @@ E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Pl
    - `bdf54dxa.pdf` page 11 OCR text differs on x86-64. This is a processor condition, and the test stays as it is (the one `pytest` failure in `.venv`).
    - GPU encoding is possible only with torch 2.14.0+cu126, a new condition. The pinned torch 2.15.0 needs driver ≥ 580 for CUDA, and the service has 565.
    - The local commits are not pushed yet.
-4. **S-v2 blind labels.** 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
+4. **S-v2 blind labels.** 17 E10 items in `experiments/frozen/e10/adjudication/blind_queue_unlabelled.csv` (bounds on AG − B1s +0.045 to +0.104 meanwhile). 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
 
 ## Known limitations (running list)
 

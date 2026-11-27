@@ -1,0 +1,1 @@
+{"execution_index": 1, "replicate_id": "smoke", "block_index": null, "position_in_block": null, "qid": "mmlb-0045", "arm": "AG", "attempt_id": "1-1", "status": "interrupted", "completed_at": "2026-11-27T10:27:04.213+00:00", "error": "APIConnectionError: Connection error."}

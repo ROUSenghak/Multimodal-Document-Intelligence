@@ -1,0 +1,15 @@
+{
+  "smoke_sha256": "2690f1859dccf828b8ff869ab361725ce9c75ea0dd3de5977a75866581e844cf",
+  "full_sha256": "edd9a6cc8890a0e9056d198bde3698238585cb535c2f6474afcc179187d8dd09",
+  "agent_contract_sha256": "de749414e4000d66f593aa735c42f9f26cb1003425008c95e894c3fc176afdad",
+  "smoke_qids": [
+    "mmlb-0045",
+    "mmlb-0999",
+    "mmlb-1000",
+    "mmlb-1002",
+    "mmlb-1051",
+    "mmlb-1061"
+  ],
+  "worst_episode_usd": 0.010792000000000001,
+  "full_worst_case_usd": 2.6410424000000003
+}

@@ -230,6 +230,42 @@ Each entry gives the hypothesis, the design, the result and the decision. Costs 
   - **Counterbalance.** B1s went first in 59 of 118 pairs, but in 55 of the 102 answerable pairs (47 F8a-first).
 - **Decision.** `no_meaningful_gain`. B1 keeps k = 4 and one read; the application does not implement adaptive acquisition. (On held-out data, the same policy was re-tested as the final evaluation's secondary claim C3: +0.021, `a1_gain_supported` but fragile, reported only; section 9.) Always reading 8 pages is not better than 4 for this reader, so the GPT-4o-mini-era 4-page cap costs no measurable accuracy and halves prompt tokens. Spend $0.151647 of a $0.50 ceiling (smoke $0.004592, full run $0.147055, lowered by the prompt caching noted above).
 
+### E10 — an agentic reader: search, read, finish
+
+- **Motivation.** B1 answers 4 of the 39 questions whose evidence is incomplete in its top 4. Reading deeper down the same ranking completes only 8 of them (E9 Stage 0). E10 lets the reader write **new queries**. Design and reasoning: `docs/e10_agentic_reader_proposal.md`.
+- **Pre-registration.** Spec `experiments/specs/e10_agentic_reader_v1.json` (commit `25cd488`, before any paid call).
+- **Design.**
+  - **Warm start:** the first message holds B1's exact top 4 pages.
+  - **Tools:** `search_pages` (ColQwen2 MaxSim over all pages, numbers only), `read_pages` (≤ 4 images) and `finish` (B1's strict schema).
+  - **Limits:** ≤ 6 calls, ≤ 12 pages, a pre-call cost check, finish forced on the last call.
+  - **Reader:** the same as B1.
+  - **Arms:** B1s (byte-identical to frozen E8 L-B1), AGa and AGb, in 118 counterbalanced blocks.
+  - **Search encoder:** queries encoded on the Datalab CPU, a new condition. The parity gate passed: top-4 set 113/118, recall@4 0.723 vs 0.726.
+- **Result** (`experiments/frozen/e10/README.md`, `tables/evaluation_summary.json`; audit 31/31):
+
+| | B1s | AGa | AGb |
+|---|---:|---:|---:|
+| S-v1 correct / 102 | 45 | 53 | 53 |
+| correct abstentions / 16 | 8 | 9 | 12 |
+| evidence recall of pages seen (101) | 0.726 | 0.868 | 0.864 |
+| calls / pages seen per question | 1 / 4 | 3.35 / 6.75 | 3.27 / 6.81 |
+| cost per question | $0.0004 | $0.0018 | $0.0017 |
+
+| Contrast (S-v1) | Δ | 95 % CI | sign-flip p |
+|---|---:|---|---:|
+| **AG − B1s (primary)** | **+0.078** | [0.000, +0.181] | 0.053 |
+| evidence recall of pages seen | +0.140 | [+0.084, +0.198] | 0.0002 |
+| AG − B1s, evidence incomplete in top 4 (39) | +0.256 | [+0.136, +0.500] | 0.001 |
+| AG − B1s, elsewhere (63) | −0.032 | [−0.129, +0.085] | 0.75 |
+
+  - Fixed / broken: AGa 13 / 5, AGb 17 / 9. All broken questions had complete evidence in B1's top 4.
+  - The 5 questions broken in both replicates fail for three reasons:
+    - over-exploration (2);
+    - a different reading of the same 4 pages in tool mode (2);
+    - an answer-format artefact (1).
+  - **Exploratory.** The agent's own stopping decision is a better router than E9's U3 trigger (U3-routed 46/49 vs always-agent 53).
+- **Decision.** `regression` under the frozen rule "broken > fixed / 2 in either replicate" (AGb 9 > 8.5). Without it the verdict would be `promising_but_uncertain` (p 0.053, 12 flips > 10). B1 is unchanged. The record supports the mechanism, more evidence found and turned into answers where B1 lacks it, but not a clean improvement. Spend $0.473375 of a $3.50 ceiling.
+
 ---
 
 ## 6. Negative and null results
@@ -243,6 +279,7 @@ Each entry gives the hypothesis, the design, the result and the decision. Costs 
 | E7 | extract-then-answer fixes multi-page and reading errors | −0.069 [−0.135, −0.008], 3 fixed / 10 broken | per-page textualisation of evidence |
 | E8 (diagnostic) | grounding failures flag wrong answers | they flag *correct* answers more often | grounding as a repair trigger |
 | E9 | an uncertainty trigger plus 8 pages recovers answers | +0.025, p = 0.125; F8 not better than 4 pages | adaptive deepening as a material gain at this sample size (held out, a small gain of +0.021 appeared: section 9) |
+| E10 | an agent that searches with its own queries is better than B1 | +0.078 net, p = 0.053, but AGb broke 9 vs 17 fixed (rule: ≤ fixed/2) | an agent as a clean improvement; it does show the search mechanism works (evidence recall +0.140) |
 
 These are reported with the same weight as the positive results. Several are "ties within noise" rather than evidence of harm (E2, E3); E7 is the only negative result whose interval excludes zero.
 
@@ -396,6 +433,7 @@ Three disagreements found in an earlier version of this report were corrected in
 | E8 | 6 + 354 | 0.0015431 + 0.144765 | `AGENTS.md` |
 | E9 | 6 + 354 | 0.151647 | `experiments/frozen/e9/README.md` |
 | Final evaluation | 6 + 2,079 | 0.003216 + 0.990233 = 0.993449 | `experiments/frozen/final/README.md` |
+| E10 | 27 + 899 | 0.017513 + 0.455862 = 0.473375 | `experiments/frozen/e10/README.md` |
 
 ---
 
@@ -412,6 +450,7 @@ Three disagreements found in an earlier version of this report were corrected in
 | Final evaluation: index | `experiments/frozen/final_index/` (commit `ab8a9c8`, before any question was read) |
 | Final evaluation: retrieval | `experiments/frozen/final_retrieval/` (commit `8d5768a`) |
 | Final evaluation: run, evaluation, audit | `experiments/frozen/final/` (commit `c6c450d`; 85 S-v2 items await the owner's labels) |
+| E10 agentic reader | `experiments/frozen/e10/` (spec commit `25cd488`; audit 31/31; 17 S-v2 items await the owner's labels) |
 | Specifications | `experiments/specs/` (E1–E9, E2 v1 superseded by v2, E9 addendum; `final_evaluation_v1.json` with its plan and deviations) |
 | Baseline description | `docs/validated_baseline_b1.md` |
 | Test-pool record | `experiments/test_pool_ledger.md` |

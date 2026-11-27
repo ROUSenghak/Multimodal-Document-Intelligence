@@ -1,0 +1,51 @@
+{
+  "experiment": "E10 agentic document reader: smoke and full run",
+  "frozen_on": "2026-11-27",
+  "population": {
+    "questions": 118,
+    "answerable": 102,
+    "unanswerable": 16,
+    "documents": 14,
+    "test_pool_used": false
+  },
+  "protocol": {
+    "spec": "experiments/specs/e10_agentic_reader_v1.json",
+    "spec_commit": "25cd488",
+    "spec_sha256": "de1b9f4e9a8807d141df567eb7a5793d962adc85e39ccda40646c1679713a3e5",
+    "design": "docs/e10_agentic_reader_proposal.md",
+    "notebook": "notebooks/10_agentic_reader.ipynb",
+    "notebook_fixes_before_any_api_call": [
+      "3e276e1 gate key path",
+      "9cfc267 empty OPENAI_BASE_URL"
+    ]
+  },
+  "runs": {
+    "full": "full_20261127T103158Z_3049dc6c",
+    "smoke": "smoke_20261127T102916Z_9460aea6",
+    "smoke_failed_locally": "smoke_20261127T102703Z_df4eb49e"
+  },
+  "reader": {
+    "model": "gpt-6-luna",
+    "served_model": "gpt-6-luna",
+    "system_fingerprint": null,
+    "api": "Chat Completions, tools, strict schemas"
+  },
+  "search_encoder": {
+    "model": "vidore/colqwen2-v1.0-hf@ddc07d23",
+    "weights_sha256": "2f6dbf32fc2db5b045d74ae73b148425d6e03cc1106a047cdcc7e72b6dc53aba",
+    "device": "cpu (Datalab, 8 threads)",
+    "torch": "2.15.0+cpu",
+    "transformers": "5.23.0",
+    "query_cache": "data/cache/e10/queries_cpu (git-ignored; needed by the audit's search check)"
+  },
+  "spend_usd": {
+    "full_observed_list_price": 0.45586162,
+    "smoke_charged": 0.0175132,
+    "total": 0.47337482,
+    "ceiling": 3.5,
+    "approved_by_owner": "2026-11-27"
+  },
+  "verdict_s_v1": "regression",
+  "s_v2_pending_items": 17,
+  "audit": "AUDIT.json, 31/31 checks"
+}

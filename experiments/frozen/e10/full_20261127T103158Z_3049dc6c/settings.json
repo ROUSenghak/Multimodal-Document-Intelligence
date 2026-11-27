@@ -1,0 +1,2854 @@
+{
+  "mode": "full",
+  "plan": [
+    {
+      "execution_index": 1,
+      "replicate_id": "agent_r2",
+      "block_index": 1,
+      "position_in_block": 1,
+      "qid": "mmlb-1019",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 2,
+      "replicate_id": "control",
+      "block_index": 1,
+      "position_in_block": 2,
+      "qid": "mmlb-1019",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 3,
+      "replicate_id": "agent_r1",
+      "block_index": 1,
+      "position_in_block": 3,
+      "qid": "mmlb-1019",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 4,
+      "replicate_id": "control",
+      "block_index": 2,
+      "position_in_block": 1,
+      "qid": "mmlb-0064",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 5,
+      "replicate_id": "agent_r1",
+      "block_index": 2,
+      "position_in_block": 2,
+      "qid": "mmlb-0064",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 6,
+      "replicate_id": "agent_r2",
+      "block_index": 2,
+      "position_in_block": 3,
+      "qid": "mmlb-0064",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 7,
+      "replicate_id": "control",
+      "block_index": 3,
+      "position_in_block": 1,
+      "qid": "mmlb-0990",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 8,
+      "replicate_id": "agent_r1",
+      "block_index": 3,
+      "position_in_block": 2,
+      "qid": "mmlb-0990",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 9,
+      "replicate_id": "agent_r2",
+      "block_index": 3,
+      "position_in_block": 3,
+      "qid": "mmlb-0990",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 10,
+      "replicate_id": "agent_r2",
+      "block_index": 4,
+      "position_in_block": 1,
+      "qid": "mmlb-1057",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 11,
+      "replicate_id": "control",
+      "block_index": 4,
+      "position_in_block": 2,
+      "qid": "mmlb-1057",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 12,
+      "replicate_id": "agent_r1",
+      "block_index": 4,
+      "position_in_block": 3,
+      "qid": "mmlb-1057",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 13,
+      "replicate_id": "control",
+      "block_index": 5,
+      "position_in_block": 1,
+      "qid": "mmlb-0408",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 14,
+      "replicate_id": "agent_r1",
+      "block_index": 5,
+      "position_in_block": 2,
+      "qid": "mmlb-0408",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 15,
+      "replicate_id": "agent_r2",
+      "block_index": 5,
+      "position_in_block": 3,
+      "qid": "mmlb-0408",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 16,
+      "replicate_id": "control",
+      "block_index": 6,
+      "position_in_block": 1,
+      "qid": "mmlb-0685",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 17,
+      "replicate_id": "agent_r1",
+      "block_index": 6,
+      "position_in_block": 2,
+      "qid": "mmlb-0685",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 18,
+      "replicate_id": "agent_r2",
+      "block_index": 6,
+      "position_in_block": 3,
+      "qid": "mmlb-0685",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 19,
+      "replicate_id": "agent_r2",
+      "block_index": 7,
+      "position_in_block": 1,
+      "qid": "mmlb-1005",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 20,
+      "replicate_id": "control",
+      "block_index": 7,
+      "position_in_block": 2,
+      "qid": "mmlb-1005",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 21,
+      "replicate_id": "agent_r1",
+      "block_index": 7,
+      "position_in_block": 3,
+      "qid": "mmlb-1005",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 22,
+      "replicate_id": "agent_r1",
+      "block_index": 8,
+      "position_in_block": 1,
+      "qid": "mmlb-0141",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 23,
+      "replicate_id": "control",
+      "block_index": 8,
+      "position_in_block": 2,
+      "qid": "mmlb-0141",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 24,
+      "replicate_id": "agent_r2",
+      "block_index": 8,
+      "position_in_block": 3,
+      "qid": "mmlb-0141",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 25,
+      "replicate_id": "control",
+      "block_index": 9,
+      "position_in_block": 1,
+      "qid": "mmlb-0200",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 26,
+      "replicate_id": "agent_r2",
+      "block_index": 9,
+      "position_in_block": 2,
+      "qid": "mmlb-0200",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 27,
+      "replicate_id": "agent_r1",
+      "block_index": 9,
+      "position_in_block": 3,
+      "qid": "mmlb-0200",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 28,
+      "replicate_id": "agent_r1",
+      "block_index": 10,
+      "position_in_block": 1,
+      "qid": "mmlb-1000",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 29,
+      "replicate_id": "control",
+      "block_index": 10,
+      "position_in_block": 2,
+      "qid": "mmlb-1000",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 30,
+      "replicate_id": "agent_r2",
+      "block_index": 10,
+      "position_in_block": 3,
+      "qid": "mmlb-1000",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 31,
+      "replicate_id": "agent_r1",
+      "block_index": 11,
+      "position_in_block": 1,
+      "qid": "mmlb-1051",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 32,
+      "replicate_id": "control",
+      "block_index": 11,
+      "position_in_block": 2,
+      "qid": "mmlb-1051",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 33,
+      "replicate_id": "agent_r2",
+      "block_index": 11,
+      "position_in_block": 3,
+      "qid": "mmlb-1051",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 34,
+      "replicate_id": "agent_r1",
+      "block_index": 12,
+      "position_in_block": 1,
+      "qid": "mmlb-0686",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 35,
+      "replicate_id": "agent_r2",
+      "block_index": 12,
+      "position_in_block": 2,
+      "qid": "mmlb-0686",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 36,
+      "replicate_id": "control",
+      "block_index": 12,
+      "position_in_block": 3,
+      "qid": "mmlb-0686",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 37,
+      "replicate_id": "agent_r1",
+      "block_index": 13,
+      "position_in_block": 1,
+      "qid": "mmlb-0989",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 38,
+      "replicate_id": "agent_r2",
+      "block_index": 13,
+      "position_in_block": 2,
+      "qid": "mmlb-0989",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 39,
+      "replicate_id": "control",
+      "block_index": 13,
+      "position_in_block": 3,
+      "qid": "mmlb-0989",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 40,
+      "replicate_id": "control",
+      "block_index": 14,
+      "position_in_block": 1,
+      "qid": "mmlb-1059",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 41,
+      "replicate_id": "agent_r1",
+      "block_index": 14,
+      "position_in_block": 2,
+      "qid": "mmlb-1059",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 42,
+      "replicate_id": "agent_r2",
+      "block_index": 14,
+      "position_in_block": 3,
+      "qid": "mmlb-1059",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 43,
+      "replicate_id": "agent_r2",
+      "block_index": 15,
+      "position_in_block": 1,
+      "qid": "mmlb-0593",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 44,
+      "replicate_id": "agent_r1",
+      "block_index": 15,
+      "position_in_block": 2,
+      "qid": "mmlb-0593",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 45,
+      "replicate_id": "control",
+      "block_index": 15,
+      "position_in_block": 3,
+      "qid": "mmlb-0593",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 46,
+      "replicate_id": "agent_r1",
+      "block_index": 16,
+      "position_in_block": 1,
+      "qid": "mmlb-0067",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 47,
+      "replicate_id": "agent_r2",
+      "block_index": 16,
+      "position_in_block": 2,
+      "qid": "mmlb-0067",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 48,
+      "replicate_id": "control",
+      "block_index": 16,
+      "position_in_block": 3,
+      "qid": "mmlb-0067",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 49,
+      "replicate_id": "agent_r2",
+      "block_index": 17,
+      "position_in_block": 1,
+      "qid": "mmlb-1023",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 50,
+      "replicate_id": "control",
+      "block_index": 17,
+      "position_in_block": 2,
+      "qid": "mmlb-1023",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 51,
+      "replicate_id": "agent_r1",
+      "block_index": 17,
+      "position_in_block": 3,
+      "qid": "mmlb-1023",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 52,
+      "replicate_id": "control",
+      "block_index": 18,
+      "position_in_block": 1,
+      "qid": "mmlb-0140",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 53,
+      "replicate_id": "agent_r1",
+      "block_index": 18,
+      "position_in_block": 2,
+      "qid": "mmlb-0140",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 54,
+      "replicate_id": "agent_r2",
+      "block_index": 18,
+      "position_in_block": 3,
+      "qid": "mmlb-0140",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 55,
+      "replicate_id": "agent_r1",
+      "block_index": 19,
+      "position_in_block": 1,
+      "qid": "mmlb-1053",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 56,
+      "replicate_id": "control",
+      "block_index": 19,
+      "position_in_block": 2,
+      "qid": "mmlb-1053",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 57,
+      "replicate_id": "agent_r2",
+      "block_index": 19,
+      "position_in_block": 3,
+      "qid": "mmlb-1053",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 58,
+      "replicate_id": "agent_r2",
+      "block_index": 20,
+      "position_in_block": 1,
+      "qid": "mmlb-1020",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 59,
+      "replicate_id": "agent_r1",
+      "block_index": 20,
+      "position_in_block": 2,
+      "qid": "mmlb-1020",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 60,
+      "replicate_id": "control",
+      "block_index": 20,
+      "position_in_block": 3,
+      "qid": "mmlb-1020",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 61,
+      "replicate_id": "control",
+      "block_index": 21,
+      "position_in_block": 1,
+      "qid": "mmlb-0048",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 62,
+      "replicate_id": "agent_r2",
+      "block_index": 21,
+      "position_in_block": 2,
+      "qid": "mmlb-0048",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 63,
+      "replicate_id": "agent_r1",
+      "block_index": 21,
+      "position_in_block": 3,
+      "qid": "mmlb-0048",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 64,
+      "replicate_id": "control",
+      "block_index": 22,
+      "position_in_block": 1,
+      "qid": "mmlb-0051",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 65,
+      "replicate_id": "agent_r2",
+      "block_index": 22,
+      "position_in_block": 2,
+      "qid": "mmlb-0051",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 66,
+      "replicate_id": "agent_r1",
+      "block_index": 22,
+      "position_in_block": 3,
+      "qid": "mmlb-0051",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 67,
+      "replicate_id": "agent_r2",
+      "block_index": 23,
+      "position_in_block": 1,
+      "qid": "mmlb-1027",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 68,
+      "replicate_id": "agent_r1",
+      "block_index": 23,
+      "position_in_block": 2,
+      "qid": "mmlb-1027",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 69,
+      "replicate_id": "control",
+      "block_index": 23,
+      "position_in_block": 3,
+      "qid": "mmlb-1027",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 70,
+      "replicate_id": "control",
+      "block_index": 24,
+      "position_in_block": 1,
+      "qid": "mmlb-0684",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 71,
+      "replicate_id": "agent_r1",
+      "block_index": 24,
+      "position_in_block": 2,
+      "qid": "mmlb-0684",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 72,
+      "replicate_id": "agent_r2",
+      "block_index": 24,
+      "position_in_block": 3,
+      "qid": "mmlb-0684",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 73,
+      "replicate_id": "agent_r2",
+      "block_index": 25,
+      "position_in_block": 1,
+      "qid": "mmlb-0042",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 74,
+      "replicate_id": "control",
+      "block_index": 25,
+      "position_in_block": 2,
+      "qid": "mmlb-0042",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 75,
+      "replicate_id": "agent_r1",
+      "block_index": 25,
+      "position_in_block": 3,
+      "qid": "mmlb-0042",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 76,
+      "replicate_id": "agent_r2",
+      "block_index": 26,
+      "position_in_block": 1,
+      "qid": "mmlb-0577",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 77,
+      "replicate_id": "control",
+      "block_index": 26,
+      "position_in_block": 2,
+      "qid": "mmlb-0577",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 78,
+      "replicate_id": "agent_r1",
+      "block_index": 26,
+      "position_in_block": 3,
+      "qid": "mmlb-0577",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 79,
+      "replicate_id": "agent_r2",
+      "block_index": 27,
+      "position_in_block": 1,
+      "qid": "mmlb-1002",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 80,
+      "replicate_id": "agent_r1",
+      "block_index": 27,
+      "position_in_block": 2,
+      "qid": "mmlb-1002",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 81,
+      "replicate_id": "control",
+      "block_index": 27,
+      "position_in_block": 3,
+      "qid": "mmlb-1002",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 82,
+      "replicate_id": "agent_r1",
+      "block_index": 28,
+      "position_in_block": 1,
+      "qid": "mmlb-0410",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 83,
+      "replicate_id": "control",
+      "block_index": 28,
+      "position_in_block": 2,
+      "qid": "mmlb-0410",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 84,
+      "replicate_id": "agent_r2",
+      "block_index": 28,
+      "position_in_block": 3,
+      "qid": "mmlb-0410",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 85,
+      "replicate_id": "agent_r2",
+      "block_index": 29,
+      "position_in_block": 1,
+      "qid": "mmlb-0579",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 86,
+      "replicate_id": "control",
+      "block_index": 29,
+      "position_in_block": 2,
+      "qid": "mmlb-0579",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 87,
+      "replicate_id": "agent_r1",
+      "block_index": 29,
+      "position_in_block": 3,
+      "qid": "mmlb-0579",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 88,
+      "replicate_id": "control",
+      "block_index": 30,
+      "position_in_block": 1,
+      "qid": "mmlb-0594",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 89,
+      "replicate_id": "agent_r1",
+      "block_index": 30,
+      "position_in_block": 2,
+      "qid": "mmlb-0594",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 90,
+      "replicate_id": "agent_r2",
+      "block_index": 30,
+      "position_in_block": 3,
+      "qid": "mmlb-0594",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 91,
+      "replicate_id": "agent_r2",
+      "block_index": 31,
+      "position_in_block": 1,
+      "qid": "mmlb-1065",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 92,
+      "replicate_id": "agent_r1",
+      "block_index": 31,
+      "position_in_block": 2,
+      "qid": "mmlb-1065",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 93,
+      "replicate_id": "control",
+      "block_index": 31,
+      "position_in_block": 3,
+      "qid": "mmlb-1065",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 94,
+      "replicate_id": "control",
+      "block_index": 32,
+      "position_in_block": 1,
+      "qid": "mmlb-0411",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 95,
+      "replicate_id": "agent_r2",
+      "block_index": 32,
+      "position_in_block": 2,
+      "qid": "mmlb-0411",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 96,
+      "replicate_id": "agent_r1",
+      "block_index": 32,
+      "position_in_block": 3,
+      "qid": "mmlb-0411",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 97,
+      "replicate_id": "agent_r1",
+      "block_index": 33,
+      "position_in_block": 1,
+      "qid": "mmlb-1063",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 98,
+      "replicate_id": "agent_r2",
+      "block_index": 33,
+      "position_in_block": 2,
+      "qid": "mmlb-1063",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 99,
+      "replicate_id": "control",
+      "block_index": 33,
+      "position_in_block": 3,
+      "qid": "mmlb-1063",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 100,
+      "replicate_id": "agent_r2",
+      "block_index": 34,
+      "position_in_block": 1,
+      "qid": "mmlb-0683",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 101,
+      "replicate_id": "control",
+      "block_index": 34,
+      "position_in_block": 2,
+      "qid": "mmlb-0683",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 102,
+      "replicate_id": "agent_r1",
+      "block_index": 34,
+      "position_in_block": 3,
+      "qid": "mmlb-0683",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 103,
+      "replicate_id": "agent_r2",
+      "block_index": 35,
+      "position_in_block": 1,
+      "qid": "mmlb-1017",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 104,
+      "replicate_id": "control",
+      "block_index": 35,
+      "position_in_block": 2,
+      "qid": "mmlb-1017",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 105,
+      "replicate_id": "agent_r1",
+      "block_index": 35,
+      "position_in_block": 3,
+      "qid": "mmlb-1017",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 106,
+      "replicate_id": "control",
+      "block_index": 36,
+      "position_in_block": 1,
+      "qid": "mmlb-1052",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 107,
+      "replicate_id": "agent_r1",
+      "block_index": 36,
+      "position_in_block": 2,
+      "qid": "mmlb-1052",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 108,
+      "replicate_id": "agent_r2",
+      "block_index": 36,
+      "position_in_block": 3,
+      "qid": "mmlb-1052",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 109,
+      "replicate_id": "control",
+      "block_index": 37,
+      "position_in_block": 1,
+      "qid": "mmlb-1007",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 110,
+      "replicate_id": "agent_r2",
+      "block_index": 37,
+      "position_in_block": 2,
+      "qid": "mmlb-1007",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 111,
+      "replicate_id": "agent_r1",
+      "block_index": 37,
+      "position_in_block": 3,
+      "qid": "mmlb-1007",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 112,
+      "replicate_id": "agent_r2",
+      "block_index": 38,
+      "position_in_block": 1,
+      "qid": "mmlb-1024",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 113,
+      "replicate_id": "agent_r1",
+      "block_index": 38,
+      "position_in_block": 2,
+      "qid": "mmlb-1024",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 114,
+      "replicate_id": "control",
+      "block_index": 38,
+      "position_in_block": 3,
+      "qid": "mmlb-1024",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 115,
+      "replicate_id": "control",
+      "block_index": 39,
+      "position_in_block": 1,
+      "qid": "mmlb-1018",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 116,
+      "replicate_id": "agent_r2",
+      "block_index": 39,
+      "position_in_block": 2,
+      "qid": "mmlb-1018",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 117,
+      "replicate_id": "agent_r1",
+      "block_index": 39,
+      "position_in_block": 3,
+      "qid": "mmlb-1018",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 118,
+      "replicate_id": "control",
+      "block_index": 40,
+      "position_in_block": 1,
+      "qid": "mmlb-1021",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 119,
+      "replicate_id": "agent_r2",
+      "block_index": 40,
+      "position_in_block": 2,
+      "qid": "mmlb-1021",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 120,
+      "replicate_id": "agent_r1",
+      "block_index": 40,
+      "position_in_block": 3,
+      "qid": "mmlb-1021",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 121,
+      "replicate_id": "agent_r1",
+      "block_index": 41,
+      "position_in_block": 1,
+      "qid": "mmlb-0409",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 122,
+      "replicate_id": "agent_r2",
+      "block_index": 41,
+      "position_in_block": 2,
+      "qid": "mmlb-0409",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 123,
+      "replicate_id": "control",
+      "block_index": 41,
+      "position_in_block": 3,
+      "qid": "mmlb-0409",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 124,
+      "replicate_id": "agent_r2",
+      "block_index": 42,
+      "position_in_block": 1,
+      "qid": "mmlb-0078",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 125,
+      "replicate_id": "agent_r1",
+      "block_index": 42,
+      "position_in_block": 2,
+      "qid": "mmlb-0078",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 126,
+      "replicate_id": "control",
+      "block_index": 42,
+      "position_in_block": 3,
+      "qid": "mmlb-0078",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 127,
+      "replicate_id": "agent_r1",
+      "block_index": 43,
+      "position_in_block": 1,
+      "qid": "mmlb-0576",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 128,
+      "replicate_id": "agent_r2",
+      "block_index": 43,
+      "position_in_block": 2,
+      "qid": "mmlb-0576",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 129,
+      "replicate_id": "control",
+      "block_index": 43,
+      "position_in_block": 3,
+      "qid": "mmlb-0576",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 130,
+      "replicate_id": "agent_r1",
+      "block_index": 44,
+      "position_in_block": 1,
+      "qid": "mmlb-0404",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 131,
+      "replicate_id": "agent_r2",
+      "block_index": 44,
+      "position_in_block": 2,
+      "qid": "mmlb-0404",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 132,
+      "replicate_id": "control",
+      "block_index": 44,
+      "position_in_block": 3,
+      "qid": "mmlb-0404",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 133,
+      "replicate_id": "agent_r2",
+      "block_index": 45,
+      "position_in_block": 1,
+      "qid": "mmlb-1016",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 134,
+      "replicate_id": "agent_r1",
+      "block_index": 45,
+      "position_in_block": 2,
+      "qid": "mmlb-1016",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 135,
+      "replicate_id": "control",
+      "block_index": 45,
+      "position_in_block": 3,
+      "qid": "mmlb-1016",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 136,
+      "replicate_id": "agent_r1",
+      "block_index": 46,
+      "position_in_block": 1,
+      "qid": "mmlb-1061",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 137,
+      "replicate_id": "control",
+      "block_index": 46,
+      "position_in_block": 2,
+      "qid": "mmlb-1061",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 138,
+      "replicate_id": "agent_r2",
+      "block_index": 46,
+      "position_in_block": 3,
+      "qid": "mmlb-1061",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 139,
+      "replicate_id": "agent_r2",
+      "block_index": 47,
+      "position_in_block": 1,
+      "qid": "mmlb-0581",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 140,
+      "replicate_id": "agent_r1",
+      "block_index": 47,
+      "position_in_block": 2,
+      "qid": "mmlb-0581",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 141,
+      "replicate_id": "control",
+      "block_index": 47,
+      "position_in_block": 3,
+      "qid": "mmlb-0581",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 142,
+      "replicate_id": "agent_r1",
+      "block_index": 48,
+      "position_in_block": 1,
+      "qid": "mmlb-0139",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 143,
+      "replicate_id": "control",
+      "block_index": 48,
+      "position_in_block": 2,
+      "qid": "mmlb-0139",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 144,
+      "replicate_id": "agent_r2",
+      "block_index": 48,
+      "position_in_block": 3,
+      "qid": "mmlb-0139",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 145,
+      "replicate_id": "control",
+      "block_index": 49,
+      "position_in_block": 1,
+      "qid": "mmlb-0403",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 146,
+      "replicate_id": "agent_r1",
+      "block_index": 49,
+      "position_in_block": 2,
+      "qid": "mmlb-0403",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 147,
+      "replicate_id": "agent_r2",
+      "block_index": 49,
+      "position_in_block": 3,
+      "qid": "mmlb-0403",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 148,
+      "replicate_id": "control",
+      "block_index": 50,
+      "position_in_block": 1,
+      "qid": "mmlb-0600",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 149,
+      "replicate_id": "agent_r2",
+      "block_index": 50,
+      "position_in_block": 2,
+      "qid": "mmlb-0600",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 150,
+      "replicate_id": "agent_r1",
+      "block_index": 50,
+      "position_in_block": 3,
+      "qid": "mmlb-0600",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 151,
+      "replicate_id": "control",
+      "block_index": 51,
+      "position_in_block": 1,
+      "qid": "mmlb-0076",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 152,
+      "replicate_id": "agent_r2",
+      "block_index": 51,
+      "position_in_block": 2,
+      "qid": "mmlb-0076",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 153,
+      "replicate_id": "agent_r1",
+      "block_index": 51,
+      "position_in_block": 3,
+      "qid": "mmlb-0076",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 154,
+      "replicate_id": "agent_r1",
+      "block_index": 52,
+      "position_in_block": 1,
+      "qid": "mmlb-0081",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 155,
+      "replicate_id": "agent_r2",
+      "block_index": 52,
+      "position_in_block": 2,
+      "qid": "mmlb-0081",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 156,
+      "replicate_id": "control",
+      "block_index": 52,
+      "position_in_block": 3,
+      "qid": "mmlb-0081",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 157,
+      "replicate_id": "control",
+      "block_index": 53,
+      "position_in_block": 1,
+      "qid": "mmlb-0687",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 158,
+      "replicate_id": "agent_r2",
+      "block_index": 53,
+      "position_in_block": 2,
+      "qid": "mmlb-0687",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 159,
+      "replicate_id": "agent_r1",
+      "block_index": 53,
+      "position_in_block": 3,
+      "qid": "mmlb-0687",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 160,
+      "replicate_id": "agent_r2",
+      "block_index": 54,
+      "position_in_block": 1,
+      "qid": "mmlb-1028",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 161,
+      "replicate_id": "agent_r1",
+      "block_index": 54,
+      "position_in_block": 2,
+      "qid": "mmlb-1028",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 162,
+      "replicate_id": "control",
+      "block_index": 54,
+      "position_in_block": 3,
+      "qid": "mmlb-1028",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 163,
+      "replicate_id": "agent_r2",
+      "block_index": 55,
+      "position_in_block": 1,
+      "qid": "mmlb-0595",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 164,
+      "replicate_id": "agent_r1",
+      "block_index": 55,
+      "position_in_block": 2,
+      "qid": "mmlb-0595",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 165,
+      "replicate_id": "control",
+      "block_index": 55,
+      "position_in_block": 3,
+      "qid": "mmlb-0595",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 166,
+      "replicate_id": "agent_r1",
+      "block_index": 56,
+      "position_in_block": 1,
+      "qid": "mmlb-1055",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 167,
+      "replicate_id": "control",
+      "block_index": 56,
+      "position_in_block": 2,
+      "qid": "mmlb-1055",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 168,
+      "replicate_id": "agent_r2",
+      "block_index": 56,
+      "position_in_block": 3,
+      "qid": "mmlb-1055",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 169,
+      "replicate_id": "agent_r1",
+      "block_index": 57,
+      "position_in_block": 1,
+      "qid": "mmlb-0202",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 170,
+      "replicate_id": "control",
+      "block_index": 57,
+      "position_in_block": 2,
+      "qid": "mmlb-0202",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 171,
+      "replicate_id": "agent_r2",
+      "block_index": 57,
+      "position_in_block": 3,
+      "qid": "mmlb-0202",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 172,
+      "replicate_id": "agent_r1",
+      "block_index": 58,
+      "position_in_block": 1,
+      "qid": "mmlb-0582",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 173,
+      "replicate_id": "agent_r2",
+      "block_index": 58,
+      "position_in_block": 2,
+      "qid": "mmlb-0582",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 174,
+      "replicate_id": "control",
+      "block_index": 58,
+      "position_in_block": 3,
+      "qid": "mmlb-0582",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 175,
+      "replicate_id": "agent_r2",
+      "block_index": 59,
+      "position_in_block": 1,
+      "qid": "mmlb-0598",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 176,
+      "replicate_id": "control",
+      "block_index": 59,
+      "position_in_block": 2,
+      "qid": "mmlb-0598",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 177,
+      "replicate_id": "agent_r1",
+      "block_index": 59,
+      "position_in_block": 3,
+      "qid": "mmlb-0598",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 178,
+      "replicate_id": "control",
+      "block_index": 60,
+      "position_in_block": 1,
+      "qid": "mmlb-1054",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 179,
+      "replicate_id": "agent_r1",
+      "block_index": 60,
+      "position_in_block": 2,
+      "qid": "mmlb-1054",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 180,
+      "replicate_id": "agent_r2",
+      "block_index": 60,
+      "position_in_block": 3,
+      "qid": "mmlb-1054",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 181,
+      "replicate_id": "agent_r1",
+      "block_index": 61,
+      "position_in_block": 1,
+      "qid": "mmlb-0201",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 182,
+      "replicate_id": "agent_r2",
+      "block_index": 61,
+      "position_in_block": 2,
+      "qid": "mmlb-0201",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 183,
+      "replicate_id": "control",
+      "block_index": 61,
+      "position_in_block": 3,
+      "qid": "mmlb-0201",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 184,
+      "replicate_id": "agent_r1",
+      "block_index": 62,
+      "position_in_block": 1,
+      "qid": "mmlb-0050",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 185,
+      "replicate_id": "control",
+      "block_index": 62,
+      "position_in_block": 2,
+      "qid": "mmlb-0050",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 186,
+      "replicate_id": "agent_r2",
+      "block_index": 62,
+      "position_in_block": 3,
+      "qid": "mmlb-0050",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 187,
+      "replicate_id": "agent_r1",
+      "block_index": 63,
+      "position_in_block": 1,
+      "qid": "mmlb-0597",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 188,
+      "replicate_id": "agent_r2",
+      "block_index": 63,
+      "position_in_block": 2,
+      "qid": "mmlb-0597",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 189,
+      "replicate_id": "control",
+      "block_index": 63,
+      "position_in_block": 3,
+      "qid": "mmlb-0597",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 190,
+      "replicate_id": "control",
+      "block_index": 64,
+      "position_in_block": 1,
+      "qid": "mmlb-0203",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 191,
+      "replicate_id": "agent_r2",
+      "block_index": 64,
+      "position_in_block": 2,
+      "qid": "mmlb-0203",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 192,
+      "replicate_id": "agent_r1",
+      "block_index": 64,
+      "position_in_block": 3,
+      "qid": "mmlb-0203",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 193,
+      "replicate_id": "control",
+      "block_index": 65,
+      "position_in_block": 1,
+      "qid": "mmlb-0406",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 194,
+      "replicate_id": "agent_r2",
+      "block_index": 65,
+      "position_in_block": 2,
+      "qid": "mmlb-0406",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 195,
+      "replicate_id": "agent_r1",
+      "block_index": 65,
+      "position_in_block": 3,
+      "qid": "mmlb-0406",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 196,
+      "replicate_id": "agent_r2",
+      "block_index": 66,
+      "position_in_block": 1,
+      "qid": "mmlb-0688",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 197,
+      "replicate_id": "control",
+      "block_index": 66,
+      "position_in_block": 2,
+      "qid": "mmlb-0688",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 198,
+      "replicate_id": "agent_r1",
+      "block_index": 66,
+      "position_in_block": 3,
+      "qid": "mmlb-0688",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 199,
+      "replicate_id": "agent_r1",
+      "block_index": 67,
+      "position_in_block": 1,
+      "qid": "mmlb-1006",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 200,
+      "replicate_id": "agent_r2",
+      "block_index": 67,
+      "position_in_block": 2,
+      "qid": "mmlb-1006",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 201,
+      "replicate_id": "control",
+      "block_index": 67,
+      "position_in_block": 3,
+      "qid": "mmlb-1006",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 202,
+      "replicate_id": "control",
+      "block_index": 68,
+      "position_in_block": 1,
+      "qid": "mmlb-0142",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 203,
+      "replicate_id": "agent_r1",
+      "block_index": 68,
+      "position_in_block": 2,
+      "qid": "mmlb-0142",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 204,
+      "replicate_id": "agent_r2",
+      "block_index": 68,
+      "position_in_block": 3,
+      "qid": "mmlb-0142",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 205,
+      "replicate_id": "control",
+      "block_index": 69,
+      "position_in_block": 1,
+      "qid": "mmlb-1060",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 206,
+      "replicate_id": "agent_r2",
+      "block_index": 69,
+      "position_in_block": 2,
+      "qid": "mmlb-1060",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 207,
+      "replicate_id": "agent_r1",
+      "block_index": 69,
+      "position_in_block": 3,
+      "qid": "mmlb-1060",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 208,
+      "replicate_id": "agent_r2",
+      "block_index": 70,
+      "position_in_block": 1,
+      "qid": "mmlb-1001",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 209,
+      "replicate_id": "control",
+      "block_index": 70,
+      "position_in_block": 2,
+      "qid": "mmlb-1001",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 210,
+      "replicate_id": "agent_r1",
+      "block_index": 70,
+      "position_in_block": 3,
+      "qid": "mmlb-1001",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 211,
+      "replicate_id": "agent_r1",
+      "block_index": 71,
+      "position_in_block": 1,
+      "qid": "mmlb-0999",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 212,
+      "replicate_id": "control",
+      "block_index": 71,
+      "position_in_block": 2,
+      "qid": "mmlb-0999",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 213,
+      "replicate_id": "agent_r2",
+      "block_index": 71,
+      "position_in_block": 3,
+      "qid": "mmlb-0999",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 214,
+      "replicate_id": "agent_r1",
+      "block_index": 72,
+      "position_in_block": 1,
+      "qid": "mmlb-0063",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 215,
+      "replicate_id": "control",
+      "block_index": 72,
+      "position_in_block": 2,
+      "qid": "mmlb-0063",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 216,
+      "replicate_id": "agent_r2",
+      "block_index": 72,
+      "position_in_block": 3,
+      "qid": "mmlb-0063",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 217,
+      "replicate_id": "control",
+      "block_index": 73,
+      "position_in_block": 1,
+      "qid": "mmlb-1026",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 218,
+      "replicate_id": "agent_r1",
+      "block_index": 73,
+      "position_in_block": 2,
+      "qid": "mmlb-1026",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 219,
+      "replicate_id": "agent_r2",
+      "block_index": 73,
+      "position_in_block": 3,
+      "qid": "mmlb-1026",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 220,
+      "replicate_id": "agent_r1",
+      "block_index": 74,
+      "position_in_block": 1,
+      "qid": "mmlb-0580",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 221,
+      "replicate_id": "agent_r2",
+      "block_index": 74,
+      "position_in_block": 2,
+      "qid": "mmlb-0580",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 222,
+      "replicate_id": "control",
+      "block_index": 74,
+      "position_in_block": 3,
+      "qid": "mmlb-0580",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 223,
+      "replicate_id": "agent_r1",
+      "block_index": 75,
+      "position_in_block": 1,
+      "qid": "mmlb-0599",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 224,
+      "replicate_id": "agent_r2",
+      "block_index": 75,
+      "position_in_block": 2,
+      "qid": "mmlb-0599",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 225,
+      "replicate_id": "control",
+      "block_index": 75,
+      "position_in_block": 3,
+      "qid": "mmlb-0599",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 226,
+      "replicate_id": "agent_r2",
+      "block_index": 76,
+      "position_in_block": 1,
+      "qid": "mmlb-0402",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 227,
+      "replicate_id": "control",
+      "block_index": 76,
+      "position_in_block": 2,
+      "qid": "mmlb-0402",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 228,
+      "replicate_id": "agent_r1",
+      "block_index": 76,
+      "position_in_block": 3,
+      "qid": "mmlb-0402",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 229,
+      "replicate_id": "agent_r2",
+      "block_index": 77,
+      "position_in_block": 1,
+      "qid": "mmlb-0407",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 230,
+      "replicate_id": "agent_r1",
+      "block_index": 77,
+      "position_in_block": 2,
+      "qid": "mmlb-0407",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 231,
+      "replicate_id": "control",
+      "block_index": 77,
+      "position_in_block": 3,
+      "qid": "mmlb-0407",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 232,
+      "replicate_id": "agent_r2",
+      "block_index": 78,
+      "position_in_block": 1,
+      "qid": "mmlb-0143",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 233,
+      "replicate_id": "agent_r1",
+      "block_index": 78,
+      "position_in_block": 2,
+      "qid": "mmlb-0143",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 234,
+      "replicate_id": "control",
+      "block_index": 78,
+      "position_in_block": 3,
+      "qid": "mmlb-0143",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 235,
+      "replicate_id": "agent_r2",
+      "block_index": 79,
+      "position_in_block": 1,
+      "qid": "mmlb-0077",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 236,
+      "replicate_id": "agent_r1",
+      "block_index": 79,
+      "position_in_block": 2,
+      "qid": "mmlb-0077",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 237,
+      "replicate_id": "control",
+      "block_index": 79,
+      "position_in_block": 3,
+      "qid": "mmlb-0077",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 238,
+      "replicate_id": "control",
+      "block_index": 80,
+      "position_in_block": 1,
+      "qid": "mmlb-0044",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 239,
+      "replicate_id": "agent_r1",
+      "block_index": 80,
+      "position_in_block": 2,
+      "qid": "mmlb-0044",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 240,
+      "replicate_id": "agent_r2",
+      "block_index": 80,
+      "position_in_block": 3,
+      "qid": "mmlb-0044",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 241,
+      "replicate_id": "control",
+      "block_index": 81,
+      "position_in_block": 1,
+      "qid": "mmlb-0068",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 242,
+      "replicate_id": "agent_r2",
+      "block_index": 81,
+      "position_in_block": 2,
+      "qid": "mmlb-0068",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 243,
+      "replicate_id": "agent_r1",
+      "block_index": 81,
+      "position_in_block": 3,
+      "qid": "mmlb-0068",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 244,
+      "replicate_id": "agent_r2",
+      "block_index": 82,
+      "position_in_block": 1,
+      "qid": "mmlb-0205",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 245,
+      "replicate_id": "agent_r1",
+      "block_index": 82,
+      "position_in_block": 2,
+      "qid": "mmlb-0205",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 246,
+      "replicate_id": "control",
+      "block_index": 82,
+      "position_in_block": 3,
+      "qid": "mmlb-0205",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 247,
+      "replicate_id": "control",
+      "block_index": 83,
+      "position_in_block": 1,
+      "qid": "mmlb-0689",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 248,
+      "replicate_id": "agent_r2",
+      "block_index": 83,
+      "position_in_block": 2,
+      "qid": "mmlb-0689",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 249,
+      "replicate_id": "agent_r1",
+      "block_index": 83,
+      "position_in_block": 3,
+      "qid": "mmlb-0689",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 250,
+      "replicate_id": "control",
+      "block_index": 84,
+      "position_in_block": 1,
+      "qid": "mmlb-1064",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 251,
+      "replicate_id": "agent_r1",
+      "block_index": 84,
+      "position_in_block": 2,
+      "qid": "mmlb-1064",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 252,
+      "replicate_id": "agent_r2",
+      "block_index": 84,
+      "position_in_block": 3,
+      "qid": "mmlb-1064",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 253,
+      "replicate_id": "control",
+      "block_index": 85,
+      "position_in_block": 1,
+      "qid": "mmlb-1015",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 254,
+      "replicate_id": "agent_r2",
+      "block_index": 85,
+      "position_in_block": 2,
+      "qid": "mmlb-1015",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 255,
+      "replicate_id": "agent_r1",
+      "block_index": 85,
+      "position_in_block": 3,
+      "qid": "mmlb-1015",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 256,
+      "replicate_id": "agent_r1",
+      "block_index": 86,
+      "position_in_block": 1,
+      "qid": "mmlb-0987",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 257,
+      "replicate_id": "agent_r2",
+      "block_index": 86,
+      "position_in_block": 2,
+      "qid": "mmlb-0987",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 258,
+      "replicate_id": "control",
+      "block_index": 86,
+      "position_in_block": 3,
+      "qid": "mmlb-0987",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 259,
+      "replicate_id": "agent_r1",
+      "block_index": 87,
+      "position_in_block": 1,
+      "qid": "mmlb-1004",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 260,
+      "replicate_id": "agent_r2",
+      "block_index": 87,
+      "position_in_block": 2,
+      "qid": "mmlb-1004",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 261,
+      "replicate_id": "control",
+      "block_index": 87,
+      "position_in_block": 3,
+      "qid": "mmlb-1004",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 262,
+      "replicate_id": "control",
+      "block_index": 88,
+      "position_in_block": 1,
+      "qid": "mmlb-0137",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 263,
+      "replicate_id": "agent_r1",
+      "block_index": 88,
+      "position_in_block": 2,
+      "qid": "mmlb-0137",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 264,
+      "replicate_id": "agent_r2",
+      "block_index": 88,
+      "position_in_block": 3,
+      "qid": "mmlb-0137",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 265,
+      "replicate_id": "agent_r1",
+      "block_index": 89,
+      "position_in_block": 1,
+      "qid": "mmlb-0043",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 266,
+      "replicate_id": "control",
+      "block_index": 89,
+      "position_in_block": 2,
+      "qid": "mmlb-0043",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 267,
+      "replicate_id": "agent_r2",
+      "block_index": 89,
+      "position_in_block": 3,
+      "qid": "mmlb-0043",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 268,
+      "replicate_id": "agent_r1",
+      "block_index": 90,
+      "position_in_block": 1,
+      "qid": "mmlb-0405",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 269,
+      "replicate_id": "agent_r2",
+      "block_index": 90,
+      "position_in_block": 2,
+      "qid": "mmlb-0405",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 270,
+      "replicate_id": "control",
+      "block_index": 90,
+      "position_in_block": 3,
+      "qid": "mmlb-0405",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 271,
+      "replicate_id": "agent_r1",
+      "block_index": 91,
+      "position_in_block": 1,
+      "qid": "mmlb-1003",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 272,
+      "replicate_id": "control",
+      "block_index": 91,
+      "position_in_block": 2,
+      "qid": "mmlb-1003",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 273,
+      "replicate_id": "agent_r2",
+      "block_index": 91,
+      "position_in_block": 3,
+      "qid": "mmlb-1003",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 274,
+      "replicate_id": "agent_r1",
+      "block_index": 92,
+      "position_in_block": 1,
+      "qid": "mmlb-0046",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 275,
+      "replicate_id": "control",
+      "block_index": 92,
+      "position_in_block": 2,
+      "qid": "mmlb-0046",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 276,
+      "replicate_id": "agent_r2",
+      "block_index": 92,
+      "position_in_block": 3,
+      "qid": "mmlb-0046",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 277,
+      "replicate_id": "agent_r1",
+      "block_index": 93,
+      "position_in_block": 1,
+      "qid": "mmlb-0045",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 278,
+      "replicate_id": "agent_r2",
+      "block_index": 93,
+      "position_in_block": 2,
+      "qid": "mmlb-0045",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 279,
+      "replicate_id": "control",
+      "block_index": 93,
+      "position_in_block": 3,
+      "qid": "mmlb-0045",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 280,
+      "replicate_id": "agent_r1",
+      "block_index": 94,
+      "position_in_block": 1,
+      "qid": "mmlb-0047",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 281,
+      "replicate_id": "control",
+      "block_index": 94,
+      "position_in_block": 2,
+      "qid": "mmlb-0047",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 282,
+      "replicate_id": "agent_r2",
+      "block_index": 94,
+      "position_in_block": 3,
+      "qid": "mmlb-0047",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 283,
+      "replicate_id": "agent_r1",
+      "block_index": 95,
+      "position_in_block": 1,
+      "qid": "mmlb-0998",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 284,
+      "replicate_id": "control",
+      "block_index": 95,
+      "position_in_block": 2,
+      "qid": "mmlb-0998",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 285,
+      "replicate_id": "agent_r2",
+      "block_index": 95,
+      "position_in_block": 3,
+      "qid": "mmlb-0998",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 286,
+      "replicate_id": "control",
+      "block_index": 96,
+      "position_in_block": 1,
+      "qid": "mmlb-0199",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 287,
+      "replicate_id": "agent_r2",
+      "block_index": 96,
+      "position_in_block": 2,
+      "qid": "mmlb-0199",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 288,
+      "replicate_id": "agent_r1",
+      "block_index": 96,
+      "position_in_block": 3,
+      "qid": "mmlb-0199",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 289,
+      "replicate_id": "control",
+      "block_index": 97,
+      "position_in_block": 1,
+      "qid": "mmlb-1058",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 290,
+      "replicate_id": "agent_r1",
+      "block_index": 97,
+      "position_in_block": 2,
+      "qid": "mmlb-1058",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 291,
+      "replicate_id": "agent_r2",
+      "block_index": 97,
+      "position_in_block": 3,
+      "qid": "mmlb-1058",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 292,
+      "replicate_id": "agent_r2",
+      "block_index": 98,
+      "position_in_block": 1,
+      "qid": "mmlb-1014",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 293,
+      "replicate_id": "control",
+      "block_index": 98,
+      "position_in_block": 2,
+      "qid": "mmlb-1014",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 294,
+      "replicate_id": "agent_r1",
+      "block_index": 98,
+      "position_in_block": 3,
+      "qid": "mmlb-1014",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 295,
+      "replicate_id": "agent_r2",
+      "block_index": 99,
+      "position_in_block": 1,
+      "qid": "mmlb-0080",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 296,
+      "replicate_id": "agent_r1",
+      "block_index": 99,
+      "position_in_block": 2,
+      "qid": "mmlb-0080",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 297,
+      "replicate_id": "control",
+      "block_index": 99,
+      "position_in_block": 3,
+      "qid": "mmlb-0080",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 298,
+      "replicate_id": "agent_r1",
+      "block_index": 100,
+      "position_in_block": 1,
+      "qid": "mmlb-0991",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 299,
+      "replicate_id": "agent_r2",
+      "block_index": 100,
+      "position_in_block": 2,
+      "qid": "mmlb-0991",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 300,
+      "replicate_id": "control",
+      "block_index": 100,
+      "position_in_block": 3,
+      "qid": "mmlb-0991",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 301,
+      "replicate_id": "agent_r2",
+      "block_index": 101,
+      "position_in_block": 1,
+      "qid": "mmlb-0578",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 302,
+      "replicate_id": "control",
+      "block_index": 101,
+      "position_in_block": 2,
+      "qid": "mmlb-0578",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 303,
+      "replicate_id": "agent_r1",
+      "block_index": 101,
+      "position_in_block": 3,
+      "qid": "mmlb-0578",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 304,
+      "replicate_id": "agent_r1",
+      "block_index": 102,
+      "position_in_block": 1,
+      "qid": "mmlb-0049",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 305,
+      "replicate_id": "control",
+      "block_index": 102,
+      "position_in_block": 2,
+      "qid": "mmlb-0049",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 306,
+      "replicate_id": "agent_r2",
+      "block_index": 102,
+      "position_in_block": 3,
+      "qid": "mmlb-0049",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 307,
+      "replicate_id": "control",
+      "block_index": 103,
+      "position_in_block": 1,
+      "qid": "mmlb-0401",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 308,
+      "replicate_id": "agent_r2",
+      "block_index": 103,
+      "position_in_block": 2,
+      "qid": "mmlb-0401",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 309,
+      "replicate_id": "agent_r1",
+      "block_index": 103,
+      "position_in_block": 3,
+      "qid": "mmlb-0401",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 310,
+      "replicate_id": "control",
+      "block_index": 104,
+      "position_in_block": 1,
+      "qid": "mmlb-0082",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 311,
+      "replicate_id": "agent_r1",
+      "block_index": 104,
+      "position_in_block": 2,
+      "qid": "mmlb-0082",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 312,
+      "replicate_id": "agent_r2",
+      "block_index": 104,
+      "position_in_block": 3,
+      "qid": "mmlb-0082",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 313,
+      "replicate_id": "agent_r1",
+      "block_index": 105,
+      "position_in_block": 1,
+      "qid": "mmlb-0062",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 314,
+      "replicate_id": "agent_r2",
+      "block_index": 105,
+      "position_in_block": 2,
+      "qid": "mmlb-0062",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 315,
+      "replicate_id": "control",
+      "block_index": 105,
+      "position_in_block": 3,
+      "qid": "mmlb-0062",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 316,
+      "replicate_id": "agent_r2",
+      "block_index": 106,
+      "position_in_block": 1,
+      "qid": "mmlb-0079",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 317,
+      "replicate_id": "agent_r1",
+      "block_index": 106,
+      "position_in_block": 2,
+      "qid": "mmlb-0079",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 318,
+      "replicate_id": "control",
+      "block_index": 106,
+      "position_in_block": 3,
+      "qid": "mmlb-0079",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 319,
+      "replicate_id": "agent_r2",
+      "block_index": 107,
+      "position_in_block": 1,
+      "qid": "mmlb-1022",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 320,
+      "replicate_id": "agent_r1",
+      "block_index": 107,
+      "position_in_block": 2,
+      "qid": "mmlb-1022",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 321,
+      "replicate_id": "control",
+      "block_index": 107,
+      "position_in_block": 3,
+      "qid": "mmlb-1022",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 322,
+      "replicate_id": "agent_r2",
+      "block_index": 108,
+      "position_in_block": 1,
+      "qid": "mmlb-0066",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 323,
+      "replicate_id": "control",
+      "block_index": 108,
+      "position_in_block": 2,
+      "qid": "mmlb-0066",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 324,
+      "replicate_id": "agent_r1",
+      "block_index": 108,
+      "position_in_block": 3,
+      "qid": "mmlb-0066",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 325,
+      "replicate_id": "agent_r2",
+      "block_index": 109,
+      "position_in_block": 1,
+      "qid": "mmlb-1056",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 326,
+      "replicate_id": "control",
+      "block_index": 109,
+      "position_in_block": 2,
+      "qid": "mmlb-1056",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 327,
+      "replicate_id": "agent_r1",
+      "block_index": 109,
+      "position_in_block": 3,
+      "qid": "mmlb-1056",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 328,
+      "replicate_id": "agent_r1",
+      "block_index": 110,
+      "position_in_block": 1,
+      "qid": "mmlb-0204",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 329,
+      "replicate_id": "control",
+      "block_index": 110,
+      "position_in_block": 2,
+      "qid": "mmlb-0204",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 330,
+      "replicate_id": "agent_r2",
+      "block_index": 110,
+      "position_in_block": 3,
+      "qid": "mmlb-0204",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 331,
+      "replicate_id": "agent_r2",
+      "block_index": 111,
+      "position_in_block": 1,
+      "qid": "mmlb-0988",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 332,
+      "replicate_id": "control",
+      "block_index": 111,
+      "position_in_block": 2,
+      "qid": "mmlb-0988",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 333,
+      "replicate_id": "agent_r1",
+      "block_index": 111,
+      "position_in_block": 3,
+      "qid": "mmlb-0988",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 334,
+      "replicate_id": "control",
+      "block_index": 112,
+      "position_in_block": 1,
+      "qid": "mmlb-1013",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 335,
+      "replicate_id": "agent_r1",
+      "block_index": 112,
+      "position_in_block": 2,
+      "qid": "mmlb-1013",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 336,
+      "replicate_id": "agent_r2",
+      "block_index": 112,
+      "position_in_block": 3,
+      "qid": "mmlb-1013",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 337,
+      "replicate_id": "agent_r2",
+      "block_index": 113,
+      "position_in_block": 1,
+      "qid": "mmlb-0596",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 338,
+      "replicate_id": "agent_r1",
+      "block_index": 113,
+      "position_in_block": 2,
+      "qid": "mmlb-0596",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 339,
+      "replicate_id": "control",
+      "block_index": 113,
+      "position_in_block": 3,
+      "qid": "mmlb-0596",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 340,
+      "replicate_id": "control",
+      "block_index": 114,
+      "position_in_block": 1,
+      "qid": "mmlb-1025",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 341,
+      "replicate_id": "agent_r1",
+      "block_index": 114,
+      "position_in_block": 2,
+      "qid": "mmlb-1025",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 342,
+      "replicate_id": "agent_r2",
+      "block_index": 114,
+      "position_in_block": 3,
+      "qid": "mmlb-1025",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 343,
+      "replicate_id": "control",
+      "block_index": 115,
+      "position_in_block": 1,
+      "qid": "mmlb-0690",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 344,
+      "replicate_id": "agent_r2",
+      "block_index": 115,
+      "position_in_block": 2,
+      "qid": "mmlb-0690",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 345,
+      "replicate_id": "agent_r1",
+      "block_index": 115,
+      "position_in_block": 3,
+      "qid": "mmlb-0690",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 346,
+      "replicate_id": "agent_r1",
+      "block_index": 116,
+      "position_in_block": 1,
+      "qid": "mmlb-1062",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 347,
+      "replicate_id": "control",
+      "block_index": 116,
+      "position_in_block": 2,
+      "qid": "mmlb-1062",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 348,
+      "replicate_id": "agent_r2",
+      "block_index": 116,
+      "position_in_block": 3,
+      "qid": "mmlb-1062",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 349,
+      "replicate_id": "agent_r2",
+      "block_index": 117,
+      "position_in_block": 1,
+      "qid": "mmlb-0065",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 350,
+      "replicate_id": "control",
+      "block_index": 117,
+      "position_in_block": 2,
+      "qid": "mmlb-0065",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 351,
+      "replicate_id": "agent_r1",
+      "block_index": 117,
+      "position_in_block": 3,
+      "qid": "mmlb-0065",
+      "arm": "AGa"
+    },
+    {
+      "execution_index": 352,
+      "replicate_id": "control",
+      "block_index": 118,
+      "position_in_block": 1,
+      "qid": "mmlb-0138",
+      "arm": "B1s"
+    },
+    {
+      "execution_index": 353,
+      "replicate_id": "agent_r2",
+      "block_index": 118,
+      "position_in_block": 2,
+      "qid": "mmlb-0138",
+      "arm": "AGb"
+    },
+    {
+      "execution_index": 354,
+      "replicate_id": "agent_r1",
+      "block_index": 118,
+      "position_in_block": 3,
+      "qid": "mmlb-0138",
+      "arm": "AGa"
+    }
+  ],
+  "plan_sha256": "edd9a6cc8890a0e9056d198bde3698238585cb535c2f6474afcc179187d8dd09",
+  "spec_sha256": "de1b9f4e9a8807d141df567eb7a5793d962adc85e39ccda40646c1679713a3e5",
+  "spec_commit": "25cd488e35366cb581b65f9879fbbf5426d1e7c9",
+  "agent_contract_sha256": "de749414e4000d66f593aa735c42f9f26cb1003425008c95e894c3fc176afdad",
+  "notebook_code_sha256": "a5a01a2c389cfd89dd94ee2df0a9e11e8acf73a05ca419b441e397416c0a7d38",
+  "api_base_url": "https://api.openai.com/v1",
+  "encoder": {
+    "repo": "vidore/colqwen2-v1.0-hf",
+    "revision": "ddc07d2317c80f75fc742b7362ee9ad1912908f9",
+    "weights_sha256": "2f6dbf32fc2db5b045d74ae73b148425d6e03cc1106a047cdcc7e72b6dc53aba",
+    "preprocessor_config_sha256": "be69973e9e1f8404b6fb70f246ad8307086d614b31464e3048c387945ac66bf0",
+    "tokenizer_sha256": "091aa7594dc2fcfbfa06b9e3c22a5f0562ac14f30375c13af7309407a0e67b8a",
+    "torch": "2.15.0",
+    "transformers": "5.23.0",
+    "device": "cpu",
+    "threads": 8
+  }
+}

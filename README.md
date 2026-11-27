@@ -2,12 +2,13 @@
 
 VisualDoc answers a question about one PDF. It returns the answer, the pages it cites and a short verbatim quote from each cited page, or `Not answerable`. It reads **page images** rather than extracted text, and it finds the pages to read with a **visual page retriever** (ColQwen2).
 
-The repository is also a research record. Ten pre-registered experiments (E0–E9) on the public benchmark [MMLongBench-Doc](https://huggingface.co/datasets/yubo2333/MMLongBench-Doc) decided each component on 20 development documents. A single pre-registered **final held-out evaluation** then measured the frozen system once on 110 documents never used in development. Every paid run is frozen with its requests, replies, an independent audit and checksums, so every reported number is re-derived without an API call.
+The repository is also a research record. Eleven pre-registered experiments (E0–E10) on the public benchmark [MMLongBench-Doc](https://huggingface.co/datasets/yubo2333/MMLongBench-Doc) decided each component on 20 development documents. A single pre-registered **final held-out evaluation** then measured the frozen system once on 110 documents never used in development. Every paid run is frozen with its requests, replies, an independent audit and checksums, so every reported number is re-derived without an API call.
 
 > **Status (2026-11-26).**
 > - **Validated baseline B1: frozen** (`docs/validated_baseline_b1.md`).
 > - **Final held-out evaluation: done, audited and frozen** (commit `c6c450d`, `experiments/frozen/final/`). B1 answers 42.7 % of held-out answerable questions, and the project's central result, visual retrieval beating OCR + BM25, is **confirmed out of sample**. The test pool is now used: it may be reported, never used to tune a system.
 > - **E9 (adaptive evidence acquisition): done** on development data, verdict `no_meaningful_gain`; B1 is unchanged.
+> - **E10 (agentic reader): done** on development data (2026-11-27). The agent searches with its own queries: +8 questions net in both replicates (45 → 53 of 102), evidence recall of the pages seen 0.726 → 0.866. The frozen verdict is `regression` by the broken-ratio rule (AGb: 17 fixed, 9 broken). B1 is unchanged (`experiments/frozen/e10/`).
 > - **Application** (CLI and local web page around B1): built, and revised after an independent review (`docs/application.md`).
 
 ---
@@ -87,6 +88,7 @@ All numbers are from frozen, audited packages in `experiments/frozen/`, on the 2
 | E7 | Extract-then-answer vs one-shot reading | same 118 q | V0 38, X4 31, X8 29 of 102; X4 − V0 −0.069 [−0.135, −0.008] | `regression` |
 | E8 | Reader migration to `gpt-6-luna` and the B1 contract | same 118 q | L-v1 42/102, L-B1 46/102, repeat 46/102; B1 − v1 +0.039 [−0.019, +0.098] | promote B1 (non-inferiority only) |
 | E9 | Read pages 5–8 only when retrieval looks uncertain | same 118 q | B1s 44, F8 46/46, A1 47/46 of 102; A1 − B1s +0.025 [0.000, +0.051], sign-flip p = 0.125 (the smallest attainable here) | `no_meaningful_gain` |
+| E10 | An agent that writes its own search queries and chooses pages (≤ 6 calls, ≤ 12 pages), warm-started with B1's top 4 | same 118 q | B1s 45, AGa 53, AGb 53 of 102; AG − B1s +0.078 [0.000, +0.181], sign-flip p = 0.053; 13/5 and 17/9 fixed/broken. Evidence recall of pages seen 0.726 → 0.866; on the 39 questions with evidence missing from the top 4, +0.256 [+0.136, +0.500]; all broken questions had complete evidence in the top 4. $0.0017 per question | `regression` (broken > fixed / 2 in AGb) |
 
 Intervals are document-cluster bootstrap 95 % intervals. Sources: `AGENTS.md` (regression references), the `README.md` of each package in `experiments/frozen/`, and `experiments/frozen/e9/tables/evaluation_summary.json`.
 
@@ -97,6 +99,7 @@ Intervals are document-cluster bootstrap 95 % intervals. Sources: `AGENTS.md` (r
   - E2: a stronger open VLM did not beat GPT-4o-mini (a tie within noise).
   - E3: adding the extracted text to the images did not help.
   - E7: reading each page separately, then answering from the extracted facts, was **worse** (the interval excludes zero).
+  - E10: the agent's search works (evidence recall +0.140, gain concentrated where B1 lacks evidence). But it also breaks questions B1 answers, by over-exploring or reading the same pages differently. The frozen broken-ratio rule therefore labels it `regression`, despite +8 questions net in both replicates.
   - E9: the adaptive policy was directionally positive on development data (5 fixed, 0 broken across two replicates) but missed the pre-registered +0.05 criterion. On held-out data it shows a small, statistically supported but fragile gain (+0.021); B1 stays the shipped system.
 - **Non-inferiority only: the B1 contract.** 46 vs 42 of 102 (S-v1), 47 vs 44 of 101 (S-v2), with an interval that straddles zero. Two identical B1 replicates flip 4 questions (S-v1), 7 under S-v2. **B1 is not a demonstrated accuracy improvement over the previous contract.** What it does buy, measured: citation validity 1.000, 9/16 correct abstentions (8/16 before), 118/118 schema-valid replies (`docs/validated_baseline_b1.md` §2).
 - **The ceiling.** More than half of held-out answerable questions remain wrong. Accuracy falls with the number of evidence pages: 54 % for single-page evidence, 13 % for 4+ pages (`experiments/frozen/final/README.md`). The strict grounding diagnostic passes 70 of 118 development replies, and E8's data show it is a poor signal of correctness (`docs/e9_proposal.md` §1).

@@ -1,0 +1,70 @@
+{
+  "mode": "smoke",
+  "plan": [
+    {
+      "execution_index": 1,
+      "replicate_id": "smoke",
+      "block_index": null,
+      "position_in_block": null,
+      "qid": "mmlb-0045",
+      "arm": "AG"
+    },
+    {
+      "execution_index": 2,
+      "replicate_id": "smoke",
+      "block_index": null,
+      "position_in_block": null,
+      "qid": "mmlb-0999",
+      "arm": "AG"
+    },
+    {
+      "execution_index": 3,
+      "replicate_id": "smoke",
+      "block_index": null,
+      "position_in_block": null,
+      "qid": "mmlb-1000",
+      "arm": "AG"
+    },
+    {
+      "execution_index": 4,
+      "replicate_id": "smoke",
+      "block_index": null,
+      "position_in_block": null,
+      "qid": "mmlb-1002",
+      "arm": "AG"
+    },
+    {
+      "execution_index": 5,
+      "replicate_id": "smoke",
+      "block_index": null,
+      "position_in_block": null,
+      "qid": "mmlb-1051",
+      "arm": "AG"
+    },
+    {
+      "execution_index": 6,
+      "replicate_id": "smoke",
+      "block_index": null,
+      "position_in_block": null,
+      "qid": "mmlb-1061",
+      "arm": "AG"
+    }
+  ],
+  "plan_sha256": "2690f1859dccf828b8ff869ab361725ce9c75ea0dd3de5977a75866581e844cf",
+  "spec_sha256": "de1b9f4e9a8807d141df567eb7a5793d962adc85e39ccda40646c1679713a3e5",
+  "spec_commit": "25cd488e35366cb581b65f9879fbbf5426d1e7c9",
+  "agent_contract_sha256": "de749414e4000d66f593aa735c42f9f26cb1003425008c95e894c3fc176afdad",
+  "notebook_code_sha256": "a5a01a2c389cfd89dd94ee2df0a9e11e8acf73a05ca419b441e397416c0a7d38",
+  "api_base_url": "https://api.openai.com/v1",
+  "encoder": {
+    "repo": "vidore/colqwen2-v1.0-hf",
+    "revision": "ddc07d2317c80f75fc742b7362ee9ad1912908f9",
+    "weights_sha256": "2f6dbf32fc2db5b045d74ae73b148425d6e03cc1106a047cdcc7e72b6dc53aba",
+    "preprocessor_config_sha256": "be69973e9e1f8404b6fb70f246ad8307086d614b31464e3048c387945ac66bf0",
+    "tokenizer_sha256": "091aa7594dc2fcfbfa06b9e3c22a5f0562ac14f30375c13af7309407a0e67b8a",
+    "torch": "2.15.0",
+    "transformers": "5.23.0",
+    "device": "cpu",
+    "threads": 8
+  }
+}
