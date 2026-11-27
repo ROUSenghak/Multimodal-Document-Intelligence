@@ -11,7 +11,7 @@ The single place that records what is done, what is running, what each decision 
 | E9 Stage 0 (offline trigger selection, $0) | **passed**; independently audited (reproduced ≤ 5e-7) | `experiments/frozen/e9_stage0/` (commit `a30bb29`) |
 | E9 Stage 1 smoke (6 calls) | **passed** all 7 gates, $0.004592 | `experiments/frozen/e9/smoke_*` |
 | E9 Stage 2 (354 calls) | **done: `no_meaningful_gain`** (S-v1). B1 unchanged. Independent audit 47/47. 13 S-v2 items await owner labels; no labelling can change the verdict | `experiments/frozen/e9/`, notebook 08 |
-| E10 agentic reader (spec `25cd488`, smoke, 354-item run) | **done: `regression`** by the frozen broken-ratio rule (AGb 17 fixed / 9 broken), with +8 questions net in both replicates (45 → 53 of 102) and evidence recall of pages seen 0.726 → 0.866. B1 unchanged. Audit 31/31 (32/32 with the package sums). 17 S-v2 items await owner labels. $0.473 | `experiments/frozen/e10/`, notebook 10 |
+| E10 agentic reader (spec `25cd488`, smoke, 354-item run) | **done: `regression`** by the frozen broken-ratio rule (AGb 17 fixed / 9 broken), with +8 questions net in both replicates (45 → 53 of 102) and evidence recall of pages seen 0.726 → 0.866. B1 unchanged. Audit 31/31 (32/32 with the package sums). S-v2 labelled by the owner (`e10_scoring_v2`): +0.089 [+0.017, +0.177], p 0.025, verdict unchanged. $0.473 | `experiments/frozen/e10/`, notebook 10 |
 | Application (B1 with live ColQwen2, cache, CLI, UI) | **built, reviewed, verified live.** 200 tests pass. Three live calls reproduced frozen E8 L-B1 requests, tokens and answers exactly. The live *encoder* is checked by notebook 09's parity gate | `src/visualdoc/{visual_index,app,web}.py`, commit `041827f` |
 | Final held-out evaluation | **done, audited, frozen** (`c6c450d`). C1 B1 0.427; C2 `visual_retrieval_confirmed` (+0.119); C3 `a1_gain_supported` (+0.021, secondary). $0.993 | `experiments/frozen/final/` |
 | Documentation (README, architecture, report, reproducibility, demo) | written; final-evaluation results are still to be added | `README.md`, `docs/{research_report,architecture,reproducibility}.md` |
@@ -303,7 +303,7 @@ E9's cumulative ceiling is **$0.50** (authorised by the owner on 2026-11-25). Pl
    - `bdf54dxa.pdf` page 11 OCR text differs on x86-64. This is a processor condition, and the test stays as it is (the one `pytest` failure in `.venv`).
    - GPU encoding is possible only with torch 2.14.0+cu126, a new condition. The pinned torch 2.15.0 needs driver ≥ 580 for CUDA, and the service has 565.
    - The local commits are not pushed yet.
-4. **S-v2 blind labels.** 17 E10 items in `experiments/frozen/e10/adjudication/blind_queue_unlabelled.csv` (bounds on AG − B1s +0.045 to +0.104 meanwhile). 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
+4. **S-v2 blind labels.** E10's 17 items were labelled on 2026-11-27 (`experiments/frozen/e10_scoring_v2/`). 13 E9 items in `data/processed/mmlongbench_doc/e9/adjudication_queue.csv` (frozen empty copy in `experiments/frozen/e9/adjudication/`). They do not affect the S-v1 verdict, and the S-v2 interval cannot change it.
 
 ## Known limitations (running list)
 

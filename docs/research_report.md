@@ -264,6 +264,7 @@ Each entry gives the hypothesis, the design, the result and the decision. Costs 
     - a different reading of the same 4 pages in tool mode (2);
     - an answer-format artefact (1).
   - **Exploratory.** The agent's own stopping decision is a better router than E9's U3 trigger (U3-routed 46/49 vs always-agent 53).
+  - **S-v2** (secondary, owner's 17 blind labels, `experiments/frozen/e10_scoring_v2/`): B1s 47, AGa 55, AGb 57 of 101; AG − B1s **+0.089** [+0.017, +0.177], sign-flip p = 0.025; fixed / broken 13 / 5 and 16 / 6. The broken-ratio rule would not fire under S-v2, but the replicates still disagree on 12 questions (> 10), so even S-v2 would not give `go`. The verdict stays the frozen S-v1 one.
 - **Decision.** `regression` under the frozen rule "broken > fixed / 2 in either replicate" (AGb 9 > 8.5). Without it the verdict would be `promising_but_uncertain` (p 0.053, 12 flips > 10). B1 is unchanged. The record supports the mechanism, more evidence found and turned into answers where B1 lacks it, but not a clean improvement. Spend $0.473375 of a $3.50 ceiling.
 
 ---
@@ -443,14 +444,14 @@ Three disagreements found in an earlier version of this report were corrected in
 |---|---|
 | E0 canonical runs | `experiments/frozen/mmlongbench_doc/` |
 | E1–E7 runs, tables, audits | `experiments/frozen/e1/` … `e7/` |
-| S-v2 owner labels | `experiments/frozen/scoring_v2/` (E6/E7), `experiments/frozen/e8_scoring_v2/` (E8) |
+| S-v2 owner labels | `experiments/frozen/scoring_v2/` (E6/E7), `experiments/frozen/e8_scoring_v2/` (E8), `experiments/frozen/e10_scoring_v2/` (E10) |
 | E8 smoke and execution | `experiments/frozen/e8_smoke/`, `experiments/frozen/e8/` (commit `0d68a93`) |
 | E9 Stage 0 | `experiments/frozen/e9_stage0/` (commit `a30bb29`) |
 | E9 Stage 1–2 | `experiments/frozen/e9/` (commit `7f6c744`; independent audit 47/47; 13 S-v2 items await the owner's labels) |
 | Final evaluation: index | `experiments/frozen/final_index/` (commit `ab8a9c8`, before any question was read) |
 | Final evaluation: retrieval | `experiments/frozen/final_retrieval/` (commit `8d5768a`) |
 | Final evaluation: run, evaluation, audit | `experiments/frozen/final/` (commit `c6c450d`; 85 S-v2 items await the owner's labels) |
-| E10 agentic reader | `experiments/frozen/e10/` (spec commit `25cd488`; audit 31/31; 17 S-v2 items await the owner's labels) |
+| E10 agentic reader | `experiments/frozen/e10/` (spec commit `25cd488`; audit 31/31); S-v2 labels in `experiments/frozen/e10_scoring_v2/` |
 | Specifications | `experiments/specs/` (E1–E9, E2 v1 superseded by v2, E9 addendum; `final_evaluation_v1.json` with its plan and deviations) |
 | Baseline description | `docs/validated_baseline_b1.md` |
 | Test-pool record | `experiments/test_pool_ledger.md` |

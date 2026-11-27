@@ -1,0 +1,33 @@
+{
+  "date": "2026-11-27",
+  "kind": "blind human adjudication for scoring protocol S-v2, E10 items",
+  "source_notebook": "notebooks/10_agentic_reader.ipynb",
+  "source_runs": [
+    "experiments/frozen/e10/full_20261127T103158Z_3049dc6c"
+  ],
+  "blind_queue": "experiments/frozen/e10/adjudication/blind_queue_unlabelled.csv",
+  "blind_queue_sha256": "87c85e5c6cd4ea77f8a508593b6207d12249eafd21ee4227e41cee4889e1a40e",
+  "items": 17,
+  "labels": {
+    "correct": 9,
+    "wrong": 8,
+    "unsure": 0
+  },
+  "adjudicator": "project owner",
+  "blind_to_arm": true,
+  "paid_calls": 0,
+  "identity_fields": [
+    "document",
+    "evidence_pages",
+    "question",
+    "answer_format",
+    "reference",
+    "reply"
+  ],
+  "identity_serialisation": "json.dumps(mapping, sort_keys=True, ensure_ascii=False).encode()",
+  "unsure_policy": "exclude from the S-v2 point estimate and paired contrasts; report wrong/correct sensitivity bounds",
+  "evidence_shown": "question, reference and reply text only; no page render was shown",
+  "unblinding": "adjudication_key.csv is a byte-for-byte copy of experiments/frozen/e10/adjudication/sealed_key.csv, opened only after every label was recorded; all 17 label identities match the key",
+  "e10_package_commit": "4a8ca21",
+  "note": "E10's execution package experiments/frozen/e10 is unchanged by this freeze. S-v2 is secondary: these labels do not change the frozen S-v1 verdict."
+}
